@@ -12,13 +12,6 @@
       "destination": "/api/:path*"
     }
   ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url",
-    "NEXT_PUBLIC_WS_URL": "@ws_url",
-    "NEXT_PUBLIC_AI_SERVICE_URL": "@ai_service_url",
-    "NEXT_PUBLIC_APP_NAME": "BluelearnerHub",
-    "NEXT_PUBLIC_APP_VERSION": "1.0.0"
-  },
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
