@@ -1,0 +1,90 @@
+{
+  "name": "edtech-platform",
+  "version": "1.0.0",
+  "description": "BluelearnerHub - Comprehensive EdTech Platform",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:ai": "cd ai-services && python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    
+    "build": "npm run build:all",
+    "build:all": "npm-run-all build:backend build:frontend",
+    "build:frontend": "cd frontend && npm ci --production=false && npm run build",
+    "build:backend": "cd backend && npm ci --production=false && npm run build",
+    "build:ai": "cd ai-services && pip install -r requirements.txt",
+    
+    "start": "npm-run-all --parallel start:*",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm start", 
+    "start:ai": "cd ai-services && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000",
+    
+    "test": "npm-run-all test:*",
+    "test:frontend": "cd frontend && npm test -- --watchAll=false",
+    "test:backend": "cd backend && npm test",
+    "test:ai": "cd ai-services && python -m pytest",
+    
+    "lint": "npm-run-all lint:*",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:clean": "docker-compose down -v --remove-orphans && docker system prune -f",
+    
+    "setup": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "setup:prod": "npm ci && cd frontend && npm ci && cd ../backend && npm ci",
+    
+    "clean": "npm-run-all clean:*",
+    "clean:frontend": "cd frontend && rm -rf .next node_modules",
+    "clean:backend": "cd backend && rm -rf dist node_modules",
+    "clean:all": "rm -rf node_modules && npm run clean",
+    
+    "db:migrate": "cd backend && npx prisma migrate deploy || cd database && psql $DATABASE_URL -f migrations/001_full_schema.sql",
+    "db:seed": "cd backend && npx prisma db seed || cd database && psql $DATABASE_URL -f seeds/sample_data.sql",
+    "db:reset": "cd backend && npx prisma migrate reset --force",
+    
+    "deploy:vercel": "cd frontend && vercel --prod",
+    "deploy:railway": "railway up",
+    "deploy:aws": "./aws/deploy.sh",
+    "deploy:docker": "docker-compose -f docker-compose.prod.yml up -d",
+    
+    "heroku-postbuild": "npm run setup:prod && npm run build:all",
+    "railway:build": "npm run setup:prod && npm run build:all",
+    "vercel-build": "cd frontend && npm ci && npm run build",
+    "aws:build": "npm run setup:prod && npm run build:all && docker-compose build"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluelearnerhub/edtech-platform.git"
+  },
+  "keywords": [
+    "edtech",
+    "education",
+    "learning",
+    "platform",
+    "nextjs",
+    "express",
+    "fastapi",
+    "ai",
+    "hackathon",
+    "jobs"
+  ],
+  "author": "BluelearnerHub Team",
+  "license": "MIT"
+}
