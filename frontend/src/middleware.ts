@@ -39,6 +39,7 @@ export default withAuth(
 
 // Match all protected routes
 export const config = {
+    runtime: 'nodejs',
     matcher: [
         '/student/:path*',
         '/candidate/:path*',

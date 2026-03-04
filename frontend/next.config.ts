@@ -47,7 +47,12 @@ const nextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
 
   // Turbopack configuration (required for Next.js 16)
-  turbopack: {},
+  turbopack: {
+    root: __dirname,
+  },
+
+  // Allow Replit's dev proxy origins
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
 
   // Environment variables
   env: {
