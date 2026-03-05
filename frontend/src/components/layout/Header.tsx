@@ -67,12 +67,12 @@ export default function Header() {
 
   const mainNavigation = [
     { name: 'Tutorials', href: '/tutorials', icon: BookOpen, isMega: true },
+    { name: 'Mentors', href: '/mentors', icon: GraduationCap },
     { name: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   ]
 
   const secondaryNavigation = [
-    { name: 'Mentors', href: '/mentors', icon: GraduationCap },
-    { name: 'Premium', href: '/premium', icon: Sparkles },
+    { name: 'Premium', href: '/premium', icon: Sparkles, isHighlight: true },
     { name: 'Community', href: '/community', icon: Users },
   ]
 
@@ -210,7 +210,7 @@ export default function Header() {
                     <item.icon className="h-4 w-4" />
                     {item.name}
                     {item.badge && (
-                      <span className="ml-1 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-500 rounded-md">
+                      <span className="ml-1.5 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-sm">
                         {item.badge}
                       </span>
                     )}
@@ -220,14 +220,18 @@ export default function Header() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <nav className="hidden lg:flex items-center gap-1">
               {secondaryNavigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-muted/50 rounded-lg transition-all duration-200"
+                  className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${item.isHighlight
+                    ? 'text-amber-400 hover:text-amber-300 hover:bg-amber-400/10'
+                    : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                    }`}
                 >
+                  {item.isHighlight && <Sparkles className="h-3.5 w-3.5" />}
                   {item.name}
                 </Link>
               ))}
