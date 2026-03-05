@@ -1,0 +1,315 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, X, TrendingUp, Clock, BookOpen, Code, Trophy, Briefcase } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { motion, AnimatePresence } from 'framer-motion'
+
+interface SearchResult {
+  id: string
+  title: string
+  description: string
+  type: 'tutorial' | 'course' | 'problem' | 'hackathon' | 'job' | 'question'
+  url: string
+  domain?: string
+  tags?: string[]
+}
+
+export default function UniversalSearch() {
+  const [query, setQuery] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [results, setResults] = useState<SearchResult[]>([])
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const searchRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Load recent searches from localStorage
+    const saved = localStorage.getItem('recentSearches')
+    if (saved) {
+      setRecentSearches(JSON.parse(saved))
+    }
+
+    // Close on click outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  useEffect(() => {
+    // Debounced search
+    if (query.length > 2) {
+      setIsLoading(true)
+      const timer = setTimeout(() => {
+        performSearch(query)
+      }, 300)
+
+      return () => clearTimeout(timer)
+    } else {
+      setResults([])
+    }
+  }, [query])
+
+  const performSearch = async (searchQuery: string) => {
+    try {
+      // Mock search - replace with actual API call
+      const mockResults: SearchResult[] = [
+        {
+          id: '1',
+          title: 'Introduction to Python Programming',
+          description: 'Learn Python basics with hands-on examples',
+          type: 'tutorial',
+          url: '/learn/computer-science/python-basics',
+          domain: 'Computer Science',
+          tags: ['Python', 'Beginner'],
+        },
+        {
+          id: '2',
+          title: 'Data Structures & Algorithms',
+          description: 'Master DSA concepts with practical problems',
+          type: 'course',
+          url: '/courses/dsa-master',
+          domain: 'Computer Science',
+          tags: ['DSA', 'Advanced'],
+        },
+        {
+          id: '3',
+          title: 'Two Sum Problem',
+          description: 'Find two numbers that add up to a target',
+          type: 'problem',
+          url: '/practice/two-sum',
+          domain: 'Computer Science',
+          tags: ['Array', 'Hash Table'],
+        },
+        {
+          id: '4',
+          title: 'Winter Code Challenge 2024',
+          description: '48-hour coding marathon with prizes',
+          type: 'hackathon',
+          url: '/hackathons/winter-2024',
+          domain: 'Computer Science',
+          tags: ['Coding', 'Competition'],
+        },
+      ]
+
+      // Filter based on query
+      const filtered = mockResults.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+
+      setResults(filtered)
+    } catch (error) {
+      console.error('Search failed:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSelect = (result: SearchResult) => {
+    // Add to recent searches
+    const updated = [result.title, ...recentSearches.filter(s => s !== result.title)].slice(0, 5)
+    setRecentSearches(updated)
+    localStorage.setItem('recentSearches', JSON.stringify(updated))
+
+    // Navigate
+    router.push(result.url)
+    setIsOpen(false)
+    setQuery('')
+  }
+
+  const clearRecentSearches = () => {
+    setRecentSearches([])
+    localStorage.removeItem('recentSearches')
+  }
+
+  const getTypeIcon = (type: SearchResult['type']) => {
+    const icons = {
+      tutorial: BookOpen,
+      course: BookOpen,
+      problem: Code,
+      hackathon: Trophy,
+      job: Briefcase,
+      question: Search,
+    }
+    const Icon = icons[type]
+    return <Icon className="w-4 h-4" />
+  }
+
+  const getTypeColor = (type: SearchResult['type']) => {
+    const colors = {
+      tutorial: 'bg-blue-500/10 text-blue-500',
+      course: 'bg-purple-500/10 text-purple-500',
+      problem: 'bg-green-500/10 text-green-500',
+      hackathon: 'bg-orange-500/10 text-orange-500',
+      job: 'bg-cyan-500/10 text-cyan-500',
+      question: 'bg-yellow-500/10 text-yellow-500',
+    }
+    return colors[type]
+  }
+
+  return (
+    <div ref={searchRef} className="relative w-full max-w-2xl">
+      {/* Search Input */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Input
+          type="search"
+          placeholder="Search tutorials, courses, problems, hackathons..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setIsOpen(true)}
+          className={cn(
+            'w-full pl-10 pr-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500',
+            isOpen && 'ring-2 ring-blue-500'
+          )}
+        />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Search Results Dropdown */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto"
+          >
+            {/* Loading */}
+            {isLoading && (
+              <div className="p-4 text-center text-gray-400">
+                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+              </div>
+            )}
+
+            {/* No Results */}
+            {!isLoading && query.length > 2 && results.length === 0 && (
+              <div className="p-4 text-center text-gray-400">
+                <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No results found for &quot;{query}&quot;</p>
+              </div>
+            )}
+
+            {/* Search Results */}
+            {results.length > 0 && (
+              <div className="p-2">
+                {results.map((result) => (
+                  <button
+                    key={result.id}
+                    onClick={() => handleSelect(result)}
+                    className="w-full text-left p-3 rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={cn('p-2 rounded-lg', getTypeColor(result.type))}>
+                        {getTypeIcon(result.type)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-white truncate">
+                          {result.title}
+                        </h4>
+                        <p className="text-sm text-gray-400 line-clamp-2">
+                          {result.description}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          {result.domain && (
+                            <Badge variant="secondary" className="text-xs">
+                              {result.domain}
+                            </Badge>
+                          )}
+                          {result.tags?.slice(0, 2).map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="outline"
+                              className="text-xs border-gray-600"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Recent Searches */}
+            {!query && recentSearches.length > 0 && (
+              <div className="p-4 border-t border-gray-700">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-300">Recent</span>
+                  </div>
+                  <button
+                    onClick={clearRecentSearches}
+                    className="text-xs text-gray-500 hover:text-gray-300"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="space-y-1">
+                  {recentSearches.map((search, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setQuery(search)}
+                      className="block w-full text-left text-sm text-gray-400 hover:text-white p-2 rounded hover:bg-gray-700"
+                    >
+                      {search}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Popular/Trending */}
+            {!query && (
+              <div className="p-4 border-t border-gray-700">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-300">Trending</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'React Hooks',
+                    'Python',
+                    'Data Structures',
+                    'System Design',
+                    'Machine Learning',
+                  ].map((trend) => (
+                    <button
+                      key={trend}
+                      onClick={() => setQuery(trend)}
+                      className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded-full hover:bg-gray-600"
+                    >
+                      {trend}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
