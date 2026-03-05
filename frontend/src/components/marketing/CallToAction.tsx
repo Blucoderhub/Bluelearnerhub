@@ -4,24 +4,6 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { ArrowRight, Sparkles, GraduationCap, Rocket } from 'lucide-react'
-import dynamic from 'next/dynamic'
-
-const CollaboratingCharacters = dynamic(() => import('@/components/animations/characters/CollaboratingCharacters'), { ssr: false })
-
-function LiveCounter({ inView }: { inView: boolean }) {
-  const [count, setCount] = useState(49847)
-
-  useEffect(() => {
-    if (!inView) return
-    const interval = setInterval(() => {
-      setCount((c) => c + Math.floor(Math.random() * 3))
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [inView])
-
-  return <span>{count.toLocaleString()}</span>
-}
-
 export default function CallToAction() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
@@ -56,23 +38,9 @@ export default function CallToAction() {
               Your Career?
             </span>
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Join{' '}
-            <span className="text-foreground font-semibold">
-              <LiveCounter inView={inView} />+
-            </span>{' '}
-            learners who are already learning, competing, and landing jobs.
+          <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Take the next step in your engineering journey. Master elite skills with industry-standard tools and world-class curriculum.
           </p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex justify-center mb-6"
-          >
-            <CollaboratingCharacters size={120} />
-          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
