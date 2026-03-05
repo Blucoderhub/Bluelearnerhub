@@ -3,6 +3,9 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { Users, Lightbulb, Trophy, Briefcase } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const CelebrationCharacter = dynamic(() => import('@/components/animations/characters/CelebrationCharacter'), { ssr: false })
 
 interface StatItem {
   label: string
@@ -28,7 +31,7 @@ const colorMap: Record<number, string> = {
   3: 'from-emerald-500 to-green-500',
 }
 
-function AnimatedCounter({ value, inView }: { value: string; inView: boolean }) {
+function AnimatedCounter({ value, inView, onComplete }: { value: string; inView: boolean; onComplete?: () => void }) {
   const [displayValue, setDisplayValue] = useState('0')
   const numericMatch = value.match(/^([\d,]+)/)
   const suffix = value.replace(/^[\d,]+/, '')
@@ -50,11 +53,14 @@ function AnimatedCounter({ value, inView }: { value: string; inView: boolean }) 
       step++
       current = Math.min(Math.round(increment * step), target)
       setDisplayValue(current.toLocaleString() + suffix)
-      if (step >= steps) clearInterval(timer)
+      if (step >= steps) {
+        clearInterval(timer)
+        onComplete?.()
+      }
     }, duration / steps)
 
     return () => clearInterval(timer)
-  }, [inView, value, numericMatch, suffix])
+  }, [inView, value, numericMatch, suffix, onComplete])
 
   return <span>{displayValue}</span>
 }
@@ -62,6 +68,7 @@ function AnimatedCounter({ value, inView }: { value: string; inView: boolean }) 
 export default function Stats({ stats }: StatsProps) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
+  const [showCelebration, setShowCelebration] = useState(false)
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -84,7 +91,7 @@ export default function Stats({ stats }: StatsProps) {
   }
 
   return (
-    <section className="py-16 md:py-20 px-4">
+    <section className="py-16 md:py-20 px-4 relative">
       <div className="max-w-6xl mx-auto" ref={ref}>
         <motion.div
           variants={containerVariants}
@@ -107,7 +114,11 @@ export default function Stats({ stats }: StatsProps) {
                     <Icon className="w-7 h-7 text-white" />
                   </div>
                   <div className="text-2xl md:text-4xl font-bold text-white mb-1">
-                    <AnimatedCounter value={stat.value} inView={inView} />
+                    <AnimatedCounter
+                      value={stat.value}
+                      inView={inView}
+                      onComplete={idx === stats.length - 1 ? () => setShowCelebration(true) : undefined}
+                    />
                   </div>
                   <p className="text-gray-400 text-xs md:text-sm font-medium uppercase tracking-wider">
                     {stat.label}
@@ -124,6 +135,15 @@ export default function Stats({ stats }: StatsProps) {
               </motion.div>
             )
           })}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={showCelebration ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.5, y: 20 }}
+          transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
+          className="flex justify-center mt-6"
+        >
+          {showCelebration && <CelebrationCharacter size={80} />}
         </motion.div>
       </div>
     </section>

@@ -2,6 +2,12 @@
 
 import { motion } from 'framer-motion'
 import { Compass, Code2, Rocket, BadgeCheck } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const LearningCharacter = dynamic(() => import('@/components/animations/characters/LearningCharacter'), { ssr: false })
+const CodingCharacter = dynamic(() => import('@/components/animations/characters/CodingCharacter'), { ssr: false })
+const CelebrationCharacter = dynamic(() => import('@/components/animations/characters/CelebrationCharacter'), { ssr: false })
+const CollaboratingCharacters = dynamic(() => import('@/components/animations/characters/CollaboratingCharacters'), { ssr: false })
 
 const steps = [
   {
@@ -10,6 +16,7 @@ const steps = [
     description: 'Start as a student, job seeker, or corporate user. Select learning paths tailored to your goals.',
     icon: Compass,
     color: 'from-blue-500 to-cyan-500',
+    Character: LearningCharacter,
   },
   {
     number: 2,
@@ -17,6 +24,7 @@ const steps = [
     description: 'Complete interactive tutorials and coding challenges to build real-world skills.',
     icon: Code2,
     color: 'from-purple-500 to-pink-500',
+    Character: CodingCharacter,
   },
   {
     number: 3,
@@ -24,6 +32,7 @@ const steps = [
     description: 'Participate in hackathons, solve challenges, and build an impressive portfolio.',
     icon: Rocket,
     color: 'from-amber-500 to-orange-500',
+    Character: CollaboratingCharacters,
   },
   {
     number: 4,
@@ -31,6 +40,7 @@ const steps = [
     description: 'Apply for jobs, practice interviews, and land your dream role with confidence.',
     icon: BadgeCheck,
     color: 'from-emerald-500 to-green-500',
+    Character: CelebrationCharacter,
   },
 ]
 
@@ -65,6 +75,7 @@ export default function HowItWorks() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {steps.map((step, idx) => {
               const Icon = step.icon
+              const StepCharacter = step.Character
               return (
                 <motion.div
                   key={idx}
@@ -89,9 +100,18 @@ export default function HowItWorks() {
                     <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-gray-400 text-sm leading-relaxed mb-4">
                       {step.description}
                     </p>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3 + idx * 0.15 }}
+                      viewport={{ once: true }}
+                      className="flex justify-center"
+                    >
+                      <StepCharacter size={64} />
+                    </motion.div>
                   </div>
 
                   {idx < steps.length - 1 && (

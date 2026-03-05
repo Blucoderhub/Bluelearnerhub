@@ -1,8 +1,8 @@
 # BluelearnerHub EdTech Platform
 
 ## Project Overview
-A comprehensive full-stack EdTech platform with gamification and mobile-first design:
-- **Frontend**: Next.js 16 with Tailwind CSS v3, framer-motion — runs on port 5000
+A comprehensive full-stack EdTech platform with gamification, isometric animations, animated characters, and mobile-first design:
+- **Frontend**: Next.js 16 with Tailwind CSS v3, framer-motion, SVG character animations — runs on port 5000
 - **Backend**: Express + TypeScript API — runs on port 3001
 - **AI Services**: Python FastAPI — runs on port 8000
 
@@ -17,6 +17,7 @@ A comprehensive full-stack EdTech platform with gamification and mobile-first de
 - **Main workflow**: `cd frontend && npm run dev` (port 5000, webview)
 - **Node.js**: v20
 - **Frontend dev command**: `next dev --webpack -p 5000 -H 0.0.0.0` (webpack mode for Replit compatibility)
+- **Deployment**: Autoscale mode, build: `cd frontend && npm run build`, run: `cd frontend && npm run start`
 - **CSS**: Tailwind CSS v3 with HSL CSS variables, dark mode via `.dark` class
 
 ## Design System
@@ -26,28 +27,48 @@ A comprehensive full-stack EdTech platform with gamification and mobile-first de
 - **Fonts**: Inter (body), Outfit (headings), JetBrains Mono (code)
 - **Components**: glass-card, glass-morphism, xp-bar, level-badge, achievement-badge, streak-flame
 
+## Animation System
+### Isometric Scene (`frontend/src/components/animations/`)
+- `IsometricScene.tsx` — Full isometric 3D scene with grid floor, 4 buildings, connection lines, particles, achievement badges
+- `IsometricBuilding.tsx` — Reusable isometric building with configurable icon, color, glow, and floating animation
+- CSS transforms (rotateX/rotateZ) for isometric perspective, framer-motion for entrance/float animations
+
+### Animated Characters (`frontend/src/components/animations/characters/`)
+- `CodingCharacter.tsx` — Person typing at desk with blinking cursor, code symbols
+- `LearningCharacter.tsx` — Person reading with floating lightbulbs
+- `CollaboratingCharacters.tsx` — Two people high-fiving with spark effects
+- `CelebrationCharacter.tsx` — Person jumping with confetti
+- All SVG-based, animated with framer-motion, lightweight (no external assets)
+
+### Utilities
+- `Confetti.tsx` — Reusable confetti animation with `useConfetti` hook
+- `animations.css` — Keyframes for slide-in, float, shimmer, skeleton, confetti, XP burst
+- `isometric.css` — Isometric scene-specific styles, grid, building entrance/float animations
+- `prefers-reduced-motion` support for accessibility
+
 ## Gamification Components
 Located in `frontend/src/components/gamification/`:
-- `XPProgressBar` — Animated XP bar with level display
+- `XPProgressBar` — Animated XP bar with level display, particle burst on level-up
 - `AchievementBadge` / `AchievementGrid` — Unlocked/locked/new achievement states
-- `DailyChallenge` — Challenge card with timer and XP reward
+- `DailyChallenge` — Challenge card with timer, XP reward, and CodingCharacter companion
 - `LeaderboardPreview` — Mini leaderboard with rankings
 - `StreakDisplay` — Streak counter with flame animation
 
 ## Key Files
-- `frontend/next.config.ts` — Next.js config (webpack custom rules, allowedDevOrigins, optimizePackageImports)
+- `frontend/next.config.ts` — Next.js config (webpack rules, allowedDevOrigins, optimizePackageImports)
 - `frontend/tailwind.config.ts` — Tailwind v3 config with custom colors, fonts, animations
-- `frontend/src/app/globals.css` — Global CSS with design tokens and gamification styles
-- `frontend/src/styles/animations.css` — Animation keyframes
-- `frontend/src/app/(student)/layout.tsx` — Student layout with sidebar + mobile bottom nav
-- `frontend/src/app/(student)/student/dashboard/page.tsx` — Gamified student dashboard
+- `frontend/src/app/globals.css` — Global CSS with design tokens, gamification styles, isometric imports
+- `frontend/src/styles/animations.css` — Animation keyframes and utility classes
+- `frontend/src/styles/isometric.css` — Isometric 3D scene styles
+- `frontend/src/app/(student)/layout.tsx` — Student layout with sidebar + mobile bottom nav + streak buddy
+- `frontend/src/app/(student)/student/dashboard/page.tsx` — Gamified dashboard with celebrations
+- `frontend/src/components/animations/IsometricHero.tsx` — Hero with isometric scene + characters
 - `frontend/src/components/layout/Header.tsx` — Marketing header with mobile drawer
 - `frontend/src/components/layout/Footer.tsx` — Marketing footer
-- `frontend/src/components/animations/IsometricHero.tsx` — Landing page hero
 
 ## Route Groups
-- `(marketing)` — Public landing page, marketing sections
-- `(student)` — Student dashboard, tutorials, exercises, IDE, AI companion, hackathons
+- `(marketing)` — Public landing page with isometric hero, marketing sections
+- `(student)` — Student dashboard, tutorials, courses, exercises, quiz, labs, IDE, AI companion, hackathons, premium
 - `(corporate)` — Corporate dashboard
 - `(hr)` — HR recruitment dashboard
 - `(admin)` — Admin panel
@@ -68,13 +89,3 @@ Located in `frontend/src/components/gamification/`:
 - `STRIPE_SECRET_KEY` — Payments
 - `JUDGE0_API_KEY` — Code execution
 - `AI_SERVICE_URL` — AI service endpoint
-
-## Migrations Done for Replit
-1. Updated frontend scripts to use `-p 5000 -H 0.0.0.0`
-2. Upgraded Node.js from v18 to v20
-3. Fixed conflicting dynamic route slugs (`[id]` vs `[hackathonId]`)
-4. Added `allowedDevOrigins` and `turbopack.root` to next.config.ts
-5. Removed NextAuth/JWT — auth is cookie-based via backend
-6. Converted CSS from Tailwind v4 syntax to v3 compatible
-7. Using `--webpack` flag instead of Turbopack for resource compatibility
-8. Complete mobile-first redesign with gamification features

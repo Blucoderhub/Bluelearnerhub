@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Users,
@@ -22,7 +22,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
-export default function HackathonTeamPage({ params }: { params: { hackathonId: string } }) {
+export default function HackathonTeamPage({ params }: { params: Promise<{ hackathonId: string }> }) {
+    const { hackathonId } = use(params);
     const [view, setView] = useState<'selection' | 'create' | 'match'>('selection');
     const [teamName, setTeamName] = useState('');
 
@@ -47,7 +48,7 @@ export default function HackathonTeamPage({ params }: { params: { hackathonId: s
         <div className="max-w-4xl mx-auto space-y-8 pb-20 animate-in fade-in duration-700">
             <div className="flex flex-col gap-2">
                 <h1 className="text-4xl font-black italic text-white tracking-tighter">TEAM <span className="text-primary ai-glow">FORMATION</span></h1>
-                <p className="text-slate-400 font-medium">Hackathon ID: #{params.hackathonId} • Build your dream squad.</p>
+                <p className="text-slate-400 font-medium">Hackathon ID: #{hackathonId} • Build your dream squad.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { XPProgressBar } from '@/components/gamification/XPProgressBar'
 import { StreakDisplay } from '@/components/gamification/StreakDisplay'
+import CodingCharacter from '@/components/animations/characters/CodingCharacter'
 import {
   LayoutDashboard,
   BookOpen,
@@ -89,6 +90,24 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               )
             })}
           </nav>
+
+          <div className="mx-3 p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
+            <div className="flex items-center gap-2">
+              <CodingCharacter size={48} />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-primary">Streak Buddy</p>
+                <p className="text-[10px] text-muted-foreground leading-snug">
+                  {12 >= 14
+                    ? '🔥 Legendary streak! Unstoppable!'
+                    : 12 >= 7
+                    ? '💪 Great streak! Keep it up!'
+                    : 12 >= 3
+                    ? '👍 Nice start! Stay consistent!'
+                    : '🚀 Start your streak today!'}
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div className="mx-3 p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
             <h4 className="text-sm font-bold text-primary">Join Community</h4>

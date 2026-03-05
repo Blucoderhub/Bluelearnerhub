@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { ArrowRight, Sparkles, GraduationCap, Rocket } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const CollaboratingCharacters = dynamic(() => import('@/components/animations/characters/CollaboratingCharacters'), { ssr: false })
 
 function LiveCounter({ inView }: { inView: boolean }) {
   const [count, setCount] = useState(49847)
@@ -53,7 +56,7 @@ export default function CallToAction() {
               Your Career?
             </span>
           </h2>
-          <p className="text-base md:text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-400 mb-6 max-w-2xl mx-auto">
             Join{' '}
             <span className="text-white font-semibold">
               <LiveCounter inView={inView} />+
@@ -65,6 +68,16 @@ export default function CallToAction() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex justify-center mb-6"
+          >
+            <CollaboratingCharacters size={120} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-3 justify-center mb-8"
           >

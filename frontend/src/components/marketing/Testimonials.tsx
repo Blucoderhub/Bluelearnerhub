@@ -114,7 +114,7 @@ export default function Testimonials() {
               viewport={{ once: true }}
               className="min-w-[85%] snap-center"
             >
-              <TestimonialCard testimonial={testimonial} />
+              <TestimonialCard testimonial={testimonial} index={idx} />
             </motion.div>
           ))}
         </div>
@@ -139,7 +139,7 @@ export default function Testimonials() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
             >
-              <TestimonialCard testimonial={testimonial} />
+              <TestimonialCard testimonial={testimonial} index={idx} />
             </motion.div>
           ))}
         </div>
@@ -148,7 +148,7 @@ export default function Testimonials() {
   )
 }
 
-function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
+function TestimonialCard({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) {
   return (
     <div className="h-full p-6 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] hover:border-purple-500/30 transition-all duration-300 group">
       <Quote className="w-8 h-8 text-purple-500/30 mb-4 group-hover:text-purple-500/50 transition-colors" />
@@ -157,9 +157,23 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
       </p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center flex-shrink-0`}>
-            <span className="text-sm font-bold text-white">{testimonial.initials}</span>
-          </div>
+          <motion.div
+            whileInView={{
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center flex-shrink-0`}>
+              <span className="text-sm font-bold text-white">{testimonial.initials}</span>
+            </div>
+            <motion.div
+              className={`absolute inset-0 rounded-full bg-gradient-to-br ${testimonial.color} opacity-0`}
+              animate={{ opacity: [0, 0.4, 0], scale: [1, 1.5, 1.8] }}
+              transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.5, ease: 'easeOut' }}
+            />
+          </motion.div>
           <div>
             <p className="font-semibold text-white text-sm">{testimonial.name}</p>
             <p className="text-xs text-gray-400">

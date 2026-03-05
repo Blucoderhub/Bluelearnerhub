@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Zap, Clock, ArrowRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import CodingCharacter from '@/components/animations/characters/CodingCharacter'
 
 interface DailyChallengeProps {
   title: string
@@ -64,6 +65,10 @@ export function DailyChallenge({
       whileHover={{ borderColor: 'rgba(0, 200, 120, 0.4)' }}
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+
+      <div className="absolute bottom-2 right-3 hidden sm:block opacity-60 pointer-events-none">
+        <CodingCharacter size={80} />
+      </div>
 
       <div className="relative space-y-4">
         <div className="flex items-start justify-between gap-3">

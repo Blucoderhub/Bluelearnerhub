@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useCallback } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { XPProgressBar } from '@/components/gamification/XPProgressBar'
 import { StreakDisplay } from '@/components/gamification/StreakDisplay'
@@ -8,7 +9,9 @@ import { LeaderboardPreview } from '@/components/gamification/LeaderboardPreview
 import { AchievementGrid } from '@/components/gamification/AchievementBadge'
 import ProgressChart from '@/components/dashboard/ProgressChart'
 import ActivityFeed from '@/components/dashboard/ActivityFeed'
-import { motion } from 'framer-motion'
+import CelebrationCharacter from '@/components/animations/characters/CelebrationCharacter'
+import Confetti from '@/components/animations/Confetti'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
   Code2,
@@ -49,9 +52,47 @@ const quickActions = [
 
 export default function StudentDashboard() {
   const { user } = useAuth()
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [showCelebration, setShowCelebration] = useState(false)
+
+  const newAchievements = sampleAchievements.filter(a => a.status === 'new')
+  const hasNewAchievement = newAchievements.length > 0
+
+  const handleCelebrate = useCallback(() => {
+    setShowConfetti(true)
+    setShowCelebration(true)
+    setTimeout(() => {
+      setShowConfetti(false)
+      setShowCelebration(false)
+    }, 3500)
+  }, [])
 
   return (
     <div className="space-y-6 sm:space-y-8">
+      <Confetti active={showConfetti} />
+
+      <AnimatePresence>
+        {showCelebration && (
+          <motion.div
+            className="fixed inset-0 z-[90] flex items-center justify-center pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -20 }}
+              animate={{ scale: 1, rotate: 0 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+              className="bg-card/90 backdrop-blur-xl rounded-3xl p-8 border border-primary/30 shadow-2xl flex flex-col items-center gap-3 pointer-events-auto"
+            >
+              <CelebrationCharacter size={120} />
+              <p className="text-lg font-bold font-heading text-foreground">Achievement Unlocked!</p>
+              <p className="text-sm text-muted-foreground">You earned a new badge 🎉</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -132,6 +173,23 @@ export default function StudentDashboard() {
           </div>
 
           <div className="p-5 sm:p-6 rounded-2xl glass-card border border-border/50">
+            {hasNewAchievement && (
+              <motion.button
+                onClick={handleCelebrate}
+                className="w-full mb-4 flex items-center gap-3 p-3 rounded-xl bg-[var(--xp-gold)]/10 border border-[var(--xp-gold)]/20 hover:bg-[var(--xp-gold)]/15 transition-colors cursor-pointer"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                <CelebrationCharacter size={48} />
+                <div className="text-left flex-1">
+                  <p className="text-sm font-bold text-[var(--xp-gold)]">New Achievement!</p>
+                  <p className="text-xs text-muted-foreground">Tap to celebrate your "{newAchievements[0].title}" badge</p>
+                </div>
+                <Sparkles className="w-5 h-5 text-[var(--xp-gold)] animate-pulse" />
+              </motion.button>
+            )}
             <AchievementGrid achievements={sampleAchievements} />
           </div>
         </motion.div>

@@ -9,6 +9,12 @@ import {
   Briefcase,
   Users,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const CodingCharacter = dynamic(() => import('@/components/animations/characters/CodingCharacter'), { ssr: false })
+const LearningCharacter = dynamic(() => import('@/components/animations/characters/LearningCharacter'), { ssr: false })
+const CelebrationCharacter = dynamic(() => import('@/components/animations/characters/CelebrationCharacter'), { ssr: false })
+const CollaboratingCharacters = dynamic(() => import('@/components/animations/characters/CollaboratingCharacters'), { ssr: false })
 
 const features = [
   {
@@ -18,6 +24,7 @@ const features = [
     color: 'from-blue-500 to-cyan-500',
     bgColor: 'bg-blue-500/10',
     borderColor: 'group-hover:border-blue-500/50',
+    character: 'learning',
   },
   {
     title: 'Coding Challenges',
@@ -26,6 +33,7 @@ const features = [
     color: 'from-purple-500 to-pink-500',
     bgColor: 'bg-purple-500/10',
     borderColor: 'group-hover:border-purple-500/50',
+    character: 'coding',
   },
   {
     title: 'Hackathons',
@@ -34,6 +42,7 @@ const features = [
     color: 'from-amber-500 to-orange-500',
     bgColor: 'bg-amber-500/10',
     borderColor: 'group-hover:border-amber-500/50',
+    character: 'celebration',
   },
   {
     title: 'AI Interview Prep',
@@ -42,6 +51,7 @@ const features = [
     color: 'from-emerald-500 to-green-500',
     bgColor: 'bg-emerald-500/10',
     borderColor: 'group-hover:border-emerald-500/50',
+    character: 'coding',
   },
   {
     title: 'Career Dashboard',
@@ -50,6 +60,7 @@ const features = [
     color: 'from-indigo-500 to-blue-500',
     bgColor: 'bg-indigo-500/10',
     borderColor: 'group-hover:border-indigo-500/50',
+    character: 'learning',
   },
   {
     title: 'Community & Rankings',
@@ -58,8 +69,24 @@ const features = [
     color: 'from-rose-500 to-pink-500',
     bgColor: 'bg-rose-500/10',
     borderColor: 'group-hover:border-rose-500/50',
+    character: 'collaborating',
   },
 ]
+
+function FeatureCharacter({ type }: { type: string }) {
+  switch (type) {
+    case 'coding':
+      return <CodingCharacter size={48} />
+    case 'learning':
+      return <LearningCharacter size={48} />
+    case 'celebration':
+      return <CelebrationCharacter size={48} />
+    case 'collaborating':
+      return <CollaboratingCharacters size={48} />
+    default:
+      return null
+  }
+}
 
 export default function Features() {
   const containerVariants = {
@@ -123,8 +150,19 @@ export default function Features() {
                 className={`group relative`}
               >
                 <div className={`relative p-6 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm ${feature.borderColor} transition-all duration-300 hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20`}>
-                  <div className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className={`w-6 h-6 bg-gradient-to-r ${feature.color} [&>*]:stroke-current text-white`} />
+                  <div className="flex items-start justify-between">
+                    <div className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`w-6 h-6 bg-gradient-to-r ${feature.color} [&>*]:stroke-current text-white`} />
+                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      whileInView={{ opacity: 0.6, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
+                      viewport={{ once: true }}
+                      className="opacity-0 group-hover:opacity-80 transition-opacity duration-300"
+                    >
+                      <FeatureCharacter type={feature.character} />
+                    </motion.div>
                   </div>
                   <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
                     {feature.title}
