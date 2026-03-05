@@ -25,13 +25,13 @@ import {
   X,
   Flame,
   Zap,
+  Play,
 } from 'lucide-react'
 
 const navItems = [
   { title: 'Dashboard', href: '/student/dashboard', icon: LayoutDashboard },
   { title: 'Tutorials', href: '/tutorials', icon: BookOpen },
-  { title: 'Courses', href: '/courses', icon: GraduationCap },
-  { title: 'Exercises', href: '/exercises', icon: Code2 },
+  { title: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   { title: 'Quiz', href: '/quiz', icon: ClipboardCheck },
   { title: 'Labs', href: '/labs', icon: FlaskConical },
   { title: 'IDE', href: '/ide', icon: Terminal },
@@ -42,8 +42,8 @@ const navItems = [
 
 const mobileTabItems = [
   { title: 'Home', href: '/student/dashboard', icon: LayoutDashboard },
-  { title: 'Learn', href: '/tutorials', icon: BookOpen },
-  { title: 'Code', href: '/ide', icon: Terminal },
+  { title: 'Tutorials', href: '/tutorials', icon: BookOpen },
+  { title: 'IDE', href: '/ide', icon: Terminal },
   { title: 'Compete', href: '/hackathons', icon: Flag },
   { title: 'More', href: '#more', icon: Menu },
 ]
@@ -96,6 +96,11 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                 >
                   <Icon className={cn('w-[18px] h-[18px] shrink-0 transition-colors', isActive ? 'text-primary' : 'group-hover:text-foreground')} />
                   <span className="truncate tracking-tight">{item.title}</span>
+                  {item.badge && (
+                    <span className="ml-auto px-1.5 py-0.5 text-[9px] font-bold tracking-wider uppercase bg-amber-500/20 text-amber-500 rounded-md">
+                      {item.badge}
+                    </span>
+                  )}
                   {isActive && <motion.div layoutId="nav-active" className="absolute left-0 w-1 h-4 bg-primary rounded-r-full" />}
                 </Link>
               )

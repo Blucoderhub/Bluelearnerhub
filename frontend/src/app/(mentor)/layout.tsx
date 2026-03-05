@@ -17,7 +17,7 @@ import {
     GraduationCap
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { facultyNav } from '@/config/nav'
+import { mentorNav } from '@/config/nav'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
@@ -55,7 +55,7 @@ export default function FacultyLayout({
                             <GraduationCap className="w-5 h-5 text-white" />
                         </div>
                         <h2 className="text-sm font-black tracking-tight text-white uppercase">
-                            Faculty <span className="text-emerald-400">Portal</span>
+                            Mentor <span className="text-emerald-400">Portal</span>
                         </h2>
                     </div>
                     <button
@@ -68,8 +68,8 @@ export default function FacultyLayout({
 
                 <div className="flex-1 overflow-y-auto py-8 px-4 space-y-10">
                     <div className="space-y-2">
-                        <p className="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-6">Academic Center</p>
-                        {facultyNav.map((item) => {
+                        <p className="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-6">Mentoring Center</p>
+                        {mentorNav.map((item) => {
                             const isActive = pathname === item.href
                             const Icon = iconMap[item.icon as string] || LayoutDashboard
 
@@ -119,7 +119,7 @@ export default function FacultyLayout({
                             <AvatarFallback className="bg-emerald-500/20 text-emerald-400 font-bold">FC</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-white truncate">Prof. Faculty</p>
+                            <p className="text-xs font-bold text-white truncate">Elite Mentor</p>
                             <p className="text-[10px] text-slate-500 truncate">Department Head</p>
                         </div>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-400">

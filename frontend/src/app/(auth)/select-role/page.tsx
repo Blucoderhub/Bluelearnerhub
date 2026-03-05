@@ -37,8 +37,8 @@ const roles = [
     },
     {
         id: 'FACULTY',
-        title: 'Faculty',
-        description: 'Manage courses, students, and academic tracks.',
+        title: 'Mentor',
+        description: 'Guided learning, student management, and academic tracks.',
         icon: Users,
         color: 'text-emerald-400',
         borderColor: 'border-emerald-500/20',
@@ -98,7 +98,7 @@ export default function SelectRolePage() {
         const pathMap: Record<string, string> = {
             STUDENT: '/student/dashboard',
             CANDIDATE: '/candidate/dashboard',
-            FACULTY: '/faculty/dashboard',
+            FACULTY: '/mentor/dashboard',
             INSTITUTION: '/institution/dashboard',
             CORPORATE: '/corporate/dashboard',
             HR: '/hr/dashboard',

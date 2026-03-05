@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
-  Search,
   ChevronDown,
   User,
   Settings,
@@ -23,23 +22,24 @@ import {
   Menu,
   X,
   BookOpen,
-  FileText,
-  Award,
+  Play,
   Users,
   GraduationCap,
   Sparkles,
   ArrowRight,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Header() {
-  const [searchQuery, setSearchQuery] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [tutorialsExpanded, setTutorialsExpanded] = useState(false)
+  const [expandedDomain, setExpandedDomain] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const { user, logout } = useAuth()
+  const allDomains = getAllDomains()
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 10)
@@ -52,7 +52,6 @@ export default function Header() {
 
   useEffect(() => {
     setMobileMenuOpen(false)
-    setMobileSearchOpen(false)
   }, [pathname])
 
   useEffect(() => {
@@ -65,25 +64,23 @@ export default function Header() {
   }, [mobileMenuOpen])
 
   const mainNavigation = [
-    { name: 'Tutorials', href: '/tutorials', icon: BookOpen },
-    { name: 'Exercises', href: '/exercises', icon: FileText },
-    { name: 'Certificates', href: '/certificates', icon: Award },
+    { name: 'Tutorials', href: '/tutorials', icon: BookOpen, isMega: true },
+    { name: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   ]
 
   const secondaryNavigation = [
-    { name: 'Community', href: '/community', icon: Users },
-    { name: 'Teachers', href: '/teachers', icon: GraduationCap },
+    { name: 'Mentors', href: '/mentors', icon: GraduationCap },
     { name: 'Premium', href: '/premium', icon: Sparkles },
+    { name: 'Community', href: '/community', icon: Users },
   ]
 
   return (
     <>
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-          scrolled
-            ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
-            : 'bg-background/80 backdrop-blur-md border-b border-transparent'
-        }`}
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
+          ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
+          : 'bg-background/80 backdrop-blur-md border-b border-transparent'
+          }`}
       >
         <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
           <div className="flex items-center gap-3">
@@ -111,48 +108,82 @@ export default function Header() {
             <nav className="hidden lg:flex items-center ml-6 gap-1">
               {mainNavigation.map((item) => {
                 const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
+
+                if (item.isMega) {
+                  return (
+                    <DropdownMenu key={item.name}>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none ${isActive
+                            ? 'text-primary bg-primary/10'
+                            : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                            }`}
+                        >
+                          <item.icon className="h-4 w-4" />
+                          {item.name}
+                          <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="start"
+                        sideOffset={15}
+                        className="w-[90vw] max-w-[1200px] p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 rounded-2xl shadow-2xl border-border/50 bg-background/95 backdrop-blur-xl"
+                      >
+                        {allDomains.map((domain) => (
+                          <div key={domain.id} className="space-y-4">
+                            <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-bold text-foreground">
+                              <span className="text-lg">{domain.icon}</span>
+                              {domain.name}
+                            </DropdownMenuLabel>
+                            <div className="flex flex-col gap-1.5">
+                              {domain.categories.slice(0, 6).map((category) => (
+                                <Link
+                                  key={category}
+                                  href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                                  className="text-[13px] text-muted-foreground hover:text-primary transition-colors py-0.5"
+                                >
+                                  {category}
+                                </Link>
+                              ))}
+                              {domain.categories.length > 6 && (
+                                <Link
+                                  href={`/tutorials/${domain.id}`}
+                                  className="text-[12px] text-primary/70 hover:text-primary font-medium mt-1 underline-offset-4 hover:underline"
+                                >
+                                  View all {domain.categories.length} topics →
+                                </Link>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )
+                }
+
                 return (
                   <Link
                     key={item.name}
-                    href={item.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? 'text-primary bg-primary/10'
-                        : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
-                    }`}
+                    href={item.badge ? '#' : item.href}
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
+                      ? 'text-primary bg-primary/10'
+                      : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                      } ${item.badge ? 'cursor-not-allowed opacity-80' : ''}`}
                   >
                     <item.icon className="h-4 w-4" />
                     {item.name}
+                    {item.badge && (
+                      <span className="ml-1 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-500 rounded-md">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 )
               })}
             </nav>
           </div>
 
-          <div className="hidden xl:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full group">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search courses, tutorials..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 w-full rounded-full border-border/50 bg-muted/30 pl-10 pr-4 text-sm focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary/50 hover:bg-muted/50 transition-all"
-              />
-            </div>
-          </div>
-
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-              className="xl:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-muted/50 active:scale-95 transition-all"
-              aria-label="Search"
-            >
-              <Search className="h-5 w-5 text-foreground/70" />
-            </button>
-
             <nav className="hidden lg:flex items-center gap-1">
               {secondaryNavigation.map((item) => (
                 <Link
@@ -221,27 +252,6 @@ export default function Header() {
           </div>
         </div>
 
-        <div
-          className={`xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileSearchOpen ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div className="px-4 pb-3">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search courses, tutorials, hackathons..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-11 w-full rounded-xl border-border/50 bg-muted/30 pl-10 pr-4 text-sm focus-visible:ring-2 focus-visible:ring-primary/20"
-                autoFocus={mobileSearchOpen}
-              />
-            </div>
-          </div>
-        </div>
       </header>
 
       {mobileMenuOpen && (
@@ -253,9 +263,8 @@ export default function Header() {
       )}
 
       <div
-        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b border-border/50">
@@ -279,19 +288,75 @@ export default function Header() {
               <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Learn</p>
               {mainNavigation.map((item) => {
                 const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
+
+                if (item.isMega) {
+                  return (
+                    <div key={item.name} className="flex flex-col">
+                      <button
+                        onClick={() => setTutorialsExpanded(!tutorialsExpanded)}
+                        className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${tutorialsExpanded || isActive
+                            ? 'text-primary bg-primary/10'
+                            : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
+                          }`}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        {item.name}
+                        <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${tutorialsExpanded ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {tutorialsExpanded && (
+                        <div className="pl-4 mt-1 space-y-1 mb-2">
+                          {allDomains.map((domain) => (
+                            <div key={domain.id} className="flex flex-col">
+                              <button
+                                onClick={() => setExpandedDomain(expandedDomain === domain.id ? null : domain.id)}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${expandedDomain === domain.id ? 'text-primary font-bold' : 'text-foreground/70'
+                                  }`}
+                              >
+                                <span>{domain.icon}</span>
+                                {domain.name}
+                                <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${expandedDomain === domain.id ? 'rotate-180' : ''}`} />
+                              </button>
+
+                              {expandedDomain === domain.id && (
+                                <div className="pl-8 flex flex-col gap-1 py-1">
+                                  {domain.categories.map((category) => (
+                                    <Link
+                                      key={category}
+                                      href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                                      onClick={() => setMobileMenuOpen(false)}
+                                      className="text-xs text-muted-foreground hover:text-primary py-1.5"
+                                    >
+                                      {category}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
                 return (
                   <Link
                     key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${
-                      isActive
+                    href={item.badge ? '#' : item.href}
+                    onClick={() => !item.badge && setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
-                    }`}
+                      } ${item.badge ? 'opacity-60 cursor-not-allowed' : ''}`}
                   >
                     <item.icon className="h-5 w-5" />
                     {item.name}
+                    {item.badge && (
+                      <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-500 rounded-md">
+                        {item.badge}
+                      </span>
+                    )}
                     {isActive && <div className="ml-auto h-2 w-2 rounded-full bg-primary" />}
                   </Link>
                 )
@@ -307,11 +372,10 @@ export default function Header() {
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${
-                      isActive
+                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
-                    }`}
+                      }`}
                   >
                     <item.icon className="h-5 w-5" />
                     {item.name}

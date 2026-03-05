@@ -31,7 +31,7 @@ export const config = {
         '/corporate/:path*',
         '/admin/:path*',
         '/hr/:path*',
-        '/faculty/:path*',
+        '/mentor/:path*',
         '/institution/:path*',
     ],
 };

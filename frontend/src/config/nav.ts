@@ -36,9 +36,9 @@ export const studentNav = [
     icon: 'reference',
   },
   {
-    title: 'Exercises',
-    href: '/exercises',
-    icon: 'code',
+    title: 'Courses',
+    href: '/courses',
+    icon: 'play',
   },
   {
     title: 'Quests',
@@ -189,10 +189,10 @@ export const adminNav = [
   },
 ]
 
-export const facultyNav = [
+export const mentorNav = [
   {
     title: 'Dashboard',
-    href: '/faculty/dashboard',
+    href: '/mentor/dashboard',
     icon: 'dashboard',
   },
   {
@@ -224,8 +224,8 @@ export const institutionNav = [
     icon: 'bar-chart',
   },
   {
-    title: 'Faculty',
-    href: '/faculty-list',
+    title: 'Mentors',
+    href: '/mentor-list',
     icon: 'users',
   },
   {
