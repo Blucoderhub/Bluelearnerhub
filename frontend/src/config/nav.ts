@@ -61,6 +61,16 @@ export const studentNav = [
     icon: 'flag',
   },
   {
+    title: 'IDE Sandbox',
+    href: '/ide',
+    icon: 'code',
+  },
+  {
+    title: 'Utilities',
+    href: '/tools',
+    icon: 'settings',
+  },
+  {
     title: 'Community',
     href: '/community',
     icon: 'users',

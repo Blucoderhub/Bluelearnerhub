@@ -4,21 +4,12 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import {
   ArrowRight,
-  Sparkles,
   GraduationCap,
   ChevronDown,
 } from 'lucide-react'
 import IsometricScene from './IsometricScene'
 import CodingCharacter from './characters/CodingCharacter'
 import LearningCharacter from './characters/LearningCharacter'
-
-const socialProofAvatars = [
-  'bg-blue-500',
-  'bg-emerald-500',
-  'bg-purple-500',
-  'bg-amber-500',
-  'bg-rose-500',
-]
 
 export default function IsometricHero() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -58,25 +49,10 @@ export default function IsometricHero() {
       >
         <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left max-w-2xl lg:max-w-none">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.1] mb-8"
-            >
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white/70 font-medium">
-                Join 50K+ learners already ahead
-              </span>
-              <span className="ml-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 rounded-full">
-                Free
-              </span>
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight"
             >
               <span className="text-white">Learn. Build.</span>
@@ -89,7 +65,7 @@ export default function IsometricHero() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
             >
               Master engineering, compete in global hackathons, and land your dream
@@ -99,7 +75,7 @@ export default function IsometricHero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
             >
               <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 shimmer reflective-glaze">
@@ -107,30 +83,6 @@ export default function IsometricHero() {
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-8 flex items-center gap-3"
-            >
-              <div className="flex -space-x-2">
-                {socialProofAvatars.map((bg, i) => (
-                  <div
-                    key={i}
-                    className={`w-8 h-8 rounded-full ${bg} border-2 border-[#061A2E] flex items-center justify-center`}
-                  >
-                    <span className="text-[10px] font-bold text-white">
-                      {String.fromCharCode(65 + i)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="text-sm text-white/50">
-                <span className="text-white/70 font-medium">2,847</span> joined this
-                week
-              </div>
             </motion.div>
           </div>
 

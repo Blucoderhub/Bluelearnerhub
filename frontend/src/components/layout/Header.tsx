@@ -27,6 +27,8 @@ import {
   GraduationCap,
   Sparkles,
   ArrowRight,
+  Code2,
+  Hammer,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { getAllDomains } from '@/lib/domain-config'
@@ -156,6 +158,41 @@ export default function Header() {
                             </div>
                           </div>
                         ))}
+
+                        {/* Developer Ecosystem Section */}
+                        <div className="space-y-4 lg:col-span-1 border-l border-border/50 pl-10 ml-2">
+                          <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-black text-primary uppercase tracking-widest">
+                            <Sparkles className="h-4 w-4" />
+                            Developer Ecosystem
+                          </DropdownMenuLabel>
+                          <div className="flex flex-col gap-3">
+                            <Link
+                              href="/ide"
+                              className="group flex items-start gap-3 p-3 rounded-xl hover:bg-primary/5 transition-all"
+                            >
+                              <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
+                                <Code2 className="h-4 w-4" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[13px] font-bold text-foreground">IDE Sandbox</span>
+                                <span className="text-[11px] text-muted-foreground leading-tight">Elite HackerRank-level coding environment.</span>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/tools"
+                              className="group flex items-start gap-3 p-3 rounded-xl hover:bg-amber-500/5 transition-all"
+                            >
+                              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 group-hover:scale-110 transition-transform">
+                                <Hammer className="h-4 w-4" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[13px] font-bold text-foreground">Engineering Tools</span>
+                                <span className="text-[11px] text-muted-foreground leading-tight">Converters, formatters, and simulators.</span>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )
@@ -295,8 +332,8 @@ export default function Header() {
                       <button
                         onClick={() => setTutorialsExpanded(!tutorialsExpanded)}
                         className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${tutorialsExpanded || isActive
-                            ? 'text-primary bg-primary/10'
-                            : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
+                          ? 'text-primary bg-primary/10'
+                          : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
                           }`}
                       >
                         <item.icon className="h-5 w-5" />
@@ -346,8 +383,8 @@ export default function Header() {
                     href={item.badge ? '#' : item.href}
                     onClick={() => !item.badge && setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
-                        ? 'text-primary bg-primary/10'
-                        : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
+                      ? 'text-primary bg-primary/10'
+                      : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
                       } ${item.badge ? 'opacity-60 cursor-not-allowed' : ''}`}
                   >
                     <item.icon className="h-5 w-5" />
@@ -373,8 +410,8 @@ export default function Header() {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
-                        ? 'text-primary bg-primary/10'
-                        : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
+                      ? 'text-primary bg-primary/10'
+                      : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
                       }`}
                   >
                     <item.icon className="h-5 w-5" />

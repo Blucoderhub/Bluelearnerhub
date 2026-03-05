@@ -1,134 +1,99 @@
 'use client'
 
-import { useState } from 'react'
-import Editor from '@monaco-editor/react'
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import React from 'react'
+import CodeEditor from '@/components/ide/CodeEditor'
 import {
-    Play,
-    Save,
-    Terminal,
-    Settings,
-    Cpu,
-    Layers,
+    Trophy,
+    Lightbulb,
+    MessageSquare,
     ChevronRight,
-    Code2,
-    Share2,
-    Bug
+    BookOpen,
+    Code2
 } from 'lucide-react'
 
 export default function IDEPage() {
-    const [code, setCode] = useState('// Welcome to the Bluelearnerhub Cloud IDE\n\nfunction salute() {\n  console.log("Saluting the new Midnight & Mint design!");\n}\n\nsalute();')
-    const [output, setOutput] = useState('Output will appear here after execution...')
-    const [language, setLanguage] = useState('javascript')
-
-    const handleRun = () => {
-        setOutput('Running code...\n> Saluting the new Midnight & Mint design!\n\nExecution finished in 42ms.')
-    }
-
     return (
-        <div className="h-[calc(100vh-8rem)] flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* IDE Toolbar */}
-            <header className="flex items-center justify-between bg-card/50 backdrop-blur-xl border border-border/50 p-3 rounded-[24px] shadow-lg shadow-black/5">
-                <div className="flex items-center gap-4 px-4">
-                    <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
-                            <Code2 className="h-5 w-5" />
-                        </div>
-                        <span className="font-black font-heading tracking-tight">Cloud IDE</span>
+        <div className="flex flex-col h-[calc(100vh-120px)] gap-6">
+            {/* Header Info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-primary tracking-widest uppercase">
+                        <Code2 className="w-4 h-4" />
+                        Specialized Practice
                     </div>
-                    <div className="h-6 w-px bg-border/50" />
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Language:</span>
-                        <select
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
-                            className="bg-transparent text-sm font-bold text-primary focus:outline-none cursor-pointer"
-                        >
-                            <option value="javascript">JavaScript</option>
-                            <option value="python">Python</option>
-                            <option value="typescript">TypeScript</option>
-                            <option value="cpp">C++</option>
-                        </select>
-                    </div>
+                    <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
+                        Elite Coding Sandbox
+                        <span className="px-2 py-0.5 text-[10px] bg-emerald-500/10 text-emerald-500 rounded-md border border-emerald-500/20">
+                            v1.0 Beta
+                        </span>
+                    </h1>
+                    <p className="text-sm text-muted-foreground font-medium">
+                        HackerRank-level environment for algorithm mastery and system design practice.
+                    </p>
                 </div>
 
-                <div className="flex items-center gap-2 pr-2">
-                    <Button variant="ghost" size="sm" className="rounded-xl gap-2 font-bold text-muted-foreground hover:text-primary transition-colors">
-                        <Save className="h-4 w-4" /> Save
-                    </Button>
-                    <Button variant="ghost" size="sm" className="rounded-xl gap-2 font-bold text-muted-foreground hover:text-primary transition-colors">
-                        <Share2 className="h-4 w-4" /> Share
-                    </Button>
-                    <div className="h-6 w-px bg-border/50 mx-2" />
-                    <Button
-                        onClick={handleRun}
-                        className="bg-primary text-white h-10 px-6 rounded-xl font-black gap-2 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20 transition-all"
-                    >
-                        <Play className="h-4 w-4 fill-current" /> Run Code
-                    </Button>
-                </div>
-            </header>
-
-            {/* Main IDE Workspace */}
-            <div className="flex-1 flex gap-4 min-h-0">
-                {/* Editor Container */}
-                <div className="flex-1 rounded-[32px] border border-border/50 bg-[#051922] overflow-hidden shadow-2xl relative">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent z-10" />
-                    <Editor
-                        height="100%"
-                        defaultLanguage={language}
-                        defaultValue={code}
-                        theme="vs-dark"
-                        onChange={(val) => setCode(val || '')}
-                        options={{
-                            fontSize: 16,
-                            fontFamily: 'var(--font-jetbrains-mono)',
-                            minimap: { enabled: false },
-                            padding: { top: 24, bottom: 24 },
-                            scrollBeyondLastLine: false,
-                            smoothScrolling: true,
-                            cursorBlinking: 'smooth',
-                            cursorSmoothCaretAnimation: 'on',
-                            lineNumbers: 'on',
-                            renderLineHighlight: 'all',
-                        }}
-                    />
-                </div>
-
-                {/* Console / Info Sidebar */}
-                <div className="w-96 flex flex-col gap-4">
-                    {/* Terminal Area */}
-                    <div className="flex-1 rounded-[32px] border border-border/50 bg-card p-6 flex flex-col gap-4">
-                        <div className="flex items-center justify-between border-b border-border/30 pb-4">
-                            <h4 className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-                                <Terminal className="h-4 w-4 text-primary" /> System Console
-                            </h4>
-                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 rounded-md hover:bg-muted/50">
-                                <Bug className="h-3 w-3" />
-                            </Button>
-                        </div>
-                        <div className="flex-1 font-mono text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed overflow-y-auto custom-scrollbar">
-                            {output}
-                        </div>
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/5 border border-amber-500/10 text-amber-500">
+                        <Trophy className="w-4 h-4" />
+                        <span className="text-xs font-bold">+500 XP Available</span>
                     </div>
+                </div>
+            </div>
 
-                    {/* AI Recommendations / Snippets */}
-                    <div className="h-64 rounded-[32px] bg-primary/5 border border-primary/20 p-6 flex flex-col gap-4 relative overflow-hidden group">
-                        <div className="relative z-10 flex flex-col gap-3">
-                            <h4 className="text-sm font-black font-heading text-primary flex items-center gap-2">
-                                <Cpu className="h-4 w-4" /> Smart Suggestions
-                            </h4>
-                            <div className="space-y-2">
-                                {['Optimize for-loop', 'Add JSDoc comments', 'Implement Error Boundary'].map((s, i) => (
-                                    <button key={i} className="w-full flex items-center justify-between p-3 rounded-xl bg-background/50 border border-primary/10 text-xs font-bold hover:border-primary/50 hover:bg-primary/5 transition-all">
-                                        {s} <ChevronRight className="h-3 w-3 text-primary opacity-50" />
-                                    </button>
-                                ))}
+            <div className="flex-1 flex gap-6 min-h-0">
+                {/* Left: Problem Description Panel (Mocked) */}
+                <div className="w-[380px] flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-hide hidden xl:flex">
+                    <div className="p-6 rounded-2xl bg-card border border-border space-y-4">
+                        <div className="flex items-center justify-between">
+                            <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider">Easy</span>
+                            <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
+                                <BookOpen className="w-3.5 h-3.5" />
+                                Algorithm
+                            </span>
+                        </div>
+                        <h3 className="text-lg font-bold tracking-tight">Two Sum Optimization</h3>
+                        <div className="space-y-3 text-[13.5px] text-muted-foreground leading-relaxed">
+                            <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.</p>
+                            <p>You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
+                            <div className="p-3 rounded-lg bg-muted/50 border border-border space-y-2">
+                                <p className="font-bold text-foreground text-xs uppercase tracking-wider">Example 1:</p>
+                                <code className="block text-[12px] opacity-80 leading-normal">
+                                    Input: nums = [2,7,11,15], target = 9 <br />
+                                    Output: [0,1] <br />
+                                    Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+                                </code>
                             </div>
                         </div>
-                        <div className="absolute -right-8 -bottom-8 h-32 w-32 bg-primary/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
                     </div>
+
+                    <div className="p-6 rounded-2xl bg-card border border-border space-y-4">
+                        <h4 className="text-sm font-bold flex items-center gap-2 uppercase tracking-wide">
+                            <Lightbulb className="w-4 h-4 text-amber-500" />
+                            Pro Tips
+                        </h4>
+                        <ul className="space-y-2.5">
+                            {[
+                                'Use a Hash Map for O(n) time complexity.',
+                                'Check for edge cases like empty arrays.',
+                                'The sandbox supports real-time stdout/stderr capture.'
+                            ].map((tip, i) => (
+                                <li key={i} className="flex gap-2 text-[12.5px] text-muted-foreground leading-relaxed">
+                                    <ChevronRight className="w-3 h-3 text-primary mt-1 shrink-0" />
+                                    {tip}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <button className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-muted/50 border border-border text-xs font-bold text-muted-foreground hover:text-primary hover:border-primary/50 transition-all uppercase tracking-widest group">
+                        <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        Discuss with Mentors
+                    </button>
+                </div>
+
+                {/* Right: Actual Editor */}
+                <div className="flex-1 min-w-0">
+                    <CodeEditor />
                 </div>
             </div>
         </div>

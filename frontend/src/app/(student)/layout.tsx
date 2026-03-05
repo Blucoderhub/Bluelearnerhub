@@ -26,6 +26,7 @@ import {
   Flame,
   Zap,
   Play,
+  Settings,
 } from 'lucide-react'
 
 const navItems = [
@@ -34,7 +35,8 @@ const navItems = [
   { title: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   { title: 'Quiz', href: '/quiz', icon: ClipboardCheck },
   { title: 'Labs', href: '/labs', icon: FlaskConical },
-  { title: 'IDE', href: '/ide', icon: Terminal },
+  { title: 'IDE Sandbox', href: '/ide', icon: Code2 },
+  { title: 'Utilities', href: '/tools', icon: Settings },
   { title: 'AI Companion', href: '/ai-companion', icon: Bot },
   { title: 'Hackathons', href: '/hackathons', icon: Flag },
   { title: 'Premium', href: '/premium', icon: Crown },
@@ -43,8 +45,8 @@ const navItems = [
 const mobileTabItems = [
   { title: 'Home', href: '/student/dashboard', icon: LayoutDashboard },
   { title: 'Tutorials', href: '/tutorials', icon: BookOpen },
-  { title: 'IDE', href: '/ide', icon: Terminal },
-  { title: 'Compete', href: '/hackathons', icon: Flag },
+  { title: 'IDE', href: '/ide', icon: Code2 },
+  { title: 'Tools', href: '/tools', icon: Settings },
   { title: 'More', href: '#more', icon: Menu },
 ]
 
