@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import { useState } from 'react'
-import { SessionProvider } from 'next-auth/react'
 import ErrorBoundary from '@/components/ui/ErrorBoundary'
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -46,9 +45,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             disableTransitionOnChange
           >
             <ErrorBoundary name="Theme Provider" level="section">
-              <SessionProvider>
-                {children}
-              </SessionProvider>
+              {children}
               <Toaster
                 position="top-right"
                 theme="dark"

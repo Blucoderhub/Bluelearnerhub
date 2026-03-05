@@ -1,82 +1,175 @@
-// src/components/marketing/Testimonials.tsx
-
 'use client'
 
 import { motion } from 'framer-motion'
+import { Star, Quote } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
 
 const testimonials = [
   {
     name: 'Sarah Chen',
-    role: 'Software Engineer at Google',
+    role: 'Software Engineer',
+    company: 'Google',
     content: 'Bluelearnerhub helped me transition from bootcamp graduate to working at Google. The hackathons gave me real-world experience!',
-    avatar: '👩‍💻',
+    rating: 5,
+    initials: 'SC',
+    color: 'from-blue-500 to-cyan-500',
   },
   {
     name: 'Raj Patel',
-    role: 'Product Manager at Meta',
+    role: 'Product Manager',
+    company: 'Meta',
     content: 'The interview prep module is incredible. I went through 10 mock interviews and got confidence for my real interviews.',
-    avatar: '👨‍💼',
+    rating: 5,
+    initials: 'RP',
+    color: 'from-purple-500 to-pink-500',
   },
   {
     name: 'Emma Wilson',
-    role: 'Full Stack Developer at Stripe',
+    role: 'Full Stack Developer',
+    company: 'Stripe',
     content: 'I loved the interactive tutorials. Learning by doing actually stuck with me, unlike traditional courses.',
-    avatar: '👩‍💻',
+    rating: 5,
+    initials: 'EW',
+    color: 'from-emerald-500 to-green-500',
   },
   {
     name: 'Alex Kumar',
-    role: 'Data Scientist at Microsoft',
+    role: 'Data Scientist',
+    company: 'Microsoft',
     content: 'The community aspect is amazing. Getting feedback from peers on my code submissions helped me improve so much.',
-    avatar: '👨‍🔬',
+    rating: 5,
+    initials: 'AK',
+    color: 'from-amber-500 to-orange-500',
   },
 ]
 
-export default function Testimonials() {
+function StarRating({ rating }: { rating: number }) {
   return (
-    <section className="py-20 px-4 bg-gray-900/50">
-      <div className="max-w-6xl mx-auto">
+    <div className="flex gap-0.5">
+      {[...Array(5)].map((_, i) => (
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function Testimonials() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    const container = scrollRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const scrollLeft = container.scrollLeft
+      const cardWidth = container.offsetWidth * 0.85
+      const index = Math.round(scrollLeft / cardWidth)
+      setActiveIndex(Math.min(index, testimonials.length - 1))
+    }
+
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <section className="py-16 md:py-24 px-4 bg-gray-900/50 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Loved by Learners
+          <span className="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-4">
+            Success Stories
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Loved by{' '}
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              50,000+
+            </span>{' '}
+            Learners
           </h2>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto">
             Join thousands of students who have transformed their careers
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 md:hidden"
+        >
           {testimonials.map((testimonial, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="p-8 rounded-lg border border-gray-700 bg-gray-800/50 backdrop-blur-sm hover:border-blue-500/50 transition-colors"
+              className="min-w-[85%] snap-center"
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="text-4xl">{testimonial.avatar}</div>
-                <div>
-                  <p className="font-semibold text-white">{testimonial.name}</p>
-                  <p className="text-sm text-gray-400">{testimonial.role}</p>
-                </div>
-              </div>
-              <p className="text-gray-300 italic">"{testimonial.content}"</p>
-              <div className="flex gap-1 mt-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">⭐</span>
-                ))}
-              </div>
+              <TestimonialCard testimonial={testimonial} />
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="flex justify-center gap-2 mt-4 md:hidden">
+          {testimonials.map((_, idx) => (
+            <div
+              key={idx}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                idx === activeIndex ? 'bg-purple-500 w-6' : 'bg-gray-600'
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="hidden md:grid md:grid-cols-2 gap-6">
+          {testimonials.map((testimonial, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <TestimonialCard testimonial={testimonial} />
             </motion.div>
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
+  return (
+    <div className="h-full p-6 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] hover:border-purple-500/30 transition-all duration-300 group">
+      <Quote className="w-8 h-8 text-purple-500/30 mb-4 group-hover:text-purple-500/50 transition-colors" />
+      <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-6">
+        &ldquo;{testimonial.content}&rdquo;
+      </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center flex-shrink-0`}>
+            <span className="text-sm font-bold text-white">{testimonial.initials}</span>
+          </div>
+          <div>
+            <p className="font-semibold text-white text-sm">{testimonial.name}</p>
+            <p className="text-xs text-gray-400">
+              {testimonial.role} at{' '}
+              <span className="text-gray-300 font-medium">{testimonial.company}</span>
+            </p>
+          </div>
+        </div>
+        <StarRating rating={testimonial.rating} />
+      </div>
+    </div>
   )
 }

@@ -75,7 +75,7 @@ const nextConfig = {
 
   // Experimental features
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
   },
 
   // Redirects

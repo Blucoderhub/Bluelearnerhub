@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -14,7 +14,9 @@ import {
     Settings,
     ChevronRight,
     LogOut,
-    Bell
+    Bell,
+    Menu,
+    X
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { corporateNav } from '@/config/nav'
@@ -27,6 +29,7 @@ export default function CorporateLayout({
     children: React.ReactNode
 }) {
     const pathname = usePathname()
+    const [mobileOpen, setMobileOpen] = useState(false)
 
     const iconMap: Record<string, any> = {
         dashboard: LayoutDashboard,
@@ -40,9 +43,18 @@ export default function CorporateLayout({
 
     return (
         <div className="flex min-h-screen bg-[#020617] text-slate-200 overflow-hidden font-sans">
-            {/* Sidebar - Corporate Pro Design */}
-            <aside className="hidden md:flex w-72 flex-col border-r border-slate-800/60 bg-[#020617] sticky top-0 h-screen z-40">
-                <div className="flex h-20 items-center border-b border-slate-800/60 px-8">
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
+
+            <aside className={cn(
+                "fixed md:sticky top-0 h-screen w-72 flex-col border-r border-slate-800/60 bg-[#020617] z-50 transition-transform duration-300",
+                mobileOpen ? "translate-x-0 flex" : "-translate-x-full md:translate-x-0 md:flex hidden md:flex"
+            )}>
+                <div className="flex h-20 items-center justify-between border-b border-slate-800/60 px-8">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                             <Building2 className="w-5 h-5 text-primary-foreground" />
@@ -51,6 +63,12 @@ export default function CorporateLayout({
                             BLUE_CORP <span className="text-primary ai-glow">OS</span>
                         </h2>
                     </div>
+                    <button
+                        className="md:hidden text-slate-400 hover:text-white"
+                        onClick={() => setMobileOpen(false)}
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-8 px-4 space-y-10">
@@ -65,6 +83,7 @@ export default function CorporateLayout({
                                 <Link
                                     key={item.href}
                                     href={item.href}
+                                    onClick={() => setMobileOpen(false)}
                                     className={cn(
                                         'group flex items-center justify-between rounded-xl px-4 py-3.5 text-[12px] font-black uppercase italic tracking-widest transition-all duration-300 relative',
                                         isActive
@@ -121,8 +140,14 @@ export default function CorporateLayout({
             {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900/20 via-[#020617] to-[#020617]">
                 {/* Top Header Barra */}
-                <header className="h-20 border-b border-slate-800/40 flex items-center justify-between px-8 bg-[#020617]/50 backdrop-blur-xl sticky top-0 z-30">
+                <header className="h-16 md:h-20 border-b border-slate-800/40 flex items-center justify-between px-4 md:px-8 bg-[#020617]/50 backdrop-blur-xl sticky top-0 z-30">
                     <div className="flex items-center gap-4">
+                        <button
+                            className="md:hidden text-slate-400 hover:text-white"
+                            onClick={() => setMobileOpen(true)}
+                        >
+                            <Menu className="w-5 h-5" />
+                        </button>
                         <Search className="w-4 h-4 text-slate-500 hover:text-primary transition-colors cursor-pointer" />
                         <div className="h-4 w-[1px] bg-slate-800" />
                         <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black uppercase italic">Network Status: Stable</Badge>
@@ -139,7 +164,7 @@ export default function CorporateLayout({
                     </div>
                 </header>
 
-                <main className="p-8 md:p-12 lg:p-16 max-w-[1600px] mx-auto w-full relative">
+                <main className="p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full relative">
                     {/* Subtle Grid Background */}
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b1a_1px,transparent_1px),linear-gradient(to_bottom,#1e293b1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 

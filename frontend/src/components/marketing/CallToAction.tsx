@@ -1,16 +1,33 @@
-// src/components/marketing/CallToAction.tsx
-
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
+import { ArrowRight, Sparkles, GraduationCap, Rocket } from 'lucide-react'
+
+function LiveCounter({ inView }: { inView: boolean }) {
+  const [count, setCount] = useState(49847)
+
+  useEffect(() => {
+    if (!inView) return
+    const interval = setInterval(() => {
+      setCount((c) => c + Math.floor(Math.random() * 3))
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [inView])
+
+  return <span>{count.toLocaleString()}</span>
+}
 
 export default function CallToAction() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true })
+
   return (
-    <section className="py-20 px-4 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 blur-3xl" />
-      
+    <section className="py-16 md:py-24 px-4 relative overflow-hidden" ref={ref}>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
+
       <div className="relative max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -19,42 +36,81 @@ export default function CallToAction() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Transform Your Career?
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-6"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Limited time: Premium features free for 30 days</span>
+          </motion.div>
+
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            Ready to Transform{' '}
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Your Career?
+            </span>
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join 50,000+ learners who are already learning, competing, and landing jobs on Bluelearnerhub.
+          <p className="text-base md:text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
+            Join{' '}
+            <span className="text-white font-semibold">
+              <LiveCounter inView={inView} />+
+            </span>{' '}
+            learners who are already learning, competing, and landing jobs.
           </p>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-3 justify-center mb-8"
           >
-            <Link href="/register">
-              <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50">
+            <Link href="/select-role">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-500 hover:via-blue-400 hover:to-cyan-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
+              >
+                <Rocket className="w-5 h-5" />
                 Start Learning Free
-              </button>
+                <ArrowRight className="w-4 h-4" />
+              </motion.button>
             </Link>
             <Link href="#features">
-              <button className="px-10 py-4 border-2 border-blue-500 text-blue-400 hover:bg-blue-500/10 font-semibold rounded-lg transition-all">
-                Learn More
-              </button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full sm:w-auto px-8 py-4 border border-white/10 text-gray-300 hover:text-white hover:border-white/20 hover:bg-white/5 font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <GraduationCap className="w-5 h-5" />
+                Explore Features
+              </motion.button>
             </Link>
           </motion.div>
 
-          {/* Social proof */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="mt-8 text-gray-400 text-sm"
+            className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-gray-500 text-sm"
           >
-            ✨ No credit card required • 🎓 Start with free tutorials • 🚀 Upgrade anytime
-          </motion.p>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              No credit card required
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+              Free tutorials included
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+              Cancel anytime
+            </span>
+          </motion.div>
         </motion.div>
       </div>
     </section>

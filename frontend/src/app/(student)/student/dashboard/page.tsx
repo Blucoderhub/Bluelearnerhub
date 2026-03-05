@@ -1,114 +1,200 @@
-// src/app/(student)/dashboard/page.tsx
-
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-import StatsCard from '@/components/dashboard/StatsCard'
-import ActivityFeed from '@/components/dashboard/ActivityFeed'
+import { XPProgressBar } from '@/components/gamification/XPProgressBar'
+import { StreakDisplay } from '@/components/gamification/StreakDisplay'
+import { DailyChallenge } from '@/components/gamification/DailyChallenge'
+import { LeaderboardPreview } from '@/components/gamification/LeaderboardPreview'
+import { AchievementGrid } from '@/components/gamification/AchievementBadge'
 import ProgressChart from '@/components/dashboard/ProgressChart'
-import UpcomingEvents from '@/components/dashboard/UpcomingEvents'
-import QuickActions from '@/components/dashboard/QuickActions'
-import StreakCounter from '@/components/dashboard/StreakCounter'
-import { GamificationSidebar } from '@/components/dashboard/GamificationSidebar'
-import { Button } from '@/components/ui/button' // Assuming this import is needed for the new Button component
+import ActivityFeed from '@/components/dashboard/ActivityFeed'
+import { motion } from 'framer-motion'
+import {
+  BookOpen,
+  Code2,
+  Trophy,
+  Award,
+  ArrowRight,
+  Flame,
+  Target,
+  Sparkles,
+} from 'lucide-react'
+import Link from 'next/link'
+
+const sampleAchievements = [
+  { id: '1', title: 'First Steps', description: 'Complete your first lesson', icon: '🎯', status: 'unlocked' as const },
+  { id: '2', title: 'Code Ninja', description: 'Solve 50 challenges', icon: '🥷', status: 'unlocked' as const },
+  { id: '3', title: 'Week Warrior', description: '7-day streak', icon: '🔥', status: 'new' as const },
+  { id: '4', title: 'Hackathon Hero', description: 'Win a hackathon', icon: '🏆', status: 'locked' as const },
+  { id: '5', title: 'Team Player', description: 'Join 3 teams', icon: '🤝', status: 'locked' as const },
+  { id: '6', title: 'Certified Pro', description: 'Earn a certificate', icon: '📜', status: 'locked' as const },
+  { id: '7', title: 'AI Explorer', description: 'Use AI companion 10 times', icon: '🤖', status: 'unlocked' as const },
+  { id: '8', title: 'Speed Demon', description: 'Complete a quiz in under 60s', icon: '⚡', status: 'locked' as const },
+]
+
+const sampleLeaderboard = [
+  { rank: 1, name: 'Alex Chen', xp: 12450, level: 12, avatar: '🧑‍💻', trend: 'up' as const },
+  { rank: 2, name: 'Priya Sharma', xp: 11200, level: 11, avatar: '👩‍💻', trend: 'same' as const },
+  { rank: 3, name: 'Jordan Lee', xp: 10800, level: 10, avatar: '🧑‍🎓', trend: 'up' as const },
+  { rank: 4, name: 'Sam Torres', xp: 9500, level: 9, avatar: '🧑‍🔬', trend: 'down' as const },
+  { rank: 5, name: 'You', xp: 2450, level: 5, avatar: '🎓', trend: 'up' as const, isCurrentUser: true },
+]
+
+const quickActions = [
+  { label: 'Continue Learning', icon: BookOpen, href: '/tutorials', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+  { label: 'Daily Quiz', icon: Target, href: '/quiz', color: 'bg-[var(--streak-orange)]/10 text-[var(--streak-orange)] border-[var(--streak-orange)]/20' },
+  { label: 'Join Hackathon', icon: Trophy, href: '/hackathons', color: 'bg-[var(--xp-gold)]/10 text-[var(--xp-gold)] border-[var(--xp-gold)]/20' },
+  { label: 'Practice Code', icon: Code2, href: '/ide', color: 'bg-[var(--level-purple)]/10 text-[var(--level-purple)] border-[var(--level-purple)]/20' },
+]
 
 export default function StudentDashboard() {
   const { user } = useAuth()
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* Premium Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-black font-heading tracking-tight text-foreground">
-            Welcome back, <span className="text-primary">{user?.fullName?.split(' ')[0]}</span>! 👋
-          </h1>
-          <p className="text-lg text-muted-foreground mt-3 font-medium max-w-2xl">
-            You're currently in the top <span className="text-primary font-bold">5%</span> of learners this week. Keep up the momentum!
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4 bg-primary/5 border border-primary/10 rounded-2xl p-4 pr-6">
-          <StreakCounter currentStreak={user?.currentStreak || 0} />
-          <div className="h-10 w-px bg-primary/20" />
-          <div className="flex flex-col">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Level</span>
-            <span className="text-xl font-black font-heading text-primary">05</span>
+    <div className="space-y-6 sm:space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-4"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-foreground">
+              Welcome back{user?.fullName ? `, ${user.fullName.split(' ')[0]}` : ''}
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1.5">
+              You're in the top <span className="text-primary font-bold">5%</span> of learners this week. Keep going!
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <StreakDisplay currentStreak={12} longestStreak={21} hasStreakProtection compact />
           </div>
         </div>
-      </div>
 
-      {/* Ultra-Modern Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Total XP"
-          value={user?.totalPoints || 0}
-          icon="⚡"
-          trend={{ value: 12, isPositive: true }}
-          className="glass-morphism border-primary/10 hover:border-primary/30 transition-all"
-        />
-        <StatsCard
-          title="Solved"
-          value="145"
-          icon="✅"
-          trend={{ value: 8, isPositive: true }}
-          className="glass-morphism border-primary/10 hover:border-primary/30 transition-all"
-        />
-        <StatsCard
-          title="Hackathons"
-          value="7"
-          icon="🏆"
-          trend={{ value: 2, isPositive: true }}
-          className="glass-morphism border-primary/10 hover:border-primary/30 transition-all"
-        />
-        <StatsCard
-          title="Certificates"
-          value="3"
-          icon="📜"
-          trend={{ value: 1, isPositive: true }}
-          className="glass-morphism border-primary/10 hover:border-primary/30 transition-all"
-        />
-      </div>
+        <XPProgressBar currentXP={2450} nextLevelXP={3000} level={5} />
+      </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Progress Area */}
-        <div className="lg:col-span-2 space-y-8">
-          <div className="p-8 rounded-3xl glass-morphism border-primary/10 ai-glow">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-bold font-heading">Learning Velocity</h3>
-              <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10">View Detailed Analytics</Button>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+      >
+        {quickActions.map((action, i) => {
+          const Icon = action.icon
+          return (
+            <Link
+              key={action.label}
+              href={action.href}
+              className={`group flex flex-col items-center gap-2 p-4 rounded-xl border transition-all hover:scale-[1.02] active:scale-[0.98] touch-target ${action.color}`}
+            >
+              <Icon className="w-6 h-6 transition-transform group-hover:scale-110" />
+              <span className="text-xs font-semibold text-center leading-tight">{action.label}</span>
+            </Link>
+          )
+        })}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+      >
+        <DailyChallenge
+          title="Array Manipulation Challenge"
+          description="Solve a medium-difficulty array problem to earn bonus XP and protect your streak."
+          difficulty="Medium"
+          xpReward={150}
+          category="Data Structures"
+          timeRemaining={43200}
+          onStart={() => window.location.href = '/quiz'}
+        />
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div
+          className="lg:col-span-2 space-y-6"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="p-5 sm:p-6 rounded-2xl glass-card border border-border/50">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-base sm:text-lg font-bold font-heading">Learning Progress</h3>
+              <Link href="/analytics" className="text-xs text-primary font-semibold hover:text-primary/80 flex items-center gap-1">
+                Details <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-            <div className="h-[300px]">
+            <div className="h-[250px] sm:h-[280px]">
               <ProgressChart />
             </div>
           </div>
 
-          {/* Activity Feed with refined list */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold font-heading px-2">Recent Synchronizations</h3>
-            <div className="rounded-3xl border border-border/50 overflow-hidden">
-              <ActivityFeed />
-            </div>
+          <div className="p-5 sm:p-6 rounded-2xl glass-card border border-border/50">
+            <AchievementGrid achievements={sampleAchievements} />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="space-y-8">
-          <GamificationSidebar />
-
-          {/* Quick Action Pills */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold font-heading px-2">Quick Navigation</h3>
-            <QuickActions
-              actions={[
-                { label: 'Resume Learning', icon: '📚', href: '/courses', color: 'primary' },
-                { label: 'Daily Quiz', icon: '🎯', href: '/quiz', color: 'primary' },
-                { label: 'Join Hackathon', icon: '🏆', href: '/hackathons', color: 'primary' },
-                { label: 'Browse Jobs', icon: '💼', href: '/jobs', color: 'primary' }
-              ]}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+        >
+          <div className="p-5 rounded-2xl glass-card border border-border/50">
+            <LeaderboardPreview
+              entries={sampleLeaderboard}
+              currentUserRank={42}
+              totalUsers={50000}
             />
           </div>
-        </div>
+
+          <div className="p-5 rounded-2xl glass-card border border-border/50">
+            <StreakDisplay currentStreak={12} longestStreak={21} hasStreakProtection />
+          </div>
+
+          <div className="rounded-2xl glass-card border border-border/50 overflow-hidden">
+            <div className="p-4 border-b border-border/50">
+              <h3 className="text-base font-bold font-heading flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-primary" />
+                Recent Activity
+              </h3>
+            </div>
+            <ActivityFeed />
+          </div>
+        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        {[
+          { label: 'Total XP', value: '2,450', icon: Flame, iconColor: 'text-[var(--xp-gold)]', trend: '+12%' },
+          { label: 'Challenges Solved', value: '145', icon: Code2, iconColor: 'text-primary', trend: '+8' },
+          { label: 'Hackathons', value: '7', icon: Trophy, iconColor: 'text-[var(--streak-orange)]', trend: '+2' },
+          { label: 'Certificates', value: '3', icon: Award, iconColor: 'text-[var(--level-purple)]', trend: '+1' },
+        ].map((stat, i) => {
+          const Icon = stat.icon
+          return (
+            <div key={stat.label} className="p-4 rounded-xl glass-card border border-border/50 flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl bg-muted/30 flex items-center justify-center ${stat.iconColor}`}>
+                <Icon className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-lg font-bold font-heading">{stat.value}</span>
+                  <span className="text-[10px] text-green-400 font-semibold">{stat.trend}</span>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </motion.div>
     </div>
   )
 }
