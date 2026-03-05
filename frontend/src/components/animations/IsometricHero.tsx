@@ -4,13 +4,8 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import {
   ArrowRight,
-  Play,
-  Users,
-  Trophy,
-  Briefcase,
   Sparkles,
   GraduationCap,
-  Code2,
   ChevronDown,
 } from 'lucide-react'
 import IsometricScene from './IsometricScene'
@@ -23,13 +18,6 @@ const socialProofAvatars = [
   'bg-purple-500',
   'bg-amber-500',
   'bg-rose-500',
-]
-
-const stats = [
-  { icon: Users, value: '50K+', label: 'Active Learners' },
-  { icon: Code2, value: '10K+', label: 'Challenges' },
-  { icon: Trophy, value: '500+', label: 'Hackathons' },
-  { icon: Briefcase, value: '2K+', label: 'Jobs Posted' },
 ]
 
 export default function IsometricHero() {
@@ -119,7 +107,6 @@ export default function IsometricHero() {
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-
             </motion.div>
 
             <motion.div
@@ -302,45 +289,6 @@ export default function IsometricHero() {
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1,
-                delayChildren: 1.4
-              }
-            }
-          }}
-          className="mt-16 w-full max-w-4xl mx-auto"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={i}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { type: 'spring', stiffness: 100, damping: 15 }
-                  }
-                }}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm"
-              >
-                <stat.icon className="w-5 h-5 text-emerald-400/70" />
-                <span className="text-xl sm:text-2xl font-bold text-white">
-                  {stat.value}
-                </span>
-                <span className="text-xs text-white/40">{stat.label}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </motion.div>
 
       <motion.div
