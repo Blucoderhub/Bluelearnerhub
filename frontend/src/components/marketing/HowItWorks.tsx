@@ -58,13 +58,13 @@ export default function HowItWorks() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4">
             Simple Process
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Your Journey to{' '}
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               Success
             </span>
           </h2>
-          <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
             From learning to landing the job, in 4 simple steps
           </p>
         </motion.div>
@@ -85,7 +85,7 @@ export default function HowItWorks() {
                   viewport={{ once: true }}
                   className="relative"
                 >
-                  <div className="relative z-10 text-center p-6 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] transition-all duration-300 group">
+                  <div className="relative z-10 text-center p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card transition-all duration-300 group">
                     <div className="relative mx-auto mb-5">
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
@@ -97,10 +97,10 @@ export default function HowItWorks() {
                         <span className="text-xs font-bold text-white">{step.number}</span>
                       </div>
                     </div>
-                    <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                       {step.description}
                     </p>
                     <motion.div
@@ -116,8 +116,8 @@ export default function HowItWorks() {
 
                   {idx < steps.length - 1 && (
                     <div className="hidden lg:flex absolute top-1/2 -right-4 z-20 -translate-y-1/2">
-                      <div className="w-8 h-8 rounded-full bg-gray-800 border border-white/10 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="w-8 h-8 rounded-full bg-muted border border-border/50 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>

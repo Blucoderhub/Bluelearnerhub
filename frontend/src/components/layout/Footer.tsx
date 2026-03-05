@@ -21,22 +21,20 @@ function AccordionSection({ section }: { section: FooterSection }) {
       >
         <span className="text-white font-semibold text-sm">{section.title}</span>
         <ChevronDown
-          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
+          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
+            }`}
         />
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? 'max-h-64 pb-4' : 'max-h-0'
-        }`}
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-64 pb-4' : 'max-h-0'
+          }`}
       >
         <ul className="space-y-2.5">
           {section.links.map((link) => (
             <li key={link.name}>
               <Link
                 href={link.href}
-                className="text-sm text-gray-400 hover:text-white transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.name}
               </Link>
@@ -110,7 +108,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gray-950/80 border-t border-white/[0.06]">
+    <footer className="bg-card/80 border-t border-border/50">
       <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-8">
           <div className="col-span-1 md:col-span-2 mb-8 md:mb-0">
@@ -123,7 +121,7 @@ export default function Footer() {
                 <PoweredByBadge />
               </div>
             </div>
-            <p className="text-sm text-gray-400 mb-5 leading-relaxed max-w-xs">
+            <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-xs">
               The world&apos;s first all-engineering & management learning platform.
               Master any domain, compete in hackathons, and land your dream job.
             </p>
@@ -136,7 +134,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-lg bg-white/[0.05] border border-white/[0.06] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200"
+                    className="w-9 h-9 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
                     aria-label={social.name}
                   >
                     <Icon className="w-4 h-4" />
@@ -162,7 +160,7 @@ export default function Footer() {
                       <li key={link.name}>
                         <Link
                           href={link.href}
-                          className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                         >
                           {link.name}
                         </Link>
@@ -177,7 +175,7 @@ export default function Footer() {
 
         <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-white/[0.06]">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-gray-500 order-2 md:order-1">
+            <p className="text-xs text-muted-foreground/60 order-2 md:order-1">
               &copy; {new Date().getFullYear()} Bluelearnerhub. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-4 md:gap-6 order-1 md:order-2">
@@ -185,7 +183,7 @@ export default function Footer() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-xs text-gray-500 hover:text-white transition-colors duration-200"
+                  className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors duration-200"
                 >
                   {link.name}
                 </Link>

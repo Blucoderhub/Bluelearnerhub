@@ -25,7 +25,7 @@ export const authenticate = async (
   try {
     // Get token from cookies (preferred) or Authorization header (fallback for API clients)
     let token: string | undefined;
-    
+
     // First try to get from signed cookies (HttpOnly)
     if (req.signedCookies?.accessToken) {
       token = req.signedCookies.accessToken;
@@ -34,7 +34,7 @@ export const authenticate = async (
     else if (req.headers.authorization?.startsWith('Bearer ')) {
       token = req.headers.authorization.substring(7);
     }
-    
+
     if (!token) {
       res.status(401).json({
         success: false,
@@ -132,13 +132,19 @@ export const optionalAuth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const authHeader = req.headers.authorization;
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // Mirror authenticate: prefer signed cookies, fall back to Authorization header
+    let token: string | undefined;
+
+    if (req.signedCookies?.accessToken) {
+      token = req.signedCookies.accessToken;
+    } else if (req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.substring(7);
+    }
+
+    if (!token) {
       return next();
     }
 
-    const token = authHeader.substring(7);
     const decoded: TokenPayload = verifyAccessToken(token);
 
     const result = await pool.query(
@@ -157,7 +163,7 @@ export const optionalAuth = async (
 
     next();
   } catch (error) {
-    // Invalid token, but continue without user
+    // Invalid token — continue without user rather than blocking
     next();
   }
 };

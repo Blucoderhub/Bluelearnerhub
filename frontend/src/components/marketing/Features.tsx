@@ -109,8 +109,8 @@ export default function Features() {
   }
 
   return (
-    <section id="features" className="py-16 md:py-24 px-4 bg-gray-900/50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
+    <section id="features" className="py-16 md:py-24 px-4 bg-card/30 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -119,16 +119,16 @@ export default function Features() {
           viewport={{ once: true }}
           className="text-center mb-12 md:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
             Why Choose Us
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Everything You Need to{' '}
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               Succeed
             </span>
           </h2>
-          <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
             A complete platform for learning, competing, and launching your tech career
           </p>
         </motion.div>
@@ -149,10 +149,10 @@ export default function Features() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className={`group relative`}
               >
-                <div className={`relative p-6 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm ${feature.borderColor} transition-all duration-300 hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20`}>
+                <div className={`relative p-6 md:p-8 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm ${feature.borderColor} transition-all duration-300 hover:bg-card hover:shadow-lg hover:shadow-black/20`}>
                   <div className="flex items-start justify-between">
                     <div className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`w-6 h-6 bg-gradient-to-r ${feature.color} [&>*]:stroke-current text-white`} />
+                      <Icon className={`w-6 h-6 bg-gradient-to-r ${feature.color} [&>*]:stroke-current text-foreground`} />
                     </div>
                     <motion.div
                       initial={{ opacity: 0, scale: 0.5 }}
@@ -164,10 +164,10 @@ export default function Features() {
                       <FeatureCharacter type={feature.character} />
                     </motion.div>
                   </div>
-                  <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {feature.description}
                   </p>
                   <div className={`mt-4 h-0.5 w-0 group-hover:w-12 bg-gradient-to-r ${feature.color} rounded-full transition-all duration-500`} />

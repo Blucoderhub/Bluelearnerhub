@@ -66,7 +66,7 @@ export default function IsometricHero() {
 
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 flex-1 flex flex-col justify-center px-5 sm:px-8 py-20 md:py-24"
+        className="relative z-20 flex-1 flex flex-col justify-center px-5 sm:px-8 py-20 md:py-24"
       >
         <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left max-w-2xl lg:max-w-none">
@@ -102,10 +102,10 @@ export default function IsometricHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
-              className="mt-6 text-base sm:text-lg md:text-xl text-white/60 leading-relaxed max-w-xl"
+              className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
             >
               Master engineering, compete in global hackathons, and land your dream
-              job — all on one premium platform built for future leaders.
+              job — all on one premium platform built for the next generation of engineers.
             </motion.p>
 
             <motion.div
@@ -119,8 +119,8 @@ export default function IsometricHero() {
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-              <button className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 bg-white/[0.06] hover:bg-white/[0.1] text-white/90 font-semibold rounded-xl transition-all duration-300 border border-white/[0.1] hover:border-white/[0.15]">
-                <Play className="w-4 h-4" />
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl transition-all duration-300 border border-white/10 hover:border-white/20 backdrop-blur-md">
+                <Play className="w-4 h-4 text-emerald-400" />
                 <span>Watch Demo</span>
               </button>
             </motion.div>

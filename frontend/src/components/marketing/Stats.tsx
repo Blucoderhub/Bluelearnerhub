@@ -10,19 +10,15 @@ const CelebrationCharacter = dynamic(() => import('@/components/animations/chara
 interface StatItem {
   label: string
   value: string
-  icon: string
+  icon: number  // index into iconComponents array
 }
 
 interface StatsProps {
   stats: StatItem[]
 }
 
-const iconMap: Record<string, React.ElementType> = {
-  '👨‍💻': Users,
-  '💡': Lightbulb,
-  '🏆': Trophy,
-  '💼': Briefcase,
-}
+// Icon components ordered by the stat items passed from the page
+const iconComponents: React.ElementType[] = [Users, Lightbulb, Trophy, Briefcase]
 
 const colorMap: Record<number, string> = {
   0: 'from-blue-500 to-cyan-500',
@@ -101,29 +97,29 @@ export default function Stats({ stats }: StatsProps) {
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
         >
           {stats.map((stat, idx) => {
-            const Icon = iconMap[stat.icon] || Users
-            const gradient = colorMap[idx] || colorMap[0]
+            const Icon = iconComponents[idx] ?? iconComponents[0]
+            const gradient = colorMap[idx] ?? colorMap[0]
             return (
               <motion.div
                 key={idx}
                 variants={itemVariants}
                 className="relative group"
               >
-                <div className="p-5 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm text-center hover:bg-white/[0.06] transition-all duration-300">
+                <div className="p-5 md:p-8 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm text-center hover:bg-card transition-all duration-300">
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <Icon className="w-7 h-7 text-white" />
                   </div>
-                  <div className="text-2xl md:text-4xl font-bold text-white mb-1">
+                  <div className="text-2xl md:text-4xl font-bold text-foreground mb-1">
                     <AnimatedCounter
                       value={stat.value}
                       inView={inView}
                       onComplete={idx === stats.length - 1 ? () => setShowCelebration(true) : undefined}
                     />
                   </div>
-                  <p className="text-gray-400 text-xs md:text-sm font-medium uppercase tracking-wider">
+                  <p className="text-muted-foreground text-xs md:text-sm font-medium uppercase tracking-wider">
                     {stat.label}
                   </p>
-                  <div className={`mt-4 mx-auto h-1 rounded-full bg-gray-800 overflow-hidden`}>
+                  <div className={`mt-4 mx-auto h-1 rounded-full bg-muted overflow-hidden`}>
                     <motion.div
                       className={`h-full rounded-full bg-gradient-to-r ${gradient}`}
                       initial={{ width: '0%' }}

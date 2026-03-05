@@ -28,8 +28,8 @@ export default function CallToAction() {
 
   return (
     <section className="py-16 md:py-24 px-4 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-600/5 to-achievement-cyan/5" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent" />
 
       <div className="relative max-w-4xl mx-auto">
         <motion.div
@@ -50,15 +50,15 @@ export default function CallToAction() {
             <span>Limited time: Premium features free for 30 days</span>
           </motion.div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 leading-tight">
             Ready to Transform{' '}
             <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
               Your Career?
             </span>
           </h2>
-          <p className="text-base md:text-lg text-gray-400 mb-6 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Join{' '}
-            <span className="text-white font-semibold">
+            <span className="text-foreground font-semibold">
               <LiveCounter inView={inView} />+
             </span>{' '}
             learners who are already learning, competing, and landing jobs.
@@ -96,7 +96,7 @@ export default function CallToAction() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto px-8 py-4 border border-white/10 text-gray-300 hover:text-white hover:border-white/20 hover:bg-white/5 font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 border border-border/50 text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/30 font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <GraduationCap className="w-5 h-5" />
                 Explore Features
@@ -109,7 +109,7 @@ export default function CallToAction() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-gray-500 text-sm"
+            className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-muted-foreground/70 text-sm"
           >
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />

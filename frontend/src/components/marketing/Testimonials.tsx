@@ -49,7 +49,7 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`}
+          className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/40'}`}
         />
       ))}
     </div>
@@ -76,8 +76,8 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <section className="py-16 md:py-24 px-4 bg-gray-900/50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
+    <section className="py-16 md:py-24 px-4 bg-card/30 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-level-purple/5 via-transparent to-transparent" />
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -89,14 +89,14 @@ export default function Testimonials() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-4">
             Success Stories
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Loved by{' '}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               50,000+
             </span>{' '}
             Learners
           </h2>
-          <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
             Join thousands of students who have transformed their careers
           </p>
         </motion.div>
@@ -123,9 +123,8 @@ export default function Testimonials() {
           {testimonials.map((_, idx) => (
             <div
               key={idx}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                idx === activeIndex ? 'bg-purple-500 w-6' : 'bg-gray-600'
-              }`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeIndex ? 'bg-purple-500 w-6' : 'bg-muted'
+                }`}
             />
           ))}
         </div>
@@ -150,9 +149,9 @@ export default function Testimonials() {
 
 function TestimonialCard({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) {
   return (
-    <div className="h-full p-6 md:p-8 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] hover:border-purple-500/30 transition-all duration-300 group">
+    <div className="h-full p-6 md:p-8 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card hover:border-purple-500/30 transition-all duration-300 group">
       <Quote className="w-8 h-8 text-purple-500/30 mb-4 group-hover:text-purple-500/50 transition-colors" />
-      <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-6">
+      <p className="text-foreground/80 text-sm md:text-base leading-relaxed mb-6">
         &ldquo;{testimonial.content}&rdquo;
       </p>
       <div className="flex items-center justify-between">
@@ -175,10 +174,10 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof testimoni
             />
           </motion.div>
           <div>
-            <p className="font-semibold text-white text-sm">{testimonial.name}</p>
-            <p className="text-xs text-gray-400">
+            <p className="font-semibold text-foreground text-sm">{testimonial.name}</p>
+            <p className="text-xs text-muted-foreground">
               {testimonial.role} at{' '}
-              <span className="text-gray-300 font-medium">{testimonial.company}</span>
+              <span className="text-foreground/70 font-medium">{testimonial.company}</span>
             </p>
           </div>
         </div>

@@ -9,29 +9,29 @@ import CallToAction from '@/components/marketing/CallToAction'
 
 export default function HomePage() {
   return (
-    <main className="bg-gradient-to-b from-gray-900 via-blue-900 to-gray-900">
+    <main className="bg-background">
       {/* Hero Section with Isometric Animation */}
       <IsometricHero />
-      
+
       {/* Stats Section */}
-      <Stats 
+      <Stats
         stats={[
-          { label: 'Active Learners', value: '50,000+', icon: '👨‍💻' },
-          { label: 'Coding Challenges', value: '10,000+', icon: '💡' },
-          { label: 'Hackathons Hosted', value: '500+', icon: '🏆' },
-          { label: 'Jobs Posted', value: '2,000+', icon: '💼' }
+          { label: 'Active Learners', value: '50,000+', icon: 0 },
+          { label: 'Coding Challenges', value: '10,000+', icon: 1 },
+          { label: 'Hackathons Hosted', value: '500+', icon: 2 },
+          { label: 'Jobs Posted', value: '2,000+', icon: 3 },
         ]}
       />
-      
+
       {/* Features Section */}
       <Features />
-      
+
       {/* How It Works */}
       <HowItWorks />
-      
+
       {/* Testimonials */}
       <Testimonials />
-      
+
       {/* Final CTA */}
       <CallToAction />
     </main>

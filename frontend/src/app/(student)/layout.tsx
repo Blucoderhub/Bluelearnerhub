@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { XPProgressBar } from '@/components/gamification/XPProgressBar'
 import { StreakDisplay } from '@/components/gamification/StreakDisplay'
 import CodingCharacter from '@/components/animations/characters/CodingCharacter'
+import { useAuth } from '@/hooks/useAuth'
 import {
   LayoutDashboard,
   BookOpen,
@@ -49,6 +50,15 @@ const mobileTabItems = [
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user } = useAuth()
+
+  // Derive display values from real user data with sensible defaults
+  const displayName = user?.fullName ?? user?.name ?? 'Student'
+  const initials = displayName.charAt(0).toUpperCase()
+  const level = user?.level ?? 1
+  const currentXP = user?.totalPoints ?? 0
+  const nextLevelXP = level * 1000
+  const streak = user?.currentStreak ?? 0
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -64,7 +74,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
         <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6 scrollbar-hide">
           <div className="px-3">
-            <XPProgressBar currentXP={2450} nextLevelXP={3000} level={5} compact />
+            <XPProgressBar currentXP={currentXP} nextLevelXP={nextLevelXP} level={level} compact />
           </div>
 
           <nav className="space-y-1">
@@ -97,13 +107,13 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-primary">Streak Buddy</p>
                 <p className="text-[10px] text-muted-foreground leading-snug">
-                  {12 >= 14
+                  {streak >= 14
                     ? '🔥 Legendary streak! Unstoppable!'
-                    : 12 >= 7
-                    ? '💪 Great streak! Keep it up!'
-                    : 12 >= 3
-                    ? '👍 Nice start! Stay consistent!'
-                    : '🚀 Start your streak today!'}
+                    : streak >= 7
+                      ? '💪 Great streak! Keep it up!'
+                      : streak >= 3
+                        ? '👍 Nice start! Stay consistent!'
+                        : '🚀 Start your streak today!'}
                 </p>
               </div>
             </div>
@@ -121,14 +131,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         <div className="p-3 border-t border-border/50">
           <div className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/20">
             <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-sm">
-              S
+              {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">Student</p>
+              <p className="text-sm font-semibold truncate">{displayName}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="level-badge text-[10px] py-0">LV 5</span>
+                <span className="level-badge text-[10px] py-0">LV {level}</span>
                 <span className="flex items-center gap-0.5 text-[10px] text-[var(--streak-orange)]">
-                  <Flame className="w-3 h-3" /> 12
+                  <Flame className="w-3 h-3" /> {streak}
                 </span>
               </div>
             </div>
@@ -147,7 +157,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               </button>
             </div>
             <div className="p-3 border-b border-border">
-              <XPProgressBar currentXP={2450} nextLevelXP={3000} level={5} compact />
+              <XPProgressBar currentXP={currentXP} nextLevelXP={nextLevelXP} level={level} compact />
             </div>
             <nav className="p-3 space-y-1">
               {navItems.map((item) => {
