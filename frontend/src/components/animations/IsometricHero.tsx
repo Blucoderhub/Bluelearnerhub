@@ -114,7 +114,7 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0">
+              <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 shimmer reflective-glaze">
                 <GraduationCap className="w-5 h-5" />
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -153,7 +153,12 @@ export default function IsometricHero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 30 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={{
+              type: 'spring',
+              stiffness: 70,
+              damping: 20,
+              delay: 0.4
+            }}
             className="flex-1 relative w-full max-w-xl lg:max-w-none"
           >
             <div className="relative w-full aspect-square max-h-[550px]">
@@ -161,9 +166,14 @@ export default function IsometricHero() {
 
               <motion.div
                 className="absolute bottom-[8%] left-[2%] z-20 hidden md:block"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.6 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 70,
+                  damping: 15,
+                  delay: 1.0
+                }}
               >
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
@@ -175,9 +185,14 @@ export default function IsometricHero() {
 
               <motion.div
                 className="absolute bottom-[15%] right-[5%] z-20 hidden md:block"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4, duration: 0.6 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 70,
+                  damping: 15,
+                  delay: 1.2
+                }}
               >
                 <motion.div
                   animate={{ y: [0, -3, 0] }}
@@ -292,19 +307,33 @@ export default function IsometricHero() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+                delayChildren: 1.4
+              }
+            }
+          }}
           className="mt-16 w-full max-w-4xl mx-auto"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {stats.map((stat, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 + i * 0.1, duration: 0.4 }}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { type: 'spring', stiffness: 100, damping: 15 }
+                  }
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 border border-white/5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm"
               >
                 <stat.icon className="w-5 h-5 text-emerald-400/70" />
                 <span className="text-xl sm:text-2xl font-bold text-white">
@@ -320,7 +349,7 @@ export default function IsometricHero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 2.0 }}
         className="relative z-10 pb-8 flex flex-col items-center gap-3"
       >
         <span className="text-xs text-white/30 tracking-wide uppercase">

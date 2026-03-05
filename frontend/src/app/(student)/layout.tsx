@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { XPProgressBar } from '@/components/gamification/XPProgressBar'
@@ -62,13 +63,13 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="hidden md:flex w-64 lg:w-72 flex-col border-r border-border/50 bg-card/50 backdrop-blur-xl sticky top-0 h-screen z-40">
-        <div className="flex h-14 items-center border-b border-border/50 px-6">
-          <Link href="/student/dashboard" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
-              <span className="text-xs font-bold text-primary-foreground">BL</span>
+      <aside className="hidden md:flex w-64 lg:w-72 flex-col border-r border-border bg-card sticky top-0 h-screen z-40 transition-all duration-500">
+        <div className="flex h-16 items-center px-6">
+          <Link href="/student/dashboard" className="flex items-center gap-2.5 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-sm group-hover:shadow-primary/20 transition-all">
+              <span className="text-xs font-bold text-primary-foreground tracking-tighter">BL</span>
             </div>
-            <span className="font-heading font-bold text-base tracking-tight">Student</span>
+            <span className="font-heading font-bold text-lg tracking-tight text-foreground">Bluelearner</span>
           </Link>
         </div>
 
@@ -77,8 +78,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             <XPProgressBar currentXP={currentXP} nextLevelXP={nextLevelXP} level={level} compact />
           </div>
 
-          <nav className="space-y-1">
-            <p className="px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] mb-2">Navigation</p>
+          <nav className="space-y-0.5">
+            <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-3 opacity-50">Systems</p>
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/student/dashboard' && pathname.startsWith(item.href))
               const Icon = item.icon
@@ -87,44 +88,42 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all relative',
+                    'group flex items-center gap-3 rounded-lg px-4 py-2.5 text-[14px] font-medium transition-all relative mx-1',
                     isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                      ? 'bg-primary/5 text-primary'
+                      : 'text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
                   )}
                 >
-                  {isActive && <span className="absolute left-0 w-[3px] h-5 bg-primary rounded-r-full" />}
                   <Icon className={cn('w-[18px] h-[18px] shrink-0 transition-colors', isActive ? 'text-primary' : 'group-hover:text-foreground')} />
-                  <span className="truncate">{item.title}</span>
+                  <span className="truncate tracking-tight">{item.title}</span>
+                  {isActive && <motion.div layoutId="nav-active" className="absolute left-0 w-1 h-4 bg-primary rounded-r-full" />}
                 </Link>
               )
             })}
           </nav>
 
-          <div className="mx-3 p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
-            <div className="flex items-center gap-2">
-              <CodingCharacter size={48} />
+          <div className="mx-3 p-4 rounded-xl bg-secondary/50 border border-border space-y-3">
+            <div className="flex items-center gap-3">
+              <CodingCharacter size={44} />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-primary">Streak Buddy</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">
-                  {streak >= 14
-                    ? '🔥 Legendary streak! Unstoppable!'
-                    : streak >= 7
-                      ? '💪 Great streak! Keep it up!'
-                      : streak >= 3
-                        ? '👍 Nice start! Stay consistent!'
-                        : '🚀 Start your streak today!'}
-                </p>
+                <p className="text-[11px] font-bold text-foreground">Learning Pulse</p>
+                <div className="mt-1 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full" style={{ width: '65%' }} />
+                </div>
               </div>
             </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Your consistency is <span className="text-foreground font-bold italic">Top 2%</span> this week.
+            </p>
           </div>
 
-          <div className="mx-3 p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
-            <h4 className="text-sm font-bold text-primary">Join Community</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">Connect with 50K+ learners.</p>
-            <Button variant="link" className="p-0 h-auto text-xs text-primary hover:text-primary/80 font-semibold">
-              Join Discord →
-            </Button>
+          <div className="mx-3 p-5 rounded-xl bg-primary text-primary-foreground space-y-2 shadow-lg shadow-primary/10 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <h4 className="text-sm font-bold tracking-tight">Elite Community</h4>
+            <p className="text-[11px] opacity-80 leading-relaxed">Network with researchers and engineers from leading institutes.</p>
+            <button className="text-[11px] font-bold underline underline-offset-4 hover:opacity-80 transition-opacity">
+              Join Agora →
+            </button>
           </div>
         </div>
 
