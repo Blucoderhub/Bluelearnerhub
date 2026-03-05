@@ -119,10 +119,7 @@ export default function IsometricHero() {
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-              <button className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl transition-all duration-300 border border-white/10 hover:border-white/20 backdrop-blur-md">
-                <Play className="w-4 h-4 text-emerald-400" />
-                <span>Watch Demo</span>
-              </button>
+
             </motion.div>
 
             <motion.div
