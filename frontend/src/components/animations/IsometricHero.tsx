@@ -68,8 +68,8 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
             >
-              Master engineering, compete in global hackathons, and land your dream
-              job — all on one premium platform built for the next generation of engineers.
+              Master complex disciplines, compete in global innovation challenges, and land your dream
+              role — all on one premium platform built for the next generation of professionals across Engineering, Management, and beyond.
             </motion.p>
 
             <motion.div

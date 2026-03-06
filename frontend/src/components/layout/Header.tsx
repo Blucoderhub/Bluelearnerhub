@@ -282,11 +282,11 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild className="hidden sm:inline-flex text-sm font-medium hover:text-primary hover:bg-primary/5 rounded-lg transition-all">
-                  <Link href="/login">Log in</Link>
-                </Button>
-                <Button asChild className="bg-primary text-white hover:bg-primary/90 font-semibold px-5 h-9 text-sm rounded-lg shadow-md shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all">
-                  <Link href="/select-role">Sign Up</Link>
+                <Button asChild className="bg-primary text-white hover:bg-primary/90 font-bold px-6 h-10 text-sm rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all group">
+                  <Link href="/get-started" className="flex items-center gap-2">
+                    Get Started
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </Button>
               </div>
             )}
@@ -443,14 +443,11 @@ export default function Header() {
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <Button asChild className="w-full bg-primary text-white hover:bg-primary/90 font-semibold h-11 rounded-xl shadow-md shadow-primary/20">
-                  <Link href="/select-role" onClick={() => setMobileMenuOpen(false)}>
+                <Button asChild className="w-full bg-primary text-white hover:bg-primary/90 font-bold h-12 rounded-xl shadow-lg shadow-primary/20 active:scale-[0.98] transition-all group">
+                  <Link href="/get-started" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 w-full">
                     Get Started
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                </Button>
-                <Button variant="outline" asChild className="w-full h-11 rounded-xl border-border/50">
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Log in</Link>
                 </Button>
               </div>
             )}

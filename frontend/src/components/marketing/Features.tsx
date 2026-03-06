@@ -19,7 +19,7 @@ const CollaboratingCharacters = dynamic(() => import('@/components/animations/ch
 const features = [
   {
     title: 'Interactive Tutorials',
-    description: 'Learn coding with interactive W3Schools-style tutorials covering JavaScript, Python, Web Dev, and more.',
+    description: 'Master your field with interactive labs and tutorials across Engineering, Management, and Data Science.',
     icon: BookOpen,
     color: 'from-blue-500 to-cyan-500',
     bgColor: 'bg-blue-500/10',
@@ -27,8 +27,8 @@ const features = [
     character: 'learning',
   },
   {
-    title: 'Coding Challenges',
-    description: 'Solve real-world coding problems with hints, test cases, and progressive difficulty levels.',
+    title: 'Smart Practice',
+    description: 'Solve domain-specific challenges with intelligent hints, simulations, and progressive difficulty levels.',
     icon: Zap,
     color: 'from-purple-500 to-pink-500',
     bgColor: 'bg-purple-500/10',
@@ -36,8 +36,8 @@ const features = [
     character: 'coding',
   },
   {
-    title: 'Hackathons',
-    description: 'Compete in exciting hackathons, showcase your skills, and win prizes from top companies.',
+    title: 'Innovation Hub',
+    description: 'Participate in global innovation challenges and multi-disciplinary hackathons to showcase your diverse expertise.',
     icon: Trophy,
     color: 'from-amber-500 to-orange-500',
     bgColor: 'bg-amber-500/10',
@@ -45,8 +45,8 @@ const features = [
     character: 'celebration',
   },
   {
-    title: 'AI Interview Prep',
-    description: 'Practice with AI-powered mock interviews, get real-time feedback, and boost your confidence.',
+    title: 'AI Career Coach',
+    description: 'Prepare for any role with an AI-powered coach tailored to your specific discipline, with real-time feedback.',
     icon: Bot,
     color: 'from-emerald-500 to-green-500',
     bgColor: 'bg-emerald-500/10',
@@ -55,7 +55,7 @@ const features = [
   },
   {
     title: 'Career Dashboard',
-    description: 'Track job applications, schedule interviews, build your portfolio, and manage your career.',
+    description: 'Track your professional growth across industries, manage your global portfolio, and land elite roles.',
     icon: Briefcase,
     color: 'from-indigo-500 to-blue-500',
     bgColor: 'bg-indigo-500/10',
@@ -64,7 +64,7 @@ const features = [
   },
   {
     title: 'Community & Rankings',
-    description: 'Connect with learners worldwide, compete on leaderboards, and celebrate achievements together.',
+    description: 'Connect with a world-class network of professionals and students across all disciplines.',
     icon: Users,
     color: 'from-rose-500 to-pink-500',
     bgColor: 'bg-rose-500/10',

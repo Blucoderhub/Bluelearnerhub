@@ -39,7 +39,7 @@ export default function CallToAction() {
             </span>
           </h2>
           <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Take the next step in your engineering journey. Master elite skills with industry-standard tools and world-class curriculum.
+            Take the next step in your professional journey. Master elite skills with industry-standard tools and world-class curriculum across multiple disciplines.
           </p>
 
           <motion.div

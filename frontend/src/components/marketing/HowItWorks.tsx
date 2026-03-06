@@ -13,7 +13,7 @@ const steps = [
   {
     number: 1,
     title: 'Choose Your Path',
-    description: 'Start as a student, job seeker, or corporate user. Select learning paths tailored to your goals.',
+    description: 'Start as a student, job seeker, or corporate user. Select learning paths tailored to your professional goals.',
     icon: Compass,
     color: 'from-blue-500 to-cyan-500',
     Character: LearningCharacter,
@@ -21,15 +21,15 @@ const steps = [
   {
     number: 2,
     title: 'Learn & Practice',
-    description: 'Complete interactive tutorials and coding challenges to build real-world skills.',
+    description: 'Complete interactive labs and challenges tailored to your chosen professional path.',
     icon: Code2,
     color: 'from-purple-500 to-pink-500',
     Character: CodingCharacter,
   },
   {
     number: 3,
-    title: 'Compete & Showcase',
-    description: 'Participate in hackathons, solve challenges, and build an impressive portfolio.',
+    title: 'Innovate & Showcase',
+    description: 'Participate in innovation challenges, solve complex problems, and build a world-class portfolio.',
     icon: Rocket,
     color: 'from-amber-500 to-orange-500',
     Character: CollaboratingCharacters,
@@ -37,7 +37,7 @@ const steps = [
   {
     number: 4,
     title: 'Get Hired',
-    description: 'Apply for jobs, practice interviews, and land your dream role with confidence.',
+    description: 'Apply for roles, practice with an AI career coach, and land your dream job with confidence.',
     icon: BadgeCheck,
     color: 'from-emerald-500 to-green-500',
     Character: CelebrationCharacter,
