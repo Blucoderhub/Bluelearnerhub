@@ -50,9 +50,9 @@ export default function LearningPathCard({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-blue-500 transition-all h-full flex flex-col">
+      <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-green-500 transition-all h-full flex flex-col">
         {/* Thumbnail */}
-        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600">
+        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-green-600 to-emerald-500">
           {thumbnail ? (
             <img
               src={thumbnail}
@@ -93,7 +93,7 @@ export default function LearningPathCard({
         <div className="flex-1 flex flex-col p-6 space-y-4">
           {/* Title & Description */}
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors line-clamp-2">
               {title}
             </h3>
             <p className="text-sm text-gray-400 line-clamp-3">
@@ -104,7 +104,7 @@ export default function LearningPathCard({
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3 text-sm text-gray-400">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-blue-400" />
+              <BookOpen className="w-4 h-4 text-green-400" />
               <span>{coursesCount} courses</span>
             </div>
             <div className="flex items-center gap-2">

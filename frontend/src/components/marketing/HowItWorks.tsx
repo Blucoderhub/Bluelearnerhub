@@ -13,15 +13,15 @@ const steps = [
   {
     number: 1,
     title: 'Choose Your Path',
-    description: 'Start as a student, job seeker, or corporate user. Select learning paths tailored to your professional goals.',
+    description: 'Start as a student or corporate user. Select learning paths tailored to your skill development goals.',
     icon: Compass,
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-green-500 to-emerald-500',
     Character: LearningCharacter,
   },
   {
     number: 2,
     title: 'Learn & Practice',
-    description: 'Complete interactive labs and challenges tailored to your chosen professional path.',
+    description: 'Complete interactive labs and challenges tailored to your chosen skill path.',
     icon: Code2,
     color: 'from-purple-500 to-pink-500',
     Character: CodingCharacter,
@@ -36,8 +36,8 @@ const steps = [
   },
   {
     number: 4,
-    title: 'Get Hired',
-    description: 'Apply for roles, practice with an AI career coach, and land your dream job with confidence.',
+    title: 'Get Certified',
+    description: 'Validate your skills with expert-led assessments and showcase your mastery to the world.',
     icon: BadgeCheck,
     color: 'from-emerald-500 to-green-500',
     Character: CelebrationCharacter,
@@ -60,17 +60,17 @@ export default function HowItWorks() {
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Your Journey to{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 to-green-100 bg-clip-text text-transparent">
               Success
             </span>
           </h2>
           <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
-            From learning to landing the job, in 4 simple steps
+            From learning to mastery, in 4 simple steps
           </p>
         </motion.div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/20 via-purple-500/20 via-amber-500/20 to-emerald-500/20 -translate-y-1/2" />
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500/20 via-emerald-500/20 via-green-300/20 to-white/20 -translate-y-1/2" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {steps.map((step, idx) => {

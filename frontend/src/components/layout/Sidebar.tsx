@@ -18,7 +18,8 @@ import {
   TrendingUp,
   Calendar,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  GraduationCap
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
@@ -60,6 +61,11 @@ export default function Sidebar() {
       name: 'Dashboard',
       href: '/dashboard',
       icon: LayoutDashboard,
+    },
+    {
+      name: 'Academy',
+      href: '/mentors',
+      icon: GraduationCap,
     },
     {
       name: 'Learn',
@@ -107,13 +113,13 @@ export default function Sidebar() {
       ],
     },
     {
-      name: 'Careers',
+      name: 'Industry Connect',
       icon: Briefcase,
-      section: 'careers',
+      section: 'industry',
       items: [
-        { name: 'Jobs', href: '/careers/jobs', icon: Briefcase },
-        { name: 'Applications', href: '/careers/applications', icon: FileText },
-        { name: 'Interviews', href: '/careers/interviews', icon: Calendar },
+        { name: 'Opportunities', href: '/careers/jobs', icon: Briefcase },
+        { name: 'My Submissions', href: '/careers/applications', icon: FileText },
+        { name: 'Interview Invites', href: '/careers/interviews', icon: Calendar },
       ],
     },
     {
@@ -162,7 +168,7 @@ export default function Sidebar() {
   const userStreak = user?.currentStreak ?? 0
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-800 lg:bg-gray-900 lg:pt-16">
+    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-neutral-800 lg:bg-neutral-950 lg:pt-16">
       <div className="flex-1 flex flex-col overflow-y-auto">
         <nav className="flex-1 px-3 py-4 space-y-1">
           {navigation.map((item) => (
@@ -195,9 +201,9 @@ export default function Sidebar() {
                             href={subItem.href}
                             className={cn(
                               'flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors',
-                              pathname === subItem.href
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                                pathname === subItem.href
+                                  ? 'bg-green-600 text-white'
+                                  : 'text-gray-400 hover:bg-neutral-800 hover:text-white'
                             )}
                           >
                             <SubIcon className="w-4 h-4" />
@@ -215,8 +221,8 @@ export default function Sidebar() {
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                     pathname === item.href
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
+                      ? 'bg-green-600 text-white'
+                      : 'text-gray-300 hover:bg-neutral-800'
                   )}
                 >
                   <item.icon className="w-5 h-5" />
@@ -239,11 +245,11 @@ export default function Sidebar() {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">Total XP</span>
-                <span className="font-bold text-blue-400">{userTotalPoints}</span>
+                <span className="font-bold text-green-400">{userTotalPoints}</span>
               </div>
               <div className="w-full bg-gray-800 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                  className="bg-gradient-to-r from-green-500 to-emerald-400 h-2 rounded-full"
                   style={{ width: `${(userTotalPoints % 1000) / 10}%` }}
                 />
               </div>

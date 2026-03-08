@@ -67,7 +67,7 @@ export default function Header() {
 
   const mainNavigation = [
     { name: 'Tutorials', href: '/tutorials', icon: BookOpen, isMega: true },
-    { name: 'Mentors', href: '/mentors', icon: GraduationCap },
+    { name: 'Academy', href: '/mentors', icon: GraduationCap },
     { name: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   ]
 

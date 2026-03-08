@@ -4,203 +4,349 @@ import React, { useState } from 'react'
 import {
     Search,
     Filter,
-    Star,
-    MessageSquare,
-    Calendar,
     CheckCircle2,
     GraduationCap,
-    Globe,
+    Users,
+    Building2,
+    Rocket,
+    BarChart3,
+    ShieldCheck,
+    Clock,
+    Zap,
+    ChevronRight,
+    PlayCircle,
+    Star,
     Award,
     TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
 
-const MENTORS = [
+const ACADEMY_FEATURES = [
     {
-        id: 1,
-        name: 'Dr. Sarah Chen',
-        role: 'Senior AI Research Engineer',
-        company: 'Google DeepMind',
-        expertise: ['Artificial Intelligence', 'Machine Learning', 'Python'],
-        rating: 4.9,
-        reviews: 124,
-        image: '',
-        status: 'Available',
-        price: '$50/hr'
+        title: 'Admin Dashboard',
+        description: 'Powerful control panel to manage students, groups, and assignments in one place.',
+        icon: Users,
+        color: 'text-emerald-400',
+        bgColor: 'bg-emerald-500/10'
     },
     {
-        id: 2,
-        name: 'James Wilson',
-        role: 'Staff Software Architect',
-        company: 'Microsoft',
-        expertise: ['System Design', 'Cloud Architecture', 'Go'],
-        rating: 4.8,
-        reviews: 89,
-        image: '',
-        status: 'Busy',
-        price: '$75/hr'
+        title: 'Custom Learning Paths',
+        description: 'Tailor modules, quizzes, and exams to match your organization\'s specific needs.',
+        icon: Rocket,
+        color: 'text-blue-400',
+        bgColor: 'bg-blue-500/10'
     },
     {
-        id: 3,
-        name: 'Elena Rodriguez',
-        role: 'Lead Data Scientist',
-        company: 'Meta',
-        expertise: ['Data Science', 'Statistics', 'R'],
-        rating: 5.0,
-        reviews: 56,
-        image: '',
-        status: 'Available',
-        price: '$60/hr'
+        title: 'Real-Time Analytics',
+        description: 'Measure performance and track progress with detailed reporting and data insights.',
+        icon: BarChart3,
+        color: 'text-purple-400',
+        bgColor: 'bg-purple-500/10'
     },
     {
-        id: 4,
-        name: 'Alex Kumar',
-        role: 'Full Stack Tech Lead',
-        company: 'Netflix',
-        expertise: ['React', 'Node.js', 'Next.js'],
-        rating: 4.9,
-        reviews: 210,
-        image: '',
-        status: 'Available',
-        price: '$45/hr'
+        title: 'Certified Mastery',
+        description: 'Official Bluelearner certificates and badges for every student who completes a path.',
+        icon: Award,
+        color: 'text-amber-400',
+        bgColor: 'bg-amber-500/10'
     }
 ]
 
-export default function MentorsPage() {
-    const [searchQuery, setSearchQuery] = useState('')
+const SECTORS = [
+    {
+        title: 'Schools & Universities',
+        description: 'Supplement your curriculum with industry-standard labs and real-time tracking.',
+        icon: GraduationCap,
+        link: '#contact'
+    },
+    {
+        title: 'Businesses & Teams',
+        description: 'Upskill your workforce with specialized tracks in Engineering and Management.',
+        icon: Building2,
+        link: '#contact'
+    },
+    {
+        title: 'Bootcamps',
+        description: 'Accelerate student learning with pre-built projects and automated assessments.',
+        icon: Zap,
+        link: '#contact'
+    }
+]
+
+export default function AcademyPage() {
+    const [selectedSubject, setSelectedSubject] = useState('HTML & CSS')
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-200 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                {/* Header Section */}
-                <div className="text-center mb-16 space-y-4">
-                    <Badge variant="outline" className="px-4 py-1.5 border-emerald-500/30 text-emerald-400 bg-emerald-500/5 font-bold uppercase tracking-widest text-[10px]">
-                        Elite Mentorship
-                    </Badge>
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white">
-                        Learn from the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Best in Industry</span>
-                    </h1>
-                    <p className="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
-                        Connect with top-tier engineers, designers, and managers from world-leading tech companies. Accelerate your career with personalized guidance.
-                    </p>
-                </div>
-
-                {/* Search and Filter Bar */}
-                <div className="flex flex-col md:flex-row gap-4 mb-12">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                        <Input
-                            placeholder="Search by expertise, company, or name..."
-                            className="w-full pl-12 h-14 bg-slate-900/50 border-slate-800 focus:border-emerald-500/50 rounded-2xl text-white placeholder:text-slate-600"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                    <Button variant="outline" className="h-14 px-8 bg-slate-900/50 border-slate-800 hover:bg-slate-800 rounded-2xl flex items-center gap-3 group">
-                        <Filter className="w-5 h-5 text-slate-500 group-hover:text-emerald-400 transition-colors" />
-                        <span className="font-bold text-slate-300">Filters</span>
-                    </Button>
-                </div>
-
-                {/* Mentor Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {MENTORS.map((mentor) => (
-                        <div key={mentor.id} className="group relative bg-slate-900/40 border border-slate-800/60 rounded-[2rem] p-8 hover:border-emerald-500/30 transition-all duration-500 hover:-translate-y-2">
-                            {/* Card Background Glow */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]" />
-
-                            <div className="relative z-10 flex flex-col h-full">
-                                <div className="flex items-start justify-between mb-6">
-                                    <div className="relative">
-                                        <Avatar className="h-20 w-20 border-2 border-slate-800 group-hover:border-emerald-500/30 transition-all duration-500">
-                                            <AvatarImage src={mentor.image} />
-                                            <AvatarFallback className="bg-slate-800 text-emerald-400 font-black text-xl">
-                                                {mentor.name.split(' ').map(n => n[0]).join('')}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className={`absolute -bottom-1 -right-1 h-5 w-5 rounded-full border-4 border-[#020617] ${mentor.status === 'Available' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="flex items-center gap-1 text-amber-400 font-bold">
-                                            <Star className="w-4 h-4 fill-current" />
-                                            <span>{mentor.rating}</span>
-                                        </div>
-                                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{mentor.reviews} Reviews</span>
-                                    </div>
-                                </div>
-
-                                <div className="mb-6">
-                                    <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">{mentor.name}</h3>
-                                    <p className="text-sm text-slate-400 font-medium">{mentor.role}</p>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <Globe className="w-3 h-3 text-slate-500" />
-                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{mentor.company}</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-wrap gap-2 mb-8">
-                                    {mentor.expertise.map(skill => (
-                                        <Badge key={skill} variant="secondary" className="bg-slate-800/80 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-400 border-none px-3 py-1 text-[11px] font-bold transition-all">
-                                            {skill}
-                                        </Badge>
-                                    ))}
-                                </div>
-
-                                <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-800/50">
-                                    <span className="text-xl font-black text-white">{mentor.price}<span className="text-xs text-slate-500 font-bold ml-1">/ session</span></span>
-                                    <Button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all">
-                                        View Profile
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Benefits Section */}
-                <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-slate-800/40 pt-20">
-                    <div className="space-y-4">
-                        <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400">
-                            <Award className="w-6 h-6" />
-                        </div>
-                        <h4 className="text-lg font-bold text-white">Certified Experts</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed">Every mentor undergoes a rigorous vetting process to ensure high-quality guidance.</p>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center text-cyan-400">
-                            <Calendar className="w-6 h-6" />
-                        </div>
-                        <h4 className="text-lg font-bold text-white">Flexible Scheduling</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed">Book sessions that fit your time zone and schedule with our automated system.</p>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-400">
-                            <TrendingUp className="w-6 h-6" />
-                        </div>
-                        <h4 className="text-lg font-bold text-white">Career Growth</h4>
-                        <p className="text-slate-400 text-sm leading-relaxed">Get internal referrals, resume reviews, and interview prep for top tech companies.</p>
-                    </div>
-                </div>
-
-                {/* Call To Action */}
-                <div className="mt-32 relative group overflow-hidden rounded-[3rem] bg-gradient-to-br from-emerald-600 to-cyan-600 p-12 text-center">
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
-                    <div className="relative z-10 space-y-8">
-                        <h2 className="text-4xl font-black text-white tracking-tight">Become a Mentor Yourself?</h2>
-                        <p className="text-emerald-50 max-w-xl mx-auto text-lg">
-                            Share your expertise with the next generation of engineers and build your personal brand in the tech community.
+        <div className="min-h-screen bg-[#020617] text-slate-200">
+            {/* Hero Section */}
+            <section className="relative pt-20 pb-24 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center max-w-4xl mx-auto space-y-8">
+                        <Badge variant="outline" className="px-4 py-1.5 border-emerald-500/30 text-emerald-400 bg-emerald-500/5 font-bold uppercase tracking-widest text-[11px] rounded-full">
+                            Bluelearner Academy
+                        </Badge>
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white leading-tight">
+                            The Complete Platform to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-200">Train Your Team</span>
+                        </h1>
+                        <p className="text-slate-400 text-xl md:text-2xl leading-relaxed">
+                            Manage learning, track progress, and upskill your organization with the world's most trusted engineering content.
                         </p>
-                        <div className="flex justify-center gap-4">
-                            <Button className="bg-white text-emerald-600 hover:bg-emerald-50 font-black px-10 h-14 rounded-2xl shadow-xl active:scale-[0.98] transition-all text-lg">
-                                Apply to Mentor
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                            <Button className="h-14 px-10 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all">
+                                Get Started Free
+                            </Button>
+                            <Button variant="outline" className="h-14 px-10 border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-white font-bold text-lg rounded-2xl transition-all">
+                                View Pricing
                             </Button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            {/* Organizations Grid */}
+            <section className="py-20 border-y border-slate-800/50 bg-slate-900/20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold text-white mb-4">Built for Organizations That Train</h2>
+                        <p className="text-slate-400">Everything you need to deliver world-class technical education.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {SECTORS.map((sector) => (
+                            <div key={sector.title} className="p-8 rounded-[2.5rem] bg-slate-900/40 border border-slate-800 hover:border-emerald-500/30 transition-all group">
+                                <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                                    <sector.icon className="w-7 h-7" />
+                                </div>
+                                <h3 className="text-xl font-bold text-white mb-3">{sector.title}</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed mb-6">{sector.description}</p>
+                                <Link href={sector.link} className="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm hover:underline">
+                                    Learn More <ChevronRight className="w-4 h-4" />
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Set Up Semester Section */}
+            <section className="py-24">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row items-center gap-16">
+                        <div className="flex-1 space-y-8">
+                            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">
+                                Set Up a Semester <span className="text-emerald-400 underline decoration-emerald-500/30">in Seconds</span>
+                            </h2>
+                            <p className="text-slate-400 text-lg leading-relaxed">
+                                Pick a subject, and your learning path is ready. Modules, quizzes, and a final exam, all built in. Fully customizable for your team.
+                            </p>
+                            <div className="space-y-4">
+                                {['HTML & CSS', 'Python Mastery', 'Data Analytics', 'Management 101'].map((sub) => (
+                                    <button 
+                                        key={sub}
+                                        onClick={() => setSelectedSubject(sub)}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${selectedSubject === sub ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-700'}`}
+                                    >
+                                        <span className="font-bold">{sub}</span>
+                                        <CheckCircle2 className={`w-5 h-5 transition-opacity ${selectedSubject === sub ? 'opacity-100' : 'opacity-0'}`} />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex-1 w-full">
+                            <div className="relative rounded-[3rem] overflow-hidden border border-slate-800 bg-slate-900/50 p-8 pt-12 shadow-2xl">
+                                <div className="absolute top-4 left-8 flex gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                                    <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+                                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                                </div>
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className="space-y-1">
+                                            <h4 className="font-bold text-white text-lg">{selectedSubject} Academy Track</h4>
+                                            <p className="text-xs text-slate-500 uppercase font-black tracking-widest">Enrollment: 124 Students</p>
+                                        </div>
+                                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none">Active Hub</Badge>
+                                    </div>
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/30 border border-white/5">
+                                            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                                <PlayCircle className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="h-2 w-24 bg-slate-700 rounded-full mb-2" />
+                                                <div className="h-1.5 w-40 bg-slate-800 rounded-full" />
+                                            </div>
+                                            <CheckCircle2 className="w-5 h-5 text-slate-700" />
+                                        </div>
+                                    ))}
+                                    <div className="mt-8 pt-8 border-t border-slate-800 flex justify-between items-center text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                        <span>Progress: 68%</span>
+                                        <span>Average: 84%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Everything You Need */}
+            <section className="py-24 bg-emerald-500/5 border-y border-emerald-500/10">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-20 space-y-4">
+                        <h2 className="text-4xl font-extrabold text-white">Everything You Need</h2>
+                        <p className="text-slate-400 text-lg">Powerful features to manage learning at any scale.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {ACADEMY_FEATURES.map((feature) => (
+                            <div key={feature.title} className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
+                                <div className={`w-12 h-12 ${feature.bgColor} ${feature.color} rounded-xl flex items-center justify-center`}>
+                                    <feature.icon className="w-6 h-6" />
+                                </div>
+                                <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Results You Can Measure */}
+            <section className="py-24">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-[3rem] p-12 lg:p-20 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] -mr-64 -mt-64" />
+                        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
+                            <div className="flex-1 space-y-6">
+                                <h2 className="text-4xl font-black text-white">Results You Can <span className="text-emerald-400">Measure</span></h2>
+                                <p className="text-slate-400 text-lg leading-relaxed">
+                                    Show leadership exactly what training delivers. Track individual performance, identify skill gaps, and celebrate mastery.
+                                </p>
+                                <div className="grid grid-cols-2 gap-6 pt-6">
+                                    <div className="space-y-1">
+                                        <p className="text-3xl font-black text-white">92%</p>
+                                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Completion Rate</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-3xl font-black text-white">4.8/5</p>
+                                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Student Rating</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex-1 w-full bg-slate-800/50 rounded-3xl p-8 border border-white/5 space-y-8">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-bold text-sm">Monthly Skills Growth</span>
+                                    <TrendingUp className="text-emerald-400 w-5 h-5" />
+                                </div>
+                                <div className="h-48 flex items-end gap-3 px-4">
+                                    {[40, 60, 45, 80, 55, 90, 75].map((h, i) => (
+                                        <div key={i} className="flex-1 bg-emerald-500/20 rounded-t-lg transition-all hover:bg-emerald-500/40 relative group" style={{ height: `${h}%` }}>
+                                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                                {h}%
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase tracking-tighter">
+                                    <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Pricing */}
+            <section id="pricing" className="py-24 bg-slate-900/30">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16 space-y-4">
+                        <h2 className="text-4xl font-black text-white tracking-tight">Simple Seat-Based Pricing</h2>
+                        <p className="text-slate-400">Scalable training for any size. No long-term commitment required.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div className="p-10 rounded-[2.5rem] bg-slate-900/60 border border-slate-800 space-y-8">
+                            <h3 className="text-2xl font-bold text-white">Self-Service</h3>
+                            <div className="space-y-2">
+                                <p className="text-5xl font-black text-white">$5.99<span className="text-sm text-slate-500 font-bold ml-2">/ seat per month</span></p>
+                                <p className="text-sm text-emerald-400 font-bold">Standard Platform Access</p>
+                            </div>
+                            <ul className="space-y-4">
+                                {[
+                                    'Access to all 45+ Technologies',
+                                    'Admin Dashboard',
+                                    'Real-time Progress Tracking',
+                                    'Official Certificates'
+                                ].map((feature) => (
+                                    <li key={feature} className="flex items-center gap-3 text-sm text-slate-300">
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
+                            <Button className="w-full h-12 bg-white text-slate-900 hover:bg-slate-100 font-black rounded-xl transition-all">
+                                Try Academy Free
+                            </Button>
+                        </div>
+                        <div className="p-10 rounded-[2.5rem] bg-emerald-500/10 border-2 border-emerald-500/30 space-y-8 relative overflow-hidden">
+                            <div className="absolute top-5 right-5">
+                                <Badge className="bg-emerald-500 text-white border-none uppercase text-[10px] font-black tracking-widest">Scale</Badge>
+                            </div>
+                            <h3 className="text-2xl font-bold text-white">Organizations</h3>
+                            <div className="space-y-2">
+                                <p className="text-5xl font-black text-white">Custom</p>
+                                <p className="text-sm text-emerald-400 font-bold text-center">Volume Discounts Available</p>
+                            </div>
+                            <ul className="space-y-4">
+                                {[
+                                    'Everything in Self-Service',
+                                    'Custom Learning Paths',
+                                    'Bulk User Enrollment',
+                                    'Dedicated Account Support',
+                                    'SSO & API Access'
+                                ].map((feature) => (
+                                    <li key={feature} className="flex items-center gap-3 text-sm text-slate-300">
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
+                            <Button className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+                                Contact Sales
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="py-24">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="bg-gradient-to-br from-emerald-600 to-green-600 rounded-[3rem] p-12 md:p-20 text-center space-y-8 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
+                        <motion.div 
+                            animate={{ scale: [1, 1.02, 1] }} 
+                            transition={{ duration: 4, repeat: Infinity }}
+                            className="relative z-10 space-y-6"
+                        >
+                            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">Ready to Train Your Team?</h2>
+                            <p className="text-emerald-50 text-xl max-w-2xl mx-auto font-medium">
+                                Join thousands of organizations building the next generation of engineers with Bluelearner Academy.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                                <Button className="h-16 px-12 bg-white text-emerald-600 hover:bg-emerald-50 font-black text-xl rounded-2xl shadow-xl active:scale-[0.95] transition-all">
+                                    Start Free Trial
+                                </Button>
+                                <Button variant="outline" className="h-16 px-12 border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold text-xl rounded-2xl backdrop-blur-md transition-all">
+                                    Contact Sales
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
         </div>
     )
 }

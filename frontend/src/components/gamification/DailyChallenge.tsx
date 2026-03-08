@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Zap, Clock, ArrowRight, Sparkles } from 'lucide-react'
+import { Zap, Clock, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CodingCharacter from '@/components/animations/characters/CodingCharacter'
 
@@ -59,65 +59,84 @@ export function DailyChallenge({
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-5 sm:p-6"
+      className="relative overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-emerald-500/5 p-8 md:p-10 shadow-2xl shadow-emerald-500/10 group"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ borderColor: 'rgba(0, 200, 120, 0.4)' }}
+      whileHover={{ y: -4, borderColor: 'rgba(16, 185, 129, 0.4)' }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/5 blur-[60px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
-      <div className="absolute bottom-2 right-3 hidden sm:block opacity-60 pointer-events-none">
-        <CodingCharacter size={80} />
-      </div>
+      <div className="relative flex flex-col md:flex-row gap-8 items-center">
+        {/* Character/Visual Side */}
+        <div className="hidden md:flex flex-col items-center justify-center p-6 rounded-[2rem] bg-white/5 border border-white/10 relative overflow-hidden group-hover:bg-emerald-500/10 transition-colors">
+           <CodingCharacter size={120} />
+           <div className="mt-4 text-center">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">CHALLENGE_STATUS</p>
+              <p className="text-xs font-bold text-white/40">{completed ? 'VERIFIED' : 'PENDING...'}</p>
+           </div>
+        </div>
 
-      <div className="relative space-y-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="streak-flame">
-              <Sparkles className="w-5 h-5 text-[var(--xp-gold)]" />
+        {/* Content Side */}
+        <div className="flex-1 space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">DAILY_REVENUE_CHALLENGE</span>
             </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">Daily Challenge</span>
+            
+            {!completed && timeRemaining > 0 && (
+              <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400">
+                <Clock className="w-4 h-4 animate-pulse" />
+                <span className="text-xs font-black tracking-widest">{hours}H {minutes}M REMAINING</span>
+              </div>
+            )}
           </div>
-          {!completed && timeRemaining > 0 && (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Clock className="w-3.5 h-3.5" />
-              <span className="font-mono">{hours}h {minutes}m left</span>
+
+          <div className="space-y-2">
+            <h4 className="text-3xl md:text-4xl font-black italic tracking-tighter text-white group-hover:text-emerald-400 transition-colors">
+              {title}
+            </h4>
+            <p className="text-lg text-slate-400 font-medium leading-relaxed max-w-2xl">
+              {description}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <div className={`px-5 py-2 rounded-xl border-2 font-black italic text-xs tracking-widest ${difficultyColors[difficulty]}`}>
+              {difficulty.toUpperCase()}
             </div>
-          )}
-        </div>
-
-        <div>
-          <h4 className="text-base sm:text-lg font-bold text-foreground mb-1">{title}</h4>
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${difficultyColors[difficulty]}`}>
-            {difficulty}
-          </span>
-          <span className="text-xs text-muted-foreground px-2.5 py-1 rounded-full bg-muted/30">
-            {category}
-          </span>
-          <span className="flex items-center gap-1 text-xs font-bold text-[var(--xp-gold)] ml-auto">
-            <Zap className="w-3.5 h-3.5" />
-            +{xpReward} XP
-          </span>
-        </div>
-
-        {completed ? (
-          <div className="flex items-center gap-2 text-sm text-primary font-semibold">
-            <span>Completed!</span>
-            <span className="text-[var(--xp-gold)]">+{xpReward} XP earned</span>
+            <div className="px-5 py-2 rounded-xl bg-slate-800/50 border border-slate-700 text-white/60 font-black text-[10px] tracking-[0.1em] uppercase">
+              {category}
+            </div>
+            <div className="flex items-center gap-2 text-xl font-black text-[var(--xp-gold)] ai-glow ml-auto md:ml-0">
+              <Zap className="w-6 h-6 fill-current" />
+              +{xpReward} XP
+            </div>
           </div>
-        ) : (
-          <Button
-            onClick={onStart}
-            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold touch-target"
-          >
-            Start Challenge
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        )}
+
+          <div className="pt-4 flex items-center gap-6">
+            {completed ? (
+              <div className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-black italic tracking-tight text-lg">
+                <CheckCircle2 className="w-6 h-6" />
+                CHALLENGE_SOLVED
+              </div>
+            ) : (
+              <Button
+                onClick={onStart}
+                className="h-16 px-10 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl italic tracking-tighter rounded-2xl shadow-2xl shadow-emerald-500/30 group/btn transition-all active:scale-95"
+              >
+                SOLVE_NOW
+                <ArrowRight className="w-6 h-6 ml-3 group-hover/btn:translate-x-2 transition-transform" />
+              </Button>
+            )}
+            <p className="hidden lg:block text-xs font-bold text-white/20 italic max-w-[200px]">
+              Complete this to maintain your 12-day streak and earn exclusive domain badges.
+            </p>
+          </div>
+        </div>
       </div>
     </motion.div>
   )

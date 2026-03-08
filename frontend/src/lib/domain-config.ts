@@ -6,8 +6,8 @@ export const DOMAINS = {
     id: 'computer-science',
     name: 'Computer Science & IT',
     icon: '💻',
-    color: '#3b82f6',
-    gradient: 'from-blue-500 to-cyan-500',
+    color: '#22c55e',
+    gradient: 'from-green-500 to-emerald-500',
     categories: [
       'Programming',
       'Data Structures & Algorithms',
@@ -126,8 +126,8 @@ export const DOMAINS = {
     id: 'electronics',
     name: 'Electronics & Communication',
     icon: '📡',
-    color: '#06b6d4',
-    gradient: 'from-cyan-500 to-blue-500',
+    color: '#86efac',
+    gradient: 'from-green-400 to-green-100',
     categories: [
       'Analog Electronics',
       'Digital Electronics',

@@ -1,218 +1,248 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-// import { QuizService } from '@/lib/api' // Assuming a service or direct API call
-import {
-    CheckCircle2,
-    XCircle,
-    ArrowRight,
-    Timer,
-    Trophy,
-    Lightbulb,
-    Sparkles
-} from 'lucide-react'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Search, 
+  Filter, 
+  Zap, 
+  Trophy, 
+  ChevronRight, 
+  Star,
+  Clock,
+  LayoutGrid
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-// Dummy fallback data if API fails or for initial UI design
-const mockQuestions = [
-    {
-        id: 1,
-        question: "What is the primary purpose of a 'Transformer' architecture in Deep Learning?",
-        options: [
-            "To transform images into sounds",
-            "To handle sequential data with parallel processing using Self-Attention",
-            "To Transform DC current to AC current",
-            "To optimize database queries"
-        ],
-        correctAnswer: 1,
-        explanation: "Transformers rely on self-attention mechanisms to process all parts of a sequence simultaneously, making them highly efficient for NLP tasks."
-    },
-    {
-        id: 2,
-        question: "Which of the following is NOT a React Hook?",
-        options: [
-            "useState",
-            "useEffect",
-            "useContext",
-            "useRender"
-        ],
-        correctAnswer: 3,
-        explanation: "useRender is not a standard React hook. The common ones are useState, useEffect, useContext, useReducer, etc."
-    }
-]
+const challenges = [
+  {
+    id: 'c1',
+    title: 'Self-Attention Mechanisms',
+    domain: 'Computer Science',
+    subDomain: 'Machine Learning',
+    difficulty: 'Hard',
+    points: 100,
+    successRate: '68%',
+    solved: true,
+  },
+  {
+    id: 'c2',
+    title: 'Equilibrium of Rigid Bodies',
+    domain: 'Mechanical',
+    subDomain: 'Statics',
+    difficulty: 'Medium',
+    points: 50,
+    successRate: '82%',
+    solved: false,
+  },
+  {
+    id: 'c3',
+    title: 'Operational Amplifiers Analysis',
+    domain: 'Electrical',
+    subDomain: 'Circuit Theory',
+    difficulty: 'Hard',
+    points: 120,
+    successRate: '45%',
+    solved: false,
+  },
+  {
+    id: 'c4',
+    title: 'Supply Chain Optimization',
+    domain: 'Management',
+    subDomain: 'Operations',
+    difficulty: 'Medium',
+    points: 80,
+    successRate: '75%',
+    solved: true,
+  },
+  {
+    id: 'c5',
+    title: 'Reinforced Concrete Design',
+    domain: 'Civil',
+    subDomain: 'Structures',
+    difficulty: 'Hard',
+    points: 150,
+    successRate: '32%',
+    solved: false,
+  },
+];
 
-export default function QuizPage() {
-    const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
-    const [selectedOption, setSelectedOption] = useState<number | null>(null)
-    const [isAnswered, setIsAnswered] = useState(false)
-    const [score, setScore] = useState(0)
-    const [isFinished, setIsFinished] = useState(false)
-    const [timeLeft, setTimeLeft] = useState(30)
-    const [showExplanation, setShowExplanation] = useState(false)
+const domains = ['All Domains', 'Computer Science', 'Mechanical', 'Electrical', 'Civil', 'Management'];
 
-    const currentQuestion = mockQuestions[currentQuestionIdx]
+export default function ChallengeHub() {
+  const [activeDomain, setActiveDomain] = useState('All Domains');
 
-    useEffect(() => {
-        if (timeLeft > 0 && !isAnswered && !isFinished) {
-            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-            return () => clearTimeout(timer)
-        } else if (timeLeft === 0 && !isAnswered) {
-            handleAnswerSubmit(-1) // Timeout
-        }
-    }, [timeLeft, isAnswered, isFinished])
-
-    const handleAnswerSubmit = (idx: number) => {
-        if (isAnswered) return
-        setSelectedOption(idx)
-        setIsAnswered(true)
-        if (idx === currentQuestion.correctAnswer) {
-            setScore(score + 1)
-        }
-        setShowExplanation(true)
-    }
-
-    const nextQuestion = () => {
-        if (currentQuestionIdx < mockQuestions.length - 1) {
-            setCurrentQuestionIdx(currentQuestionIdx + 1)
-            setSelectedOption(null)
-            setIsAnswered(false)
-            setTimeLeft(30)
-            setShowExplanation(false)
-        } else {
-            setIsFinished(true)
-        }
-    }
-
-    if (isFinished) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-8 animate-in fade-in zoom-in duration-500">
-                <div className="relative">
-                    <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
-                    <Trophy className="h-24 w-24 text-primary relative z-10" />
-                </div>
-                <div className="text-center space-y-2">
-                    <h2 className="text-4xl font-black font-heading">Quiz Completed!</h2>
-                    <p className="text-xl text-muted-foreground">You scored {score} out of {mockQuestions.length}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-                    <div className="bg-card border border-border/50 p-6 rounded-3xl text-center">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Accuracy</p>
-                        <p className="text-3xl font-black text-primary">{Math.round((score / mockQuestions.length) * 100)}%</p>
-                    </div>
-                    <div className="bg-card border border-border/50 p-6 rounded-3xl text-center">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">XP Gained</p>
-                        <p className="text-3xl font-black text-primary">+{score * 50}</p>
-                    </div>
-                </div>
-
-                <div className="flex gap-4">
-                    <Button size="lg" className="rounded-2xl px-10 h-14 text-lg font-bold" onClick={() => window.location.reload()}>
-                        Try Another Quiz
-                    </Button>
-                    <Button variant="outline" size="lg" className="rounded-2xl px-10 h-14 text-lg font-bold">
-                        Back to Dashboard
-                    </Button>
-                </div>
-            </div>
-        )
-    }
-
-    return (
-        <div className="max-w-4xl mx-auto space-y-8 pt-4">
-            {/* Quiz Header */}
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                        <Sparkles className="h-4 w-4" /> AI Generated Quiz
-                    </h3>
-                    <p className="text-2xl font-black font-heading">Advanced Machine Learning</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 bg-muted/30 px-4 py-2 rounded-xl border border-border/50">
-                        <Timer className={`h-5 w-5 ${timeLeft < 10 ? 'text-destructive animate-pulse' : 'text-primary'}`} />
-                        <span className="font-mono font-bold text-lg">{timeLeft}s</span>
-                    </div>
-                    <div className="text-sm font-bold bg-primary/10 text-primary px-4 py-2 rounded-xl">
-                        {currentQuestionIdx + 1} / {mockQuestions.length}
-                    </div>
-                </div>
-            </div>
-
-            <Progress value={((currentQuestionIdx + 1) / mockQuestions.length) * 100} className="h-2 bg-muted border-none" />
-
-            {/* Question Card */}
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={currentQuestionIdx}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="bg-card border border-border/50 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
-                >
-                    <div className="absolute top-0 right-0 p-8 opacity-5">
-                        <Lightbulb className="h-32 w-32" />
-                    </div>
-
-                    <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight relative z-10">
-                        {currentQuestion.question}
-                    </h2>
-
-                    <div className="grid grid-cols-1 gap-4 mt-12 relative z-10">
-                        {currentQuestion.options.map((option, idx) => {
-                            const isSelected = selectedOption === idx
-                            const isCorrect = idx === currentQuestion.correctAnswer
-
-                            let variantClasses = "border-border/50 hover:border-primary/50 hover:bg-primary/5"
-                            if (isAnswered) {
-                                if (isCorrect) variantClasses = "border-green-500 bg-green-500/10 text-green-400"
-                                else if (isSelected) variantClasses = "border-red-500 bg-red-500/10 text-red-400"
-                                else variantClasses = "opacity-50 border-border/20"
-                            }
-
-                            return (
-                                <button
-                                    key={idx}
-                                    disabled={isAnswered}
-                                    onClick={() => handleAnswerSubmit(idx)}
-                                    className={`flex items-center justify-between p-6 rounded-2xl border-2 text-left transition-all duration-300 group ${variantClasses}`}
-                                >
-                                    <span className="text-lg font-semibold">{option}</span>
-                                    {isAnswered && isCorrect && <CheckCircle2 className="h-6 w-6 text-green-500" />}
-                                    {isAnswered && isSelected && !isCorrect && <XCircle className="h-6 w-6 text-red-500" />}
-                                </button>
-                            )
-                        })}
-                    </div>
-
-                    <AnimatePresence>
-                        {showExplanation && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="mt-8 p-6 bg-primary/5 border border-primary/10 rounded-2xl"
-                            >
-                                <p className="text-sm font-bold text-primary uppercase tracking-widest mb-2">Explanation</p>
-                                <p className="text-muted-foreground leading-relaxed">{currentQuestion.explanation}</p>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </motion.div>
-            </AnimatePresence>
-
-            <div className="flex justify-end pt-4">
-                <Button
-                    disabled={!isAnswered}
-                    onClick={nextQuestion}
-                    size="lg"
-                    className="rounded-2xl px-10 h-14 text-lg font-bold gap-2 group shadow-xl shadow-primary/20"
-                >
-                    {currentQuestionIdx === mockQuestions.length - 1 ? 'Finish Quiz' : 'Next Question'}
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+  return (
+    <div className="max-w-6xl mx-auto space-y-12 pb-20">
+      {/* Hero Section (HackerRank Style) */}
+      <div className="relative overflow-hidden rounded-[3rem] bg-slate-950 p-12 md:p-16 border border-emerald-500/20">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+        
+        <div className="relative z-10 max-w-2xl space-y-6">
+          <Badge className="bg-emerald-500/20 text-emerald-400 border-none px-4 py-1.5 font-black uppercase tracking-widest text-[10px]">
+            Mastery Practice
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white leading-tight">
+            PREPARE_FOR <span className="text-emerald-500 ai-glow">WORLD_CLASS</span> DOMAIN_MASTERY
+          </h1>
+          <p className="text-lg text-slate-400 font-medium leading-relaxed">
+            Solve world-class challenges across all engineering and management disciplines. Gain points, climb the global leaderboard, and get certified by the industry's best.
+          </p>
+          <div className="flex gap-4 pt-4">
+             <Button className="h-14 px-8 bg-emerald-500 hover:bg-emerald-600 text-white font-black italic tracking-tighter rounded-2xl shadow-xl shadow-emerald-500/20">
+                START_ASSESSMENT
+             </Button>
+             <Link href="/hackathons">
+                <Button variant="outline" className="h-14 px-8 border-slate-700 text-white font-black italic tracking-tighter rounded-2xl hover:bg-slate-900">
+                    VIEW_HACKATHONS
                 </Button>
-            </div>
+             </Link>
+          </div>
         </div>
-    )
+      </div>
+
+      {/* Filter & Search Bar */}
+      <div className="flex flex-col lg:flex-row items-center gap-6 p-4 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
+        <div className="flex-1 w-full relative">
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Input 
+            placeholder="Search for challenges (e.g. 'Thermodynamics', 'React', 'Equity Financing')" 
+            className="h-16 pl-14 pr-6 rounded-2xl border-none bg-slate-50 dark:bg-slate-800/50 text-base font-medium focus-visible:ring-emerald-500"
+          />
+        </div>
+        <div className="h-10 w-px bg-slate-200 dark:bg-slate-800 hidden lg:block" />
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 w-full lg:w-auto px-2 lg:px-0 scrollbar-none">
+          {domains.map(domain => (
+            <button
+              key={domain}
+              onClick={() => setActiveDomain(domain)}
+              className={`whitespace-nowrap px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                activeDomain === domain 
+                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                : 'text-slate-500 hover:text-emerald-500 hover:bg-emerald-500/5'
+              }`}
+            >
+              {domain}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Challenge Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Main List */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between px-4">
+            <h3 className="text-xl font-black font-heading flex items-center gap-2 italic">
+              <LayoutGrid size={20} className="text-emerald-500" />
+              TOP_CHALLENGES
+            </h3>
+            <div className="flex items-center gap-2">
+               <span className="text-xs font-bold text-slate-400">Sort by:</span>
+               <select className="bg-transparent text-xs font-black text-emerald-600 focus:outline-none">
+                  <option>NEWEST</option>
+                  <option>MOST_ATTEMPTED</option>
+                  <option>POINTS</option>
+               </select>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {challenges.filter(c => activeDomain === 'All Domains' || c.domain === activeDomain).map((challenge) => (
+              <motion.div 
+                key={challenge.id}
+                whileHover={{ x: 6 }}
+                className="group p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none flex items-center justify-between transition-all"
+              >
+                <div className="flex items-center gap-6">
+                  <div className={`p-4 rounded-3xl ${challenge.solved ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                    {challenge.solved ? <Trophy size={24} /> : <Star size={24} />}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">{challenge.domain}</span>
+                      <span className="text-[10px] text-slate-300">•</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{challenge.subDomain}</span>
+                    </div>
+                    <h4 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors uppercase italic tracking-tighter">
+                      {challenge.title}
+                    </h4>
+                    <div className="flex items-center gap-4 mt-2">
+                       <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
+                          <Zap size={14} className="text-emerald-500" /> {challenge.points} Points
+                       </div>
+                       <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
+                          <Star size={14} className="text-orange-500" /> {challenge.difficulty}
+                       </div>
+                       <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
+                          <Star size={14} className="text-blue-500" /> {challenge.successRate} Success
+                       </div>
+                    </div>
+                  </div>
+                </div>
+                <Link href={`/quiz?id=${challenge.id}`}>
+                    <Button variant="ghost" className="h-16 w-16 rounded-3xl bg-slate-50 dark:bg-slate-800/50 hover:bg-emerald-500 hover:text-white transition-all">
+                        <ChevronRight size={24} />
+                    </Button>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sidebar Info */}
+        <div className="space-y-8">
+           <div className="p-8 rounded-[2.5rem] bg-slate-900 text-white relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500" />
+              <h3 className="text-xl font-black italic mb-6 tracking-tight">YOUR_RANKING</h3>
+              <div className="space-y-6">
+                 <div>
+                    <p className="text-[10px] font-black text-white/40 uppercase mb-2">Current Tier</p>
+                    <div className="flex items-center gap-4">
+                       <div className="h-14 w-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                          <Trophy size={28} />
+                       </div>
+                       <div>
+                          <p className="text-2xl font-black italic tracking-tighter">EMERALD_III</p>
+                          <p className="text-xs font-bold text-emerald-400">Top 5.2% Globally</p>
+                       </div>
+                    </div>
+                 </div>
+
+                 <div className="pt-4 border-t border-white/5 space-y-4">
+                    <div className="flex justify-between items-center text-xs font-bold">
+                       <span className="text-white/40 uppercase">Global Points</span>
+                       <span className="text-emerald-400 tracking-widest uppercase">14,250 PTS</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                       <span className="text-white/40 uppercase">Domain Badges</span>
+                       <span className="text-white">12 Mastery Badges</span>
+                    </div>
+                 </div>
+
+                 <Button className="w-full h-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-black uppercase tracking-widest">
+                    VIEW_LEADERBOARD
+                 </Button>
+              </div>
+           </div>
+
+           <div className="p-8 rounded-[2.5rem] bg-emerald-500/5 border border-emerald-500/20 space-y-4 text-center group cursor-pointer hover:bg-emerald-500/10 transition-colors">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mx-auto group-hover:scale-110 transition-transform">
+                 <Clock size={32} />
+              </div>
+              <h4 className="text-xl font-black italic tracking-tight text-white/90">COMING_SOON</h4>
+              <p className="text-sm text-slate-500 font-bold uppercase tracking-widest leading-tight">
+                 Real-time Multiplayer Battles
+              </p>
+              <Button variant="ghost" className="text-xs font-black text-emerald-500 hover:text-emerald-400">
+                GET_NOTIFIED
+              </Button>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -18,33 +18,32 @@
     --card-foreground: 220 20% 12%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 12%;
-    --primary: 160 84% 35%;
+    --primary: 142 45% 45%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 14% 96%;
     --secondary-foreground: 220 20% 16%;
     --muted: 220 14% 96%;
     --muted-foreground: 220 8% 46%;
-    --accent: 160 84% 35%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 142 45% 45%;
     --destructive: 0 84% 60%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 160 84% 35%;
+    --border: 142 20% 90%;
+    --input: 142 20% 90%;
+    --ring: 142 45% 45%;
 
-    --chart-1: 160 84% 35%;
-    --chart-2: 200 80% 45%;
+    --chart-1: 142 45% 45%;
+    --chart-2: 142 30% 60%;
     --chart-3: 280 65% 55%;
     --chart-4: 38 92% 50%;
     --chart-5: 340 82% 52%;
 
     --sidebar: 0 0% 98%;
-    --sidebar-foreground: 220 20% 12%;
-    --sidebar-primary: 160 84% 35%;
+    --sidebar-foreground: 142 20% 12%;
+    --sidebar-primary: 142 45% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 160 84% 35%;
+    --sidebar-accent: 142 45% 45%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 160 84% 35%;
+    --sidebar-border: 142 10% 91%;
+    --sidebar-ring: 142 45% 45%;
 
     /* Elevation Tokens (Multi-layered shadows) */
     --sh-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -55,38 +54,38 @@
     --xp-gold: #d4a843;
     --streak-orange: #e08a3c;
     --level-purple: #8b5cf6;
-    --achievement-cyan: #22d3ee;
+    --achievement-cyan: #e2fce6; /* Pale White-Green */
     --reward-green: #34d399;
   }
 
   .dark {
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 6%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 5%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 160 84% 45%;
-    --primary-foreground: 222 47% 4%;
-    --secondary: 222 30% 12%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 30% 12%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 160 84% 45%;
-    --accent-foreground: 210 40% 98%;
+    --background: 142 20% 3%;
+    --foreground: 142 10% 98%;
+    --card: 142 20% 5%;
+    --card-foreground: 142 10% 98%;
+    --popover: 142 20% 4%;
+    --popover-foreground: 142 10% 98%;
+    --primary: 142 45% 60%;
+    --primary-foreground: 142 20% 3%;
+    --secondary: 142 15% 12%;
+    --secondary-foreground: 142 10% 98%;
+    --muted: 142 15% 12%;
+    --muted-foreground: 142 10% 65%;
+    --accent: 142 45% 60%;
+    --accent-foreground: 142 10% 98%;
     --destructive: 0 84% 60%;
-    --border: 222 30% 15%;
-    --input: 222 30% 15%;
-    --ring: 160 84% 45%;
+    --border: 142 15% 15%;
+    --input: 142 15% 15%;
+    --ring: 142 45% 60%;
 
-    --sidebar: 222 47% 5%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 160 84% 45%;
-    --sidebar-primary-foreground: 222 47% 4%;
-    --sidebar-accent: 160 84% 45%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 30% 15%;
-    --sidebar-ring: 160 84% 45%;
+    --sidebar: 142 20% 4%;
+    --sidebar-foreground: 142 10% 98%;
+    --sidebar-primary: 142 45% 60%;
+    --sidebar-primary-foreground: 142 20% 3%;
+    --sidebar-accent: 142 45% 60%;
+    --sidebar-accent-foreground: 142 10% 98%;
+    --sidebar-border: 142 15% 15%;
+    --sidebar-ring: 142 45% 60%;
 
     /* Dark Elevation Tokens */
     --sh-1: 0 1px 3px 0 rgb(0 0 0 / 0.2);
@@ -97,7 +96,7 @@
     --xp-gold: #e0b84a;
     --streak-orange: #f0964a;
     --level-purple: #a78bfa;
-    --achievement-cyan: #67e8f9;
+    --achievement-cyan: #dcfce7;
     --reward-green: #6ee7b7;
   }
 
@@ -202,9 +201,9 @@
 }
 
 :root {
-  --primary-rgb: 0, 150, 110;
+  --primary-rgb: 76, 175, 80;
   --level-purple-rgb: 139, 92, 246;
-  --achievement-cyan-rgb: 34, 211, 238;
+  --achievement-cyan-rgb: 220, 252, 231;
   --streak-orange-rgb: 224, 138, 60;
 }
 

@@ -18,15 +18,15 @@ export function Logo({ variant = 'default', className = '', showText = true }: L
         xmlns="http://www.w3.org/2000/svg"
         className="shrink-0"
       >
-        <rect width="32" height="32" rx="8" fill={variant === 'white' ? '#fff' : '#3b82f6'} />
+        <rect width="32" height="32" rx="8" fill={variant === 'white' ? '#fff' : '#22c55e'} />
         <path
           d="M8 12h8v8H8z"
-          fill={variant === 'white' ? '#3b82f6' : '#fff'}
+          fill={variant === 'white' ? '#22c55e' : '#fff'}
           opacity="0.8"
         />
         <path
           d="M12 8h8v8h-8z"
-          fill={variant === 'white' ? '#3b82f6' : '#fff'}
+          fill={variant === 'white' ? '#22c55e' : '#fff'}
         />
       </svg>
 

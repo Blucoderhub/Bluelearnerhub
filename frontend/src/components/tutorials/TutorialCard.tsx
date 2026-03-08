@@ -44,7 +44,7 @@ export default function TutorialCard({
   }
 
   const domainColors: Record<string, string> = {
-    'computer-science': 'bg-blue-500',
+    'computer-science': 'bg-green-600',
     'mechanical': 'bg-orange-500',
     'electrical': 'bg-yellow-500',
     'civil': 'bg-green-500',
@@ -60,7 +60,7 @@ export default function TutorialCard({
       whileHover={{ y: -4 }}
     >
       <Link href={`/tutorials/${id}`}>
-        <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-blue-500 transition-all cursor-pointer h-full">
+        <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-green-500 transition-all cursor-pointer h-full">
           {/* Thumbnail */}
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
             {thumbnail ? (
@@ -91,7 +91,7 @@ export default function TutorialCard({
 
             {/* Play Button Overlay */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center">
                 <Play className="w-8 h-8 text-white ml-1" />
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function TutorialCard({
           {/* Content */}
           <div className="p-5 space-y-3">
             {/* Title */}
-            <h3 className="text-lg font-semibold text-white line-clamp-2 group-hover:text-blue-400 transition-colors">
+            <h3 className="text-lg font-semibold text-white line-clamp-2 group-hover:text-green-400 transition-colors">
               {title}
             </h3>
 
@@ -150,7 +150,7 @@ export default function TutorialCard({
               <div className="space-y-1 pt-2">
                 <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>Progress</span>
-                  <span className="font-semibold text-blue-400">{progress}%</span>
+                  <span className="font-semibold text-green-400">{progress}%</span>
                 </div>
                 <Progress value={progress} className="h-2" />
               </div>

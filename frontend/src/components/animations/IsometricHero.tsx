@@ -26,7 +26,7 @@ export default function IsometricHero() {
       ref={containerRef}
       className="relative min-h-screen overflow-hidden flex flex-col"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030B1A] via-[#061A2E] to-[#0A1628]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#020502] via-[#041005] to-[#050806]" />
 
       <div className="absolute inset-0 opacity-[0.03]">
         <div
@@ -39,9 +39,9 @@ export default function IsometricHero() {
         />
       </div>
 
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-blue-600/10 via-emerald-500/5 to-transparent blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-purple-600/8 to-transparent blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-emerald-500/5 to-transparent blur-3xl hidden lg:block" />
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-emerald-600/10 via-green-500/5 to-transparent blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-emerald-600/5 to-transparent blur-3xl" />
+      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-green-500/5 to-transparent blur-3xl hidden lg:block" />
 
       <motion.div
         style={{ y, opacity }}
@@ -57,8 +57,8 @@ export default function IsometricHero() {
             >
               <span className="text-white">Learn. Build.</span>
               <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Get Hired.
+              <span className="bg-gradient-to-r from-emerald-400 via-green-300 to-white bg-clip-text text-transparent">
+                Master Skills.
               </span>
             </motion.h1>
 
@@ -68,8 +68,7 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
             >
-              Master complex disciplines, compete in global innovation challenges, and land your dream
-              role — all on one premium platform built for the next generation of professionals across Engineering, Management, and beyond.
+              Master complex disciplines, compete in global innovation challenges, and reach peak expertise — all on one premium platform built for the next generation of professionals across Engineering, Management, and beyond.
             </motion.p>
 
             <motion.div
@@ -164,9 +163,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-                  className="px-2.5 py-1 rounded-md bg-blue-500/15 border border-blue-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-green-500/15 border border-green-500/25 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-blue-400">⚡ +250 XP</span>
+                  <span className="text-[10px] font-bold text-green-400">⚡ +250 XP</span>
                 </motion.div>
               </motion.div>
 
@@ -202,11 +201,11 @@ export default function IsometricHero() {
 
               {[
                 { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#34d399' },
-                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#60a5fa' },
+                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#86efac' },
                 { s: 3, l: 58, t: 38, dy: -45, dur: 3.8, bg: '#a78bfa' },
                 { s: 4.5, l: 70, t: 55, dy: -55, dur: 4.2, bg: '#fbbf24' },
                 { s: 3.5, l: 35, t: 60, dy: -48, dur: 3.2, bg: '#f472b6' },
-                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#22d3ee' },
+                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#dcfce7' },
               ].map((p, i) => (
                 <motion.div
                   key={`xp-particle-${i}`}

@@ -53,10 +53,11 @@ export default function Footer() {
       links: [
         { name: 'Learn', href: '/learn' },
         { name: 'Courses', href: '/courses' },
+        { name: 'Academy', href: '/mentors' },
         { name: 'Practice', href: '/practice' },
         { name: 'Hackathons', href: '/hackathons' },
         { name: 'Community', href: '/community' },
-        { name: 'Careers', href: '/careers' },
+        { name: 'Updates', href: '/updates' },
       ],
     },
     {
@@ -67,7 +68,7 @@ export default function Footer() {
         { name: 'Electrical', href: '/learn/electrical' },
         { name: 'Civil', href: '/learn/civil' },
         { name: 'Management', href: '/learn/management' },
-        { name: 'All Domains', href: '/domains' },
+        { name: 'Resources', href: '/resources' },
       ],
     },
     {
@@ -76,7 +77,7 @@ export default function Footer() {
         { name: 'About Us', href: '/about' },
         { name: 'Pricing', href: '/pricing' },
         { name: 'Contact', href: '/contact' },
-        { name: 'Careers', href: '/about/careers' },
+        { name: 'Culture', href: '/about/culture' },
         { name: 'Blog', href: '/blog' },
       ],
     },
@@ -113,7 +114,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-8">
           <div className="col-span-1 md:col-span-2 mb-8 md:mb-0">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/20">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/20">
                 <span className="text-lg font-bold text-white">BL</span>
               </div>
               <div>
@@ -123,7 +124,7 @@ export default function Footer() {
             </div>
             <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-xs">
               The world&apos;s first all-engineering & management learning platform.
-              Master any domain, compete in hackathons, and land your dream job.
+              Master any domain, compete in hackathons, and reach peak expertise.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => {

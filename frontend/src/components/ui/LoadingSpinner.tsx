@@ -22,7 +22,7 @@ export default function LoadingSpinner({
     <div className={cn('flex items-center justify-center', fullScreen && 'min-h-screen')}>
       <div
         className={cn(
-          'animate-spin rounded-full border-blue-500 border-t-transparent',
+          'animate-spin rounded-full border-green-500 border-t-transparent',
           sizes[size],
           className
         )}

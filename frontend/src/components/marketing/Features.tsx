@@ -21,9 +21,9 @@ const features = [
     title: 'Interactive Tutorials',
     description: 'Master your field with interactive labs and tutorials across Engineering, Management, and Data Science.',
     icon: BookOpen,
-    color: 'from-blue-500 to-cyan-500',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'group-hover:border-blue-500/50',
+    color: 'from-green-500 to-emerald-500',
+    bgColor: 'bg-green-500/10',
+    borderColor: 'group-hover:border-green-500/50',
     character: 'learning',
   },
   {
@@ -45,8 +45,8 @@ const features = [
     character: 'celebration',
   },
   {
-    title: 'AI Career Coach',
-    description: 'Prepare for any role with an AI-powered coach tailored to your specific discipline, with real-time feedback.',
+    title: 'AI Skill Mentor',
+    description: 'Engage with an AI mentor to deepen your knowledge in any discipline with real-time feedback.',
     icon: Bot,
     color: 'from-emerald-500 to-green-500',
     bgColor: 'bg-emerald-500/10',
@@ -54,12 +54,12 @@ const features = [
     character: 'coding',
   },
   {
-    title: 'Career Dashboard',
-    description: 'Track your professional growth across industries, manage your global portfolio, and land elite roles.',
+    title: 'Skills Dashboard',
+    description: 'Monitor your skill progression, manage your project portfolio, and track your learning milestones.',
     icon: Briefcase,
-    color: 'from-indigo-500 to-blue-500',
-    bgColor: 'bg-indigo-500/10',
-    borderColor: 'group-hover:border-indigo-500/50',
+    color: 'from-emerald-600 to-green-500',
+    bgColor: 'bg-emerald-600/10',
+    borderColor: 'group-hover:border-emerald-600/50',
     character: 'learning',
   },
   {
@@ -124,12 +124,12 @@ export default function Features() {
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Everything You Need to{' '}
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
               Succeed
             </span>
           </h2>
           <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
-            A complete platform for learning, competing, and launching your tech career
+            A complete platform for learning, competing, and mastering your field
           </p>
         </motion.div>
 

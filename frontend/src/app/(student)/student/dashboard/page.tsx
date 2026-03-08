@@ -11,6 +11,8 @@ import ProgressChart from '@/components/dashboard/ProgressChart'
 import ActivityFeed from '@/components/dashboard/ActivityFeed'
 import CelebrationCharacter from '@/components/animations/characters/CelebrationCharacter'
 import Confetti from '@/components/animations/Confetti'
+import { LearningPathOverview } from '@/components/dashboard/LearningPathOverview'
+import { SkillProficiency } from '@/components/dashboard/SkillProficiency'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
@@ -141,6 +143,21 @@ export default function StudentDashboard() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
+      >
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+           <div className="xl:col-span-2">
+              <LearningPathOverview />
+           </div>
+           <div className="xl:col-span-1 h-full">
+              <SkillProficiency />
+           </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
       >
         <DailyChallenge
           title="Array Manipulation Challenge"
