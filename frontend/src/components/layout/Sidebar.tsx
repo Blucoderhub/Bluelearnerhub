@@ -72,7 +72,7 @@ export default function Sidebar() {
       icon: BookOpen,
       section: 'learn',
       items: [
-        { name: 'Tutorials', href: '/learn', icon: BookOpen },
+        { name: 'Tutorials', href: '/tutorials', icon: BookOpen },
         { name: 'References', href: '/references', icon: FileText },
         { name: 'My Progress', href: '/learn/progress', icon: TrendingUp },
       ],

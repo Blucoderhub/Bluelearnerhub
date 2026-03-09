@@ -68,7 +68,7 @@ export default function UniversalSearch() {
           title: 'Introduction to Python Programming',
           description: 'Learn Python basics with hands-on examples',
           type: 'tutorial',
-          url: '/learn/computer-science/python-basics',
+          url: '/tutorials/computer-science/python-basics',
           domain: 'Computer Science',
           tags: ['Python', 'Beginner'],
         },
