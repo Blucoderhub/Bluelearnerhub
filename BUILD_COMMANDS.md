@@ -34,7 +34,13 @@ npm run format:all       # Format all code
 # Database operations
 npm run db:migrate       # Run database migrations
 npm run db:seed          # Seed database with sample data
-npm run db:reset         # Reset and recreate database\n\n# ⚡ Google Gemini AI Configuration\n# The platform now uses Google Gemini API exclusively\n# API Key: AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM\n# Make sure this is set in your environment variables:\n# GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+npm run db:reset         # Reset and recreate database
+
+# ⚡ Google Gemini AI Configuration
+# The platform now uses Google Gemini API exclusively
+# API Key: REPLACE_WITH_YOUR_GEMINI_API_KEY
+# Make sure this is set in your environment variables:
+# GEMINI_API_KEY=REPLACE_WITH_YOUR_GEMINI_API_KEY
 
 ## 🧠 AI Training Data Generation - 10,000+ Questions
 
@@ -155,7 +161,7 @@ cat ai-services/data/processed_training_data/*_metadata.json
 ### Environment Variables Required
 ```bash
 # Google Gemini API (primary)
-GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+GEMINI_API_KEY=REPLACE_WITH_YOUR_GEMINI_API_KEY
 
 # Database connection
 DB_HOST=localhost

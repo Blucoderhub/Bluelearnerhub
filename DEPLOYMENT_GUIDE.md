@@ -71,7 +71,7 @@ DATABASE_URL=postgresql://username:password@host:port/database
 REDIS_URL=redis://host:port
 
 # Google Gemini
-GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
 
 # Server Configuration
 HOST=0.0.0.0
