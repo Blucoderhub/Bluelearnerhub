@@ -1,3 +1,5 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -48,7 +50,7 @@ const nextConfig = {
 
   // Turbopack configuration (required for Next.js 16)
   turbopack: {
-    root: __dirname,
+    root: path.resolve(__dirname, '..'),
   },
 
   // Allow Replit's dev proxy origins
@@ -125,4 +127,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
