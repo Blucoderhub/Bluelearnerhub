@@ -1,0 +1,195 @@
+'use client';
+
+/**
+ * ExercisePanel — Practice challenge with test case runner
+ */
+
+import React, { useState } from 'react';
+import { Terminal, CheckCircle2, XCircle, ChevronDown, ChevronUp, Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import CodePlayground from './CodePlayground';
+
+interface TestCase {
+  input: string;
+  expectedOutput: string;
+  isHidden: boolean;
+}
+
+interface TestResult {
+  input: string;
+  expected: string;
+  actual: string;
+  passed: boolean;
+  hidden: boolean;
+}
+
+interface ExercisePanelProps {
+  prompt: string;
+  testCases: TestCase[];
+  xpReward: number;
+  language: string;
+  onRun: (code: string, language: string) => Promise<{ stdout: string; stderr: string; success: boolean }>;
+  onComplete: () => Promise<void>;
+}
+
+export default function ExercisePanel({
+  prompt,
+  testCases,
+  xpReward,
+  language,
+  onRun,
+  onComplete,
+}: ExercisePanelProps) {
+  const [isExpanded, setIsExpanded]     = useState(false);
+  const [testResults, setTestResults]   = useState<TestResult[]>([]);
+  const [allPassed, setAllPassed]       = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentCode, setCurrentCode]   = useState('');
+
+  const visibleTests = testCases.filter((t) => !t.isHidden);
+
+  const handleRunTests = async (code: string) => {
+    setIsSubmitting(true);
+    const results: TestResult[] = [];
+
+    for (const tc of testCases) {
+      try {
+        const result = await onRun(code, language);
+        const actual = result.stdout.trim();
+        results.push({
+          input:    tc.input,
+          expected: tc.expectedOutput,
+          actual,
+          passed:   actual === tc.expectedOutput.trim(),
+          hidden:   tc.isHidden,
+        });
+      } catch {
+        results.push({
+          input:    tc.input,
+          expected: tc.expectedOutput,
+          actual:   'Execution error',
+          passed:   false,
+          hidden:   tc.isHidden,
+        });
+      }
+    }
+
+    setTestResults(results);
+    const passed = results.every((r) => r.passed);
+    setAllPassed(passed);
+
+    if (passed) {
+      await onComplete();
+    }
+
+    setIsSubmitting(false);
+    return { stdout: '', stderr: '', success: passed };
+  };
+
+  return (
+    <div className="flex flex-col">
+      {/* Header (collapsible on mobile) */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800/50 md:cursor-default"
+      >
+        <div className="flex items-center gap-2">
+          <Terminal className="h-4 w-4 text-blue-500" />
+          <span>Practice Exercise</span>
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+            +{xpReward} XP
+          </span>
+        </div>
+        <div className="md:hidden">
+          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </div>
+      </button>
+
+      <div className={cn('flex flex-col', !isExpanded && 'hidden md:flex')}>
+        {/* Prompt */}
+        <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-800 dark:bg-gray-900/50">
+          <p className="text-sm text-gray-700 dark:text-gray-300">{prompt}</p>
+        </div>
+
+        {/* Visible test cases */}
+        {visibleTests.length > 0 && (
+          <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Test Cases
+            </p>
+            <div className="flex flex-col gap-2">
+              {visibleTests.map((tc, i) => (
+                <div key={i} className="rounded-lg bg-gray-100 px-3 py-2 font-mono text-xs dark:bg-gray-800">
+                  <span className="text-gray-500">Input: </span>
+                  <span className="text-gray-800 dark:text-gray-200">{tc.input}</span>
+                  <br />
+                  <span className="text-gray-500">Expected: </span>
+                  <span className="text-emerald-700 dark:text-emerald-400">{tc.expectedOutput}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Code + run button */}
+        <div className="border-t border-gray-200 dark:border-gray-800">
+          <CodePlayground
+            starterCode=""
+            language={language}
+            onRun={handleRunTests}
+            height="200px"
+          />
+        </div>
+
+        {/* Test results */}
+        {testResults.length > 0 && (
+          <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
+            {allPassed ? (
+              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 dark:bg-emerald-950">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                <div>
+                  <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                    All tests passed!
+                  </p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                    +{xpReward} XP awarded
+                  </p>
+                </div>
+                <Zap className="ml-auto h-5 w-5 text-amber-500" />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {testResults.filter((r) => !r.hidden).map((r, i) => (
+                  <div
+                    key={i}
+                    className={cn(
+                      'flex items-start gap-2 rounded-lg px-3 py-2 text-xs font-mono',
+                      r.passed
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                        : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
+                    )}
+                  >
+                    {r.passed ? (
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                    ) : (
+                      <XCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                    )}
+                    <div>
+                      <div>Input: {r.input}</div>
+                      {!r.passed && (
+                        <>
+                          <div>Expected: {r.expected}</div>
+                          <div>Got: {r.actual}</div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

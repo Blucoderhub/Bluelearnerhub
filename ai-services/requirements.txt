@@ -15,6 +15,22 @@ torchvision==0.16.0
 tensorflow==2.15.0
 transformers==4.35.2
 
+# Local LLM inference — AIR LLM enables running large models (Mistral, Llama,
+# etc.) on consumer hardware via split-computing / quantisation.
+# To change the model: set LOCAL_LLM_MODEL env var (see app/ai/airllm_service.py)
+airllm>=0.7.0
+
+# Semantic embeddings — used by AI Orchestrator for Q&A duplicate detection,
+# tutorial recommendations, and personalized search
+sentence-transformers==2.3.1
+
+# LangChain — agent orchestration for complex multi-step AI tasks
+langchain==0.1.0
+langchain-google-genai==0.0.6
+
+# pgvector Python client — for direct vector DB queries from AI service
+pgvector==0.2.4
+
 # NLP
 spacy==3.7.2
 nltk==3.8.1

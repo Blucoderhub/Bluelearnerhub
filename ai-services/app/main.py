@@ -9,6 +9,11 @@ from app.api import api_router
 from app.core.logging import logger
 from app.core.database import redis_client
 
+# AIR LLM provider — loaded once here so the first /chat request is fast.
+# To change the model, set LOCAL_LLM_MODEL in your .env file.
+# To disable local LLM (e.g. in CI), set LOCAL_LLM_PROVIDER=stub.
+from app.ai.airllm_service import get_provider
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,6 +33,17 @@ async def lifespan(app: FastAPI):
             logger.info("✓ Redis connected successfully")
     except Exception as e:
         logger.error(f"✗ Redis connection failed: {e}")
+
+    # Warm up the local LLM provider so the first request doesn't time out.
+    # The model is loaded once and cached for the lifetime of the process.
+    try:
+        provider = get_provider()
+        logger.info(f"✓ Local LLM provider ready: {provider.provider_name}")
+    except Exception as e:
+        logger.error(
+            f"✗ Local LLM provider failed to load: {e}  "
+            "(set LOCAL_LLM_PROVIDER=stub to skip local model loading)"
+        )
 
     yield
 

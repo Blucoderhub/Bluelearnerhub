@@ -29,6 +29,12 @@ import {
   ArrowRight,
   Code2,
   Hammer,
+  MessageSquare,
+  Map,
+  Award,
+  GitBranch,
+  Building2,
+  Zap,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { getAllDomains } from '@/lib/domain-config'
@@ -67,11 +73,16 @@ export default function Header() {
 
   const mainNavigation = [
     { name: 'Tutorials', href: '/tutorials', icon: BookOpen, isMega: true },
+    { name: 'Tracks', href: '/learning-tracks', icon: Map },
     { name: 'Academy', href: '/mentors', icon: GraduationCap },
+    { name: 'Q&A', href: '/qna', icon: MessageSquare },
+    { name: 'Dev Portal', href: '/dev', icon: GitBranch },
     { name: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
   ]
 
   const secondaryNavigation = [
+    { name: 'Daily Quiz', href: '/daily-quiz', icon: Zap, isHighlight: false },
+    { name: 'Certificates', href: '/certificates', icon: Award },
     { name: 'Premium', href: '/premium', icon: Sparkles, isHighlight: true },
     { name: 'Community', href: '/community', icon: Users },
   ]

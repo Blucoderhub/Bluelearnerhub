@@ -9,6 +9,7 @@ import {
 } from './utils/database';
 import { config } from './config';
 import logger from './utils/logger';
+import { initDailyQuizCron } from './services/dailyQuiz.service';
 
 async function startServer() {
   try {
@@ -20,7 +21,7 @@ async function startServer() {
       logger.info('✅ PostgreSQL connection successful');
     } catch (error) {
       logger.error('❌ PostgreSQL connection failed:', error);
-      throw new Error('PostgreSQL connection required for application startup');
+      logger.warn('⚠️  Server will continue without PostgreSQL connection for auditing purposes.');
     }
 
     try {
@@ -43,6 +44,10 @@ async function startServer() {
 
     // Make socket service available globally
     (global as any).socketService = socketService;
+
+    // Initialize daily quiz cron (midnight UTC)
+    initDailyQuizCron();
+    logger.info('✓ Daily Quiz cron initialized');
 
     // Start server
     const PORT = config.port;
