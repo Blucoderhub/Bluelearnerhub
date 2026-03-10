@@ -1,6 +1,56 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/**
+ * AI Service — Provider Abstraction Layer
+ * ========================================
+ *
+ * This module exposes a single `aiService` singleton whose methods (chatAssistant,
+ * chatAssistantStream, generateQuiz) are backed by whichever AI provider is
+ * configured at startup.
+ *
+ * HOW TO CHANGE THE PROVIDER
+ * ---------------------------
+ * Set the AI_PROVIDER environment variable:
+ *   AI_PROVIDER=gemini   → Google Gemini 1.5 Pro (default, cloud)
+ *   AI_PROVIDER=local    → Local AIR LLM via the Python ai-services FastAPI app
+ *
+ * HOW TO ADD A NEW PROVIDER (e.g. OpenAI)
+ * ----------------------------------------
+ * 1. Implement the AIProvider interface below.
+ * 2. Add a case in buildProvider() that returns your class.
+ * 3. Set AI_PROVIDER=<your-key> in the environment.
+ *
+ * HOW TO SCALE THE LOCAL LLM LAYER
+ * ----------------------------------
+ * The local provider forwards requests to the Python ai-services microservice
+ * (AI_SERVICE_URL). To scale horizontally, run multiple replicas of that
+ * service and point AI_SERVICE_URL at a load balancer.
+ */
 
-export class AIService {
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
+import { config } from '../config';
+import logger from '../utils/logger';
+
+// ---------------------------------------------------------------------------
+// Provider interface — every backend must implement this
+// ---------------------------------------------------------------------------
+
+interface AIProvider {
+  readonly name: string;
+  chatAssistant(query: string, context: Record<string, unknown>): Promise<string>;
+  chatAssistantStream(
+    query: string,
+    context: Record<string, unknown>,
+    persona?: 'tutor' | 'technical' | 'manager' | 'career' | 'competition'
+  ): Promise<AsyncIterable<{ text(): string }>>;
+  generateQuiz(domain: string, level: number, performance: string): Promise<{ questions: unknown[] } | null>;
+}
+
+// ---------------------------------------------------------------------------
+// Gemini provider (cloud)
+// ---------------------------------------------------------------------------
+
+class GeminiProvider implements AIProvider {
+  readonly name = 'gemini';
   private genAI: GoogleGenerativeAI;
 
   constructor() {
@@ -12,85 +62,227 @@ export class AIService {
   }
 
   async generateQuiz(domain: string, level: number, performance: string) {
-    const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-    const prompt = `
-      You are an expert ${domain} tutor on the BLUELEARNERHUB platform.
-      Generate 5 challenging quiz questions for a student at Level ${level}.
-      User performance context: ${performance}.
-      
-      Question formats: MCQ, Numerical, Case-based, Coding (if applicable), Design.
-      
-      Return the response in JSON format:
-      {
-        "questions": [
-          {
-            "type": "string",
-            "content": "string",
-            "options": ["string"],
-            "correctAnswer": "string",
-            "explanation": "string"
-          }
-        ]
-      }
-    `;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
     try {
-      // Find the JSON block in the response
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      return jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+      const difficultyMap: Record<number, string> = { 1: 'easy', 2: 'medium', 3: 'hard', 4: 'expert' };
+      const difficulty = difficultyMap[level] || 'medium';
+
+      const response = await axios.post(`${config.aiServiceUrl}/api/v1/quiz/generate`, {
+        topic: domain,
+        difficulty,
+        num_questions: 5,
+        context: performance,
+      });
+
+      const questions = response.data.questions.map((q: any) => ({
+        type: q.question_type || 'multiple_choice',
+        content: q.question,
+        options: [q.options.A, q.options.B, q.options.C, q.options.D],
+        correctAnswer: q.correct_answer,
+        explanation: q.explanation,
+      }));
+
+      return { questions };
     } catch (error) {
-      console.error('Failed to parse Gemini response:', error);
+      logger.error('GeminiProvider: generateQuiz failed', error);
       return null;
     }
   }
 
-  async chatAssistantStream(query: string, context: any, persona: 'tutor' | 'technical' | 'manager' | 'career' | 'competition' = 'tutor') {
+  async chatAssistantStream(
+    query: string,
+    context: Record<string, unknown>,
+    persona: 'tutor' | 'technical' | 'manager' | 'career' | 'competition' = 'tutor'
+  ) {
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
     const systemPrompts = {
-      tutor: "You are the BLUELEARNERHUB AI Tutor. Your goal is to simplify complex concepts, be encouraging, and guide students through their learning path with Socratic questioning.",
-      technical: "You are the BLUELEARNERHUB Engineering Lead. Provide high-performance code, architecture critiques, and deeply technical solutions for software, mechanical, or electrical challenges.",
-      manager: "You are the BLUELEARNERHUB Management Consultant. Focus on ROI, strategic positioning, project management (Agile/Scrum), and business analytics.",
-      career: "You are the BLUELEARNERHUB Career Accelerator. Help with resume optimization, portfolio building, interview preparation, and industry networking strategies.",
-      competition: "You are the BLUELEARNERHUB Hackathon Strategist. Focus on rapid prototyping, 'winning' features, presentation deck polish, and technical efficiency."
+      tutor: 'You are the BLUELEARNERHUB AI Tutor. Simplify concepts and guide students with Socratic questioning.',
+      technical: 'You are the BLUELEARNERHUB Engineering Lead. Provide high-performance code and architecture critiques.',
+      manager: 'You are the BLUELEARNERHUB Management Consultant. Focus on ROI, strategy, and Agile/Scrum.',
+      career: 'You are the BLUELEARNERHUB Career Accelerator. Help with resumes, portfolios, and interviews.',
+      competition: 'You are the BLUELEARNERHUB Hackathon Strategist. Focus on rapid prototyping and winning features.',
     };
 
     const prompt = `
-            ${systemPrompts[persona]}
-            
-            USER_CONTEXT:
-            - Name: ${context.userName || 'Learner'}
-            - Domain: ${context.domain || 'General Engineering/Management'}
-            - Level: ${context.level || 1}
-            - Page Context: ${context.path || 'Dashboard'}
-            
-            Current Query: ${query}
-            
-            Respond in Markdown. Be concise but impactful. If suggesting code or designs, ensure they are state-of-the-art.
-        `;
+      ${systemPrompts[persona]}
+
+      USER_CONTEXT:
+      - Name: ${(context.userName as string) || 'Learner'}
+      - Domain: ${(context.domain as string) || 'General'}
+      - Level: ${(context.level as string) || 1}
+      - Page: ${(context.path as string) || 'Dashboard'}
+
+      Current Query: ${query}
+
+      Respond in Markdown. Be concise but impactful.
+    `;
 
     const result = await model.generateContentStream(prompt);
     return result.stream;
   }
 
-  async chatAssistant(query: string, context: any) {
+  async chatAssistant(query: string, context: Record<string, unknown>) {
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
-
     const prompt = `
       User: ${query}
       Context: ${JSON.stringify(context)}
-      Role: You are the BLUELEARNERHUB AI Assistant. Provide professional, encouraging, and highly technical or strategic advice based on the user's domain.
+      Role: You are the BLUELEARNERHUB AI Assistant.
     `;
-
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    return (await result.response).text();
   }
 }
 
+// ---------------------------------------------------------------------------
+// Local LLM provider — delegates to the Python ai-services FastAPI app
+// which runs AIR LLM (see ai-services/app/ai/airllm_service.py)
+// ---------------------------------------------------------------------------
+
+/**
+ * A minimal SSE-compatible iterable so LocalLLMProvider.chatAssistantStream
+ * honours the same interface as the Gemini streaming API.
+ */
+class SingleChunkIterable implements AsyncIterable<{ text(): string }> {
+  constructor(private content: string) {}
+
+  [Symbol.asyncIterator]() {
+    let done = false;
+    const content = this.content;
+    return {
+      async next() {
+        if (done) return { value: undefined, done: true as const };
+        done = true;
+        return { value: { text: () => content }, done: false as const };
+      },
+    };
+  }
+}
+
+class LocalLLMProvider implements AIProvider {
+  readonly name = 'local-airllm';
+
+  /** Base URL of the Python ai-services FastAPI app */
+  private serviceUrl: string;
+
+  constructor() {
+    // AI_SERVICE_URL defaults to the same value used by other service calls
+    this.serviceUrl = process.env.AI_SERVICE_URL || config.aiServiceUrl || 'http://localhost:8000';
+    logger.info(`[LocalLLMProvider] Routing AI requests to ${this.serviceUrl}/api/v1/chat`);
+  }
+
+  async chatAssistant(query: string, context: Record<string, unknown>) {
+    const prompt = this.buildPrompt(query, context);
+    const { data } = await axios.post<{ response: string }>(
+      `${this.serviceUrl}/api/v1/chat`,
+      { prompt, max_new_tokens: 512 }
+    );
+    return data.response;
+  }
+
+  async chatAssistantStream(
+    query: string,
+    context: Record<string, unknown>,
+    _persona?: string
+  ) {
+    // The local model does not yet support token streaming; we return the full
+    // response wrapped in a single-chunk iterable to keep the interface uniform.
+    // To add streaming: implement SSE/chunked transfer in the Python service and
+    // consume it here with an async generator.
+    const text = await this.chatAssistant(query, context);
+    return new SingleChunkIterable(text);
+  }
+
+  async generateQuiz(domain: string, level: number, performance: string) {
+    // Quiz generation still routes through the structured quiz endpoint in the
+    // Python service, which uses Gemini or templates — not the raw LLM.
+    try {
+      const difficultyMap: Record<number, string> = { 1: 'easy', 2: 'medium', 3: 'hard', 4: 'expert' };
+      const { data } = await axios.post(`${this.serviceUrl}/api/v1/quiz/generate`, {
+        topic: domain,
+        difficulty: difficultyMap[level] || 'medium',
+        num_questions: 5,
+        context: performance,
+      });
+      const questions = data.questions.map((q: any) => ({
+        type: q.question_type || 'multiple_choice',
+        content: q.question,
+        options: [q.options.A, q.options.B, q.options.C, q.options.D],
+        correctAnswer: q.correct_answer,
+        explanation: q.explanation,
+      }));
+      return { questions };
+    } catch (error) {
+      logger.error('LocalLLMProvider: generateQuiz failed', error);
+      return null;
+    }
+  }
+
+  /** Build a plain-text prompt that Mistral / Llama instruction models understand. */
+  private buildPrompt(query: string, context: Record<string, unknown>): string {
+    return [
+      '<s>[INST]',
+      'You are the BLUELEARNERHUB AI Assistant — an expert tutor and career advisor.',
+      `User name: ${(context.userName as string) || 'Learner'}`,
+      `Domain: ${(context.domain as string) || 'General'}`,
+      `Level: ${(context.level as string) || '1'}`,
+      '',
+      query,
+      '[/INST]',
+    ].join('\n');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Provider factory
+// ---------------------------------------------------------------------------
+
+function buildProvider(): AIProvider {
+  const providerKey = (process.env.AI_PROVIDER || 'gemini').toLowerCase();
+
+  switch (providerKey) {
+    case 'local':
+    case 'airllm':
+      logger.info('[AIService] Using local AIR LLM provider');
+      return new LocalLLMProvider();
+
+    case 'gemini':
+    default:
+      logger.info('[AIService] Using Gemini cloud provider');
+      return new GeminiProvider();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Public AIService facade — keeps existing callers unchanged
+// ---------------------------------------------------------------------------
+
+export class AIService {
+  private provider: AIProvider;
+
+  constructor() {
+    this.provider = buildProvider();
+  }
+
+  get providerName(): string {
+    return this.provider.name;
+  }
+
+  generateQuiz(domain: string, level: number, performance: string) {
+    return this.provider.generateQuiz(domain, level, performance);
+  }
+
+  chatAssistantStream(
+    query: string,
+    context: Record<string, unknown>,
+    persona: 'tutor' | 'technical' | 'manager' | 'career' | 'competition' = 'tutor'
+  ) {
+    return this.provider.chatAssistantStream(query, context, persona);
+  }
+
+  chatAssistant(query: string, context: Record<string, unknown>) {
+    return this.provider.chatAssistant(query, context);
+  }
+}
+
+// Singleton — instantiated once when the backend process starts
 export const aiService = new AIService();
