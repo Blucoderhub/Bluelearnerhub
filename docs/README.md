@@ -1,25 +1,38 @@
-# EdTech Platform Documentation
+# BluelearnerHub Documentation
 
-This directory contains comprehensive documentation for the EdTech Platform.
+Welcome to the comprehensive documentation for the BluelearnerHub EdTech platform. Documentation is organized by domain to ensure clarity and ease of navigation.
 
-## Documentation Index
+## 📂 Documentation Structure
 
-1. **[API.md](./API.md)** - Complete API reference and endpoints
-2. **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture and design decisions
-3. **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment and DevOps guidance
-4. **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Developer guide and setup instructions
+### 🏗️ [Architecture](./architecture/)
+- **[System Architecture](./architecture/README.md)**: Core design decisions and service overview.
+- **[Civilization Manifesto](./architecture/CIVILIZATION.md)**: The long-term vision and global learning civilization blueprint.
 
-## Quick Links
+### 🚀 [Setup & Getting Started](./setup/)
+- **[Platform Setup](./setup/PLATFORM_SETUP.md)**: Complete guide for environment and service configuration.
+- **[Health Check](./setup/HEALTH_CHECK.md)**: Service verification and diagnostics guide.
+- **[Quick Start](../development/QUICK_START.md)**: Rapid development environment startup.
 
-- [API Endpoints](./API.md#endpoints)
-- [Database Schema](./ARCHITECTURE.md#database-schema)
-- [Deployment Checklist](./DEPLOYMENT.md#checklist)
-- [Development Setup](./DEVELOPMENT.md#setup)
+### 💻 [Development](./development/)
+- **[Development Guide](./development/README.md)**: Coding standards, workflows, and developer tooling.
+- **[API Reference](../api/README.md)**: Complete API documentation and endpoints.
 
-## Getting Help
+### 🛡️ [Security](./security/)
+- **[Security Overview](./security/README.md)**: Foundational security principles and configurations.
+- **[Audit Report](./security/AUDIT_REPORT.md)**: Findings from the comprehensive security assessment.
+- **[Implementation Guide](./security/IMPLEMENTATION_GUIDE.md)**: Step-by-step remediation of security vulnerabilities.
 
-For questions or issues:
-1. Check the relevant documentation file
-2. Review the code comments
-3. Check GitHub issues
-4. Contact the development team
+### 📦 [Deployment](./deployment/)
+- **[Deployment Guide](./deployment/README.md)**: Production deployment instructions for cloud environments.
+- **[Build Commands](./deployment/BUILD_COMMANDS.md)**: Reference for common build and maintenance tasks.
+- **[Deployment Checklist](./deployment/CHECKLIST.md)**: Critical verification steps before and after release.
+
+### 📖 [Reference](./reference/)
+- **[Quick Reference](./reference/QUICK_REFERENCE.md)**: Rapid lookup for commands, files, and configurations.
+- **[Documentation Index](./reference/INDEX.md)**: A detailed index of all project documentation.
+
+### 📁 [Archive](./archive/)
+- **[Project Logs & Legacy Reports](./archive/)**: Historical data including completion summaries and legacy Replit configurations.
+
+---
+*Last updated: March 2026*
