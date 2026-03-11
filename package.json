@@ -16,7 +16,7 @@
     "dev:agent": "cd ai-agent && python agent.py",
     "dev:ai-system": "cd ai_system && python orchestrator.py",
     "dev:telegram": "cd telegram_bot && python bot.py",
-    "dev:sales": "cd sales_system && python -c \"import lead_generator, email_writer\"",
+    "dev:sales": "cd sales_system && python -c \"from lead_generator import generate_segments; print(generate_segments('test')); from email_writer import draft_email; print(draft_email('Test subject','recipient@example.com'))\"",
     "build": "npm run build:all",
     "build:all": "npm-run-all build:backend build:frontend",
     "build:frontend": "cd frontend && npm ci --production=false && npm run build",

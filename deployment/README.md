@@ -30,12 +30,12 @@ services:
     plan: free
   - name: bluelearner-aisystem
     env: python
-    buildCommand: "pip install openclaw || true"
+    buildCommand: "pip install openclaw"
     startCommand: "python ai_system/orchestrator.py"
     plan: free
   - name: bluelearner-telegram
     env: python
-    buildCommand: "pip install python-telegram-bot || true"
+    buildCommand: "pip install python-telegram-bot"
     startCommand: "python telegram_bot/bot.py"
     plan: free
 ```

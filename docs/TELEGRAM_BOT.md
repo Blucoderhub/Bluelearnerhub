@@ -11,12 +11,14 @@ system via Telegram commands.
    ```bash
    export TELEGRAM_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
    ```
-3. Install dependencies:
+3. Install dependencies and make project modules available:
    ```bash
    cd telegram_bot
    python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
+   source venv/bin/activate   # Windows: venv\Scripts\activate
    pip install python-telegram-bot
+   # ensure the main project is importable (editable install):
+   pip install -e ..
    ```
 4. Run the bot:
    ```bash

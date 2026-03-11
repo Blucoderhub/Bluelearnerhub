@@ -2,5 +2,6 @@
 FROM python:3.11-slim
 WORKDIR /app
 COPY . /app
-RUN pip install --no-cache-dir python-telegram-bot || true
+# pin python-telegram-bot and fail if install fails
+RUN pip install --no-cache-dir "python-telegram-bot==23.15.2"
 ENTRYPOINT ["python", "bot.py"]

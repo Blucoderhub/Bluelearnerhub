@@ -69,7 +69,7 @@ This platform consists of four production-ready microservices:
 - Located in `ai-agent/` with a simple interactive prompt
 - Uses `OPENCLAW_API_KEY` environment variable when available
 
-## �️ Developer Workflow
+## ⚙️ Developer Workflow
 
 1. **Clone repository & install root dependencies**
 
@@ -118,7 +118,7 @@ cd ai-agent && python agent.py
 The agent can scaffold new endpoints, query documentation or assist with
 deployment by connecting to the OpenClaw API.
 
-## �🚀 Quick Deployment
+## 🚀 Quick Deployment
 To deploy the platform to production today, follow these steps:
 
 1. **Provision cloud resources** (PostgreSQL, Redis) or use managed services.

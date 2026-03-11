@@ -30,69 +30,22 @@ docker-compose up
 
 ### Manual Setup (Without Docker)
 
+The following sections walk through getting each component running
+individually.
+
 #### 1. Backend Setup
 
 ```bash
 cd backend
-
-# Install dependencies
 npm install
-
-# Create .env file (see backend/.env.example)
-cp .env.example .env
-
-# Build TypeScript
+cp .env.example .env      # configure DB, JWT, etc.
 npm run build
-
-# Start development server (or npm start for production)
-npm run dev
+npm run dev                # or npm start for production
 ```
 
-Backend will run on `http://localhost:5000`
+The backend listens on `http://localhost:5000`.
 
-#### 2. AI System Setup
-
-```bash
-cd ai_system
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-# install optional dependencies if using OpenClaw
-pip install openclaw python-dotenv
-python orchestrator.py
-```
-
-#### 3. AI Model Setup
-
-```bash
-cd ai_model
-# place your AirLLM model binary in knowledge_base/
-export AIRLLM_MODEL_PATH=./ai_model/knowledge_base/model.bin
-python -c "from airllm_model import AirLLMModel; print(AirLLMModel().generate('test'))"
-```
-
-#### 4. Telegram Bot Setup
-
-```bash
-cd telegram_bot
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-pip install python-telegram-bot
-export TELEGRAM_TOKEN=your_token_here
-python bot.py
-```
-
-#### 5. Sales System Setup
-
-```bash
-cd sales_system
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-# no dependencies except standard library
-# ensure SMTP vars are defined in .env
-python -c "from lead_generator import generate_segments; print(generate_segments('test'))"
-```
-
-#### 6. AI Services Setup
+#### 2. AI Services Setup
 
 ```bash
 cd ai-services
@@ -107,16 +60,97 @@ setup.bat
 # - Create Python virtual environment
 # - Install dependencies
 # - Download ML models (spaCy, NLTK)
-# - Create .env file
+# - Create a .env file
 
 # Start AI services
 python app/main.py
 ```
 
-#### 2. AI Services Setup
+The AI services run on `http://localhost:8000`.
+
+#### 3. AI System Setup
 
 ```bash
-cd ai-services
+cd ai_system
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install openclaw python-dotenv
+python orchestrator.py
+```
+
+#### 4. AI Model Setup
+
+```bash
+cd ai_model
+# place your AirLLM model binary in knowledge_base/ (see AIRLLM.md)
+export AIRLLM_MODEL_PATH=$(pwd)/knowledge_base/model.bin   # must be absolute or evaluated here
+python -c "from airllm_model import AirLLMModel; print(AirLLMModel().generate('test'))"
+```
+
+#### 5. Telegram Bot Setup
+
+```bash
+cd telegram_bot
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install python-telegram-bot
+export TELEGRAM_TOKEN=your_token_here
+python bot.py
+```
+
+#### 6. Sales System Setup
+
+```bash
+cd sales_system
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+# no dependencies beyond standard library
+# ensure SMTP vars are defined in .env
+python -c "from lead_generator import generate_segments; print(generate_segments('test'))"
+```
+
+#### 7. AI Agent Setup
+
+```bash
+cd ai-agent
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+# set OPENCLAW_API_KEY in your shell or .env
+python agent.py
+```
+
+#### 8. Database Setup
+
+Ensure PostgreSQL 16+ is running with these credentials (from `.env` files):
+```
+Database: edtech_db
+User: edtech_user
+Password: (see .env files)
+Port: 5432
+```
+
+Create the database:
+```sql
+CREATE DATABASE edtech_db;
+CREATE USER edtech_user WITH PASSWORD 'your_password';
+ALTER ROLE edtech_user SET client_encoding TO 'utf8';
+ALTER ROLE edtech_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE edtech_user SET default_transaction_deferrable TO on;
+GRANT ALL PRIVILEGES ON DATABASE edtech_db TO edtech_user;
+```
+
+#### 9. Redis Setup
+
+Start Redis (default port 6379):
+```bash
+# Docker
+docker run -d -p 6379:6379 redis:7
+
+# OR native installation
+redis-server
+```
+
 
 # Run automated setup (Unix/Linux/macOS)
 bash setup.sh

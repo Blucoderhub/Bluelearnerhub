@@ -9,5 +9,7 @@ def route_command(text: str) -> str:
     if not parts:
         return "No command provided."
     cmd = parts[0].lstrip('/')
+    if not cmd:
+        return "No command provided."
     args = parts[1] if len(parts) > 1 else ""
     return orchestrator.handle_command(f"{cmd} {args}")

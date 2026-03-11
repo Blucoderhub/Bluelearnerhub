@@ -7,8 +7,9 @@ import os
 
 try:
     from openclaw import OpenClawAgent, OpenClawOrchestrator
-except ImportError:
-    # stub classes if OpenClaw SDK is not installed
+except ImportError as e:
+    # stub classes if OpenClaw SDK is not installed; log error
+    print(f"OpenClaw SDK not available: {e} (running in stub mode)")
     class OpenClawAgent:
         def __init__(self, name, system_prompt="", role=""):
             self.name = name
@@ -63,8 +64,11 @@ if __name__ == "__main__":
     while True:
         try:
             cmd = input("orchestrator> ")
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, EOFError):
             break
         if not cmd.strip():
             continue
-        print(handle_command(cmd))
+        try:
+            print(handle_command(cmd))
+        except Exception as err:
+            print(f"Error handling command: {err}")

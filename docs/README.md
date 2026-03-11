@@ -7,7 +7,8 @@ Welcome to the comprehensive documentation for the BluelearnerHub EdTech platfor
 ### 🏗️ [Architecture](./architecture/)
 - **[System Architecture](./architecture/README.md)**: Core design decisions and service overview (now includes AI Agent helper).
 - **[Civilization Manifesto](./architecture/CIVILIZATION.md)**: The long-term vision and global learning civilization blueprint.
-- **[AI Agent](../ai-agent/README.md)**: Developer-facing OpenClaw assistant for automation and code generation.- **[AI Multi-Agent System](../docs/AI_SYSTEM.md)**: Orchestrator and role-based agents for CTO/Dev/Product/Sales.
+- **[AI Agent](../ai-agent/README.md)**: Developer-facing OpenClaw assistant for automation and code generation.
+- **[AI Multi-Agent System](./AI_SYSTEM.md)**: Orchestrator and role-based agents for CTO/Dev/Product/Sales.
 ### 🚀 [Setup & Getting Started](./setup/)
 - **[Platform Setup](./setup/PLATFORM_SETUP.md)**: Complete guide for environment and service configuration (now includes AI system, model, telegram bot, sales system).
 - **[AirLLM Model](./AIRLLM.md)**: Instructions for local AI model setup.

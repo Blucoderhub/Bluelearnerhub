@@ -31,7 +31,11 @@ class Settings:
 
     # SMTP email
     SMTP_HOST = os.getenv("SMTP_HOST")
-    SMTP_PORT = os.getenv("SMTP_PORT")
+    # convert port to integer with default and validation
+    try:
+        SMTP_PORT = int(os.getenv("SMTP_PORT", 25))
+    except (TypeError, ValueError):
+        raise RuntimeError("Invalid SMTP_PORT environment variable; must be integer")
     SMTP_USER = os.getenv("SMTP_USER")
     SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 
@@ -40,5 +44,17 @@ class Settings:
 
     # other variables can be added as needed
 
+    def validate(self):
+        # check critical secrets in production
+        if self.NODE_ENV.lower() == "production":
+            if not self.JWT_SECRET or not self.JWT_REFRESH_SECRET:
+                raise RuntimeError("JWT_SECRET and JWT_REFRESH_SECRET must be set in production")
+
 
 settings = Settings()
+# perform post-instantiation validation
+try:
+    settings.validate()
+except Exception as e:
+    # re-raise with context
+    raise
