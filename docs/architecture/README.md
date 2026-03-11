@@ -2,11 +2,19 @@
 
 ## Overview
 
-The EdTech Platform follows a microservices architecture with three main services:
+The EdTech Platform follows a microservices architecture with additional support components:
 
 1. **Frontend** - Next.js SPA
 2. **Backend** - Express.js API
 3. **AI Services** - FastAPI microservice
+4. **AI Agent** - Python-based OpenClaw agent (`ai-agent/`) used by developers for automation, code‑generation and deployment helpers
+
+Additionally:
+- **AI System** - a multi-agent orchestration layer (`ai_system/`) leveraging OpenClaw for CTO/Dev/Product/Sales agents
+- **AI Model** - local AirLLM-based model (`ai_model/`)  used by agents for reasoning and content generation
+- **Telegram Bot** - command center (`telegram_bot/`) exposing agents via chat interface
+- **Sales System** - lead/email/CRM modules (`sales_system/`) for outreach automation
+
 
 ## Architecture Diagram
 
@@ -39,10 +47,16 @@ The EdTech Platform follows a microservices architecture with three main service
          │   PostgreSQL + Redis           │
          └────────────────────────────────┘
                 │               │
-         ┌──────▼──────┐   ┌────▼──────────┐
-         │  AI Space   │   │  Background   │
-         │  (FastAPI)  │   │  Jobs (Bull)  │
-         └─────────────┘   └───────────────┘
+         ┌──────▼──────┐   ┌────▼──────────┐   ┌────▼──────────┐   ┌─────▼─────┐
+         │  AI Space   │   │  Background   │   │ AI Agent      │   │ AI System │
+         │  (FastAPI)  │   │  Jobs (Bull)  │   │ (OpenClaw)    │   │ (agents)  │
+         └─────────────┘   └───────────────┘   └──────────────┘   └───────────┘
+                │                                           │
+                │                                           │
+         ┌──────▼──────┐                         ┌────────┴────────┐
+         │ AI Model    │                         │ Telegram Bot    │
+         │ (AirLLM)    │                         │ & Sales System  │
+         └─────────────┘                         └─────────────────┘
 ```
 
 ## Database Schema

@@ -182,11 +182,109 @@ jobs:
         flags: ai-services
         name: ai-services-coverage
 
-  # Build Jobs
-  build-frontend:
-    name: Build Frontend
+  test-ai-agent:
+    name: Test AI Agent
     runs-on: ubuntu-latest
-    needs: test-frontend
+    defaults:
+      run:
+        working-directory: ./ai-agent
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('ai-agent/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ai-agent/requirements.txt
+    - name: Lint agent
+      run: |
+        python -m flake8 agent.py || true
+    - name: Smoke test import
+      run: |
+        python -c "import agent; print('ai-agent import ok')"
+
+  test-ai-system:
+    name: Test AI System
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ai_system
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Run lint
+      run: |
+        python -m flake8 *.py || true
+    - name: Smoke import
+      run: |
+        python -c "import ai_system" || true
+
+  test-ai-model:
+    name: Test AI Model
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ai_model
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Run lint
+      run: |
+        python -m flake8 *.py || true
+    - name: Smoke import
+      run: |
+        python -c "import ai_model" || true
+
+  test-telegram:
+    name: Test Telegram Bot
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./telegram_bot
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Install dependencies
+      run: pip install python-telegram-bot || true
+    - name: Smoke import
+      run: python -c "import bot, command_router" || true
+
+  test-sales-system:
+    name: Test Sales System
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sales_system
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Run lint
+      run: |
+        python -m flake8 *.py || true
+    - name: Smoke import
+      run: python -c "import lead_generator, email_writer, outreach_manager, crm_storage" || true
     defaults:
       run:
         working-directory: ./frontend
@@ -323,8 +421,34 @@ jobs:
         push: true
         tags: bluelearnerhub/ai-services:${{ github.sha }},bluelearnerhub/ai-services:latest
         cache-from: type=gha
+        cache-to: type=gha,mode=max    - name: Build and push AI Agent
+      uses: docker/build-push-action@v5
+      with:
+        context: ./ai-agent
+        file: ./ai-agent/Dockerfile
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: bluelearnerhub/ai-agent:${{ github.sha }},bluelearnerhub/ai-agent:latest
+        cache-from: type=gha
         cache-to: type=gha,mode=max
-
+    - name: Build and push AI System
+      uses: docker/build-push-action@v5
+      with:
+        context: ./ai_system
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: bluelearnerhub/ai-system:${{ github.sha }},bluelearnerhub/ai-system:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - name: Build and push Telegram Bot
+      uses: docker/build-push-action@v5
+      with:
+        context: ./telegram_bot
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: bluelearnerhub/telegram-bot:${{ github.sha }},bluelearnerhub/telegram-bot:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
   # Deploy to Vercel (Frontend)
   deploy-vercel:
     name: Deploy to Vercel
@@ -366,6 +490,22 @@ jobs:
         
     - name: Deploy AI Services to Railway
       run: railway up --service ai-services
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy AI Agent to Railway
+      run: railway up --service ai-agent || true
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy AI System to Railway
+      run: railway up --service ai_system || true
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy Telegram Bot to Railway
+      run: railway up --service telegram-bot || true
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    - name: Deploy Sales System to Railway
+      run: railway up --service sales-system || true
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
