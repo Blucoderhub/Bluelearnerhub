@@ -7,7 +7,9 @@ The EdTech Platform follows a microservices architecture with additional support
 1. **Frontend** - Next.js SPA
 2. **Backend** - Express.js API
 3. **AI Services** - FastAPI microservice
-4. **AI Agent** - Python-based OpenClaw agent (`ai-agent/`) used by developers for automation, code‑generation and deployment helpers
+4. **AI Agent** - development-time CLI tool (`ai-agent/`) based on OpenClaw.  It is used
+   by developers for automation, code generation, and deployment helpers and is
+   not a runtime component of the live service.
 
 Additionally:
 - **AI System** - a multi-agent orchestration layer (`ai_system/`) leveraging OpenClaw for CTO/Dev/Product/Sales agents
@@ -48,7 +50,7 @@ Additionally:
          └────────────────────────────────┘
                 │               │
          ┌──────▼──────┐   ┌────▼──────────┐   ┌────▼──────────┐   ┌─────▼─────┐
-         │  AI Space   │   │  Background   │   │ AI Agent      │   │ AI System │
+         │  AI Services │   │  Background   │   │ AI Agent      │   │ AI System │
          │  (FastAPI)  │   │  Jobs (Bull)  │   │ (OpenClaw)    │   │ (agents)  │
          └─────────────┘   └───────────────┘   └──────────────┘   └───────────┘
                 │                                           │

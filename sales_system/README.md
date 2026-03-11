@@ -12,15 +12,23 @@ Components:
 
 ## Setup
 
-Configure environment variables (see `.env.example`):
+Configure environment variables (see `.env.example`).
 
 ```
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your@gmail.com
-SMTP_PASSWORD=yourpassword
+SMTP_PASSWORD=your-app-specific-password-here   # Gmail requires an App
+                                              # Password; do NOT use your
+                                              # regular account password.
 CRM_STORAGE_PATH=sales_system/crm.json
 ```
+
+- Never commit `.env` files into version control; add `.env` to `.gitignore`.
+- For production use a secrets manager or environment-specific injection and
+  rotate credentials regularly.
+- Consider using OAuth2 or another secure authentication method instead of
+  plain passwords where supported.
 
 Make sure the AirLLM model is available (see `ai_model` docs).
 

@@ -6,9 +6,10 @@ calls are required ensuring offline functionality and zero cost.
 
 ## Requirements
 
-- A normal laptop with 4+ GB RAM
+- A laptop or desktop with at least **8 GB RAM** (6–8 GB may work for heavily
+  quantized models but 8 GB+ is recommended).
 - Python 3.11
-- Model binary (free open-source model such as `tiny-llama`)
+- Model binary (free open-source model such as `TinyLlama`)
 
 ## Configuration
 
@@ -18,8 +19,11 @@ calls are required ensuring offline functionality and zero cost.
    ```env
    AIRLLM_MODEL_PATH=./ai_model/knowledge_base/model.bin
    ```
-3. Optionally add reference documents to `ai_model/knowledge_base/` to expand
-the knowledge base.
+3. Place reference documents in `ai_model/knowledge_base/` if you plan to
+   build a retrieval‑augmented pipeline. **Note:** dropping files there does not
+   magically change a pre-trained model; you must implement a retriever/vector
+   database or fine‑tune the model on that data to actually use it at runtime.
+   The directory simply holds assets for any such workflow.
 
 ## Usage
 
@@ -35,4 +39,7 @@ to obtain text output.
 
 - The current implementation is a stub; integrate the real AirLLM library when
   available.
-- Keep the model under 1GB for smooth performance on modest hardware.
+- Prefer smaller or highly‑quantized models where possible. Modern
+  quantized models (e.g. TinyLlama ~1.1 GB) may exceed 1 GB; aim for ≲1.5 GB and
+  benchmark on your target machine to ensure acceptable memory/latency.
+  Quantization and model size trade‑offs are application‑specific.

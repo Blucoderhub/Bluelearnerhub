@@ -6,6 +6,8 @@ from email.mime.text import MIMEText
 
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+# timeout in seconds for SMTP connections
+SMTP_TIMEOUT = int(os.getenv("SMTP_TIMEOUT", 10))
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASS = os.getenv("SMTP_PASSWORD")
 
@@ -18,7 +20,7 @@ def send_email(to_address: str, subject: str, body: str):
     msg["From"] = SMTP_USER
     msg["To"] = to_address
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=SMTP_TIMEOUT) as server:
         server.starttls()
         server.login(SMTP_USER, SMTP_PASS)
         server.send_message(msg)
