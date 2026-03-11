@@ -18,6 +18,13 @@ class Settings:
     DATABASE_URL = os.getenv("DATABASE_URL")
     REDIS_URL = os.getenv("REDIS_URL")
 
+    # support Supabase as alternative PostgreSQL provider
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+    # if DATABASE_URL is not set but SUPABASE_URL is, use it
+    if not DATABASE_URL and SUPABASE_URL:
+        DATABASE_URL = SUPABASE_URL
+
     JWT_SECRET = os.getenv("JWT_SECRET")
     JWT_REFRESH_SECRET = os.getenv("JWT_REFRESH_SECRET")
 
