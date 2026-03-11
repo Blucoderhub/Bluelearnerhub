@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   GitBranch, Star, GitFork, Eye, MapPin, Link2,
@@ -102,7 +102,8 @@ function ContributionGraph() {
   );
 }
 
-export default function DeveloperProfilePage({ params }: { params: { username: string } }) {
+export default function DeveloperProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = React.use(params);
   const user  = MOCK_USER;
   const repos = MOCK_REPOS;
 
