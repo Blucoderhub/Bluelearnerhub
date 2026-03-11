@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   ChevronUp, ChevronDown, CheckCircle2, MessageSquare,
@@ -163,7 +163,8 @@ function MarkdownBody({ content }: { content: string }) {
   );
 }
 
-export default function QuestionDetailPage({ params }: { params: { id: string } }) {
+export default function QuestionDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const [answerBody, setAnswerBody] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [answers, setAnswers]       = useState(MOCK_ANSWERS);

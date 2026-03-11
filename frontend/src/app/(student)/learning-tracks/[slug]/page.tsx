@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Clock, Users, Star, Award, BookOpen, CheckCircle2,
@@ -61,7 +61,8 @@ const MOCK_TRACK = {
   ],
 };
 
-export default function TrackDetailPage({ params }: { params: { slug: string } }) {
+export default function TrackDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = React.use(params);
   const [enrolling, setEnrolling]     = useState(false);
   const [isEnrolled, setIsEnrolled]   = useState(false);
   const [expandedPhase, setExpanded]  = useState<number>(1);

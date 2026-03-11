@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import React from 'react';
 
 // Mock — in production: fetch /api/certificates/verify/:id
 const MOCK_CERT = {
@@ -20,7 +21,8 @@ const MOCK_CERT = {
   status: 'valid',
 };
 
-export default function VerifyCertificatePage({ params }: { params: { id: string } }) {
+export default function VerifyCertificatePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const cert = MOCK_CERT;
 
   return (

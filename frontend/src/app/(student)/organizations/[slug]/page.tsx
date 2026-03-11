@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Building2, Users, Trophy, Globe, MapPin, ExternalLink,
@@ -58,7 +58,8 @@ const MOCK_ORG = {
   ],
 };
 
-export default function OrganizationDetailPage({ params }: { params: { slug: string } }) {
+export default function OrganizationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = React.use(params);
   const org = MOCK_ORG;
   const [joining, setJoining] = useState(false);
   const [joined, setJoined]   = useState(false);

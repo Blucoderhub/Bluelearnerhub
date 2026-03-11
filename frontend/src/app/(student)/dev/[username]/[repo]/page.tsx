@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Star, GitFork, Eye, GitBranch, Code2, FileText,
@@ -101,7 +101,8 @@ function FileTree() {
   );
 }
 
-export default function RepositoryPage({ params }: { params: { username: string; repo: string } }) {
+export default function RepositoryPage({ params }: { params: Promise<{ username: string; repo: string }> }) {
+  const { username, repo } = React.use(params);
   const [activeTab, setActiveTab] = useState('code');
   const [starred, setStarred]     = useState(false);
 
