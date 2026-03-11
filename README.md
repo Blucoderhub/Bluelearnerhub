@@ -9,10 +9,38 @@ A comprehensive educational technology platform built with modern web technologi
 - **Real-time Collaboration** - Live coding sessions and peer-to-peer learning
 - **Advanced Analytics** - Learning progress tracking and performance insights
 - **Multi-Platform Deployment** - Deploy on Vercel, Railway, AWS, or any hosting platform
+- **AI Multi-Agent Assistant** - CTO/dev/product/sales agents orchestrated with OpenClaw
+- **Telegram Command Center** - control agents via a free Telegram bot
 
 ## 🏗️ Architecture Overview
 
-This platform consists of three production-ready microservices:
+Below is a high-level overview of the expanded system:
+
+```mermaid
+flowchart LR
+    subgraph Web
+        A[Frontend (Next.js)]
+    end
+    subgraph API
+        B[Backend (Express)]
+        C[AI Services (FastAPI)]
+    end
+    A --> B
+    B --> C
+    subgraph "Developer Tools"
+        D[AI Agent]
+        E[AI System (agents)]
+        F[AirLLM Model]
+        G[Telegram Bot]
+        H[Sales System]
+    end
+    B --> E
+    E --> F
+    G --> E
+    H --> F
+```
+
+This platform consists of four production-ready microservices:
 
 ### 🎨 Frontend (Next.js 14+)
 - Modern React with App Router and TypeScript
@@ -35,8 +63,78 @@ This platform consists of three production-ready microservices:
 - Machine learning recommendation engine
 - Scalable microservice architecture
 
-## 🚀 Quick Deployment
+### 🧠 AI Agent (Python + OpenClaw)
+- Command‑line assistant for developers
+- Automates scaffolding, documentation lookups, and deployment tasks
+- Located in `ai-agent/` with a simple interactive prompt
+- Uses `OPENCLAW_API_KEY` environment variable when available
 
+## �️ Developer Workflow
+
+1. **Clone repository & install root dependencies**
+
+```bash
+git clone https://github.com/Blucoderhub/Bluelearnerhub.git
+cd Bluelearnerhub
+npm install
+```
+
+2. **Copy environment template and configure**
+
+```bash
+cp .env.example .env
+# modify values, generate secrets using ./security-remediation.sh
+```
+
+3. **Start services locally**
+
+```bash
+# start everything at once (frontend, backend, ai-services, ai-agent)
+npm run dev
+```
+
+The `dev` target now also launches the AI system; individual commands are:
+
+```bash
+npm run dev:ai-system   # multi-agent orchestrator (directory ai_system)
+npm run dev:telegram    # Telegram bot interface
+npm run dev:sales       # quick import test of sales modules
+```
+
+`dev:agent` will open the BlueLearnerAI CLI in a separate terminal.
+
+4. **Run tests**
+
+```bash
+npm test        # runs frontend, backend, ai-services, ai-agent tests
+```
+
+5. **Use the AI Agent**
+
+```bash
+cd ai-agent && python agent.py
+```
+
+The agent can scaffold new endpoints, query documentation or assist with
+deployment by connecting to the OpenClaw API.
+
+## �🚀 Quick Deployment
+To deploy the platform to production today, follow these steps:
+
+1. **Provision cloud resources** (PostgreSQL, Redis) or use managed services.
+2. **Set environment variables** in your hosting provider or `.env` file.
+3. **Build and push Docker images** (frontend, backend, ai-services, ai-agent):
+   ```bash
+   docker-compose -f docker-compose.prod.yml build
+   docker push bluelearnerhub/backend:latest
+   docker push bluelearnerhub/frontend:latest
+   docker push bluelearnerhub/ai-services:latest
+   docker push bluelearnerhub/ai-agent:latest
+   ```
+4. **Deploy frontend** to Vercel (`npm run deploy:vercel`) or host static build.
+5. **Deploy backend/AI services** to Docker host, Railway, Render, or AWS.
+6. **Verify health endpoints** (`/health`) and migrate the database.
+7. **Run post-deploy checks** from `scripts/validate-deployment.ps1`.
 **Choose your deployment platform:**
 
 ### Vercel (Frontend) + Railway (Backend)
@@ -66,6 +164,12 @@ railway up
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
+> **Note:** the `docker-compose` configuration now includes an `ai-agent`
+> container. To build it manually run:
+> ```bash
+> docker build -t bluelearnerhub/ai-agent:latest -f ai-agent/Dockerfile ./ai-agent
+> ```
+
 ## 📋 Deployment Checklist
 
 Before deploying, ensure you have:
@@ -87,14 +191,20 @@ edtech-platform/
 ├── frontend/              # Next.js application
 ├── backend/              # Node.js + Express API  
 ├── ai-services/          # FastAPI ML services
+├── ai-system/             # Multi-agent orchestrator (ai_system)
+├── ai_model/              # Local AirLLM model helpers
+├── telegram_bot/         # Telegram command center
+├── sales_system/         # Sales automation modules
+├── config/               # Shared configuration loader
+├── deployment/           # Deployment templates & documentation
 ├── database/             # Migrations and seeds
 ├── aws/                  # AWS deployment configs
 ├── scripts/              # Deployment automation
 ├── .github/workflows/    # CI/CD pipelines
-├── vercel.json          # Vercel configuration
-├── railway.json         # Railway configuration
+├── vercel.json           # Vercel configuration
+├── railway.json          # Railway configuration
 ├── docker-compose.prod.yml  # Production Docker setup
-└── DEPLOYMENT_GUIDE.md  # Complete deployment guide
+└── DEPLOYMENT_GUIDE.md   # Complete deployment guide
 ```
 
 ## ⚡ Quick Start (Development)
@@ -163,6 +273,10 @@ vercel --prod
 ```
 
 ### 2. Railway Deployment (Recommended)
+
+> **Free tier note:** services like backend, ai-services, ai-agent, ai_system,
+> telegram-bot, and sales_system can all run on Railway's free plan as separate
+> services or workers. You can start them individually with `railway up --service <name>`.
 
 Deploy the complete platform to Railway:
 

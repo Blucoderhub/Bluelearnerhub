@@ -5,13 +5,18 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "ai-agent"
   ],
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
     "dev:ai": "cd ai-services && python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "dev:agent": "cd ai-agent && python agent.py",
+    "dev:ai-system": "cd ai_system && python orchestrator.py",
+    "dev:telegram": "cd telegram_bot && python bot.py",
+    "dev:sales": "cd sales_system && python -c \"import lead_generator, email_writer\"",
     "build": "npm run build:all",
     "build:all": "npm-run-all build:backend build:frontend",
     "build:frontend": "cd frontend && npm ci --production=false && npm run build",

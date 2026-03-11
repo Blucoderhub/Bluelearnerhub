@@ -50,6 +50,69 @@ npm run dev
 
 Backend will run on `http://localhost:5000`
 
+#### 2. AI System Setup
+
+```bash
+cd ai_system
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+# install optional dependencies if using OpenClaw
+pip install openclaw python-dotenv
+python orchestrator.py
+```
+
+#### 3. AI Model Setup
+
+```bash
+cd ai_model
+# place your AirLLM model binary in knowledge_base/
+export AIRLLM_MODEL_PATH=./ai_model/knowledge_base/model.bin
+python -c "from airllm_model import AirLLMModel; print(AirLLMModel().generate('test'))"
+```
+
+#### 4. Telegram Bot Setup
+
+```bash
+cd telegram_bot
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install python-telegram-bot
+export TELEGRAM_TOKEN=your_token_here
+python bot.py
+```
+
+#### 5. Sales System Setup
+
+```bash
+cd sales_system
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+# no dependencies except standard library
+# ensure SMTP vars are defined in .env
+python -c "from lead_generator import generate_segments; print(generate_segments('test'))"
+```
+
+#### 6. AI Services Setup
+
+```bash
+cd ai-services
+
+# Run automated setup (Unix/Linux/macOS)
+bash setup.sh
+
+# OR Windows
+setup.bat
+
+# This will:
+# - Create Python virtual environment
+# - Install dependencies
+# - Download ML models (spaCy, NLTK)
+# - Create .env file
+
+# Start AI services
+python app/main.py
+```
+
 #### 2. AI Services Setup
 
 ```bash
@@ -71,6 +134,24 @@ setup.bat
 python app/main.py
 ```
 
+#### 3. AI Agent Setup
+
+```bash
+cd ai-agent
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+# set OPENCLAW_API_KEY in your shell or .env
+python agent.py
+```
+
+The agent provides a REPL for development automation; it can be run locally
+alongside the other services or executed in CI as part of the pipeline.
+
+#### 4. Database Setup
+
+```bash
+"""
 AI Services will run on `http://localhost:8000`
 
 #### 3. Database Setup
