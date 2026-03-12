@@ -32,7 +32,7 @@ export default function StatsCard({ title, value, icon, trend, className }: Stat
       <div className="flex items-baseline gap-2">
         <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{value}</h3>
         {trend && (
-          <span className={`text-sm font-semibold ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`text-sm font-semibold ${trend.isPositive ? 'text-blue-600' : 'text-red-600'}`}>
             {trend.isPositive ? '+' : '-'}{trend.value}%
           </span>
         )}

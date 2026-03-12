@@ -67,3 +67,4 @@ logs
 cache
 .cache
 .eslintcache
+.env*.local

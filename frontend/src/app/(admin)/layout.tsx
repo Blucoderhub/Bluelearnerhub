@@ -114,10 +114,10 @@ export default function AdminLayout({
                                     <Server className="w-3.5 h-3.5 text-blue-500" />
                                     <span className="text-[9px] font-black text-slate-400">Mainframe_Core</span>
                                 </div>
-                                <span className="text-[9px] font-black text-emerald-500">99.9%</span>
+                                <span className="text-[9px] font-black text-amber-500">99.9%</span>
                             </div>
                             <div className="w-full bg-slate-900 rounded-full h-1">
-                                <div className="bg-emerald-500 h-1 rounded-full w-[99%]" />
+                                <div className="bg-amber-500 h-1 rounded-full w-[99%]" />
                             </div>
                         </div>
                         <div className="p-4 rounded-xl bg-slate-950 border border-slate-900">
@@ -172,11 +172,11 @@ export default function AdminLayout({
                     <div className="flex items-center gap-8">
                         <div className="flex gap-4">
                             <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(59,130,246,0.45)]" />
                                 <span className="text-[9px] font-black text-slate-500 uppercase">Gateway_01</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(59,130,246,0.45)]" />
                                 <span className="text-[9px] font-black text-slate-500 uppercase">Gateway_02</span>
                             </div>
                         </div>

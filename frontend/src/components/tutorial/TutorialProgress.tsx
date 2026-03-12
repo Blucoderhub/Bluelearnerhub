@@ -26,7 +26,7 @@ export default function TutorialProgress({ completed, total, percent, xpReward }
           <div
             className={cn(
               'h-full rounded-full transition-all duration-500',
-              percent === 100 ? 'bg-emerald-500' : 'bg-blue-500',
+              percent === 100 ? 'bg-amber-500' : 'bg-blue-500',
             )}
             style={{ width: `${percent}%` }}
           />

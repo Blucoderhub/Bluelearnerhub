@@ -110,7 +110,7 @@ export default function DomainTools() {
                                 <RotateCcw className="w-4 h-4" />
                             </button>
                             <button onClick={handleCopy} className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[10px] font-black uppercase text-white/60 hover:text-white hover:bg-white/10 transition-all">
-                                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Clipboard className="w-3 h-3" />}
+                                {copied ? <Check className="w-3 h-3 text-amber-400" /> : <Clipboard className="w-3 h-3" />}
                                 {copied ? 'Copied' : 'Copy'}
                             </button>
                         </div>
@@ -132,7 +132,7 @@ export default function DomainTools() {
                                 {activeTab === 'base64' && (
                                     <div className="flex gap-2">
                                         <button onClick={() => convertBase64('encode')} className="px-6 py-2.5 bg-white/5 text-white border border-white/10 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-white/10 transition-all">Encode</button>
-                                        <button onClick={() => convertBase64('decode')} className="px-6 py-2.5 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-emerald-500/20 transition-all">Decode</button>
+                                        <button onClick={() => convertBase64('decode')} className="px-6 py-2.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-amber-500/20 transition-all">Decode</button>
                                     </div>
                                 )}
                             </div>

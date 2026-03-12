@@ -85,9 +85,14 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   private reportError = async (errorData: any) => {
+    // skip network reporting during tests to avoid noise and potential failures
+    if (process.env.NODE_ENV === 'test') {
+      return
+    }
+
     try {
       // Report to backend error logging endpoint
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && typeof fetch === 'function') {
         await fetch('/api/errors/report', {
           method: 'POST',
           headers: {
@@ -98,6 +103,9 @@ export default class ErrorBoundary extends Component<Props, State> {
           // Silently fail if error reporting fails
           console.warn('Failed to report error to backend')
         })
+      } else {
+        // fetch not available (e.g. in Jest), skip reporting
+        console.warn('Skipping error report: fetch unavailable')
       }
     } catch (e) {
       console.warn('Error reporting failed:', e)
@@ -148,16 +156,29 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   private renderMinimalError = () => (
-    <div className="flex items-center justify-center p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-      <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
-      <span className="text-red-700 dark:text-red-400 text-sm">
-        Something went wrong in this section
-      </span>
+    <div className="flex flex-col items-center justify-center p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
+      <div className="flex items-center">
+        <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
+        <div className="flex flex-col">
+          <span className="text-red-700 dark:text-red-400 text-sm font-medium">
+            Oops! Something went wrong
+          </span>
+          <span className="text-red-700 dark:text-red-400 text-sm">
+            Reload this section, or report this error using the Error ID.
+          </span>
+        </div>
+      </div>
+      {this.state.errorId && (
+        <Badge variant="secondary" className="font-mono text-xs mt-2">
+          Error ID: {this.state.errorId}
+        </Badge>
+      )}
       <Button
+        type="button"
         size="sm"
         variant="ghost"
         onClick={this.handleRetry}
-        className="ml-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900"
+        className="mt-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900"
       >
         <RefreshCw className="w-4 h-4" />
       </Button>
@@ -223,6 +244,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
                 <div className="flex justify-end">
                   <Button
+                    type="button"
                     size="sm"
                     variant="outline"
                     onClick={this.copyErrorDetails}
@@ -239,6 +261,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           {/* Recovery actions */}
           <div className="flex gap-3 justify-center pt-4">
             <Button
+              type="button"
               onClick={this.handleRetry}
               disabled={this.state.retryCount >= 3}
               className="flex items-center"
@@ -248,6 +271,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             </Button>
             
             <Button
+              type="button"
               variant="outline"
               onClick={() => window.location.reload()}
             >
@@ -256,6 +280,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             </Button>
             
             <Button
+              type="button"
               variant="outline"
               onClick={() => window.location.href = '/'}
             >

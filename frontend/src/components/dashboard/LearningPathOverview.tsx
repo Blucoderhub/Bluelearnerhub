@@ -58,10 +58,10 @@ export const LearningPathOverview = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-black font-heading flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-emerald-500" />
+          <BookOpen className="w-5 h-5 text-amber-500" />
           Active Mastery Tracks
         </h3>
-        <Button variant="ghost" size="sm" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 p-0 h-auto">
+        <Button variant="ghost" size="sm" className="text-xs font-bold text-amber-600 hover:text-amber-700 p-0 h-auto">
           View All Paths
         </Button>
       </div>
@@ -75,14 +75,14 @@ export const LearningPathOverview = () => {
           >
             <div className="flex items-start justify-between mb-4">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">
                   {path.domain} Mastery
                 </span>
-                <h4 className="font-black text-lg text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                <h4 className="font-black text-lg text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
                   {path.title}
                 </h4>
               </div>
-              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
                 <Play size={20} className="fill-current" />
               </div>
             </div>
@@ -93,14 +93,14 @@ export const LearningPathOverview = () => {
                   <span className="text-slate-500 italic">Progress: {path.progress}%</span>
                   <span className="text-slate-900 dark:text-white">{path.totalLessons} Lessons Total</span>
                 </div>
-                <Progress value={path.progress} className="h-2 bg-emerald-500/10" />
+                <Progress value={path.progress} className="h-2 bg-amber-500/10" />
               </div>
 
               <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Next Lesson</p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{path.currentLesson}</span>
-                  <Button size="sm" className="h-8 rounded-xl bg-emerald-500 hover:bg-emerald-600 font-black text-[10px] uppercase italic tracking-widest">
+                  <Button size="sm" className="h-8 rounded-xl bg-amber-500 hover:bg-amber-600 font-black text-[10px] uppercase italic tracking-widest">
                     Resume
                   </Button>
                 </div>

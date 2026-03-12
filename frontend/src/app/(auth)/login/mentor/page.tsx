@@ -15,10 +15,10 @@ export default function MentorLogin() {
             role="mentor"
             title="Mentor Portal"
             subtitle="Access your mentoring dashboard, manage students, and track academic progress."
-            accentColor="#10b981" // Emerald
+            accentColor="#0ea5e9" // Emerald
             icon={<Users size={48} />}
         >
-            <LoginForm role="candidate" accentColor="#10b981" onSubmit={handleSubmit} />
+            <LoginForm role="candidate" accentColor="#0ea5e9" onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

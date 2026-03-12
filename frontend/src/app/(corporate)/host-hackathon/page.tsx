@@ -235,7 +235,7 @@ export default function HostHackathonPage() {
             {/* Footer Info */}
             <div className="flex justify-center gap-12 py-8">
                 <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-emerald-500" />
+                    <Shield className="w-4 h-4 text-amber-500" />
                     <span className="text-[10px] font-black text-slate-500 uppercase italic">Enterprise_Security_Locked</span>
                 </div>
                 <div className="flex items-center gap-2">

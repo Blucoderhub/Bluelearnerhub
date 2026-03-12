@@ -107,7 +107,7 @@ export default function QnAPage() {
           <div className="mt-8 flex gap-6">
             {[
               { label: 'Questions', value: '12,847', icon: MessageSquare, color: 'text-blue-400' },
-              { label: 'Answered', value: '10,204', icon: CheckCircle2, color: 'text-emerald-400' },
+              { label: 'Answered', value: '10,204', icon: CheckCircle2, color: 'text-amber-400' },
               { label: 'Experts',  value: '3,420',  icon: Award,         color: 'text-amber-400' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">

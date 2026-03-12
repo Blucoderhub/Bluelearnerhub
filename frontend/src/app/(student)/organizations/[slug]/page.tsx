@@ -116,7 +116,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                   <div className="space-y-2.5 text-sm mb-5">
                     {org.benefits.map((b) => (
                       <div key={b} className="flex items-start gap-2 text-gray-300">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0 mt-0.5" />
                         <span className="text-xs leading-relaxed">{b}</span>
                       </div>
                     ))}
@@ -124,7 +124,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                   <Button
                     onClick={joined ? undefined : handleJoin}
                     disabled={joining}
-                    className={`w-full font-semibold ${joined ? 'bg-emerald-700 hover:bg-emerald-600' : `bg-gradient-to-r ${org.gradient} hover:opacity-90`}`}
+                    className={`w-full font-semibold ${joined ? 'bg-amber-700 hover:bg-amber-600' : `bg-gradient-to-r ${org.gradient} hover:opacity-90`}`}
                   >
                     {joining ? 'Joining…' : joined ? '✓ Joined' : 'Join Organization'}
                   </Button>
@@ -159,7 +159,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                           <div className="flex items-center gap-2 mb-1.5">
                             <h3 className="font-semibold text-white">{c.title}</h3>
                             {c.isActive && (
-                              <Badge className="bg-emerald-900/50 text-emerald-400 text-[10px]">Active</Badge>
+                              <Badge className="bg-amber-900/50 text-amber-400 text-[10px]">Active</Badge>
                             )}
                           </div>
                           <p className="text-sm text-gray-500 mb-3 leading-relaxed">{c.description}</p>

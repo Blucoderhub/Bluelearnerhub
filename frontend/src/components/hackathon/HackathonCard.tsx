@@ -25,7 +25,7 @@ const statusColors = {
 }
 
 const difficultyColors = {
-  beginner: 'text-green-400',
+  beginner: 'text-blue-400',
   intermediate: 'text-yellow-400',
   advanced: 'text-red-400',
 }

@@ -55,20 +55,26 @@ describe('ErrorBoundary', () => {
       )
       
       expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument()
-      expect(screen.getByText('Something went wrong in this section')).toBeInTheDocument()
+      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
     })
 
     it('displays error details when expanded', () => {
       render(
         <TestWrapper>
-          <ErrorBoundary>
+          {/* use page boundary which renders the full UI with collapsible details */}
+          <PageErrorBoundary>
             <ThrowError />
-          </ErrorBoundary>
+          </PageErrorBoundary>
         </TestWrapper>
       )
       
+      // open the technical details section
+      const summary = screen.getByText(/Technical Details/)
+      summary.click()
+
       // Look for error message in details
-      expect(screen.getByText(/Test error message/)).toBeInTheDocument()
+      const matches = screen.getAllByText(/Test error message/)
+      expect(matches.length).toBeGreaterThan(0)
     })
 
     it('calls onError callback when error occurs', () => {
@@ -132,7 +138,7 @@ describe('ErrorBoundary', () => {
         </TestWrapper>
       )
       
-      expect(screen.getByText('Something went wrong in this section')).toBeInTheDocument()
+      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
     })
   })
 
@@ -167,7 +173,7 @@ describe('ErrorBoundary', () => {
       )
       
       // Error should be displayed
-      expect(screen.getByText('Something went wrong in this section')).toBeInTheDocument()
+      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
       
       // Simulate fixing the error
       shouldThrow = false
@@ -207,7 +213,7 @@ describe('ErrorBoundary', () => {
       )
       
       // Check for alert role or aria-live region
-      const errorMessage = screen.getByText('Something went wrong in this section')
+      const errorMessage = screen.getByText('Reload this section, or report this error using the Error ID.')
       expect(errorMessage.closest('div')).toBeInTheDocument()
     })
 

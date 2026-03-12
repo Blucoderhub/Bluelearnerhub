@@ -30,18 +30,18 @@ const engineeringDomains = [
     { name: 'Computer Science', icon: Cpu, color: 'text-blue-400', border: 'border-blue-500/20' },
     { name: 'Mechanical', icon: Settings, color: 'text-orange-400', border: 'border-orange-500/20' },
     { name: 'Electrical', icon: Zap, color: 'text-yellow-400', border: 'border-yellow-500/20' },
-    { name: 'Civil', icon: Building2, color: 'text-emerald-400', border: 'border-emerald-500/20' },
+    { name: 'Civil', icon: Building2, color: 'text-amber-400', border: 'border-amber-500/20' },
     { name: 'Aerospace', icon: Rocket, color: 'text-cyan-400', border: 'border-cyan-500/20' },
     { name: 'Robotics', icon: Bot, color: 'text-purple-400', border: 'border-purple-500/20' },
     { name: 'Automotive', icon: Car, color: 'text-red-400', border: 'border-red-500/20' },
-    { name: 'Chemical', icon: FlaskConical, color: 'text-green-400', border: 'border-green-500/20' },
+    { name: 'Chemical', icon: FlaskConical, color: 'text-blue-400', border: 'border-blue-500/20' },
     { name: 'Biomedical', icon: HeartPulse, color: 'text-pink-400', border: 'border-pink-500/20' },
     { name: 'Industrial', icon: Factory, color: 'text-indigo-400', border: 'border-indigo-500/20' },
 ];
 
 const managementDomains = [
     { name: 'MBA', icon: GraduationCapIcon, color: 'text-orange-400', border: 'border-orange-500/20' },
-    { name: 'Finance', icon: DollarSign, color: 'text-emerald-400', border: 'border-emerald-500/20' },
+    { name: 'Finance', icon: DollarSign, color: 'text-amber-400', border: 'border-amber-500/20' },
     { name: 'Marketing', icon: Target, color: 'text-pink-400', border: 'border-pink-500/20' },
     { name: 'Operations', icon: Truck, color: 'text-blue-400', border: 'border-blue-500/20' },
     { name: 'HR', icon: Users, color: 'text-cyan-400', border: 'border-cyan-500/20' },

@@ -261,7 +261,7 @@ export default function Header() {
                           {user.fullName?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-green-500 border-2 border-background rounded-full" />
+                      <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-blue-500 border-2 border-background rounded-full" />
                     </div>
                     <ChevronDown className="hidden sm:block h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                   </button>

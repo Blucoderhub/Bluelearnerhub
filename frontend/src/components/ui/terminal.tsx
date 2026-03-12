@@ -18,11 +18,11 @@ const Terminal: React.FC<TerminalProps> = ({ commands = [], output = [], height,
         <div className="flex gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500" />
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-green-500" />
+          <div className="w-3 h-3 rounded-full bg-blue-500" />
         </div>
         <span className="text-gray-400 text-xs ml-2">terminal</span>
       </div>
-      <div className="p-4 text-green-400 space-y-2 overflow-auto" style={{ maxHeight: height ? `calc(${height} - 40px)` : undefined }}>
+      <div className="p-4 text-blue-400 space-y-2 overflow-auto" style={{ maxHeight: height ? `calc(${height} - 40px)` : undefined }}>
         {lines.map((cmd, idx) => (
           <div key={idx}>
             <span className="text-blue-400">$</span> {cmd}

@@ -21,9 +21,9 @@ const features = [
     title: 'Interactive Tutorials',
     description: 'Master your field with interactive labs and tutorials across Engineering, Management, and Data Science.',
     icon: BookOpen,
-    color: 'from-green-500 to-emerald-500',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'group-hover:border-green-500/50',
+    color: 'from-blue-500 to-amber-500',
+    bgColor: 'bg-blue-500/10',
+    borderColor: 'group-hover:border-blue-500/50',
     character: 'learning',
   },
   {
@@ -48,18 +48,18 @@ const features = [
     title: 'AI Skill Mentor',
     description: 'Engage with an AI mentor to deepen your knowledge in any discipline with real-time feedback.',
     icon: Bot,
-    color: 'from-emerald-500 to-green-500',
-    bgColor: 'bg-emerald-500/10',
-    borderColor: 'group-hover:border-emerald-500/50',
+    color: 'from-amber-500 to-blue-500',
+    bgColor: 'bg-amber-500/10',
+    borderColor: 'group-hover:border-amber-500/50',
     character: 'coding',
   },
   {
     title: 'Skills Dashboard',
     description: 'Monitor your skill progression, manage your project portfolio, and track your learning milestones.',
     icon: Briefcase,
-    color: 'from-emerald-600 to-green-500',
-    bgColor: 'bg-emerald-600/10',
-    borderColor: 'group-hover:border-emerald-600/50',
+    color: 'from-amber-600 to-blue-500',
+    bgColor: 'bg-amber-600/10',
+    borderColor: 'group-hover:border-amber-600/50',
     character: 'learning',
   },
   {
@@ -124,7 +124,7 @@ export default function Features() {
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Everything You Need to{' '}
-            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-amber-400 bg-clip-text text-transparent">
               Succeed
             </span>
           </h2>

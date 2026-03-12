@@ -149,7 +149,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                       'Lifetime access',
                     ].map((feat) => (
                       <div key={feat} className="flex items-center gap-2 text-gray-300">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                         <span className="text-xs">{feat}</span>
                       </div>
                     ))}
@@ -157,7 +157,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                   <Button
                     onClick={isEnrolled ? undefined : handleEnroll}
                     disabled={enrolling}
-                    className={`w-full font-semibold ${isEnrolled ? 'bg-emerald-700 hover:bg-emerald-600' : `bg-gradient-to-r ${MOCK_TRACK.gradient} hover:opacity-90`}`}
+                    className={`w-full font-semibold ${isEnrolled ? 'bg-amber-700 hover:bg-amber-600' : `bg-gradient-to-r ${MOCK_TRACK.gradient} hover:opacity-90`}`}
                   >
                     {enrolling ? 'Enrolling...' : isEnrolled ? '✓ Continue Learning' : 'Enroll Free'}
                   </Button>
@@ -209,7 +209,7 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
                         <p className="text-xs text-gray-600">{course.lessons} lessons · {course.hours}h</p>
                       </div>
                       {!course.locked && (
-                        <Badge className="bg-emerald-900/50 text-emerald-400 text-[10px]">Free</Badge>
+                        <Badge className="bg-amber-900/50 text-amber-400 text-[10px]">Free</Badge>
                       )}
                     </div>
                   ))}

@@ -15,10 +15,10 @@ export default function CandidateLogin() {
             role="candidate"
             title="Candidate Dash"
             subtitle="View job applications, prepare for interviews, and showcase your portfolio."
-            accentColor="#10b981" // Emerald
+            accentColor="#0ea5e9" // Emerald
             icon={<UserCircle size={48} />}
         >
-            <LoginForm role="candidate" accentColor="#10b981" onSubmit={handleSubmit} />
+            <LoginForm role="candidate" accentColor="#0ea5e9" onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

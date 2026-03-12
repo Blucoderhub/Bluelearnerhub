@@ -6,8 +6,8 @@ export const DOMAINS = {
     id: 'computer-science',
     name: 'Computer Science & IT',
     icon: '💻',
-    color: '#22c55e',
-    gradient: 'from-green-500 to-emerald-500',
+    color: '#3b82f6',
+    gradient: 'from-blue-500 to-amber-500',
     categories: [
       'Programming',
       'Data Structures & Algorithms',
@@ -78,8 +78,8 @@ export const DOMAINS = {
     id: 'civil',
     name: 'Civil Engineering',
     icon: '🏗️',
-    color: '#84cc16',
-    gradient: 'from-green-500 to-lime-500',
+    color: '#eab308',
+    gradient: 'from-blue-500 to-yellow-500',
     categories: [
       'Structural Analysis',
       'Geotechnical Engineering',
@@ -126,8 +126,8 @@ export const DOMAINS = {
     id: 'electronics',
     name: 'Electronics & Communication',
     icon: '📡',
-    color: '#86efac',
-    gradient: 'from-green-400 to-green-100',
+    color: '#93c5fd',
+    gradient: 'from-blue-400 to-blue-100',
     categories: [
       'Analog Electronics',
       'Digital Electronics',
@@ -247,8 +247,8 @@ export const DOMAINS = {
     id: 'data-science',
     name: 'Data Science & Analytics',
     icon: '📊',
-    color: '#10b981',
-    gradient: 'from-emerald-500 to-green-500',
+    color: '#0ea5e9',
+    gradient: 'from-amber-500 to-blue-500',
     categories: [
       'Statistics',
       'Machine Learning',

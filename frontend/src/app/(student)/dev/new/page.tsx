@@ -121,7 +121,7 @@ export default function NewRepositoryPage() {
                       }`}
                     >
                       {v === 'public'
-                        ? <Globe className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />
+                        ? <Globe className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                         : <Lock className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                       }
                       <div>

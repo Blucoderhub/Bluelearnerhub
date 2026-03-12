@@ -56,7 +56,7 @@ const MOCK_RECENT_ACTIVITY = [
 
 const ACTIVITY_ICONS = {
   enroll:   { icon: Users,        color: 'text-blue-400' },
-  complete: { icon: CheckCircle2, color: 'text-emerald-400' },
+  complete: { icon: CheckCircle2, color: 'text-amber-400' },
   review:   { icon: Star,         color: 'text-amber-400' },
 };
 
@@ -89,13 +89,13 @@ export default function TeacherDashboardPage() {
             { label: 'Total Students', value: MOCK_STATS.totalStudents.toLocaleString(), icon: Users, color: 'text-blue-400', change: '+12%', up: true },
             { label: 'Total Views',    value: (MOCK_STATS.totalViews / 1000).toFixed(0) + 'K', icon: Eye, color: 'text-purple-400', change: '+8%', up: true },
             { label: 'Avg Rating',     value: MOCK_STATS.avgRating.toString(), icon: Star, color: 'text-amber-400', change: '+0.1', up: true },
-            { label: 'XP Awarded',     value: (MOCK_STATS.xpAwarded / 1000).toFixed(0) + 'K', icon: Zap, color: 'text-emerald-400', change: '+24%', up: true },
+            { label: 'XP Awarded',     value: (MOCK_STATS.xpAwarded / 1000).toFixed(0) + 'K', icon: Zap, color: 'text-amber-400', change: '+24%', up: true },
           ].map(({ label, value, icon: Icon, color, change, up }) => (
             <Card key={label} className="bg-gray-900 border-gray-800">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-3">
                   <Icon className={`h-5 w-5 ${color}`} />
-                  <span className={`flex items-center text-xs font-medium ${up ? 'text-emerald-400' : 'text-red-400'}`}>
+                  <span className={`flex items-center text-xs font-medium ${up ? 'text-amber-400' : 'text-red-400'}`}>
                     {up ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}{change}
                   </span>
                 </div>
@@ -115,7 +115,7 @@ export default function TeacherDashboardPage() {
                 Your Content
               </h2>
               <div className="flex gap-2 text-xs">
-                <Badge className="bg-emerald-900/50 text-emerald-400">{MOCK_STATS.publishedCount} published</Badge>
+                <Badge className="bg-amber-900/50 text-amber-400">{MOCK_STATS.publishedCount} published</Badge>
                 <Badge className="bg-gray-800 text-gray-400">{MOCK_STATS.draftCount} drafts</Badge>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function TeacherDashboardPage() {
                             <h3 className="text-sm font-semibold text-white truncate">{t.title}</h3>
                             <Badge className={`text-[10px] shrink-0 ${
                               t.status === 'published'
-                                ? 'bg-emerald-900/50 text-emerald-400'
+                                ? 'bg-amber-900/50 text-amber-400'
                                 : 'bg-gray-800 text-gray-400'
                             }`}>
                               {t.status}

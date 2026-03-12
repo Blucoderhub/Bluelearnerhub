@@ -15,7 +15,7 @@ const steps = [
     title: 'Choose Your Path',
     description: 'Start as a student or corporate user. Select learning paths tailored to your skill development goals.',
     icon: Compass,
-    color: 'from-green-500 to-emerald-500',
+    color: 'from-blue-500 to-amber-500',
     Character: LearningCharacter,
   },
   {
@@ -39,7 +39,7 @@ const steps = [
     title: 'Get Certified',
     description: 'Validate your skills with expert-led assessments and showcase your mastery to the world.',
     icon: BadgeCheck,
-    color: 'from-emerald-500 to-green-500',
+    color: 'from-amber-500 to-blue-500',
     Character: CelebrationCharacter,
   },
 ]
@@ -55,12 +55,12 @@ export default function HowItWorks() {
           viewport={{ once: true }}
           className="text-center mb-12 md:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-4">
             Simple Process
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Your Journey to{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-green-100 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-400 to-blue-100 bg-clip-text text-transparent">
               Success
             </span>
           </h2>
@@ -70,7 +70,7 @@ export default function HowItWorks() {
         </motion.div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500/20 via-emerald-500/20 via-green-300/20 to-white/20 -translate-y-1/2" />
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/20 via-amber-500/20 via-blue-300/20 to-white/20 -translate-y-1/2" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {steps.map((step, idx) => {

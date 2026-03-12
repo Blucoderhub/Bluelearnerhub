@@ -159,7 +159,7 @@ export default function ContentManagementPage() {
                                         <div className="flex items-center gap-2">
                                             <span className={cn(
                                                 "w-2 h-2 rounded-full",
-                                                course.status === 'Published' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' :
+                                                course.status === 'Published' ? 'bg-amber-500 shadow-[0_0_8px_rgba(59,130,246,0.45)]' :
                                                     course.status === 'In Review' ? 'bg-orange-500' : 'bg-slate-700'
                                             )} />
                                             <span className="text-[9px] font-black uppercase italic text-slate-300 tracking-tighter">{course.status}</span>

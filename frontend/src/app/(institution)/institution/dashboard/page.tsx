@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 const stats = [
     { title: 'Total Enrollment', value: '4,820', icon: GraduationCap, color: 'text-orange-400' },
     { title: 'Faculty Members', value: '156', icon: Users, color: 'text-blue-400' },
-    { title: 'Average CGPA', value: '3.4', icon: BarChart3, color: 'text-emerald-400' },
+    { title: 'Average CGPA', value: '3.4', icon: BarChart3, color: 'text-amber-400' },
     { title: 'Placement Rate', value: '88%', icon: PieChart, color: 'text-purple-400' },
 ];
 
@@ -97,7 +97,7 @@ export default function InstitutionDashboard() {
                                             <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700" />
                                             <span className="text-sm font-medium">Faculty Member {f}</span>
                                         </div>
-                                        <span className="text-xs font-bold text-emerald-400">9.2 Rating</span>
+                                        <span className="text-xs font-bold text-amber-400">9.2 Rating</span>
                                     </div>
                                 ))}
                             </CardContent>

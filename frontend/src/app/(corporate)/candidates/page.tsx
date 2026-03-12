@@ -193,11 +193,11 @@ export default function CandidatesPage() {
                                 {/* Top Accomplishments */}
                                 <div className="grid grid-cols-2 gap-4">
                                     {candidate.achievements.map((acc, idx) => (
-                                        <div key={idx} className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center gap-3">
-                                            <div className="p-2 bg-emerald-500/10 rounded-lg">
-                                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                        <div key={idx} className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl flex items-center gap-3">
+                                            <div className="p-2 bg-amber-500/10 rounded-lg">
+                                                <CheckCircle2 className="w-4 h-4 text-amber-400" />
                                             </div>
-                                            <span className="text-[9px] font-black text-emerald-200/80 uppercase tracking-tighter">{acc}</span>
+                                            <span className="text-[9px] font-black text-amber-200/80 uppercase tracking-tighter">{acc}</span>
                                         </div>
                                     ))}
                                 </div>

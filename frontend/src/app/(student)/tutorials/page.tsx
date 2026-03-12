@@ -33,7 +33,7 @@ const tutorialTracks = [
   {
     category: 'Architecture & Civil',
     icon: Building2,
-    color: 'text-emerald-500',
+    color: 'text-amber-500',
     tutorials: [
       { id: 't4', title: 'Structural Engineering Basics', lessons: 15, level: 'Beginner', progress: 80, icon: BookOpen },
       { id: 't5', title: 'Modern Urban Planning', lessons: 20, level: 'Intermediate', progress: 0, icon: Building2 },
@@ -54,21 +54,25 @@ export default function TutorialsLibrary() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="max-w-7xl mx-auto space-y-16 pb-20">
+    <div className="max-w-7xl mx-auto space-y-16 pb-20 relative">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-20 left-10 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute top-44 right-10 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
+      </div>
       {/* Search Header */}
       <div className="space-y-8 text-center max-w-3xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
-          LIBRARY_OF <span className="text-emerald-500 ai-glow">MASTERY</span>
+          LIBRARY_OF <span className="text-amber-500 ai-glow">MASTERY</span>
         </h1>
         <p className="text-xl text-slate-500 font-medium">
           Access the world's most comprehensive educational resources across all domains. From Mechanical Engineering to Corporate Finance.
         </p>
         
         <div className="relative group max-w-2xl mx-auto">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-emerald-500 transition-colors" />
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-amber-500 transition-colors" />
           <Input 
             placeholder="Search thousands of tutorials..." 
-            className="h-20 pl-16 pr-8 rounded-[2.5rem] border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-lg shadow-2xl shadow-slate-200/50 dark:shadow-none focus-visible:ring-emerald-500 focus-visible:border-emerald-500 transition-all font-medium"
+            className="h-20 pl-16 pr-8 rounded-[2.5rem] border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-lg shadow-2xl shadow-slate-200/50 dark:shadow-none focus-visible:ring-amber-500 focus-visible:border-amber-500 transition-all font-medium"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -92,7 +96,7 @@ export default function TutorialsLibrary() {
                 </div>
                 <h2 className="text-2xl font-black italic tracking-tight text-slate-900 dark:text-white uppercase">{track.category}</h2>
               </div>
-              <Button variant="ghost" className="text-xs font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700">
+              <Button variant="ghost" className="text-xs font-black uppercase tracking-widest text-amber-600 hover:text-amber-700">
                 Explore All
               </Button>
             </div>
@@ -102,10 +106,11 @@ export default function TutorialsLibrary() {
                 <Link key={tutorial.id} href={`/tutorials/domain/${tutorial.id}/lesson-1`}>
                   <motion.div 
                     whileHover={{ y: -6 }}
-                    className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none hover:shadow-2xl hover:shadow-emerald-500/10 transition-all group relative overflow-hidden"
+                    className="p-8 rounded-[2.5rem] bg-white/95 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none hover:shadow-2xl hover:shadow-amber-500/10 transition-all group relative overflow-hidden"
                   >
+                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-amber-400/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex items-start justify-between mb-8">
-                      <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
+                      <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500">
                         <tutorial.icon size={28} />
                       </div>
                       <Badge variant="outline" className="border-slate-200 text-slate-400 font-black uppercase text-[10px] tracking-widest rounded-lg">
@@ -113,28 +118,28 @@ export default function TutorialsLibrary() {
                       </Badge>
                     </div>
 
-                    <h3 className="text-2xl font-black italic tracking-tighter text-slate-900 dark:text-white leading-tight mb-4 group-hover:text-emerald-500 transition-colors">
+                    <h3 className="text-2xl font-black italic tracking-tighter text-slate-900 dark:text-white leading-tight mb-4 group-hover:text-amber-500 transition-colors">
                       {tutorial.title}
                     </h3>
 
                     <div className="space-y-4">
                        <div className="flex items-center justify-between text-xs font-bold text-slate-400">
                           <span>{tutorial.lessons} Lessons</span>
-                          <span className="text-emerald-500">{tutorial.progress}% Complete</span>
+                          <span className="text-amber-500">{tutorial.progress}% Complete</span>
                        </div>
                        <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-emerald-500 transition-all duration-1000 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]" 
+                            className="h-full bg-amber-500 transition-all duration-1000 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.45)]" 
                             style={{ width: `${tutorial.progress}%` }} 
                           />
                        </div>
                     </div>
 
-                    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
                        Continue Learning <ChevronRight size={14} />
                     </div>
 
-                    <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-emerald-500/5 blur-3xl rounded-full" />
+                    <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-amber-500/5 blur-3xl rounded-full" />
                   </motion.div>
                 </Link>
               ))}
@@ -144,15 +149,15 @@ export default function TutorialsLibrary() {
       </div>
 
       {/* Footer CTA */}
-      <div className="p-16 rounded-[4rem] bg-slate-950 text-center space-y-8 relative overflow-hidden border border-emerald-500/20">
-         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+      <div className="p-16 rounded-[4rem] bg-slate-950 text-center space-y-8 relative overflow-hidden border border-amber-500/20 shadow-[0_20px_80px_rgba(2,6,23,0.45)]">
+         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
          <div className="max-w-xl mx-auto space-y-4">
             <h2 className="text-4xl font-black italic tracking-tighter text-white">READY_FOR_CERTIFICATION?</h2>
             <p className="text-slate-400 font-medium leading-relaxed">
               Complete any track to earn industry-recognized credentials verified on the blockchain.
             </p>
          </div>
-         <Button className="h-16 px-12 bg-emerald-500 hover:bg-emerald-600 text-white font-black italic tracking-tighter text-xl rounded-[2rem] shadow-2xl shadow-emerald-500/20 active:scale-95 transition-all">
+         <Button className="h-16 px-12 bg-amber-500 hover:bg-amber-600 text-white font-black italic tracking-tighter text-xl rounded-[2rem] shadow-2xl shadow-amber-500/20 active:scale-95 transition-all">
             GET_CERTIFIED_NOW
          </Button>
       </div>

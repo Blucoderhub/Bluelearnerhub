@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Zap } from 'lucide-react'
 
-const PARTICLE_COLORS = ['#fbbf24', '#34d399', '#60a5fa', '#a78bfa', '#f472b6', '#22d3ee']
+const PARTICLE_COLORS = ['#fbbf24', '#60a5fa', '#60a5fa', '#a78bfa', '#f472b6', '#22d3ee']
 
 function XPParticles({ burst }: { burst: boolean }) {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; color: string }>>([])

@@ -71,7 +71,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
       {/* Complete button */}
       <div className="mt-12 flex items-center gap-4">
         {section.completed ? (
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+          <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
             <CheckCircle className="h-5 w-5" />
             <span className="text-sm font-medium">Section completed</span>
           </div>

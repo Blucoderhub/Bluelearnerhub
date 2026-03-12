@@ -96,7 +96,7 @@ export default function CollaboratingCharacters({ className = '', size = 200 }: 
           <line x1="145" y1="160" x2="150" y2="180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" />
 
           {/* Body */}
-          <path d="M128 130 Q140 124 152 130 L150 162 Q140 166 130 162 Z" fill="#10b981" />
+          <path d="M128 130 Q140 124 152 130 L150 162 Q140 166 130 162 Z" fill="#0ea5e9" />
 
           {/* Head */}
           <motion.g

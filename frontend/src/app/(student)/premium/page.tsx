@@ -70,9 +70,9 @@ const tiers = [
             'Dedicated Support Engineer'
         ],
         icon: Crown,
-        color: 'text-emerald-400',
-        border: 'border-emerald-500/20',
-        buttonColor: 'bg-emerald-600 hover:bg-emerald-700',
+        color: 'text-amber-400',
+        border: 'border-amber-500/20',
+        buttonColor: 'bg-amber-600 hover:bg-amber-700',
     },
 ];
 
@@ -129,10 +129,10 @@ export default function PremiumHubPage() {
                 <Card className="bg-slate-900/40 border-slate-800 p-6 flex items-center justify-between group">
                     <div className="space-y-1">
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Current_Tier</p>
-                        <p className="text-3xl font-black text-emerald-400 uppercase italic">Free_User</p>
+                        <p className="text-3xl font-black text-amber-400 uppercase italic">Free_User</p>
                     </div>
-                    <div className="p-3 bg-emerald-500/10 rounded-2xl group-hover:scale-110 transition-transform">
-                        <Shield className="w-6 h-6 text-emerald-500" />
+                    <div className="p-3 bg-amber-500/10 rounded-2xl group-hover:scale-110 transition-transform">
+                        <Shield className="w-6 h-6 text-amber-500" />
                     </div>
                 </Card>
                 <Card className="bg-slate-900/40 border-slate-800 p-6 flex items-center justify-between group">

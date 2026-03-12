@@ -24,6 +24,37 @@ export const tutorialsAPI = {
                 api.post(`/tutorials/${id}/progress`, { sectionId, completed: true }).then((r) => r.data),
   runCode:    (id: number, code: string, language: string) =>
                 api.post(`/tutorials/${id}/run-code`, { code, language }).then((r) => r.data),
+  trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
+                api.post(`/tutorials/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
+  adaptiveGuidance: (id: number) =>
+                api.get(`/tutorials/${id}/adaptive-guidance`).then((r) => r.data),
+};
+
+// ─── Study Notebooks ───────────────────────────────────────────────────────
+
+export const notebooksAPI = {
+  trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
+                api.post(`/notebooks/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
+  adaptiveGuidance: (id: number) =>
+                api.get(`/notebooks/${id}/adaptive-guidance`).then((r) => r.data),
+};
+
+// ─── Hackathons ────────────────────────────────────────────────────────────
+
+export const hackathonsAPI = {
+  trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
+                api.post(`/hackathons/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
+  adaptiveGuidance: (id: number) =>
+                api.get(`/hackathons/${id}/adaptive-guidance`).then((r) => r.data),
+};
+
+// ─── Quizzes ───────────────────────────────────────────────────────────────
+
+export const quizzesAPI = {
+  trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
+                api.post(`/quiz/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
+  adaptiveGuidance: (id: number) =>
+                api.get(`/quiz/${id}/adaptive-guidance`).then((r) => r.data),
 };
 
 // ─── Q&A ─────────────────────────────────────────────────────────────────────

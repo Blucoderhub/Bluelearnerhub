@@ -27,7 +27,7 @@ const roles = [
         title: "Candidate",
         description: "Find your dream job",
         icon: <UserCircle size={32} />,
-        color: "#10b981",
+        color: "#0ea5e9",
         href: "/auth/login/candidate",
     },
     {

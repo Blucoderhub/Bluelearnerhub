@@ -50,7 +50,7 @@ const TRACKS_FALLBACK = [
     domain: 'Finance', careerOutcome: 'Become an IB Analyst',
     estimatedWeeks: 16, difficulty: 'advanced', enrollmentCount: 4100,
     rating: 4.9, courseCount: 6, icon: TrendingUp,
-    gradient: 'from-emerald-600 to-teal-600',
+    gradient: 'from-amber-600 to-cyan-600',
     skills: ['Financial Modeling', 'DCF', 'M&A Analysis', 'LBO', 'Excel'],
     description: 'Master the analytical toolkit of top-tier investment banks.',
     hasCertificate: true,
@@ -79,7 +79,7 @@ const TRACKS_FALLBACK = [
 
 const DOMAINS = ['All', 'Software', 'AI/ML', 'Mechanical', 'Electrical', 'Finance', 'Data'];
 const DIFFICULTY_COLORS = {
-  beginner: 'bg-emerald-900 text-emerald-400',
+  beginner: 'bg-amber-900 text-amber-400',
   intermediate: 'bg-blue-900 text-blue-400',
   advanced: 'bg-purple-900 text-purple-400',
 };
@@ -103,24 +103,29 @@ export default function LearningTracksPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-white relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 -left-24 h-[28rem] w-[28rem] rounded-full bg-blue-600/15 blur-3xl" />
+        <div className="absolute top-28 -right-20 h-[24rem] w-[24rem] rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute bottom-0 left-1/3 h-[20rem] w-[20rem] rounded-full bg-cyan-500/10 blur-3xl" />
+      </div>
       {/* Hero */}
-      <div className="border-b border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 px-6 py-12">
+      <div className="relative border-b border-gray-800/80 bg-gradient-to-b from-gray-900 via-gray-950 to-gray-950 px-6 py-12">
         <div className="mx-auto max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="mb-2 flex items-center gap-2">
+            <div className="mb-3 flex items-center gap-2">
               <Map className="h-5 w-5 text-purple-400" />
-              <span className="text-sm font-medium text-purple-400 uppercase tracking-wider">Career Tracks</span>
+              <span className="text-[11px] font-black text-purple-400 uppercase tracking-[0.25em]">Career Tracks</span>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">Learning Tracks</h1>
-            <p className="mt-2 text-gray-400 max-w-xl">
+            <h1 className="text-3xl md:text-5xl font-black tracking-tight">Learning Tracks</h1>
+            <p className="mt-3 text-gray-400 max-w-2xl text-sm md:text-base leading-relaxed">
               Structured career paths with courses, projects, and industry-verified certificates.
             </p>
           </motion.div>
 
           <div className="mt-6 flex gap-6">
             {[
-              { label: 'Tracks', value: TRACKS.length, icon: Map, color: 'text-purple-400' },
+              { label: 'Tracks', value: tracks.length, icon: Map, color: 'text-purple-400' },
               { label: 'Enrolled', value: '32K+', icon: Users, color: 'text-blue-400' },
               { label: 'Completed', value: '8.4K', icon: Award, color: 'text-amber-400' },
             ].map(({ label, value, icon: Icon, color }) => (
@@ -134,9 +139,9 @@ export default function LearningTracksPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-5xl px-6 py-8">
+      <div className="relative mx-auto max-w-5xl px-6 py-8">
         {/* Filters */}
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center rounded-2xl border border-gray-800/90 bg-gray-900/50 p-3 backdrop-blur-sm">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
             <Input
@@ -176,7 +181,8 @@ export default function LearningTracksPage() {
                 <Card className="overflow-hidden bg-gray-900 border-gray-800 hover:border-gray-700 transition-all group h-full">
                   {/* Header gradient */}
                   <div className={`h-2 bg-gradient-to-r ${track.gradient}`} />
-                  <CardContent className="p-5 flex flex-col h-full">
+                  <CardContent className="p-5 flex flex-col h-full relative">
+                    <div className={`pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-to-br ${track.gradient} opacity-10 blur-2xl`} />
                     <div className="flex items-start justify-between mb-3">
                       <div className={`rounded-xl bg-gradient-to-br ${track.gradient} p-2.5`}>
                         <Icon className="h-5 w-5 text-white" />
@@ -193,12 +199,12 @@ export default function LearningTracksPage() {
                       </div>
                     </div>
 
-                    <h3 className="font-bold text-white text-base mb-1">{track.title}</h3>
+                    <h3 className="font-black text-white text-base mb-1 tracking-tight">{track.title}</h3>
                     <p className="text-xs text-gray-500 mb-3 flex-1">{track.description}</p>
 
                     {/* Skills */}
                     <div className="mb-4 flex flex-wrap gap-1">
-                      {track.skills.slice(0, 4).map((s) => (
+                      {track.skills.slice(0, 4).map((s: string) => (
                         <span key={s} className="rounded-md bg-gray-800 px-2 py-0.5 text-[10px] text-gray-400">{s}</span>
                       ))}
                       {track.skills.length > 4 && (
@@ -207,7 +213,7 @@ export default function LearningTracksPage() {
                     </div>
 
                     {/* Stats */}
-                    <div className="mb-4 flex items-center gap-4 text-xs text-gray-500">
+                    <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-gray-500">
                       <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{track.estimatedWeeks}w</span>
                       <span className="flex items-center gap-1"><BookOpen className="h-3.5 w-3.5" />{track.courseCount} courses</span>
                       <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{(track.enrollmentCount / 1000).toFixed(1)}k enrolled</span>
@@ -224,7 +230,7 @@ export default function LearningTracksPage() {
                       <Button
                         size="sm"
                         onClick={() => setEnrolled(isEnrolled ? enrolled.filter((id) => id !== track.id) : [...enrolled, track.id])}
-                        className={`text-xs px-4 ${isEnrolled ? 'bg-emerald-700 hover:bg-emerald-600' : `bg-gradient-to-r ${track.gradient} hover:opacity-90`}`}
+                        className={`text-xs px-4 ${isEnrolled ? 'bg-amber-700 hover:bg-amber-600' : `bg-gradient-to-r ${track.gradient} hover:opacity-90`}`}
                       >
                         {isEnrolled ? '✓ Enrolled' : 'Enroll'}
                       </Button>

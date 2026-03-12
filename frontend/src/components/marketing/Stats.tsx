@@ -21,10 +21,10 @@ interface StatsProps {
 const iconComponents: React.ElementType[] = [Users, Lightbulb, Trophy, Briefcase]
 
 const colorMap: Record<number, string> = {
-  0: 'from-green-500 to-emerald-500',
+  0: 'from-blue-500 to-amber-500',
   1: 'from-purple-500 to-pink-500',
   2: 'from-amber-500 to-orange-500',
-  3: 'from-emerald-500 to-green-500',
+  3: 'from-amber-500 to-blue-500',
 }
 
 function AnimatedCounter({ value, inView, onComplete }: { value: string; inView: boolean; onComplete?: () => void }) {

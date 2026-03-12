@@ -24,10 +24,10 @@ import { Badge } from '@/components/ui/badge';
 
 export default function AdminDashboardPage() {
   const systemVitals = [
-    { label: 'CPU_LOAD', value: '42%', status: 'nominal', color: 'text-emerald-500' },
+    { label: 'CPU_LOAD', value: '42%', status: 'nominal', color: 'text-amber-500' },
     { label: 'MEMORY_USAGE', value: '8.4GB', status: 'optimal', color: 'text-blue-500' },
     { label: 'NET_THROUGHPUT', value: '1.2GB/s', status: 'peak', color: 'text-purple-500' },
-    { label: 'LATENCY_GLOBAL', value: '24ms', status: 'ultra-low', color: 'text-emerald-500' },
+    { label: 'LATENCY_GLOBAL', value: '24ms', status: 'ultra-low', color: 'text-amber-500' },
   ];
 
   return (
@@ -57,7 +57,7 @@ export default function AdminDashboardPage() {
         {[
           { label: 'Total_Users_Live', value: '12,456', change: '+12.4%', icon: Users, color: 'text-blue-500' },
           { label: 'Course_Engagements', value: '842,001', change: '+8.2%', icon: BookOpen, color: 'text-purple-500' },
-          { label: 'Hackathons_Hosted', value: '1,248', change: '+15.1%', icon: Trophy, color: 'text-emerald-500' },
+          { label: 'Hackathons_Hosted', value: '1,248', change: '+15.1%', icon: Trophy, color: 'text-amber-500' },
           { label: 'Total_XP_Awarded', value: '4.2M', change: '+22.4%', icon: Zap, color: 'text-orange-500' },
         ].map((metric, i) => (
           <motion.div
@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
                 <p className="text-[9px] font-black text-slate-500 tracking-widest uppercase">{vital.label}</p>
                 <p className={`text-2xl font-black ${vital.color}`}>{vital.value}</p>
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   <span className="text-[8px] font-black text-slate-600 uppercase">{vital.status}</span>
                 </div>
               </div>
@@ -109,7 +109,7 @@ export default function AdminDashboardPage() {
               <div key={edge.name} className="p-4 bg-slate-950 border border-slate-900 rounded-xl space-y-3 hover:border-red-600/20 transition-all cursor-pointer">
                 <div className="flex items-center justify-between">
                   <Globe className="w-3.5 h-3.5 text-blue-500" />
-                  <span className="text-[8px] font-black text-emerald-500 uppercase">{edge.status}</span>
+                  <span className="text-[8px] font-black text-amber-500 uppercase">{edge.status}</span>
                 </div>
                 <p className="text-[9px] font-black text-white uppercase">{edge.name}</p>
                 <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden">

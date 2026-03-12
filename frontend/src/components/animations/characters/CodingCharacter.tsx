@@ -35,11 +35,11 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <rect x="70" y="100" width="30" height="3" rx="1" fill="#34d399" opacity="0.8" />
+            <rect x="70" y="100" width="30" height="3" rx="1" fill="#60a5fa" opacity="0.8" />
             <rect x="70" y="106" width="45" height="3" rx="1" fill="#60a5fa" opacity="0.6" />
             <rect x="70" y="112" width="20" height="3" rx="1" fill="#c084fc" opacity="0.7" />
             <rect x="75" y="118" width="35" height="3" rx="1" fill="#fbbf24" opacity="0.5" />
-            <rect x="70" y="124" width="25" height="3" rx="1" fill="#34d399" opacity="0.6" />
+            <rect x="70" y="124" width="25" height="3" rx="1" fill="#60a5fa" opacity="0.6" />
           </motion.g>
 
           {/* Blinking cursor */}
@@ -48,7 +48,7 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
             y="124"
             width="2"
             height="4"
-            fill="#34d399"
+            fill="#60a5fa"
             animate={{ opacity: [1, 0, 1] }}
             transition={{ duration: 0.8, repeat: Infinity, ease: 'linear', times: [0, 0.5, 1] }}
           />
@@ -113,7 +113,7 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
         <motion.text
           x="40"
           y="80"
-          fill="#34d399"
+          fill="#60a5fa"
           fontSize="12"
           fontFamily="monospace"
           opacity="0.4"

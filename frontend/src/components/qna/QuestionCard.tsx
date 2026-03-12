@@ -41,7 +41,7 @@ export default function QuestionCard({
           value={answerCount}
           label="answers"
           highlight={isAnswered}
-          icon={isAnswered ? <CheckCircle2 className="h-3 w-3 text-emerald-500" /> : null}
+          icon={isAnswered ? <CheckCircle2 className="h-3 w-3 text-amber-500" /> : null}
           highlightColor="emerald"
         />
         <Stat value={viewCount} label="views" />
@@ -107,7 +107,7 @@ function Stat({
       className={cn(
         'flex flex-col items-end rounded-lg px-2 py-1 text-right',
         highlight && highlightColor === 'blue'    && 'bg-blue-50 dark:bg-blue-950',
-        highlight && highlightColor === 'emerald' && 'bg-emerald-50 dark:bg-emerald-950',
+        highlight && highlightColor === 'emerald' && 'bg-amber-50 dark:bg-amber-950',
       )}
     >
       <div className="flex items-center gap-1">
@@ -116,7 +116,7 @@ function Stat({
           className={cn(
             'text-base font-bold tabular-nums',
             highlight && highlightColor === 'blue'    && 'text-blue-700 dark:text-blue-300',
-            highlight && highlightColor === 'emerald' && 'text-emerald-700 dark:text-emerald-300',
+            highlight && highlightColor === 'emerald' && 'text-amber-700 dark:text-amber-300',
             !highlight && 'text-gray-700 dark:text-gray-300',
           )}
         >

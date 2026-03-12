@@ -38,7 +38,7 @@ const MOCK_ORGS = [
     id: 4, slug: 'iim-ahmedabad', name: 'IIM Ahmedabad Business Lab',
     orgType: 'university', description: 'Finance, strategy, and management learning programs with real-world case studies.',
     memberCount: 890, openChallenges: 4, location: 'Ahmedabad, India',
-    gradient: 'from-emerald-600 to-teal-600', rating: 4.8,
+    gradient: 'from-amber-600 to-cyan-600', rating: 4.8,
     tags: ['Finance', 'Strategy', 'Consulting'],
   },
   {
@@ -95,7 +95,7 @@ export default function OrganizationsPage() {
             {[
               { label: 'Partners', value: '50+', icon: Building2, color: 'text-blue-400' },
               { label: 'Challenges', value: '120+', icon: Trophy, color: 'text-amber-400' },
-              { label: 'Members', value: '32K+', icon: Users, color: 'text-emerald-400' },
+              { label: 'Members', value: '32K+', icon: Users, color: 'text-amber-400' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />

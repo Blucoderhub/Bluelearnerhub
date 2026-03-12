@@ -36,9 +36,14 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute top-56 -right-16 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+      </div>
       {/* Premium Sticky Header */}
       <div className="sticky top-0 z-[60] bg-background/80 backdrop-blur-xl border-b border-border/50 px-6 py-4 flex items-center justify-between">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
@@ -63,7 +68,7 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
                     <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}
-                        className="h-full bg-gradient-to-r from-primary to-emerald-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                        className="h-full bg-gradient-to-r from-primary to-amber-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]"
                     />
                 </div>
             </div>
@@ -153,7 +158,7 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
         </AnimatePresence>
 
         {/* Main Mastery Content */}
-        <main className="flex-1 overflow-y-auto bg-background min-w-0">
+        <main className="flex-1 overflow-y-auto bg-background/70 min-w-0">
           <div className="max-w-4xl mx-auto py-16 md:py-24 px-8 md:px-16 lg:px-24">
             
             <header className="mb-16">
@@ -169,10 +174,10 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-heading font-black tracking-tighter text-foreground mb-8 leading-[1.05] text-gradient">
                     {currentLessonTitle}
                 </h1>
-                <div className="h-1.5 w-24 bg-primary rounded-full mb-12 shadow-[0_0_12px_rgba(16,185,129,0.3)]" />
+                <div className="h-1.5 w-24 bg-primary rounded-full mb-12 shadow-[0_0_12px_rgba(59,130,246,0.35)]" />
             </header>
             
-            <div className="prose prose-invert prose-emerald max-w-none 
+            <div className="prose prose-invert prose-blue max-w-none 
               prose-h2:text-4xl prose-h2:font-heading prose-h2:font-black prose-h2:tracking-tight prose-h2:mt-16 prose-h2:mb-8
               prose-h3:text-2xl prose-h3:font-heading prose-h3:font-bold prose-h3:text-foreground/90
               prose-p:text-xl prose-p:leading-relaxed prose-p:text-muted-foreground prose-p:tracking-tight

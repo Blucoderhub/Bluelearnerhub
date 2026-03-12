@@ -29,8 +29,8 @@ const ACADEMY_FEATURES = [
         title: 'Admin Dashboard',
         description: 'Powerful control panel to manage students, groups, and assignments in one place.',
         icon: Users,
-        color: 'text-emerald-400',
-        bgColor: 'bg-emerald-500/10'
+        color: 'text-amber-400',
+        bgColor: 'bg-amber-500/10'
     },
     {
         title: 'Custom Learning Paths',
@@ -83,20 +83,20 @@ export default function AcademyPage() {
         <div className="min-h-screen bg-[#020617] text-slate-200">
             {/* Hero Section */}
             <section className="relative pt-20 pb-24 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent pointer-events-none" />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center max-w-4xl mx-auto space-y-8">
-                        <Badge variant="outline" className="px-4 py-1.5 border-emerald-500/30 text-emerald-400 bg-emerald-500/5 font-bold uppercase tracking-widest text-[11px] rounded-full">
+                        <Badge variant="outline" className="px-4 py-1.5 border-amber-500/30 text-amber-400 bg-amber-500/5 font-bold uppercase tracking-widest text-[11px] rounded-full">
                             Bluelearner Academy
                         </Badge>
                         <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white leading-tight">
-                            The Complete Platform to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-200">Train Your Team</span>
+                            The Complete Platform to <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-blue-200">Train Your Team</span>
                         </h1>
                         <p className="text-slate-400 text-xl md:text-2xl leading-relaxed">
                             Manage learning, track progress, and upskill your organization with the world's most trusted engineering content.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                            <Button className="h-14 px-10 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all">
+                            <Button className="h-14 px-10 bg-amber-500 hover:bg-amber-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-amber-500/20 active:scale-[0.98] transition-all">
                                 Get Started Free
                             </Button>
                             <Button variant="outline" className="h-14 px-10 border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-white font-bold text-lg rounded-2xl transition-all">
@@ -116,13 +116,13 @@ export default function AcademyPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {SECTORS.map((sector) => (
-                            <div key={sector.title} className="p-8 rounded-[2.5rem] bg-slate-900/40 border border-slate-800 hover:border-emerald-500/30 transition-all group">
-                                <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <div key={sector.title} className="p-8 rounded-[2.5rem] bg-slate-900/40 border border-slate-800 hover:border-amber-500/30 transition-all group">
+                                <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform">
                                     <sector.icon className="w-7 h-7" />
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-3">{sector.title}</h3>
                                 <p className="text-slate-400 text-sm leading-relaxed mb-6">{sector.description}</p>
-                                <Link href={sector.link} className="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm hover:underline">
+                                <Link href={sector.link} className="inline-flex items-center gap-2 text-amber-400 font-bold text-sm hover:underline">
                                     Learn More <ChevronRight className="w-4 h-4" />
                                 </Link>
                             </div>
@@ -137,7 +137,7 @@ export default function AcademyPage() {
                     <div className="flex flex-col lg:flex-row items-center gap-16">
                         <div className="flex-1 space-y-8">
                             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">
-                                Set Up a Semester <span className="text-emerald-400 underline decoration-emerald-500/30">in Seconds</span>
+                                Set Up a Semester <span className="text-amber-400 underline decoration-amber-500/30">in Seconds</span>
                             </h2>
                             <p className="text-slate-400 text-lg leading-relaxed">
                                 Pick a subject, and your learning path is ready. Modules, quizzes, and a final exam, all built in. Fully customizable for your team.
@@ -147,7 +147,7 @@ export default function AcademyPage() {
                                     <button 
                                         key={sub}
                                         onClick={() => setSelectedSubject(sub)}
-                                        className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${selectedSubject === sub ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-700'}`}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${selectedSubject === sub ? 'bg-amber-500/10 border-amber-500/50 text-amber-400' : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-700'}`}
                                     >
                                         <span className="font-bold">{sub}</span>
                                         <CheckCircle2 className={`w-5 h-5 transition-opacity ${selectedSubject === sub ? 'opacity-100' : 'opacity-0'}`} />
@@ -160,7 +160,7 @@ export default function AcademyPage() {
                                 <div className="absolute top-4 left-8 flex gap-2">
                                     <div className="w-3 h-3 rounded-full bg-red-500/50" />
                                     <div className="w-3 h-3 rounded-full bg-amber-500/50" />
-                                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                                    <div className="w-3 h-3 rounded-full bg-blue-500/50" />
                                 </div>
                                 <div className="space-y-6">
                                     <div className="flex items-center justify-between mb-8">
@@ -168,11 +168,11 @@ export default function AcademyPage() {
                                             <h4 className="font-bold text-white text-lg">{selectedSubject} Academy Track</h4>
                                             <p className="text-xs text-slate-500 uppercase font-black tracking-widest">Enrollment: 124 Students</p>
                                         </div>
-                                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none">Active Hub</Badge>
+                                        <Badge className="bg-amber-500/10 text-amber-400 border-none">Active Hub</Badge>
                                     </div>
                                     {[1, 2, 3, 4].map((i) => (
                                         <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/30 border border-white/5">
-                                            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                            <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
                                                 <PlayCircle className="w-5 h-5" />
                                             </div>
                                             <div className="flex-1">
@@ -194,7 +194,7 @@ export default function AcademyPage() {
             </section>
 
             {/* Everything You Need */}
-            <section className="py-24 bg-emerald-500/5 border-y border-emerald-500/10">
+            <section className="py-24 bg-amber-500/5 border-y border-amber-500/10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-20 space-y-4">
                         <h2 className="text-4xl font-extrabold text-white">Everything You Need</h2>
@@ -218,10 +218,10 @@ export default function AcademyPage() {
             <section className="py-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="bg-slate-900/40 border border-slate-800 rounded-[3rem] p-12 lg:p-20 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] -mr-64 -mt-64" />
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/5 blur-[120px] -mr-64 -mt-64" />
                         <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
                             <div className="flex-1 space-y-6">
-                                <h2 className="text-4xl font-black text-white">Results You Can <span className="text-emerald-400">Measure</span></h2>
+                                <h2 className="text-4xl font-black text-white">Results You Can <span className="text-amber-400">Measure</span></h2>
                                 <p className="text-slate-400 text-lg leading-relaxed">
                                     Show leadership exactly what training delivers. Track individual performance, identify skill gaps, and celebrate mastery.
                                 </p>
@@ -239,12 +239,12 @@ export default function AcademyPage() {
                             <div className="flex-1 w-full bg-slate-800/50 rounded-3xl p-8 border border-white/5 space-y-8">
                                 <div className="flex items-center justify-between">
                                     <span className="font-bold text-sm">Monthly Skills Growth</span>
-                                    <TrendingUp className="text-emerald-400 w-5 h-5" />
+                                    <TrendingUp className="text-amber-400 w-5 h-5" />
                                 </div>
                                 <div className="h-48 flex items-end gap-3 px-4">
                                     {[40, 60, 45, 80, 55, 90, 75].map((h, i) => (
-                                        <div key={i} className="flex-1 bg-emerald-500/20 rounded-t-lg transition-all hover:bg-emerald-500/40 relative group" style={{ height: `${h}%` }}>
-                                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div key={i} className="flex-1 bg-amber-500/20 rounded-t-lg transition-all hover:bg-amber-500/40 relative group" style={{ height: `${h}%` }}>
+                                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {h}%
                                             </div>
                                         </div>
@@ -271,7 +271,7 @@ export default function AcademyPage() {
                             <h3 className="text-2xl font-bold text-white">Self-Service</h3>
                             <div className="space-y-2">
                                 <p className="text-5xl font-black text-white">$5.99<span className="text-sm text-slate-500 font-bold ml-2">/ seat per month</span></p>
-                                <p className="text-sm text-emerald-400 font-bold">Standard Platform Access</p>
+                                <p className="text-sm text-amber-400 font-bold">Standard Platform Access</p>
                             </div>
                             <ul className="space-y-4">
                                 {[
@@ -281,7 +281,7 @@ export default function AcademyPage() {
                                     'Official Certificates'
                                 ].map((feature) => (
                                     <li key={feature} className="flex items-center gap-3 text-sm text-slate-300">
-                                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                                        <CheckCircle2 className="w-5 h-5 text-amber-400" />
                                         {feature}
                                     </li>
                                 ))}
@@ -290,14 +290,14 @@ export default function AcademyPage() {
                                 Try Academy Free
                             </Button>
                         </div>
-                        <div className="p-10 rounded-[2.5rem] bg-emerald-500/10 border-2 border-emerald-500/30 space-y-8 relative overflow-hidden">
+                        <div className="p-10 rounded-[2.5rem] bg-amber-500/10 border-2 border-amber-500/30 space-y-8 relative overflow-hidden">
                             <div className="absolute top-5 right-5">
-                                <Badge className="bg-emerald-500 text-white border-none uppercase text-[10px] font-black tracking-widest">Scale</Badge>
+                                <Badge className="bg-amber-500 text-white border-none uppercase text-[10px] font-black tracking-widest">Scale</Badge>
                             </div>
                             <h3 className="text-2xl font-bold text-white">Organizations</h3>
                             <div className="space-y-2">
                                 <p className="text-5xl font-black text-white">Custom</p>
-                                <p className="text-sm text-emerald-400 font-bold text-center">Volume Discounts Available</p>
+                                <p className="text-sm text-amber-400 font-bold text-center">Volume Discounts Available</p>
                             </div>
                             <ul className="space-y-4">
                                 {[
@@ -308,12 +308,12 @@ export default function AcademyPage() {
                                     'SSO & API Access'
                                 ].map((feature) => (
                                     <li key={feature} className="flex items-center gap-3 text-sm text-slate-300">
-                                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                                        <CheckCircle2 className="w-5 h-5 text-amber-400" />
                                         {feature}
                                     </li>
                                 ))}
                             </ul>
-                            <Button className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+                            <Button className="w-full h-12 bg-amber-500 hover:bg-amber-600 text-white font-black rounded-xl transition-all shadow-lg shadow-amber-500/20">
                                 Contact Sales
                             </Button>
                         </div>
@@ -324,7 +324,7 @@ export default function AcademyPage() {
             {/* CTA Section */}
             <section className="py-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-gradient-to-br from-emerald-600 to-green-600 rounded-[3rem] p-12 md:p-20 text-center space-y-8 shadow-2xl relative overflow-hidden group">
+                    <div className="bg-gradient-to-br from-amber-600 to-blue-600 rounded-[3rem] p-12 md:p-20 text-center space-y-8 shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
                         <motion.div 
                             animate={{ scale: [1, 1.02, 1] }} 
@@ -332,11 +332,11 @@ export default function AcademyPage() {
                             className="relative z-10 space-y-6"
                         >
                             <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">Ready to Train Your Team?</h2>
-                            <p className="text-emerald-50 text-xl max-w-2xl mx-auto font-medium">
+                            <p className="text-amber-50 text-xl max-w-2xl mx-auto font-medium">
                                 Join thousands of organizations building the next generation of engineers with Bluelearner Academy.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                                <Button className="h-16 px-12 bg-white text-emerald-600 hover:bg-emerald-50 font-black text-xl rounded-2xl shadow-xl active:scale-[0.95] transition-all">
+                                <Button className="h-16 px-12 bg-white text-amber-600 hover:bg-amber-50 font-black text-xl rounded-2xl shadow-xl active:scale-[0.95] transition-all">
                                     Start Free Trial
                                 </Button>
                                 <Button variant="outline" className="h-16 px-12 border-white/30 bg-white/10 hover:bg-white/20 text-white font-bold text-xl rounded-2xl backdrop-blur-md transition-all">

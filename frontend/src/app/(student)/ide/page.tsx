@@ -23,7 +23,7 @@ export default function IDEPage() {
                     </div>
                     <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
                         Elite Coding Sandbox
-                        <span className="px-2 py-0.5 text-[10px] bg-emerald-500/10 text-emerald-500 rounded-md border border-emerald-500/20">
+                        <span className="px-2 py-0.5 text-[10px] bg-amber-500/10 text-amber-500 rounded-md border border-amber-500/20">
                             v1.0 Beta
                         </span>
                     </h1>
@@ -45,7 +45,7 @@ export default function IDEPage() {
                 <div className="w-[380px] flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-hide hidden xl:flex">
                     <div className="p-6 rounded-2xl bg-card border border-border space-y-4">
                         <div className="flex items-center justify-between">
-                            <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider">Easy</span>
+                            <span className="px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-wider">Easy</span>
                             <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
                                 <BookOpen className="w-3.5 h-3.5" />
                                 Algorithm

@@ -159,12 +159,12 @@ export default function UniversalSearch() {
 
   const getTypeColor = (type: SearchResult['type']) => {
     const colors = {
-      tutorial: 'bg-green-500/10 text-green-500',
+      tutorial: 'bg-blue-500/10 text-blue-500',
       course: 'bg-purple-500/10 text-purple-500',
-      problem: 'bg-green-500/10 text-green-500',
+      problem: 'bg-blue-500/10 text-blue-500',
       hackathon: 'bg-orange-500/10 text-orange-500',
-      opening: 'bg-emerald-500/10 text-emerald-500',
-      academy: 'bg-emerald-500/10 text-emerald-400',
+      opening: 'bg-amber-500/10 text-amber-500',
+      academy: 'bg-amber-500/10 text-amber-400',
       question: 'bg-yellow-500/10 text-yellow-500',
     }
     return colors[type]
@@ -183,7 +183,7 @@ export default function UniversalSearch() {
           onFocus={() => setIsOpen(true)}
           className={cn(
             'w-full pl-10 pr-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500',
-            isOpen && 'ring-2 ring-green-500'
+            isOpen && 'ring-2 ring-blue-500'
           )}
         />
         {query && (
@@ -208,7 +208,7 @@ export default function UniversalSearch() {
             {/* Loading */}
             {isLoading && (
               <div className="p-4 text-center text-gray-400">
-                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-green-500"></div>
+                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
               </div>
             )}
 

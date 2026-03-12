@@ -114,7 +114,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-8">
           <div className="col-span-1 md:col-span-2 mb-8 md:mb-0">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/20">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/20">
                 <span className="text-lg font-bold text-white">BL</span>
               </div>
               <div>

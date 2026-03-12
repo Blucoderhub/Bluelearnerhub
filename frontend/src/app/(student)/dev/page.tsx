@@ -118,7 +118,7 @@ export default function DevPortalPage() {
                   </button>
                 ))}
                 <Link href="/dev/new">
-                  <Button size="sm" className="gap-1.5 bg-green-700 hover:bg-green-600 ml-1">
+                  <Button size="sm" className="gap-1.5 bg-blue-700 hover:bg-blue-600 ml-1">
                     <Plus className="h-3.5 w-3.5" /> New
                   </Button>
                 </Link>
@@ -140,7 +140,7 @@ export default function DevPortalPage() {
             <Card className="bg-gray-900 border-gray-800">
               <CardContent className="p-4">
                 <div className="mb-3 flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-green-400" />
+                  <TrendingUp className="h-4 w-4 text-blue-400" />
                   <span className="text-sm font-semibold text-white">Trending Today</span>
                 </div>
                 {TRENDING.map((r, i) => (

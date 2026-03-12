@@ -134,8 +134,8 @@ function VoteWidget({ score, onUpvote, onDownvote, isAccepted }: {
         <ChevronDown className="h-5 w-5" />
       </button>
       {isAccepted && (
-        <div className="mt-1 rounded-full bg-emerald-900 p-1.5">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+        <div className="mt-1 rounded-full bg-amber-900 p-1.5">
+          <CheckCircle2 className="h-4 w-4 text-amber-400" />
         </div>
       )}
     </div>
@@ -236,10 +236,10 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
         <div className="flex flex-col gap-4 mb-8">
           {answers.map((a, i) => (
             <motion.div key={a.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-              <Card className={`border ${a.isAccepted ? 'border-emerald-800 bg-emerald-950/30' : 'border-gray-800 bg-gray-900'}`}>
+              <Card className={`border ${a.isAccepted ? 'border-amber-800 bg-amber-950/30' : 'border-gray-800 bg-gray-900'}`}>
                 <CardContent className="p-6">
                   {a.isAccepted && (
-                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-400">
+                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-400">
                       <CheckCircle2 className="h-4 w-4" /> Accepted Answer
                     </div>
                   )}

@@ -11,15 +11,15 @@ import Link from 'next/link';
 export default function PaymentSuccessPage() {
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-6">
-            <Card className="max-w-md w-full bg-slate-900/60 border-emerald-500/30 p-10 text-center space-y-8 glass-morphism relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500" />
+            <Card className="max-w-md w-full bg-slate-900/60 border-amber-500/30 p-10 text-center space-y-8 glass-morphism relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-amber-500" />
 
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border-4 border-emerald-500/20"
+                    className="w-24 h-24 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto border-4 border-amber-500/20"
                 >
-                    <CheckCircle2 className="w-12 h-12 text-emerald-500" />
+                    <CheckCircle2 className="w-12 h-12 text-amber-500" />
                 </motion.div>
 
                 <div className="space-y-2">
@@ -34,7 +34,7 @@ export default function PaymentSuccessPage() {
                 <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 space-y-4">
                     <div className="flex items-center justify-between">
                         <span className="text-[10px] font-black text-slate-500 uppercase italic">Status:</span>
-                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black">ACTIVE_SUBSCRIPTION</Badge>
+                        <Badge className="bg-amber-500/10 text-amber-400 border-none text-[8px] font-black">ACTIVE_SUBSCRIPTION</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                         <span className="text-[10px] font-black text-slate-500 uppercase italic">AI_Credits:</span>
@@ -44,7 +44,7 @@ export default function PaymentSuccessPage() {
 
                 <div className="grid grid-cols-1 gap-4">
                     <Link href="/student/dashboard">
-                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black italic uppercase tracking-widest h-12">
+                        <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-black italic uppercase tracking-widest h-12">
                             LAUNCH_DASHBOARD <Rocket className="w-4 h-4 ml-2" />
                         </Button>
                     </Link>
