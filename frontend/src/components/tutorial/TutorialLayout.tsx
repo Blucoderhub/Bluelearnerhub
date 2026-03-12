@@ -90,13 +90,13 @@ function SectionNav({
         >
           <span className="flex-shrink-0">
             {s.completed ? (
-              <CheckCircle className="h-4 w-4 text-amber-500" />
+              <CheckCircle className="h-4 w-4 text-foreground/80" />
             ) : (
               <span
                 className={cn(
                   'flex h-4 w-4 items-center justify-center rounded-full border-2 text-[10px] font-bold',
                   s.id === activeId
-                    ? 'border-blue-600 text-blue-600'
+                    ? 'border-blue-600 text-primary'
                     : 'border-gray-300 text-gray-400',
                 )}
               >
@@ -188,7 +188,7 @@ export default function TutorialLayout({
                 className={cn(
                   'flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-medium transition-colors',
                   activeTab === key
-                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    ? 'border-b-2 border-blue-600 text-primary'
                     : 'text-gray-500 hover:text-gray-700',
                 )}
               >

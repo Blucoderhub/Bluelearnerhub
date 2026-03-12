@@ -37,15 +37,15 @@ export default function TutorialCard({
   tags = [],
 }: TutorialCardProps) {
   const difficultyColors = {
-    easy: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+    easy: 'bg-blue-500/10 text-primary/80 border-blue-500/20',
     medium: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-    hard: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+    hard: 'bg-primary/10 text-foreground/80 border-border',
     expert: 'bg-red-500/10 text-red-500 border-red-500/20',
   }
 
   const domainColors: Record<string, string> = {
-    'computer-science': 'bg-blue-600',
-    'mechanical': 'bg-orange-500',
+    'computer-science': 'bg-primary',
+    'mechanical': 'bg-primary',
     'electrical': 'bg-yellow-500',
     'civil': 'bg-blue-500',
     'chemical': 'bg-purple-500',
@@ -91,7 +91,7 @@ export default function TutorialCard({
 
             {/* Play Button Overlay */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
                 <Play className="w-8 h-8 text-white ml-1" />
               </div>
             </div>

@@ -29,7 +29,7 @@ interface Props {
 type AddMode = 'text' | 'url' | null
 
 const STATUS_ICON = {
-  ready:      <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" />,
+  ready:      <CheckCircle2 className="w-3.5 h-3.5 text-primary/80" />,
   processing: <Loader2 className="w-3.5 h-3.5 text-yellow-500 animate-spin" />,
   pending:    <Clock className="w-3.5 h-3.5 text-gray-400" />,
   failed:     <AlertCircle className="w-3.5 h-3.5 text-red-400" />,
@@ -131,7 +131,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
             onClick={() => setAddMode('text')}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-medium
                        rounded-lg border border-dashed border-gray-300 dark:border-gray-600
-                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500
+                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-primary/80
                        dark:hover:border-blue-500 dark:hover:text-blue-400 transition-colors
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
           >
@@ -141,7 +141,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
             onClick={() => setAddMode('url')}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-medium
                        rounded-lg border border-dashed border-gray-300 dark:border-gray-600
-                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500
+                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-primary/80
                        dark:hover:border-blue-500 dark:hover:text-blue-400 transition-colors
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
           >
@@ -149,7 +149,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
           </button>
           <label className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-medium
                        rounded-lg border border-dashed border-gray-300 dark:border-gray-600
-                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500
+                       text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-primary/80
                        dark:hover:border-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer">
             {uploadingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
             PDF
@@ -201,7 +201,7 @@ export default function SourcesPanel({ notebookId, sources, onSourcesChange }: P
                 type="submit"
                 size="sm"
                 disabled={adding || (addMode === 'text' && !content.trim()) || (addMode === 'url' && !url.trim())}
-                className="bg-blue-600 hover:bg-blue-700 text-white h-7 text-xs px-3"
+                className="bg-primary hover:bg-primary/90 text-white h-7 text-xs px-3"
               >
                 {adding ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Plus className="w-3 h-3 mr-1" />}
                 Add

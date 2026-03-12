@@ -96,7 +96,7 @@ export default function QnAPage() {
               </p>
             </div>
             <Link href="/qna/ask">
-              <Button className="gap-2 bg-blue-600 hover:bg-blue-700 px-5 py-2.5">
+              <Button className="gap-2 bg-primary hover:bg-primary/90 px-5 py-2.5">
                 <Plus className="h-4 w-4" />
                 Ask Question
               </Button>
@@ -107,8 +107,8 @@ export default function QnAPage() {
           <div className="mt-8 flex gap-6">
             {[
               { label: 'Questions', value: '12,847', icon: MessageSquare, color: 'text-blue-400' },
-              { label: 'Answered', value: '10,204', icon: CheckCircle2, color: 'text-amber-400' },
-              { label: 'Experts',  value: '3,420',  icon: Award,         color: 'text-amber-400' },
+              { label: 'Answered', value: '10,204', icon: CheckCircle2, color: 'text-foreground/70' },
+              { label: 'Experts',  value: '3,420',  icon: Award,         color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -142,7 +142,7 @@ export default function QnAPage() {
                     onClick={() => setSort(value)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                       sort === value
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-primary text-white'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -195,7 +195,7 @@ export default function QnAPage() {
                       onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                       className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                         activeTag === tag
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary text-white'
                           : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                     >
@@ -210,7 +210,7 @@ export default function QnAPage() {
             <Card className="bg-gray-900 border-gray-800">
               <CardContent className="p-4">
                 <div className="mb-3 flex items-center gap-2">
-                  <Flame className="h-4 w-4 text-orange-400" />
+                  <Flame className="h-4 w-4 text-foreground/70" />
                   <span className="text-sm font-semibold text-white">Top Experts</span>
                 </div>
                 {[
@@ -227,7 +227,7 @@ export default function QnAPage() {
                       <p className="text-xs font-medium text-white truncate">{u.name}</p>
                       <p className="text-[10px] text-gray-500">{u.domain}</p>
                     </div>
-                    <span className="text-xs font-bold text-amber-400">{u.rep.toLocaleString()}</span>
+                    <span className="text-xs font-bold text-foreground/70">{u.rep.toLocaleString()}</span>
                   </div>
                 ))}
               </CardContent>

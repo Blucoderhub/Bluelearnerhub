@@ -71,7 +71,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
       {/* Complete button */}
       <div className="mt-12 flex items-center gap-4">
         {section.completed ? (
-          <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+          <div className="flex items-center gap-2 text-foreground/90 dark:text-foreground/70">
             <CheckCircle className="h-5 w-5" />
             <span className="text-sm font-medium">Section completed</span>
           </div>
@@ -83,7 +83,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
               'flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all',
               completing
                 ? 'bg-blue-400 text-white cursor-wait'
-                : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]',
+                : 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]',
             )}
           >
             <Sparkles className="h-4 w-4" />

@@ -24,21 +24,21 @@ const MOCK_ORGS = [
     id: 2, slug: 'iit-bombay', name: 'IIT Bombay Research Hub',
     orgType: 'university', description: 'Collaborative research platform for students and faculty across engineering and sciences.',
     memberCount: 3800, openChallenges: 5, location: 'Mumbai, India',
-    gradient: 'from-orange-600 to-red-600', rating: 4.9,
+    gradient: 'from-primary/90 to-red-600', rating: 4.9,
     tags: ['Research', 'Robotics', 'Semiconductor'],
   },
   {
     id: 3, slug: 'flipkart-campus', name: 'Flipkart Campus Program',
     orgType: 'corporate', description: 'Hire, train, and engage top engineering talent from India\'s best colleges.',
     memberCount: 620, openChallenges: 2, location: 'Bengaluru, India',
-    gradient: 'from-yellow-500 to-orange-500', rating: 4.7,
+    gradient: 'from-yellow-500 to-primary', rating: 4.7,
     tags: ['E-commerce', 'Backend', 'Data Engineering'],
   },
   {
     id: 4, slug: 'iim-ahmedabad', name: 'IIM Ahmedabad Business Lab',
     orgType: 'university', description: 'Finance, strategy, and management learning programs with real-world case studies.',
     memberCount: 890, openChallenges: 4, location: 'Ahmedabad, India',
-    gradient: 'from-amber-600 to-cyan-600', rating: 4.8,
+    gradient: 'from-primary/90 to-cyan-600', rating: 4.8,
     tags: ['Finance', 'Strategy', 'Consulting'],
   },
   {
@@ -61,7 +61,7 @@ const ORG_TYPES = ['All', 'corporate', 'university', 'research'];
 
 const TYPE_CONFIG = {
   corporate:  { label: 'Corporate',  icon: Briefcase, color: 'bg-blue-900/50 text-blue-400' },
-  university: { label: 'University', icon: GraduationCap, color: 'bg-amber-900/50 text-amber-400' },
+  university: { label: 'University', icon: GraduationCap, color: 'bg-muted text-foreground/70' },
   research:   { label: 'Research',   icon: Zap, color: 'bg-purple-900/50 text-purple-400' },
 };
 
@@ -94,8 +94,8 @@ export default function OrganizationsPage() {
           <div className="mt-6 flex gap-6">
             {[
               { label: 'Partners', value: '50+', icon: Building2, color: 'text-blue-400' },
-              { label: 'Challenges', value: '120+', icon: Trophy, color: 'text-amber-400' },
-              { label: 'Members', value: '32K+', icon: Users, color: 'text-amber-400' },
+              { label: 'Challenges', value: '120+', icon: Trophy, color: 'text-foreground/70' },
+              { label: 'Members', value: '32K+', icon: Users, color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -125,7 +125,7 @@ export default function OrganizationsPage() {
                 key={t}
                 onClick={() => setType(t)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-                  type === t ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
+                  type === t ? 'bg-primary text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
                 }`}
               >
                 {t === 'All' ? 'All' : TYPE_CONFIG[t as keyof typeof TYPE_CONFIG]?.label ?? t}
@@ -174,7 +174,7 @@ export default function OrganizationsPage() {
                     {/* Stats */}
                     <div className="mb-4 flex items-center gap-4 text-xs text-gray-500">
                       <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{org.memberCount.toLocaleString()}</span>
-                      <span className="flex items-center gap-1"><Trophy className="h-3.5 w-3.5 text-amber-400" />{org.openChallenges} challenges</span>
+                      <span className="flex items-center gap-1"><Trophy className="h-3.5 w-3.5 text-foreground/70" />{org.openChallenges} challenges</span>
                       <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />{org.location.split(',')[0]}</span>
                     </div>
 

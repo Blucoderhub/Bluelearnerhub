@@ -41,7 +41,7 @@ export default function HighlightsPanel({ notebookId, refreshToken, onOpenCitati
   return (
     <div className="p-4 flex flex-col gap-3 h-full overflow-y-auto bg-white/40 dark:bg-transparent">
       <div className="flex items-center gap-2">
-        <Bookmark className="w-4 h-4 text-blue-500" />
+        <Bookmark className="w-4 h-4 text-primary/80" />
         <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
           Highlights
         </h2>

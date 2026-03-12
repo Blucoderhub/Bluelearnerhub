@@ -13,12 +13,12 @@ export default function StreakCounter({ currentStreak }: StreakCounterProps) {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex items-center gap-3 px-6 py-4 rounded-lg bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30"
+      className="flex items-center gap-3 px-6 py-4 rounded-lg bg-gradient-to-r from-muted to-muted/60 dark:from-muted/60/30 dark:to-muted/30/30"
     >
       <span className="text-4xl animate-pulse">🔥</span>
       <div>
         <p className="text-sm text-gray-600 dark:text-gray-400">Current Streak</p>
-        <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+        <p className="text-2xl font-bold text-foreground/80 dark:text-foreground/70">
           {currentStreak} days
         </p>
       </div>

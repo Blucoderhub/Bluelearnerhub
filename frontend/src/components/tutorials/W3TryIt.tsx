@@ -34,7 +34,7 @@ export const W3TryIt: React.FC<W3TryItProps> = ({
         </div>
         <div className="flex items-center gap-1.5 opacity-40 hover:opacity-100 transition-opacity">
             <div className="w-3 h-3 rounded-full bg-red-500/50" />
-            <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+            <div className="w-3 h-3 rounded-full bg-primary/50" />
             <div className="w-3 h-3 rounded-full bg-blue-500/50" />
         </div>
       </div>

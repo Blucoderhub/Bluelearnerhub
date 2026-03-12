@@ -50,7 +50,7 @@ export default function ConfirmDialog({
             className={
               variant === 'destructive'
                 ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary hover:bg-primary/90'
             }
           >
             {confirmLabel}

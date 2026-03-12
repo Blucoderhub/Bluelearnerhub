@@ -37,9 +37,9 @@ export default function TableOfContents({ items, currentId }: TableOfContentsPro
             style={{ paddingLeft: `${(item.level - 1) * 16}px` }}
           >
             <Link href={item.href}>
-              <a className={`text-sm hover:text-blue-600 dark:hover:text-blue-400 transition-colors ${
+              <a className={`text-sm hover:text-primary dark:hover:text-blue-400 transition-colors ${
                 currentId === item.id
-                  ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                  ? 'text-primary dark:text-blue-400 font-semibold'
                   : 'text-gray-600 dark:text-gray-400'
               }`}>
                 {item.title}

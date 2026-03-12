@@ -39,7 +39,7 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
     <div className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute top-56 -right-16 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute top-56 -right-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
       </div>
       {/* Premium Sticky Header */}
       <div className="sticky top-0 z-[60] bg-background/80 backdrop-blur-xl border-b border-border/50 px-6 py-4 flex items-center justify-between">
@@ -68,7 +68,7 @@ export const W3TutorialLayout: React.FC<W3TutorialLayoutProps> = ({
                     <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}
-                        className="h-full bg-gradient-to-r from-primary to-amber-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+                        className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]"
                     />
                 </div>
             </div>

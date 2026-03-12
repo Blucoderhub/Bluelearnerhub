@@ -203,9 +203,9 @@ export default function IsometricScene() {
         <motion.div
           animate={{ y: [0, -5, 0], rotate: [0, 5, -5, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          className="px-2 py-1 rounded-md bg-amber-500/20 border border-amber-500/30 backdrop-blur-sm"
+          className="px-2 py-1 rounded-md bg-primary/15 border border-border backdrop-blur-sm"
         >
-          <span className="text-[9px] font-bold text-amber-400">🏆 +500 XP</span>
+          <span className="text-[9px] font-bold text-foreground/70">🏆 +500 XP</span>
         </motion.div>
       </motion.div>
 
@@ -218,9 +218,9 @@ export default function IsometricScene() {
         <motion.div
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-          className="px-2 py-1 rounded-md bg-amber-500/20 border border-amber-500/30 backdrop-blur-sm"
+          className="px-2 py-1 rounded-md bg-primary/15 border border-border backdrop-blur-sm"
         >
-          <span className="text-[9px] font-bold text-amber-400">✨ Level Up!</span>
+          <span className="text-[9px] font-bold text-foreground/70">✨ Level Up!</span>
         </motion.div>
       </motion.div>
 

@@ -94,9 +94,9 @@ export default function ExercisePanel({
         className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800/50 md:cursor-default"
       >
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 text-blue-500" />
+          <Terminal className="h-4 w-4 text-primary/80" />
           <span>Practice Exercise</span>
-          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+          <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-foreground dark:bg-muted dark:text-foreground/60">
             +{xpReward} XP
           </span>
         </div>
@@ -124,7 +124,7 @@ export default function ExercisePanel({
                   <span className="text-gray-800 dark:text-gray-200">{tc.input}</span>
                   <br />
                   <span className="text-gray-500">Expected: </span>
-                  <span className="text-amber-700 dark:text-amber-400">{tc.expectedOutput}</span>
+                  <span className="text-foreground dark:text-foreground/70">{tc.expectedOutput}</span>
                 </div>
               ))}
             </div>
@@ -145,17 +145,17 @@ export default function ExercisePanel({
         {testResults.length > 0 && (
           <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
             {allPassed ? (
-              <div className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 dark:bg-amber-950">
-                <CheckCircle2 className="h-5 w-5 text-amber-600" />
+              <div className="flex items-center gap-2 rounded-xl bg-secondary px-4 py-3 dark:bg-background">
+                <CheckCircle2 className="h-5 w-5 text-foreground/90" />
                 <div>
-                  <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                  <p className="text-sm font-semibold text-foreground dark:text-foreground/60">
                     All tests passed!
                   </p>
-                  <p className="text-xs text-amber-600 dark:text-amber-400">
+                  <p className="text-xs text-foreground/90 dark:text-foreground/70">
                     +{xpReward} XP awarded
                   </p>
                 </div>
-                <Zap className="ml-auto h-5 w-5 text-amber-500" />
+                <Zap className="ml-auto h-5 w-5 text-foreground/80" />
               </div>
             ) : (
               <div className="flex flex-col gap-2">
@@ -165,7 +165,7 @@ export default function ExercisePanel({
                     className={cn(
                       'flex items-start gap-2 rounded-lg px-3 py-2 text-xs font-mono',
                       r.passed
-                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                        ? 'bg-secondary text-foreground dark:bg-background dark:text-foreground/60'
                         : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
                     )}
                   >

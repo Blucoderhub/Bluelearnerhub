@@ -53,7 +53,7 @@ export default function UpcomingEvents() {
               <p className="text-xs text-gray-500 dark:text-gray-400">{event.date}</p>
             </div>
             {event.status === 'today' && (
-              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 whitespace-nowrap">
+              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-muted dark:bg-muted/60 text-foreground/70 dark:text-foreground/70 whitespace-nowrap">
                 Today
               </span>
             )}

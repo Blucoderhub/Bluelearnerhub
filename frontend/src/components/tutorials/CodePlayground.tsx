@@ -72,7 +72,7 @@ export default function CodePlayground({
             onClick={handleRun}
             disabled={isRunning}
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-primary hover:bg-primary/90"
           >
             <Play className="w-4 h-4 mr-1" />
             {isRunning ? 'Running...' : 'Run'}

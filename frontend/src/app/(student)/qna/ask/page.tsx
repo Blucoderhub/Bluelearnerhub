@@ -105,7 +105,7 @@ export default function AskQuestionPage() {
               <div className="mt-1.5 flex items-center justify-between">
                 <span className="text-xs text-gray-600">{title.length}/200</span>
                 {title.length > 0 && title.length < 15 && (
-                  <span className="text-xs text-amber-400 flex items-center gap-1">
+                  <span className="text-xs text-foreground/70 flex items-center gap-1">
                     <AlertCircle className="h-3.5 w-3.5" /> Add more detail ({15 - title.length} chars min)
                   </span>
                 )}
@@ -114,7 +114,7 @@ export default function AskQuestionPage() {
               {/* Similar questions warning */}
               {showSimilar && (
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
-                  <p className="text-xs font-semibold text-amber-400 mb-2 flex items-center gap-1.5">
+                  <p className="text-xs font-semibold text-foreground/70 mb-2 flex items-center gap-1.5">
                     <Search className="h-3.5 w-3.5" /> Similar questions already exist — check these first:
                   </p>
                   {SIMILAR_QUESTIONS.map((q) => (
@@ -157,7 +157,7 @@ export default function AskQuestionPage() {
                     onClick={() => setDomain(d)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                       domain === d
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-primary text-white'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -207,7 +207,7 @@ export default function AskQuestionPage() {
             <Button
               onClick={handleSubmit}
               disabled={!isValid || submitting}
-              className="bg-blue-600 hover:bg-blue-700 px-6"
+              className="bg-primary hover:bg-primary/90 px-6"
             >
               {submitting ? 'Posting...' : 'Post Question'}
             </Button>

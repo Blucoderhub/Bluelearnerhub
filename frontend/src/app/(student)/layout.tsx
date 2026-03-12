@@ -99,7 +99,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   <Icon className={cn('w-[18px] h-[18px] shrink-0 transition-colors', isActive ? 'text-primary' : 'group-hover:text-foreground')} />
                   <span className="truncate tracking-tight">{item.title}</span>
                   {item.badge && (
-                    <span className="ml-auto px-1.5 py-0.5 text-[9px] font-bold tracking-wider uppercase bg-amber-500/20 text-amber-500 rounded-md">
+                    <span className="ml-auto px-1.5 py-0.5 text-[9px] font-bold tracking-wider uppercase bg-primary/15 text-foreground/80 rounded-md">
                       {item.badge}
                     </span>
                   )}

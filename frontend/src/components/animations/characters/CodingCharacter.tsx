@@ -17,7 +17,7 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
         style={{ width: '100%', height: '100%' }}
       >
         {/* Desk */}
-        <rect x="30" y="140" width="140" height="8" rx="3" fill="#1e293b" />
+        <rect x="30" y="140" width="140" height="8" rx="3" fill="hsl(var(--secondary))" />
         <rect x="50" y="148" width="8" height="30" rx="2" fill="#334155" />
         <rect x="142" y="148" width="8" height="30" rx="2" fill="#334155" />
 
@@ -27,7 +27,7 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         >
           <rect x="60" y="90" width="80" height="50" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="2" />
-          <rect x="65" y="95" width="70" height="40" rx="2" fill="#020617" />
+          <rect x="65" y="95" width="70" height="40" rx="2" fill="hsl(var(--background))" />
           <rect x="95" y="140" width="10" height="5" fill="#334155" />
 
           {/* Code lines on screen */}
@@ -55,7 +55,7 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
         </motion.g>
 
         {/* Chair */}
-        <ellipse cx="100" cy="170" rx="20" ry="4" fill="#1e293b" />
+        <ellipse cx="100" cy="170" rx="20" ry="4" fill="hsl(var(--secondary))" />
 
         {/* Body */}
         <motion.g
@@ -74,18 +74,18 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
             <circle cx="100" cy="108" r="14" fill="#fbbf24" opacity="0.9" />
             <circle cx="100" cy="108" r="14" fill="#d4a574" />
             {/* Hair */}
-            <path d="M86 102 Q88 90 100 88 Q112 90 114 102 Q112 96 100 95 Q88 96 86 102Z" fill="#1e293b" />
+            <path d="M86 102 Q88 90 100 88 Q112 90 114 102 Q112 96 100 95 Q88 96 86 102Z" fill="hsl(var(--secondary))" />
             {/* Eyes */}
             <motion.g
               animate={{ scaleY: [1, 0.1, 1] }}
               transition={{ duration: 4, repeat: Infinity, repeatDelay: 2, times: [0, 0.05, 0.1] }}
               style={{ transformOrigin: '100px 107px' }}
             >
-              <circle cx="95" cy="107" r="1.5" fill="#1e293b" />
-              <circle cx="105" cy="107" r="1.5" fill="#1e293b" />
+              <circle cx="95" cy="107" r="1.5" fill="hsl(var(--secondary))" />
+              <circle cx="105" cy="107" r="1.5" fill="hsl(var(--secondary))" />
             </motion.g>
             {/* Smile */}
-            <path d="M96 113 Q100 116 104 113" stroke="#1e293b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path d="M96 113 Q100 116 104 113" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
             {/* Glasses */}
             <circle cx="95" cy="107" r="5" stroke="#64748b" strokeWidth="1" fill="none" />
             <circle cx="105" cy="107" r="5" stroke="#64748b" strokeWidth="1" fill="none" />

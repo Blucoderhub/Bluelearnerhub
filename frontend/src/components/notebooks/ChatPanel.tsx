@@ -107,7 +107,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
       {/* Chat header */}
       <div className="relative flex items-center justify-between px-4 py-2 border-b border-white/10 shrink-0 bg-white/65 dark:bg-gray-900/55 backdrop-blur">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-blue-500" />
+          <BookOpen className="w-4 h-4 text-primary/80" />
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {readySources.length === 0
               ? 'Add sources to start chatting'
@@ -132,7 +132,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
             <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full mb-3">
-              <Bot className="w-8 h-8 text-blue-500" />
+              <Bot className="w-8 h-8 text-primary/80" />
             </div>
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
               Ask anything about your sources
@@ -155,7 +155,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
                     key={s}
                     onClick={() => setInput(s)}
                     className="text-xs px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/20
-                               text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40
+                               text-primary dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40
                                border border-blue-200 dark:border-blue-800 transition-colors
                                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
                   >
@@ -178,7 +178,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
             >
               {msg.role === 'assistant' && (
                 <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shrink-0 mt-0.5">
-                  <Bot className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <Bot className="w-4 h-4 text-primary dark:text-blue-400" />
                 </div>
               )}
 
@@ -186,7 +186,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
                 <div
                   className={`px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-blue-600 text-white rounded-tr-sm'
+                      ? 'bg-primary text-white rounded-tr-sm'
                       : 'bg-white/90 dark:bg-gray-800/90 border border-blue-100/70 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-tl-sm shadow-sm backdrop-blur'
                   }`}
                 >
@@ -230,7 +230,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
         {sending && (
           <div className="flex gap-3 justify-start">
             <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shrink-0">
-              <Bot className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <Bot className="w-4 h-4 text-primary dark:text-blue-400" />
             </div>
             <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-sm">
               <div className="flex gap-1 items-center">
@@ -263,7 +263,7 @@ export default function ChatPanel({ notebookId, messages, onMessagesChange, sour
         <Button
           type="submit"
           disabled={!input.trim() || sending || readySources.length === 0}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+          className="bg-primary hover:bg-primary/90 text-white px-4"
         >
           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </Button>

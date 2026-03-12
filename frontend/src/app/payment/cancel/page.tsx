@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function PaymentCancelPage() {
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-6">
-            <Card className="max-w-md w-full bg-slate-900/60 border-red-500/30 p-10 text-center space-y-8 glass-morphism relative overflow-hidden">
+            <Card className="max-w-md w-full bg-card/60 border-red-500/30 p-10 text-center space-y-8 glass-morphism relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-red-600" />
 
                 <motion.div
@@ -24,7 +24,7 @@ export default function PaymentCancelPage() {
                     <h1 className="text-3xl font-black italic tracking-tighter text-white uppercase font-mono">
                         SEQUENCE_ABORTED
                     </h1>
-                    <p className="text-slate-500 font-bold uppercase text-[10px] tracking-widest leading-relaxed">
+                    <p className="text-muted-foreground font-bold uppercase text-[10px] tracking-widest leading-relaxed">
                         The payment transaction was cancelled. No charges were processed.
                     </p>
                 </div>
@@ -36,7 +36,7 @@ export default function PaymentCancelPage() {
                         </Button>
                     </Link>
                     <Link href="/student/dashboard">
-                        <Button variant="ghost" className="w-full text-slate-500 hover:text-white font-black italic uppercase text-[10px] tracking-widest h-12">
+                        <Button variant="ghost" className="w-full text-muted-foreground hover:text-white font-black italic uppercase text-[10px] tracking-widest h-12">
                             RETURN_TO_BASE
                         </Button>
                     </Link>

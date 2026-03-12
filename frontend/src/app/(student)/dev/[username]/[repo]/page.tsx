@@ -134,10 +134,10 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
               <button
                 onClick={() => setStarred(!starred)}
                 className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-colors ${
-                  starred ? 'border-amber-600 bg-amber-950 text-amber-400' : 'border-gray-700 bg-gray-800 text-gray-300 hover:border-amber-600'
+                  starred ? 'border-primary bg-background text-foreground/70' : 'border-gray-700 bg-gray-800 text-gray-300 hover:border-primary'
                 }`}
               >
-                <Star className={`h-4 w-4 ${starred ? 'fill-amber-400 text-amber-400' : ''}`} />
+                <Star className={`h-4 w-4 ${starred ? 'fill-foreground/70 text-foreground/70' : ''}`} />
                 {starred ? 'Starred' : 'Star'} · {MOCK_REPO.starCount + (starred ? 1 : 0)}
               </button>
               <button className="flex items-center gap-1.5 rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:border-gray-600">
@@ -171,7 +171,7 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
               <TabsTrigger
                 key={value}
                 value={value}
-                className="flex items-center gap-1.5 rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm data-[state=active]:border-orange-400 data-[state=active]:text-white data-[state=inactive]:text-gray-500"
+                className="flex items-center gap-1.5 rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm data-[state=active]:border-primary/70 data-[state=active]:text-white data-[state=inactive]:text-gray-500"
               >
                 <Icon className="h-4 w-4" />{label}
               </TabsTrigger>
@@ -248,10 +248,10 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
           <TabsContent value="issues" className="pt-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex gap-2">
-                <button className="text-sm font-medium text-white border-b-2 border-orange-400 pb-1">Open ({MOCK_ISSUES.filter(i => i.status === 'open').length})</button>
+                <button className="text-sm font-medium text-white border-b-2 border-primary/70 pb-1">Open ({MOCK_ISSUES.filter(i => i.status === 'open').length})</button>
                 <button className="text-sm text-gray-500 pb-1">Closed</button>
               </div>
-              <Button size="sm" className="bg-blue-700 hover:bg-blue-600 gap-1.5 text-xs">
+              <Button size="sm" className="bg-primary/90 hover:bg-primary gap-1.5 text-xs">
                 <Bug className="h-3.5 w-3.5" /> New Issue
               </Button>
             </div>
@@ -296,7 +296,7 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
           <TabsContent value="pulls" className="pt-4">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-gray-400">0 open pull requests</p>
-              <Button size="sm" className="bg-blue-700 hover:bg-blue-600 gap-1.5 text-xs">
+              <Button size="sm" className="bg-primary/90 hover:bg-primary gap-1.5 text-xs">
                 <GitMerge className="h-3.5 w-3.5" /> New Pull Request
               </Button>
             </div>

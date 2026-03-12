@@ -74,7 +74,7 @@ function ContributionGraph() {
   });
 
   const levelColor = (l: number) =>
-    ['bg-gray-800', 'bg-amber-900', 'bg-amber-700', 'bg-amber-500', 'bg-amber-400'][l];
+    ['bg-gray-800', 'bg-muted', 'bg-primary/80', 'bg-primary', 'bg-primary/70'][l];
 
   return (
     <div className="overflow-x-auto">
@@ -169,12 +169,12 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
               {/* Streaks */}
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <div className="rounded-xl bg-gray-900 border border-gray-800 p-3 text-center">
-                  <Flame className="h-5 w-5 text-orange-400 mx-auto mb-1" />
+                  <Flame className="h-5 w-5 text-foreground/70 mx-auto mb-1" />
                   <p className="text-lg font-bold text-white">{user.currentStreak}</p>
                   <p className="text-[10px] text-gray-600">day streak</p>
                 </div>
                 <div className="rounded-xl bg-gray-900 border border-gray-800 p-3 text-center">
-                  <Trophy className="h-5 w-5 text-amber-400 mx-auto mb-1" />
+                  <Trophy className="h-5 w-5 text-foreground/70 mx-auto mb-1" />
                   <p className="text-lg font-bold text-white">{user.longestStreak}</p>
                   <p className="text-[10px] text-gray-600">best streak</p>
                 </div>
@@ -197,7 +197,7 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
                   {user.certificates.map((c) => (
                     <Link key={c.id} href={`/certificates/verify/${c.id}`}>
                       <div className="flex items-center gap-2 py-1.5 text-sm text-gray-400 hover:text-white transition-colors">
-                        <Award className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                        <Award className="h-3.5 w-3.5 text-foreground/70 shrink-0" />
                         <span className="text-xs">{c.title}</span>
                       </div>
                     </Link>
@@ -217,8 +217,8 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
             >
               {[
                 { label: 'Repositories', value: repos.length, icon: Code2, color: 'text-blue-400' },
-                { label: 'Total Stars', value: user.totalStars, icon: Star, color: 'text-amber-400' },
-                { label: 'Commits', value: user.totalCommits.toLocaleString(), icon: Activity, color: 'text-amber-400' },
+                { label: 'Total Stars', value: user.totalStars, icon: Star, color: 'text-foreground/70' },
+                { label: 'Commits', value: user.totalCommits.toLocaleString(), icon: Activity, color: 'text-foreground/70' },
               ].map(({ label, value, icon: Icon, color }) => (
                 <Card key={label} className="bg-gray-900 border-gray-800">
                   <CardContent className="p-4 flex items-center gap-3">
@@ -242,7 +242,7 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-amber-400" />
+                      <Activity className="h-4 w-4 text-foreground/70" />
                       Contribution Activity
                     </h2>
                     <span className="text-xs text-gray-600">{user.totalCommits.toLocaleString()} contributions in the last year</span>

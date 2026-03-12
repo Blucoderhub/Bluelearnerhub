@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -16,38 +16,65 @@ import {
 import {
   ChevronDown,
   User,
-  Settings,
   LogOut,
   Trophy,
   Menu,
   X,
   BookOpen,
-  Play,
-  Users,
-  GraduationCap,
-  Sparkles,
   ArrowRight,
   Code2,
   Hammer,
-  MessageSquare,
-  Map,
-  Award,
-  GitBranch,
-  Building2,
   Zap,
+  ExternalLink,
+  GraduationCap,
+  BarChart3,
+  PlusCircle,
+  BookMarked,
+  LogIn,
+  UserPlus,
+  Users,
+  Award,
 } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
+
+const hackathons = [
+  { name: 'MLH Hackathons', description: 'Major League Hacking — official student hackathons', href: 'https://mlh.io/seasons/2025/events', logo: '🏆' },
+  { name: 'Devfolio', description: "India's largest hackathon platform", href: 'https://devfolio.co/hackathons', logo: '⚡' },
+  { name: 'HackerEarth', description: 'Developer challenges & hackathons', href: 'https://www.hackerearth.com/hackathon/explore/', logo: '🌐' },
+  { name: 'Unstop', description: 'Competitions, hackathons & challenges', href: 'https://unstop.com/hackathons', logo: '🚀' },
+  { name: 'Devpost', description: 'The home of virtual hackathons', href: 'https://devpost.com/hackathons', logo: '💻' },
+]
+
+const mentorFeatures = [
+  { name: 'Become an Instructor', description: 'Share your expertise, teach thousands', href: '/mentor/apply', icon: GraduationCap },
+  { name: 'Create a Course', description: 'Build interactive courses and tutorials', href: '/mentor/create-course', icon: PlusCircle },
+  { name: 'Manage Students', description: 'Track progress, grade and mentor learners', href: '/mentor/students', icon: Users },
+  { name: 'Instructor Dashboard', description: 'Analytics, earnings, and course insights', href: '/mentor/dashboard', icon: BarChart3 },
+  { name: 'Teaching Resources', description: 'Templates, guides, and best practices', href: '/mentor/resources', icon: BookMarked },
+  { name: 'Certification Issuing', description: 'Award certificates to your learners', href: '/mentor/certificates', icon: Award },
+]
+
+type MenuKey = 'tutorials' | 'hackathon' | 'mentor' | 'getin' | null
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [tutorialsExpanded, setTutorialsExpanded] = useState(false)
   const [expandedDomain, setExpandedDomain] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [openMenu, setOpenMenu] = useState<MenuKey>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pathname = usePathname()
   const { user, logout } = useAuth()
   const allDomains = getAllDomains()
+
+  const openHover = (key: MenuKey) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setOpenMenu(key)
+  }
+  const closeHover = () => {
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 120)
+  }
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 10)
@@ -58,103 +85,238 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [handleScroll])
 
-  useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [pathname])
+  useEffect(() => { setMobileMenuOpen(false) }, [pathname])
 
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileMenuOpen])
 
-  const mainNavigation = [
-    { name: 'Tutorials', href: '/tutorials', icon: BookOpen, isMega: true },
-    { name: 'Tracks', href: '/learning-tracks', icon: Map },
-    { name: 'Academy', href: '/mentors', icon: GraduationCap },
-    { name: 'Q&A', href: '/qna', icon: MessageSquare },
-    { name: 'Dev Portal', href: '/dev', icon: GitBranch },
-    { name: 'Courses', href: '/courses', icon: Play, badge: 'Soon' },
-  ]
-
-  const secondaryNavigation = [
-    { name: 'Daily Quiz', href: '/daily-quiz', icon: Zap, isHighlight: false },
-    { name: 'Certificates', href: '/certificates', icon: Award },
-    { name: 'Premium', href: '/premium', icon: Sparkles, isHighlight: true },
-    { name: 'Community', href: '/community', icon: Users },
-  ]
+  const navLinkCls = (active: boolean) =>
+    `relative flex items-center gap-1 px-4 h-full text-[13px] font-bold transition-colors duration-150 border-b-2 ${
+      active
+        ? 'text-foreground border-foreground'
+        : 'text-foreground/60 border-transparent hover:text-foreground'
+    }`
 
   return (
     <>
-    <>
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
-          ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
-          : 'bg-background/80 backdrop-blur-md border-b border-transparent'
-          }`}
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          scrolled
+            ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
+            : 'bg-background/80 backdrop-blur-md border-b border-transparent'
+        }`}
       >
-        {/* Top Bar: Brand, Search, Auth */}
-        <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
-          <div className="flex items-center gap-6 flex-1">
-            <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25 group-hover:shadow-primary/40 group-hover:scale-105 transition-all duration-200">
-                <span className="text-lg font-bold text-primary-foreground">BL</span>
-              </div>
-              <span className="hidden sm:block font-black text-xl tracking-tighter">
-                BLUELEARNERHUB
-              </span>
-            </Link>
+        <div className="mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
 
-            {/* Psychological Attraction: Centralized Search */}
-            <div className="hidden md:flex flex-1 max-w-xl relative group">
-              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                <Zap className="h-4 w-4 text-primary group-focus-within:animate-pulse" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search tutorials, courses, or documentation..."
-                className="w-full pl-10 h-10 bg-muted/30 border-border/50 rounded-2xl focus-visible:ring-primary/30 focus-visible:border-primary transition-all text-sm"
-              />
-              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                <span className="text-[10px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded border border-border/50">⌘K</span>
-              </div>
+          {/* Brand */}
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0 mr-6">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25 group-hover:scale-105 transition-all duration-200">
+              <span className="text-sm font-black text-primary-foreground">BL</span>
             </div>
-          </div>
+            <span className="hidden sm:block font-black text-[15px] tracking-tighter">
+              BLUELEARNERHUB
+            </span>
+          </Link>
 
-          <div className="flex items-center gap-4">
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center h-14 flex-1 gap-0">
+
+            {/* Tutorials — hover mega menu */}
+            <div
+              className="relative h-full"
+              onMouseEnter={() => openHover('tutorials')}
+              onMouseLeave={closeHover}
+            >
+              <button className={navLinkCls(!!pathname?.startsWith('/tutorials'))}>
+                <BookOpen className="h-3.5 w-3.5 opacity-60" />
+                Tutorials
+                <ChevronDown className={`h-3 w-3 opacity-40 transition-transform duration-200 ${openMenu === 'tutorials' ? 'rotate-180' : ''}`} />
+              </button>
+              {openMenu === 'tutorials' && (
+                <div
+                  className="absolute top-full left-0 mt-0 w-[780px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl p-8 z-50"
+                  onMouseEnter={() => openHover('tutorials')}
+                  onMouseLeave={closeHover}
+                >
+                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-6">Browse by Domain</p>
+                  <div className="grid grid-cols-3 gap-x-10 gap-y-8">
+                    {allDomains.map((domain) => (
+                      <div key={domain.id} className="space-y-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{domain.icon}</span>
+                          <span className="text-[12px] font-black text-foreground">{domain.name}</span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          {domain.categories.slice(0, 5).map((cat) => (
+                            <Link
+                              key={cat}
+                              href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+                              className="text-[12px] text-muted-foreground hover:text-foreground transition-colors py-0.5"
+                              onClick={() => setOpenMenu(null)}
+                            >
+                              {cat}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-8 pt-6 border-t border-border/40 flex gap-4">
+                    <Link href="/ide" className="flex items-center gap-2 text-[12px] font-bold text-muted-foreground hover:text-foreground transition-colors" onClick={() => setOpenMenu(null)}>
+                      <Code2 className="h-4 w-4" /> IDE Sandbox
+                    </Link>
+                    <Link href="/tools" className="flex items-center gap-2 text-[12px] font-bold text-muted-foreground hover:text-foreground transition-colors" onClick={() => setOpenMenu(null)}>
+                      <Hammer className="h-4 w-4" /> Tools
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Courses — coming soon */}
+            <div className="relative h-full flex items-center">
+              <span className={`${navLinkCls(false)} opacity-50 cursor-not-allowed`}>
+                Courses
+                <span className="ml-1.5 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tight bg-foreground/10 text-foreground/50 rounded">
+                  Soon
+                </span>
+              </span>
+            </div>
+
+            {/* Hackathon — hover panel */}
+            <div
+              className="relative h-full"
+              onMouseEnter={() => openHover('hackathon')}
+              onMouseLeave={closeHover}
+            >
+              <button className={navLinkCls(!!pathname?.startsWith('/hackathon'))}>
+                Hackathon
+                <ChevronDown className={`h-3 w-3 opacity-40 transition-transform duration-200 ${openMenu === 'hackathon' ? 'rotate-180' : ''}`} />
+              </button>
+              {openMenu === 'hackathon' && (
+                <div
+                  className="absolute top-full left-0 mt-0 w-[400px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl p-6 z-50"
+                  onMouseEnter={() => openHover('hackathon')}
+                  onMouseLeave={closeHover}
+                >
+                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">External Platforms</p>
+                  <div className="flex flex-col gap-1">
+                    {hackathons.map((h) => (
+                      <a
+                        key={h.name}
+                        href={h.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all"
+                        onClick={() => setOpenMenu(null)}
+                      >
+                        <span className="text-xl shrink-0 mt-0.5">{h.logo}</span>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[13px] font-bold text-foreground group-hover:text-primary transition-colors">{h.name}</span>
+                            <ExternalLink className="h-3 w-3 text-muted-foreground/60 group-hover:text-primary transition-colors" />
+                          </div>
+                          <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{h.description}</p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mentor — hover panel (W3Schools teacher style) */}
+            <div
+              className="relative h-full"
+              onMouseEnter={() => openHover('mentor')}
+              onMouseLeave={closeHover}
+            >
+              <button className={navLinkCls(!!pathname?.startsWith('/mentor'))}>
+                Mentor
+                <ChevronDown className={`h-3 w-3 opacity-40 transition-transform duration-200 ${openMenu === 'mentor' ? 'rotate-180' : ''}`} />
+              </button>
+              {openMenu === 'mentor' && (
+                <div
+                  className="absolute top-full left-0 mt-0 w-[480px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  onMouseEnter={() => openHover('mentor')}
+                  onMouseLeave={closeHover}
+                >
+                  {/* Header banner */}
+                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 border border-primary/20">
+                      <GraduationCap className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-black text-foreground">Teach on Bluelearnerhub</p>
+                      <p className="text-[11px] text-muted-foreground">Join thousands of instructors worldwide</p>
+                    </div>
+                    <Link
+                      href="/mentor/apply"
+                      className="ml-auto shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-black hover:bg-primary/90 transition-all"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      Start Teaching <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                  {/* Feature grid */}
+                  <div className="p-4 grid grid-cols-2 gap-1">
+                    {mentorFeatures.map((f) => {
+                      const Icon = f.icon
+                      return (
+                        <Link
+                          key={f.name}
+                          href={f.href}
+                          className="group flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all"
+                          onClick={() => setOpenMenu(null)}
+                        >
+                          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 group-hover:bg-primary/10 transition-colors">
+                            <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                          </div>
+                          <div>
+                            <p className="text-[12px] font-bold text-foreground group-hover:text-primary transition-colors leading-tight">{f.name}</p>
+                            <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{f.description}</p>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            {/* Mobile hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-muted/50 active:scale-95 transition-all"
+              className="lg:hidden flex items-center justify-center h-9 w-9 rounded-xl hover:bg-muted/50 active:scale-95 transition-all"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
             {user ? (
+              /* Logged-in user avatar dropdown */
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2 px-1.5 py-1.5 rounded-xl hover:bg-muted/50 focus:outline-none transition-all group">
                     <div className="relative">
-                      <Avatar className="h-9 w-9 border-2 border-transparent group-hover:border-primary/50 transition-all">
+                      <Avatar className="h-8 w-8 border-2 border-transparent group-hover:border-primary/50 transition-all">
                         <AvatarImage src={user.profilePicture} />
-                        <AvatarFallback className="bg-primary/10 text-primary text-sm font-bold">
+                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                           {user.fullName?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-primary border-2 border-background rounded-full" />
+                      <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 bg-primary border-2 border-background rounded-full" />
                     </div>
-                    <ChevronDown className="hidden sm:block h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                    <ChevronDown className="hidden sm:block h-3 w-3 text-muted-foreground group-hover:text-foreground transition-colors" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-xl border-border/50">
-                  <DropdownMenuLabel className="font-semibold text-primary text-xs uppercase tracking-wider">Account</DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-52 rounded-xl shadow-xl border-border/50">
+                  <DropdownMenuLabel className="font-semibold text-primary text-[10px] uppercase tracking-wider">Account</DropdownMenuLabel>
                   <div className="px-2 pb-2">
                     <p className="text-sm font-medium leading-none">{user.fullName}</p>
                     <p className="text-xs text-muted-foreground mt-1 truncate">{user.email}</p>
@@ -167,132 +329,63 @@ export default function Header() {
                     <Link href="/dashboard"><Trophy className="mr-2 h-4 w-4" />Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={logout}
-                    className="rounded-lg text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
-                  >
+                  <DropdownMenuItem onClick={logout} className="rounded-lg text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/login"
-                  className="hidden sm:block text-sm font-bold text-foreground/70 hover:text-primary transition-colors px-3 py-2"
-                >
-                  Log In
-                </Link>
-                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 font-black px-6 h-10 text-xs uppercase tracking-widest rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all group">
-                  <Link href="/login" className="flex items-center gap-2">
-                    Get Started
-                  </Link>
-                </Button>
+              /* "Get In" hover dropdown — Sign In / Sign Up */
+              <div
+                className="relative hidden lg:block"
+                onMouseEnter={() => openHover('getin')}
+                onMouseLeave={closeHover}
+              >
+                <button className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-[13px] font-black hover:bg-primary/90 transition-all active:scale-[0.98]">
+                  Get In
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${openMenu === 'getin' ? 'rotate-180' : ''}`} />
+                </button>
+                {openMenu === 'getin' && (
+                  <div
+                    className="absolute top-full right-0 mt-1.5 w-52 bg-background/98 backdrop-blur-xl border border-border/60 rounded-2xl shadow-2xl overflow-hidden z-50"
+                    onMouseEnter={() => openHover('getin')}
+                    onMouseLeave={closeHover}
+                  >
+                    <Link
+                      href="/login"
+                      className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors group border-b border-border/40"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 group-hover:bg-primary/10 transition-colors">
+                        <LogIn className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-bold text-foreground group-hover:text-primary transition-colors">Sign In</p>
+                        <p className="text-[11px] text-muted-foreground">Already have an account</p>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/get-started"
+                      className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors group"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 group-hover:bg-primary/10 transition-colors">
+                        <UserPlus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-bold text-foreground group-hover:text-primary transition-colors">Sign Up</p>
+                        <p className="text-[11px] text-muted-foreground">Create a free account</p>
+                      </div>
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
-
-        {/* Sub-Navbar: Navigation (W3Schools Style) */}
-        <nav className="hidden lg:flex border-t border-border/30 h-12 bg-muted/10">
-          <div className="mx-auto flex h-full items-center px-4 sm:px-6 lg:px-8 max-w-[1400px] w-full gap-1 overflow-x-auto scrollbar-hide">
-            {mainNavigation.map((item) => {
-              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
-
-              if (item.isMega) {
-                return (
-                  <DropdownMenu key={item.name}>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        className={`relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold transition-all duration-200 focus:outline-none border-b-2 ${isActive
-                          ? 'text-primary border-primary bg-primary/5'
-                          : 'text-foreground/70 border-transparent hover:text-foreground hover:bg-muted/50'
-                          }`}
-                      >
-                        {item.name}
-                        <ChevronDown className="h-3.5 w-3.5 opacity-50" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="start"
-                      sideOffset={0}
-                      className="w-[90vw] max-w-[1200px] p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 rounded-b-2xl rounded-t-none shadow-2xl border-border/50 bg-background/95 backdrop-blur-xl"
-                    >
-                      {allDomains.map((domain) => (
-                        <div key={domain.id} className="space-y-4">
-                          <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-bold text-foreground">
-                            <span className="text-lg">{domain.icon}</span>
-                            {domain.name}
-                          </DropdownMenuLabel>
-                          <div className="flex flex-col gap-1.5">
-                            {domain.categories.slice(0, 6).map((category) => (
-                              <Link
-                                key={category}
-                                href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                                className="text-[13px] text-muted-foreground hover:text-primary transition-colors py-0.5"
-                              >
-                                {category}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                      <div className="space-y-4 border-l border-border/50 pl-10 ml-2">
-                        <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-black text-primary uppercase tracking-widest">
-                          Deep Dive
-                        </DropdownMenuLabel>
-                        <div className="flex flex-col gap-3">
-                          <Link href="/ide" className="group flex items-center gap-3 p-2 rounded-xl hover:bg-primary/5 transition-all">
-                            <Code2 className="h-4 w-4 text-primary" />
-                            <span className="text-[13px] font-bold">IDE Sandbox</span>
-                          </Link>
-                          <Link href="/tools" className="group flex items-center gap-3 p-2 rounded-xl hover:bg-primary/5 transition-all">
-                            <Hammer className="h-4 w-4 text-primary" />
-                            <span className="text-[13px] font-bold">Tools</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )
-              }
-
-              return (
-                <Link
-                  key={item.name}
-                  href={item.badge ? '#' : item.href}
-                  className={`relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold transition-all duration-200 border-b-2 ${isActive
-                    ? 'text-primary border-primary bg-primary/5'
-                    : 'text-foreground/70 border-transparent hover:text-foreground hover:bg-muted/50'
-                    } ${item.badge ? 'cursor-not-allowed opacity-50' : ''}`}
-                >
-                  {item.name}
-                  {item.badge && (
-                    <span className="px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter bg-primary/10 text-primary rounded-sm">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              )
-            })}
-            <div className="flex-1" />
-            {secondaryNavigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`px-4 h-full text-[12px] font-bold transition-all duration-200 flex items-center gap-2 ${item.isHighlight
-                  ? 'text-primary hover:bg-primary/10'
-                  : 'text-foreground/60 hover:text-foreground hover:bg-muted/50'
-                  }`}
-              >
-                {item.isHighlight && <Sparkles className="h-3.5 w-3.5" />}
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </nav>
       </header>
 
+      {/* Mobile backdrop */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
@@ -301,136 +394,122 @@ export default function Header() {
         />
       )}
 
+      {/* Mobile drawer */}
       <div
-        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b border-border/50">
-            <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileMenuOpen(false)}>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
-                <span className="text-sm font-bold text-white">BL</span>
+            <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
+                <span className="text-sm font-black text-primary-foreground">BL</span>
               </div>
-              <span className="font-bold text-lg tracking-tight">Bluelearnerhub</span>
+              <span className="font-black text-[15px] tracking-tighter">Bluelearnerhub</span>
             </Link>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center h-10 w-10 rounded-xl hover:bg-muted/50 active:scale-95 transition-all"
-              aria-label="Close menu"
-            >
+            <button onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center h-9 w-9 rounded-xl hover:bg-muted/50 transition-all" aria-label="Close">
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto py-4">
-            <div className="px-3 mb-2">
-              <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Learn</p>
-              {mainNavigation.map((item) => {
-                const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
-
-                if (item.isMega) {
-                  return (
-                    <div key={item.name} className="flex flex-col">
-                      <button
-                        onClick={() => setTutorialsExpanded(!tutorialsExpanded)}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${tutorialsExpanded || isActive
-                          ? 'text-primary bg-primary/10'
-                          : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
-                          }`}
-                      >
-                        <item.icon className="h-5 w-5" />
-                        {item.name}
-                        <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${tutorialsExpanded ? 'rotate-180' : ''}`} />
-                      </button>
-
-                      {tutorialsExpanded && (
-                        <div className="pl-4 mt-1 space-y-1 mb-2">
-                          {allDomains.map((domain) => (
-                            <div key={domain.id} className="flex flex-col">
-                              <button
-                                onClick={() => setExpandedDomain(expandedDomain === domain.id ? null : domain.id)}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${expandedDomain === domain.id ? 'text-primary font-bold' : 'text-foreground/70'
-                                  }`}
-                              >
-                                <span>{domain.icon}</span>
-                                {domain.name}
-                                <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${expandedDomain === domain.id ? 'rotate-180' : ''}`} />
-                              </button>
-
-                              {expandedDomain === domain.id && (
-                                <div className="pl-8 flex flex-col gap-1 py-1">
-                                  {domain.categories.map((category) => (
-                                    <Link
-                                      key={category}
-                                      href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                                      onClick={() => setMobileMenuOpen(false)}
-                                      className="text-xs text-muted-foreground hover:text-primary py-1.5"
-                                    >
-                                      {category}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.badge ? '#' : item.href}
-                    onClick={() => !item.badge && setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
-                      ? 'text-primary bg-primary/10'
-                      : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
-                      } ${item.badge ? 'opacity-60 cursor-not-allowed' : ''}`}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    {item.name}
-                    {item.badge && (
-                      <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-500 rounded-md">
-                        {item.badge}
-                      </span>
+          <div className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
+            {/* Tutorials accordion */}
+            <button
+              onClick={() => setTutorialsExpanded(!tutorialsExpanded)}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold text-foreground/80 hover:bg-muted/50 transition-all"
+            >
+              <BookOpen className="h-5 w-5 shrink-0" />
+              Tutorials
+              <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${tutorialsExpanded ? 'rotate-180' : ''}`} />
+            </button>
+            {tutorialsExpanded && (
+              <div className="pl-3 space-y-0.5">
+                {allDomains.map((domain) => (
+                  <div key={domain.id}>
+                    <button
+                      onClick={() => setExpandedDomain(expandedDomain === domain.id ? null : domain.id)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-foreground/70 hover:bg-muted/40 transition-all font-medium"
+                    >
+                      <span className="text-base">{domain.icon}</span>
+                      {domain.name}
+                      <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${expandedDomain === domain.id ? 'rotate-180' : ''}`} />
+                    </button>
+                    {expandedDomain === domain.id && (
+                      <div className="pl-9 flex flex-col gap-0.5 pb-1">
+                        {domain.categories.map((cat) => (
+                          <Link
+                            key={cat}
+                            href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="text-xs text-muted-foreground hover:text-foreground py-1.5 transition-colors"
+                          >
+                            {cat}
+                          </Link>
+                        ))}
+                      </div>
                     )}
-                    {isActive && <div className="ml-auto h-2 w-2 rounded-full bg-primary" />}
-                  </Link>
-                )
-              })}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Courses */}
+            <div className="flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold text-foreground/40 cursor-not-allowed">
+              Courses
+              <span className="ml-1 px-1.5 py-0.5 text-[9px] font-black uppercase bg-foreground/10 text-foreground/40 rounded">Soon</span>
             </div>
 
-            <div className="px-3 mb-2">
-              <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 mt-4">Explore</p>
-              {secondaryNavigation.map((item) => {
-                const isActive = pathname === item.href
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-medium transition-all ${isActive
-                      ? 'text-primary bg-primary/10'
-                      : 'text-foreground/80 hover:bg-muted/50 active:bg-muted'
-                      }`}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    {item.name}
-                    {isActive && <div className="ml-auto h-2 w-2 rounded-full bg-primary" />}
-                  </Link>
-                )
-              })}
-            </div>
+            {/* Hackathon */}
+            <button
+              onClick={() => setExpandedDomain(expandedDomain === 'hackathon' ? null : 'hackathon')}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold text-foreground/80 hover:bg-muted/50 transition-all"
+            >
+              Hackathon
+              <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${expandedDomain === 'hackathon' ? 'rotate-180' : ''}`} />
+            </button>
+            {expandedDomain === 'hackathon' && (
+              <div className="pl-3 space-y-0.5">
+                {hackathons.map((h) => (
+                  <a key={h.name} href={h.href} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all font-medium">
+                    <span>{h.logo}</span> {h.name} <ExternalLink className="ml-auto h-3 w-3 opacity-40" />
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Mentor */}
+            <button
+              onClick={() => setExpandedDomain(expandedDomain === 'mentor' ? null : 'mentor')}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold text-foreground/80 hover:bg-muted/50 transition-all"
+            >
+              <GraduationCap className="h-5 w-5 shrink-0" />
+              Mentor
+              <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${expandedDomain === 'mentor' ? 'rotate-180' : ''}`} />
+            </button>
+            {expandedDomain === 'mentor' && (
+              <div className="pl-3 space-y-0.5">
+                {mentorFeatures.map((f) => {
+                  const Icon = f.icon
+                  return (
+                    <Link key={f.name} href={f.href} onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all font-medium">
+                      <Icon className="h-4 w-4 shrink-0" /> {f.name}
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
-          <div className="p-4 border-t border-border/50">
+          {/* Bottom auth */}
+          <div className="p-4 border-t border-border/50 space-y-2">
             {user ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
-                <Avatar className="h-10 w-10 border-2 border-primary/30">
+                <Avatar className="h-9 w-9 border-2 border-primary/30">
                   <AvatarImage src={user.profilePicture} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                  <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
                     {user.fullName?.charAt(0) || 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -440,14 +519,22 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
-                <Button asChild className="w-full bg-primary text-white hover:bg-primary/90 font-bold h-12 rounded-xl shadow-lg shadow-primary/20 active:scale-[0.98] transition-all group">
-                  <Link href="/get-started" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 w-full">
-                    Get Started
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </div>
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full h-11 rounded-xl border border-border/60 text-sm font-bold text-foreground/80 hover:bg-muted/50 transition-all"
+                >
+                  <LogIn className="h-4 w-4" /> Sign In
+                </Link>
+                <Link
+                  href="/get-started"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-black hover:bg-primary/90 transition-all active:scale-[0.98]"
+                >
+                  <UserPlus className="h-4 w-4" /> Sign Up
+                </Link>
+              </>
             )}
           </div>
         </div>

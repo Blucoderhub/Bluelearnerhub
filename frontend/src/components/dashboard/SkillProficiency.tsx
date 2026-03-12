@@ -14,15 +14,15 @@ interface DomainSkill {
 }
 
 const domainSkills: DomainSkill[] = [
-  { name: 'Computer Science', rank: 42, total: 15400, percentile: 99.7, icon: Zap, color: 'text-amber-500' },
-  { name: 'Mechanical', rank: 890, total: 8200, percentile: 89.1, icon: Star, color: 'text-orange-500' },
-  { name: 'Data Science', rank: 120, total: 12000, percentile: 99.0, icon: TrendingUp, color: 'text-blue-500' },
+  { name: 'Computer Science', rank: 42, total: 15400, percentile: 99.7, icon: Zap, color: 'text-foreground/80' },
+  { name: 'Mechanical', rank: 890, total: 8200, percentile: 89.1, icon: Star, color: 'text-foreground/80' },
+  { name: 'Data Science', rank: 120, total: 12000, percentile: 99.0, icon: TrendingUp, color: 'text-primary/80' },
 ];
 
 export const SkillProficiency = () => {
   return (
-    <div className="p-6 rounded-[2.5rem] bg-slate-950 border border-slate-800 shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
+    <div className="p-6 rounded-[2.5rem] bg-background border border-border shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
       
       <div className="flex items-center gap-2 mb-6">
         <Trophy className="w-5 h-5 text-[var(--xp-gold)]" />
@@ -45,7 +45,7 @@ export const SkillProficiency = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-black text-amber-400">{skill.percentile}%</p>
+                  <p className="text-xl font-black text-foreground/70">{skill.percentile}%</p>
                   <p className="text-[10px] font-black text-white/20 uppercase tracking-tight">Percentile</p>
                 </div>
               </div>
@@ -54,7 +54,7 @@ export const SkillProficiency = () => {
                   initial={{ width: 0 }}
                   animate={{ width: `${skill.percentile}%` }}
                   transition={{ duration: 1, delay: 0.2 + i * 0.1 }}
-                  className="h-full bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_10px_rgba(59,130,246,0.35)]"
+                  className="h-full bg-gradient-to-r from-primary to-primary/80 shadow-[0_0_10px_rgba(59,130,246,0.35)]"
                 />
               </div>
             </div>
@@ -62,7 +62,7 @@ export const SkillProficiency = () => {
         })}
       </div>
 
-      <button className="w-full mt-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black text-white uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all">
+      <button className="w-full mt-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black text-white uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
         VIEW_ALL_DOMAINS
       </button>
     </div>

@@ -109,29 +109,29 @@ export default function DailyQuizPage() {
             <div className="relative flex min-h-[70vh] items-center justify-center overflow-hidden">
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
-                    <div className="absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl" />
+                    <div className="absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
                 </div>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative max-w-md w-full text-center space-y-6 rounded-3xl border border-white/10 bg-slate-950/50 p-8 shadow-[0_24px_90px_rgba(8,47,73,0.35)] backdrop-blur-xl"
+                    className="relative max-w-md w-full text-center space-y-6 rounded-3xl border border-white/10 bg-background/50 p-8 shadow-[0_24px_90px_rgba(8,47,73,0.35)] backdrop-blur-xl"
                 >
                     <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20 animate-pulse">
                         <Brain className="w-10 h-10 text-primary" />
                     </div>
                     <h1 className="text-4xl font-black italic text-white italic tracking-tighter">DAILY <span className="text-primary ai-glow">BRAIN_HACK</span></h1>
-                    <p className="text-slate-400">
+                    <p className="text-muted-foreground">
                         5 AI-generated challenges tailored to your Level and Domain. Earn XP and protect your daily streak.
                     </p>
                     <div className="flex flex-col gap-3 pt-4">
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800">
-                            <span className="text-xs text-slate-500 uppercase font-bold">Reward</span>
-                            <span className="text-xs text-amber-400 font-black">+100 XP</span>
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-card/50 border border-border">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Reward</span>
+                            <span className="text-xs text-foreground/70 font-black">+100 XP</span>
                         </div>
-                        <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800">
-                            <span className="text-xs text-slate-500 uppercase font-bold">Time Limit</span>
-                            <span className="text-xs text-orange-400 font-black">2 Minutes</span>
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-card/50 border border-border">
+                            <span className="text-xs text-muted-foreground uppercase font-bold">Time Limit</span>
+                            <span className="text-xs text-foreground/70 font-black">2 Minutes</span>
                         </div>
                     </div>
                     {adaptiveGuidance.length > 0 && (
@@ -163,11 +163,11 @@ export default function DailyQuizPage() {
         return (
             <div className="relative max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
                 <div className="pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
-                <div className="pointer-events-none absolute -right-20 top-40 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-40 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
                 <div className="relative flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md py-4 z-10 border-b border-white/5">
                     <div className="flex items-center gap-4">
                         <Badge variant="outline" className="text-primary font-mono">{currentQuestionIndex + 1} / {questions.length}</Badge>
-                        <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono">
                             <Timer className="w-3 h-3" />
                             <span className={timeLeft < 30 ? 'text-red-400 animate-pulse' : ''}>
                                 {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}
@@ -175,7 +175,7 @@ export default function DailyQuizPage() {
                         </div>
                     </div>
                     <div className="w-48">
-                        <Progress value={progress} className="h-1.5 bg-slate-800" />
+                        <Progress value={progress} className="h-1.5 bg-secondary" />
                     </div>
                 </div>
 
@@ -190,7 +190,7 @@ export default function DailyQuizPage() {
                     </div>
                 )}
 
-                <Card className="relative overflow-hidden border border-white/10 bg-slate-950/55 shadow-[0_28px_80px_rgba(2,6,23,0.55)] ring-1 ring-blue-400/15 backdrop-blur-xl">
+                <Card className="relative overflow-hidden border border-white/10 bg-background/55 shadow-[0_28px_80px_rgba(2,6,23,0.55)] ring-1 ring-blue-400/15 backdrop-blur-xl">
                     <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
                     <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-blue-500/10 to-transparent" />
                     <CardHeader className="space-y-4">
@@ -211,21 +211,21 @@ export default function DailyQuizPage() {
                                     aria-pressed={selectedAnswer === option}
                                     className={`flex w-full items-center gap-3 p-4 rounded-xl border text-left transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 ${selectedAnswer === option
                                         ? 'bg-primary/10 border-primary shadow-[0_0_15px_rgba(var(--primary),0.1)]'
-                                        : 'bg-slate-950/40 border-slate-800 hover:border-slate-700'
+                                        : 'bg-background/40 border-border hover:border-border'
                                         }`}
                                 >
-                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${selectedAnswer === option ? 'border-primary bg-primary text-primary-foreground' : 'border-slate-700'
+                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${selectedAnswer === option ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
                                         }`}>
                                         {selectedAnswer === option && <div className="w-2 h-2 rounded-full bg-white" />}
                                     </div>
-                                    <span className={`text-sm ${selectedAnswer === option ? 'text-white font-medium' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                    <span className={`text-sm ${selectedAnswer === option ? 'text-white font-medium' : 'text-muted-foreground group-hover:text-foreground'}`}>
                                         {option}
                                     </span>
                                 </button>
                             ))}
                         </div>
                     </CardContent>
-                    <CardFooter className="flex justify-end p-6 bg-slate-950/20 border-t border-slate-800">
+                    <CardFooter className="flex justify-end p-6 bg-background/20 border-t border-border">
                         <Button
                             disabled={!selectedAnswer}
                             onClick={handleNext}
@@ -246,7 +246,7 @@ export default function DailyQuizPage() {
             <div className="relative flex items-center justify-center min-h-[70vh] overflow-hidden">
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-500/15 blur-3xl" />
-                    <div className="absolute -right-16 bottom-4 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl" />
+                    <div className="absolute -right-16 bottom-4 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
                 </div>
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -254,25 +254,25 @@ export default function DailyQuizPage() {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="max-w-md w-full"
                 >
-                    <Card className="relative overflow-hidden border border-white/10 bg-slate-950/70 text-center shadow-[0_28px_80px_rgba(2,6,23,0.6)] backdrop-blur-xl">
+                    <Card className="relative overflow-hidden border border-white/10 bg-background/70 text-center shadow-[0_28px_80px_rgba(2,6,23,0.6)] backdrop-blur-xl">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-500/10 to-transparent" />
                         <CardHeader>
                             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
-                                <Trophy className={`w-10 h-10 ${isSuccess ? 'text-yellow-400' : 'text-slate-400'}`} />
+                                <Trophy className={`w-10 h-10 ${isSuccess ? 'text-yellow-400' : 'text-muted-foreground'}`} />
                             </div>
                             <CardTitle className="text-3xl font-black italic tracking-tighter">CHALLENGE <span className="text-primary truncate">REPORT</span></CardTitle>
                             <CardDescription>Performance assessment complete</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-                                    <p className="text-xs text-slate-500 uppercase font-bold mb-1">Score</p>
-                                    <p className="text-2xl font-black text-white">{score} <span className="text-xs text-slate-600">/ {questions.length}</span></p>
+                                <div className="p-4 rounded-xl bg-card border border-border">
+                                    <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Score</p>
+                                    <p className="text-2xl font-black text-white">{score} <span className="text-xs text-muted-foreground">/ {questions.length}</span></p>
                                 </div>
-                                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-                                    <p className="text-xs text-slate-500 uppercase font-bold mb-1">XP Earned</p>
-                                    <p className="text-2xl font-black text-amber-400">+{score * 20}</p>
+                                <div className="p-4 rounded-xl bg-card border border-border">
+                                    <p className="text-xs text-muted-foreground uppercase font-bold mb-1">XP Earned</p>
+                                    <p className="text-2xl font-black text-foreground/70">+{score * 20}</p>
                                 </div>
                             </div>
 
@@ -280,7 +280,7 @@ export default function DailyQuizPage() {
                                 <Zap className="w-5 h-5 text-primary shrink-0" />
                                 <div>
                                     <p className="text-xs text-white font-bold">STREAK PROTECTED</p>
-                                    <p className="text-[10px] text-slate-400 uppercase">You're on a 5-day winning spree!</p>
+                                    <p className="text-[10px] text-muted-foreground uppercase">You're on a 5-day winning spree!</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -288,7 +288,7 @@ export default function DailyQuizPage() {
                             <Button asChild className="w-full bg-white text-black hover:bg-white/90 font-black h-12">
                                 <Link href="/student/dashboard">CONTINUE TO DASHBOARD</Link>
                             </Button>
-                            <Button variant="ghost" className="text-xs text-slate-500 hover:text-white">Review Detailed Explanation</Button>
+                            <Button variant="ghost" className="text-xs text-muted-foreground hover:text-white">Review Detailed Explanation</Button>
                         </CardFooter>
                     </Card>
                 </motion.div>

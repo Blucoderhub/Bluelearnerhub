@@ -73,8 +73,8 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* Legs crossed */}
-          <path d="M78 165 Q70 175 65 175 Q60 175 62 170" stroke="#1e293b" strokeWidth="6" strokeLinecap="round" fill="none" />
-          <path d="M102 165 Q110 175 115 175 Q120 175 118 170" stroke="#1e293b" strokeWidth="6" strokeLinecap="round" fill="none" />
+          <path d="M78 165 Q70 175 65 175 Q60 175 62 170" stroke="hsl(var(--secondary))" strokeWidth="6" strokeLinecap="round" fill="none" />
+          <path d="M102 165 Q110 175 115 175 Q120 175 118 170" stroke="hsl(var(--secondary))" strokeWidth="6" strokeLinecap="round" fill="none" />
 
           {/* Torso */}
           <path d="M82 135 Q90 128 100 135 L98 165 Q90 168 82 165 Z" fill="#8b5cf6" />
@@ -110,11 +110,11 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
               transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 3, times: [0, 0.05, 0.1] }}
               style={{ transformOrigin: '90px 113px' }}
             >
-              <ellipse cx="85" cy="113" rx="1.5" ry="2" fill="#1e293b" />
-              <ellipse cx="95" cy="113" rx="1.5" ry="2" fill="#1e293b" />
+              <ellipse cx="85" cy="113" rx="1.5" ry="2" fill="hsl(var(--secondary))" />
+              <ellipse cx="95" cy="113" rx="1.5" ry="2" fill="hsl(var(--secondary))" />
             </motion.g>
             {/* Content smile */}
-            <path d="M86 119 Q90 122 94 119" stroke="#1e293b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path d="M86 119 Q90 122 94 119" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
           </motion.g>
         </motion.g>
 

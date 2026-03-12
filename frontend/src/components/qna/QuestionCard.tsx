@@ -41,7 +41,7 @@ export default function QuestionCard({
           value={answerCount}
           label="answers"
           highlight={isAnswered}
-          icon={isAnswered ? <CheckCircle2 className="h-3 w-3 text-amber-500" /> : null}
+          icon={isAnswered ? <CheckCircle2 className="h-3 w-3 text-foreground/80" /> : null}
           highlightColor="emerald"
         />
         <Stat value={viewCount} label="views" />
@@ -51,7 +51,7 @@ export default function QuestionCard({
       <div className="flex-1 min-w-0">
         <Link
           href={`/qna/questions/${id}`}
-          className="block text-base font-semibold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors line-clamp-2"
+          className="block text-base font-semibold text-gray-900 group-hover:text-primary dark:text-white dark:group-hover:text-blue-400 transition-colors line-clamp-2"
         >
           {title}
         </Link>
@@ -107,7 +107,7 @@ function Stat({
       className={cn(
         'flex flex-col items-end rounded-lg px-2 py-1 text-right',
         highlight && highlightColor === 'blue'    && 'bg-blue-50 dark:bg-blue-950',
-        highlight && highlightColor === 'emerald' && 'bg-amber-50 dark:bg-amber-950',
+        highlight && highlightColor === 'emerald' && 'bg-secondary dark:bg-background',
       )}
     >
       <div className="flex items-center gap-1">
@@ -116,7 +116,7 @@ function Stat({
           className={cn(
             'text-base font-bold tabular-nums',
             highlight && highlightColor === 'blue'    && 'text-blue-700 dark:text-blue-300',
-            highlight && highlightColor === 'emerald' && 'text-amber-700 dark:text-amber-300',
+            highlight && highlightColor === 'emerald' && 'text-foreground dark:text-foreground/60',
             !highlight && 'text-gray-700 dark:text-gray-300',
           )}
         >

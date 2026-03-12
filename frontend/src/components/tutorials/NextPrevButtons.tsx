@@ -19,7 +19,7 @@ export default function NextPrevButtons({ prevLesson, nextLesson }: NextPrevButt
     >
       {prevLesson ? (
         <Link href={prevLesson}>
-          <button className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-blue-400 font-semibold transition-colors">
             ← Previous Lesson
           </button>
         </Link>
@@ -33,7 +33,7 @@ export default function NextPrevButtons({ prevLesson, nextLesson }: NextPrevButt
 
       {nextLesson ? (
         <Link href={nextLesson}>
-          <button className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-blue-400 font-semibold transition-colors">
             Next Lesson →
           </button>
         </Link>

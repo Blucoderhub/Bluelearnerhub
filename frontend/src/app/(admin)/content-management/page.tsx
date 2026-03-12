@@ -82,7 +82,7 @@ export default function ContentManagementPage() {
     return (
         <div className="space-y-10 pb-32 font-mono">
             {/* Header & Controls */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-slate-900/40 p-10 rounded-3xl border border-slate-800 glass-morphism relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-slate-900/40 p-10 rounded-3xl border border-border glass-morphism relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                     <Layers className="w-32 h-32" />
                 </div>
@@ -91,17 +91,17 @@ export default function ContentManagementPage() {
                     <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white uppercase">
                         CONTENT_OPS <span className="text-red-600 ai-glow">LEVEL_SYNC</span>
                     </h1>
-                    <p className="text-slate-500 font-bold uppercase text-[10px] tracking-widest leading-relaxed">
+                    <p className="text-muted-foreground font-bold uppercase text-[10px] tracking-widest leading-relaxed">
                         Architect, edit, and deploy global learning pathways. Manage domain-specific skill vectors and XP rewards.
                     </p>
                 </div>
 
                 <div className="flex gap-4 w-full md:w-auto relative z-10">
                     <div className="relative flex-1 md:w-80">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <Input
                             placeholder="Query content by title or ID..."
-                            className="bg-slate-950/80 border-slate-800 text-white h-12 pl-12 font-medium italic"
+                            className="bg-background/80 border-border text-white h-12 pl-12 font-medium italic"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -113,30 +113,30 @@ export default function ContentManagementPage() {
             </div>
 
             {/* Course List / Table View */}
-            <Card className="bg-slate-950/60 border-slate-900 overflow-hidden group">
+            <Card className="bg-background/60 border-slate-900 overflow-hidden group">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead className="bg-slate-900/50 border-b border-slate-800/50">
+                        <thead className="bg-card/50 border-b border-slate-800/50">
                             <tr>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Course_Entity</th>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Domain_Vector</th>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Inventory</th>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">XP_Stake</th>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Status_Flag</th>
-                                <th className="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-widest italic text-right">Access_Control</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Course_Entity</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Domain_Vector</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Inventory</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">XP_Stake</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">Status_Flag</th>
+                                <th className="px-6 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-widest italic text-right">Access_Control</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-900">
                             {courses.map((course) => (
-                                <tr key={course.id} className="hover:bg-slate-900/30 transition-all group/row">
+                                <tr key={course.id} className="hover:bg-card/30 transition-all group/row">
                                     <td className="px-6 py-6">
                                         <div className="space-y-1">
                                             <p className="text-[11px] font-black text-white uppercase italic tracking-tight">{course.title}</p>
-                                            <p className="text-[9px] text-slate-600 font-bold uppercase tracking-tighter">ID: {course.id} • Updated: {course.lastUpdated}</p>
+                                            <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-tighter">ID: {course.id} • Updated: {course.lastUpdated}</p>
                                         </div>
                                     </td>
                                     <td className="px-6 py-6 font-medium italic">
-                                        <Badge variant="outline" className="bg-slate-900 border-slate-800 text-[8px] font-black uppercase text-slate-400">
+                                        <Badge variant="outline" className="bg-card border-border text-[8px] font-black uppercase text-muted-foreground">
                                             {course.domain}
                                         </Badge>
                                     </td>
@@ -144,36 +144,36 @@ export default function ContentManagementPage() {
                                         <div className="flex gap-4">
                                             <div className="text-center">
                                                 <p className="text-[10px] font-black text-white tracking-widest">{course.modules}</p>
-                                                <p className="text-[7px] font-black text-slate-600 uppercase">MODS</p>
+                                                <p className="text-[7px] font-black text-muted-foreground uppercase">MODS</p>
                                             </div>
                                             <div className="text-center">
                                                 <p className="text-[10px] font-black text-white tracking-widest">{course.lessons}</p>
-                                                <p className="text-[7px] font-black text-slate-600 uppercase">LESSONS</p>
+                                                <p className="text-[7px] font-black text-muted-foreground uppercase">LESSONS</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-6">
-                                        <p className="text-[10px] font-black text-orange-500 italic tracking-widest">{course.xpValue.toLocaleString()}</p>
+                                        <p className="text-[10px] font-black text-foreground/80 italic tracking-widest">{course.xpValue.toLocaleString()}</p>
                                     </td>
                                     <td className="px-6 py-6">
                                         <div className="flex items-center gap-2">
                                             <span className={cn(
                                                 "w-2 h-2 rounded-full",
-                                                course.status === 'Published' ? 'bg-amber-500 shadow-[0_0_8px_rgba(59,130,246,0.45)]' :
-                                                    course.status === 'In Review' ? 'bg-orange-500' : 'bg-slate-700'
+                                                course.status === 'Published' ? 'bg-primary shadow-[0_0_8px_rgba(59,130,246,0.45)]' :
+                                                    course.status === 'In Review' ? 'bg-primary' : 'bg-muted'
                                             )} />
-                                            <span className="text-[9px] font-black uppercase italic text-slate-300 tracking-tighter">{course.status}</span>
+                                            <span className="text-[9px] font-black uppercase italic text-foreground/80 tracking-tighter">{course.status}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-6 text-right">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-row-hover:opacity-100 transition-opacity">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-white hover:bg-slate-800">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-secondary">
                                                 <Edit3 className="w-3.5 h-3.5" />
                                             </Button>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-blue-500 hover:bg-blue-500/10">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary/80 hover:bg-blue-500/10">
                                                 <Eye className="w-3.5 h-3.5" />
                                             </Button>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-500 hover:bg-red-500/10">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-500/10">
                                                 <Trash2 className="w-3.5 h-3.5" />
                                             </Button>
                                         </div>
@@ -195,12 +195,12 @@ export default function ContentManagementPage() {
                 </div>
                 <div className="space-y-2">
                     <h4 className="text-sm font-black italic text-white uppercase tracking-widest">AI_CURATOR_SYNC_REQD</h4>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest max-w-2xl leading-relaxed">
+                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest max-w-2xl leading-relaxed">
                         3 New course blueprints are pending Neural Review for domain-accuracy.
                         Recommended Action: Execute <span className="text-red-500">INIT_AI_VALIDATION_SEQUENCE</span> for all draft entities.
                     </p>
                 </div>
-                <Button className="ml-auto bg-slate-950 border border-slate-800 text-white hover:bg-slate-900 font-black italic uppercase text-[10px] h-12 px-8 tracking-[0.2em] transition-all">
+                <Button className="ml-auto bg-background border border-border text-white hover:bg-card font-black italic uppercase text-[10px] h-12 px-8 tracking-[0.2em] transition-all">
                     LAUNCH_SYNC
                 </Button>
             </div>

@@ -77,7 +77,7 @@ export default function NotebooksPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary/80" />
       </div>
     )
   }
@@ -86,14 +86,14 @@ export default function NotebooksPage() {
     <div className="relative max-w-6xl mx-auto px-4 py-8 overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
-        <div className="absolute -right-20 top-32 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute -right-20 top-32 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
       </div>
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <div className="flex items-center gap-3 mb-1">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Sparkles className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <Sparkles className="w-6 h-6 text-primary dark:text-blue-400" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Study Notebooks</h1>
           </div>
@@ -103,7 +103,7 @@ export default function NotebooksPage() {
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
         >
           <Plus className="w-4 h-4" />
           New Notebook
@@ -165,7 +165,7 @@ export default function NotebooksPage() {
                 <Button
                   type="submit"
                   disabled={creating || !form.title.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-white"
                 >
                   {creating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   Create Notebook
@@ -188,7 +188,7 @@ export default function NotebooksPage() {
           </p>
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
             Create your first notebook
@@ -246,7 +246,7 @@ export default function NotebooksPage() {
                     <FileText className="w-3.5 h-3.5" />
                     <span>{nb.sourceCount} {nb.sourceCount === 1 ? 'source' : 'sources'}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-blue-500 font-medium
+                  <div className="flex items-center gap-1 text-xs text-primary/80 font-medium
                                   group-hover:gap-2 transition-all">
                     Open
                     <ArrowRight className="w-3.5 h-3.5" />

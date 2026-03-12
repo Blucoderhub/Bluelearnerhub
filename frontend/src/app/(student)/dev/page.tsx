@@ -76,7 +76,7 @@ export default function DevPortalPage() {
             {[
               { label: 'Repositories', value: '48,200', icon: Folder, color: 'text-purple-400' },
               { label: 'Developers',   value: '12,800', icon: Users,  color: 'text-blue-400' },
-              { label: 'Stars Given',  value: '220K',   icon: Star,   color: 'text-amber-400' },
+              { label: 'Stars Given',  value: '220K',   icon: Star,   color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -109,7 +109,7 @@ export default function DevPortalPage() {
                     key={f}
                     onClick={() => setFilter(f)}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-                      filter === f ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
+                      filter === f ? 'bg-primary text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
                     }`}
                   >
                     {f === 'private' && <Lock className="h-3 w-3" />}
@@ -118,7 +118,7 @@ export default function DevPortalPage() {
                   </button>
                 ))}
                 <Link href="/dev/new">
-                  <Button size="sm" className="gap-1.5 bg-blue-700 hover:bg-blue-600 ml-1">
+                  <Button size="sm" className="gap-1.5 bg-primary/90 hover:bg-primary ml-1">
                     <Plus className="h-3.5 w-3.5" /> New
                   </Button>
                 </Link>
@@ -150,7 +150,7 @@ export default function DevPortalPage() {
                       <p className="text-xs font-medium text-blue-400 truncate">{r.name}</p>
                       <p className="text-[10px] text-gray-500">{r.lang}</p>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-amber-400">
+                    <div className="flex items-center gap-1 text-xs text-foreground/70">
                       <Star className="h-3 w-3" />{r.stars}
                     </div>
                   </div>

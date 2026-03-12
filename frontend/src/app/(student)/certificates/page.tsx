@@ -36,7 +36,7 @@ const MOCK_CERTS = [
     issuerName: 'BlueLearnerHub',
     skills: ['Machine Learning', 'FastAPI', 'System Design'],
     verificationUrl: '/certificates/verify/BLH-2026-HK-002D4E5F',
-    gradient: 'from-amber-500 to-orange-600',
+    gradient: 'from-primary to-primary/90',
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const MOCK_CERTS = [
     issuerName: 'BlueLearnerHub',
     skills: ['Python', 'scikit-learn', 'Neural Networks', 'Data Analysis'],
     verificationUrl: '/certificates/verify/BLH-2026-CR-003F6G7H',
-    gradient: 'from-amber-500 to-cyan-600',
+    gradient: 'from-primary to-cyan-600',
   },
 ];
 
@@ -99,7 +99,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
             Issued {format(new Date(cert.issuedAt), 'MMMM d, yyyy')} by {cert.issuerName}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <CheckCircle2 className="h-3.5 w-3.5 text-amber-500" />
+            <CheckCircle2 className="h-3.5 w-3.5 text-foreground/80" />
             Credential ID: <span className="font-mono text-gray-400">{cert.credentialId}</span>
           </div>
         </div>
@@ -119,7 +119,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
             </Button>
           </Link>
           <Button onClick={copyLink} variant="outline" size="sm" className="gap-1.5 border-gray-700 text-gray-300 hover:text-white text-xs">
-            {copied ? <Check className="h-3.5 w-3.5 text-amber-400" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3.5 w-3.5 text-foreground/70" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied' : 'Share'}
           </Button>
           <Button variant="outline" size="sm" className="gap-1.5 border-gray-700 text-gray-300 hover:text-white text-xs">
@@ -146,8 +146,8 @@ export default function CertificatesPage() {
         <div className="mx-auto max-w-5xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-2 flex items-center gap-2">
-              <Award className="h-5 w-5 text-amber-400" />
-              <span className="text-sm font-medium text-amber-400 uppercase tracking-wider">Credentials</span>
+              <Award className="h-5 w-5 text-foreground/70" />
+              <span className="text-sm font-medium text-foreground/70 uppercase tracking-wider">Credentials</span>
             </div>
             <h1 className="text-3xl font-bold">My Certificates</h1>
             <p className="mt-2 text-gray-400">Verifiable credentials for courses, tracks, and hackathon achievements.</p>
@@ -155,7 +155,7 @@ export default function CertificatesPage() {
 
           <div className="mt-6 flex gap-6">
             {[
-              { label: 'Earned',       value: MOCK_CERTS.length,                              icon: Award,        color: 'text-amber-400' },
+              { label: 'Earned',       value: MOCK_CERTS.length,                              icon: Award,        color: 'text-foreground/70' },
               { label: 'Course Certs', value: MOCK_CERTS.filter(c => c.type === 'course').length, icon: Sparkles, color: 'text-blue-400' },
               { label: 'Track Certs',  value: MOCK_CERTS.filter(c => c.type === 'track').length,  icon: Trophy,   color: 'text-purple-400' },
             ].map(({ label, value, icon: Icon, color }) => (
@@ -176,7 +176,7 @@ export default function CertificatesPage() {
             <h2 className="text-lg font-semibold text-gray-400 mb-2">No certificates yet</h2>
             <p className="text-sm text-gray-500 mb-6">Complete courses and tracks to earn verifiable certificates.</p>
             <Link href="/learning-tracks">
-              <Button className="bg-blue-600 hover:bg-blue-700">Browse Learning Tracks</Button>
+              <Button className="bg-primary hover:bg-primary/90">Browse Learning Tracks</Button>
             </Link>
           </div>
         ) : (

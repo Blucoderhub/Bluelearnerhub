@@ -76,14 +76,14 @@ export default function CelebrationCharacter({ className = '', size = 200 }: Cel
             transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '90px 155px' }}
           >
-            <path d="M90 155 L78 175 L75 180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" fill="none" />
+            <path d="M90 155 L78 175 L75 180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" fill="none" />
           </motion.g>
           <motion.g
             animate={{ rotate: [10, -10, 10] }}
             transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '110px 155px' }}
           >
-            <path d="M110 155 L122 175 L125 180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" fill="none" />
+            <path d="M110 155 L122 175 L125 180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" fill="none" />
           </motion.g>
 
           {/* Body */}
@@ -119,10 +119,10 @@ export default function CelebrationCharacter({ className = '', size = 200 }: Cel
             {/* Hair */}
             <path d="M85 97 Q88 84 100 82 Q112 84 115 97 Q112 90 100 89 Q88 90 85 97Z" fill="#7c3aed" />
             {/* Happy eyes - crescents */}
-            <path d="M92 101 Q95 98 98 101" stroke="#1e293b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-            <path d="M102 101 Q105 98 108 101" stroke="#1e293b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M92 101 Q95 98 98 101" stroke="hsl(var(--secondary))" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M102 101 Q105 98 108 101" stroke="hsl(var(--secondary))" strokeWidth="1.8" fill="none" strokeLinecap="round" />
             {/* Big smile */}
-            <path d="M93 108 Q100 115 107 108" stroke="#1e293b" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+            <path d="M93 108 Q100 115 107 108" stroke="hsl(var(--secondary))" strokeWidth="1.5" fill="none" strokeLinecap="round" />
             {/* Rosy cheeks */}
             <circle cx="90" cy="107" r="3" fill="#f472b6" opacity="0.3" />
             <circle cx="110" cy="107" r="3" fill="#f472b6" opacity="0.3" />

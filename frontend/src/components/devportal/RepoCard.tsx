@@ -57,7 +57,7 @@ export default function RepoCard({
             )}
             <Link
               href={`/dev/${ownerSlug}/${slug}`}
-              className="truncate text-base font-semibold text-blue-600 hover:underline dark:text-blue-400"
+              className="truncate text-base font-semibold text-primary hover:underline dark:text-blue-400"
             >
               {name}
             </Link>

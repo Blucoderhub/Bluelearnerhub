@@ -108,8 +108,8 @@ export function AIAssistant() {
                         exit={{ opacity: 0, scale: 0.8, y: 20 }}
                         className="mb-4 w-[350px] md:w-[450px] h-[600px]"
                     >
-                        <Card className="h-full flex flex-col bg-slate-900 border-slate-800 shadow-2xl overflow-hidden glass-morphism">
-                            <CardHeader className="p-4 border-b border-slate-800 flex flex-col gap-3 bg-slate-950/50">
+                        <Card className="h-full flex flex-col bg-card border-border shadow-2xl overflow-hidden glass-morphism">
+                            <CardHeader className="p-4 border-b border-border flex flex-col gap-3 bg-background/50">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
@@ -119,14 +119,14 @@ export function AIAssistant() {
                                             <CardTitle className="text-sm font-black italic text-white tracking-widest uppercase">
                                                 BlueAI_{persona}
                                             </CardTitle>
-                                            <p className="text-[9px] text-slate-500 font-bold uppercase">Real-time Mentorship</p>
+                                            <p className="text-[9px] text-muted-foreground font-bold uppercase">Real-time Mentorship</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400" onClick={() => setIsMinimized(true)}>
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setIsMinimized(true)}>
                                             <Minimize2 className="w-3.5 h-3.5" />
                                         </Button>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400" onClick={() => setIsOpen(false)}>
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setIsOpen(false)}>
                                             <X className="w-4 h-4" />
                                         </Button>
                                     </div>
@@ -140,7 +140,7 @@ export function AIAssistant() {
                                             onClick={() => setPersona(p as any)}
                                             className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase italic tracking-widest whitespace-nowrap transition-all ${persona === p
                                                 ? 'bg-primary text-primary-foreground ai-glow'
-                                                : 'bg-slate-900 text-slate-500 hover:text-slate-300'}`}
+                                                : 'bg-card text-muted-foreground hover:text-foreground/80'}`}
                                         >
                                             {p}
                                         </button>
@@ -148,14 +148,14 @@ export function AIAssistant() {
                                 </div>
                             </CardHeader>
 
-                            <CardContent className="flex-1 overflow-hidden p-0 bg-slate-900/50">
+                            <CardContent className="flex-1 overflow-hidden p-0 bg-card/50">
                                 <div className="h-full p-4 overflow-y-auto scroll-smooth" ref={scrollRef}>
                                     <div className="space-y-4">
                                         {messages.map((m, i) => (
                                             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                                 <div className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed ${m.role === 'user'
-                                                    ? 'bg-blue-600 text-white shadow-lg font-medium'
-                                                    : 'bg-slate-950/80 text-slate-200 border border-slate-800'
+                                                    ? 'bg-primary text-white shadow-lg font-medium'
+                                                    : 'bg-background/80 text-foreground border border-slate-800'
                                                     }`}>
                                                     {m.content}
                                                     {isLoading && i === messages.length - 1 && m.role === 'assistant' && m.content === '' && (
@@ -172,13 +172,13 @@ export function AIAssistant() {
                                 </div>
                             </CardContent>
 
-                            <CardFooter className="p-3 border-t border-slate-800 bg-slate-950/30">
+                            <CardFooter className="p-3 border-t border-border bg-background/30">
                                 <form className="flex w-full items-center gap-2" onSubmit={(e) => { e.preventDefault(); handleSend(); }}>
                                     <Input
                                         placeholder={`Message the ${persona} assistant...`}
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        className="flex-1 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 h-10 italic"
+                                        className="flex-1 bg-secondary border-border text-white placeholder:text-muted-foreground h-10 italic"
                                     />
                                     <Button type="submit" size="icon" className="h-10 w-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.3)]" disabled={isLoading}>
                                         <Send className="w-4 h-4" />
@@ -194,12 +194,12 @@ export function AIAssistant() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => { setIsOpen(true); setIsMinimized(false); }}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 ${isOpen ? 'bg-blue-600 shadow-blue-500/20' : 'bg-slate-900 border border-slate-700 shadow-black'
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 ${isOpen ? 'bg-primary shadow-blue-500/20' : 'bg-card border border-border shadow-black'
                     }`}
             >
                 {isOpen ? <MessageSquare className="w-6 h-6 text-white" /> : <Bot className="w-7 h-7 text-blue-400" />}
                 {!isOpen && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-slate-950 rounded-full" />
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-border rounded-full" />
                 )}
             </motion.button>
         </div>

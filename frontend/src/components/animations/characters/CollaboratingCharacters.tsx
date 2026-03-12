@@ -48,8 +48,8 @@ export default function CollaboratingCharacters({ className = '', size = 200 }: 
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* Legs */}
-          <line x1="55" y1="160" x2="50" y2="180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" />
-          <line x1="65" y1="160" x2="68" y2="180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" />
+          <line x1="55" y1="160" x2="50" y2="180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" />
+          <line x1="65" y1="160" x2="68" y2="180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" />
 
           {/* Body */}
           <path d="M48 130 Q60 124 72 130 L70 162 Q60 166 50 162 Z" fill="#3b82f6" />
@@ -61,16 +61,16 @@ export default function CollaboratingCharacters({ className = '', size = 200 }: 
             style={{ transformOrigin: '60px 108px' }}
           >
             <circle cx="60" cy="108" r="14" fill="#d4a574" />
-            <path d="M46 102 Q48 90 60 88 Q72 90 74 102 Q72 96 60 95 Q48 96 46 102Z" fill="#1e293b" />
+            <path d="M46 102 Q48 90 60 88 Q72 90 74 102 Q72 96 60 95 Q48 96 46 102Z" fill="hsl(var(--secondary))" />
             <motion.g
               animate={{ scaleY: [1, 0.1, 1] }}
               transition={{ duration: 4, repeat: Infinity, repeatDelay: 2.5, times: [0, 0.05, 0.1] }}
               style={{ transformOrigin: '60px 107px' }}
             >
-              <circle cx="55" cy="107" r="1.5" fill="#1e293b" />
-              <circle cx="65" cy="107" r="1.5" fill="#1e293b" />
+              <circle cx="55" cy="107" r="1.5" fill="hsl(var(--secondary))" />
+              <circle cx="65" cy="107" r="1.5" fill="hsl(var(--secondary))" />
             </motion.g>
-            <path d="M55 114 Q60 118 65 114" stroke="#1e293b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path d="M55 114 Q60 118 65 114" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
           </motion.g>
 
           {/* Arm reaching for high-five */}
@@ -92,8 +92,8 @@ export default function CollaboratingCharacters({ className = '', size = 200 }: 
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* Legs */}
-          <line x1="135" y1="160" x2="132" y2="180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" />
-          <line x1="145" y1="160" x2="150" y2="180" stroke="#1e293b" strokeWidth="5" strokeLinecap="round" />
+          <line x1="135" y1="160" x2="132" y2="180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" />
+          <line x1="145" y1="160" x2="150" y2="180" stroke="hsl(var(--secondary))" strokeWidth="5" strokeLinecap="round" />
 
           {/* Body */}
           <path d="M128 130 Q140 124 152 130 L150 162 Q140 166 130 162 Z" fill="#0ea5e9" />
@@ -111,10 +111,10 @@ export default function CollaboratingCharacters({ className = '', size = 200 }: 
               transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 3, times: [0, 0.05, 0.1] }}
               style={{ transformOrigin: '140px 107px' }}
             >
-              <circle cx="135" cy="107" r="1.5" fill="#1e293b" />
-              <circle cx="145" cy="107" r="1.5" fill="#1e293b" />
+              <circle cx="135" cy="107" r="1.5" fill="hsl(var(--secondary))" />
+              <circle cx="145" cy="107" r="1.5" fill="hsl(var(--secondary))" />
             </motion.g>
-            <path d="M135 114 Q140 118 145 114" stroke="#1e293b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path d="M135 114 Q140 118 145 114" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
           </motion.g>
 
           {/* Arm reaching for high-five */}

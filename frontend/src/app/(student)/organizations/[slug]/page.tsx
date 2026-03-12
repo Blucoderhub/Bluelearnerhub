@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -93,7 +93,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
 
               <div className="flex flex-wrap gap-4 text-sm text-gray-400 mb-4">
                 <span className="flex items-center gap-1.5"><Users className="h-4 w-4" />{org.memberCount.toLocaleString()} members</span>
-                <span className="flex items-center gap-1.5"><Trophy className="h-4 w-4 text-amber-400" />{org.challenges.length} active challenges</span>
+                <span className="flex items-center gap-1.5"><Trophy className="h-4 w-4 text-foreground/70" />{org.challenges.length} active challenges</span>
                 <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{org.location}</span>
                 <a href={org.website} target="_blank" rel="noreferrer"
                   className="flex items-center gap-1.5 text-blue-400 hover:underline">
@@ -116,7 +116,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                   <div className="space-y-2.5 text-sm mb-5">
                     {org.benefits.map((b) => (
                       <div key={b} className="flex items-start gap-2 text-gray-300">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="h-3.5 w-3.5 text-foreground/80 shrink-0 mt-0.5" />
                         <span className="text-xs leading-relaxed">{b}</span>
                       </div>
                     ))}
@@ -124,7 +124,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                   <Button
                     onClick={joined ? undefined : handleJoin}
                     disabled={joining}
-                    className={`w-full font-semibold ${joined ? 'bg-amber-700 hover:bg-amber-600' : `bg-gradient-to-r ${org.gradient} hover:opacity-90`}`}
+                    className={`w-full font-semibold ${joined ? 'bg-primary/80 hover:bg-primary/90' : `bg-gradient-to-r ${org.gradient} hover:opacity-90`}`}
                   >
                     {joining ? 'Joining…' : joined ? '✓ Joined' : 'Join Organization'}
                   </Button>
@@ -159,7 +159,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                           <div className="flex items-center gap-2 mb-1.5">
                             <h3 className="font-semibold text-white">{c.title}</h3>
                             {c.isActive && (
-                              <Badge className="bg-amber-900/50 text-amber-400 text-[10px]">Active</Badge>
+                              <Badge className="bg-muted text-foreground/70 text-[10px]">Active</Badge>
                             )}
                           </div>
                           <p className="text-sm text-gray-500 mb-3 leading-relaxed">{c.description}</p>
@@ -172,7 +172,7 @@ export default function OrganizationDetailPage({ params }: { params: Promise<{ s
                         <div className="flex flex-col items-end gap-2 shrink-0">
                           <div className="text-center">
                             <p className="text-xs text-gray-600 mb-0.5">Prize Pool</p>
-                            <p className="text-lg font-bold text-amber-400">{c.prizePool}</p>
+                            <p className="text-lg font-bold text-foreground/70">{c.prizePool}</p>
                           </div>
                           <Button size="sm" className={`text-xs bg-gradient-to-r ${org.gradient} hover:opacity-90`}>
                             Participate <ChevronRight className="h-3 w-3 ml-1" />

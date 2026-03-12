@@ -34,15 +34,15 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ id
             {cert.valid ? (
               <div className="inline-flex flex-col items-center gap-3">
                 <div className="relative">
-                  <div className="h-20 w-20 rounded-full bg-amber-950 flex items-center justify-center">
-                    <Shield className="h-10 w-10 text-amber-400" />
+                  <div className="h-20 w-20 rounded-full bg-background flex items-center justify-center">
+                    <Shield className="h-10 w-10 text-foreground/70" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 h-7 w-7 rounded-full bg-amber-500 flex items-center justify-center">
+                  <div className="absolute -bottom-1 -right-1 h-7 w-7 rounded-full bg-primary flex items-center justify-center">
                     <CheckCircle2 className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-amber-400">Certificate Verified</h1>
+                  <h1 className="text-2xl font-bold text-foreground/70">Certificate Verified</h1>
                   <p className="text-sm text-gray-400 mt-1">This credential is authentic and has been issued by BlueLearnerHub</p>
                 </div>
               </div>
@@ -70,7 +70,7 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ id
               </div>
 
               <div className="flex items-center justify-center gap-2 py-4 border-y border-gray-800">
-                <Award className="h-5 w-5 text-amber-400" />
+                <Award className="h-5 w-5 text-foreground/70" />
                 <div className="text-center">
                   <p className="text-xs text-gray-500">Awarded to</p>
                   <p className="text-lg font-bold text-white">{cert.recipientName}</p>
@@ -92,7 +92,7 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ id
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">Status</span>
-                  <span className="flex items-center gap-1.5 text-amber-400 font-medium">
+                  <span className="flex items-center gap-1.5 text-foreground/70 font-medium">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Valid · Does not expire
                   </span>
                 </div>

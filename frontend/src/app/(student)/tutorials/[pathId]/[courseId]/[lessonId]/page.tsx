@@ -77,9 +77,9 @@ export default function LessonPage() {
         <li><strong>Large Community</strong>: Millions of developers and massive library support (PyPI).</li>
       </ul>
 
-      <div className="bg-amber-50 dark:bg-amber-500/10 p-6 rounded-3xl border border-amber-500/20 my-8">
-        <h3 className="text-amber-500 mt-0">🚀 Mastery Tip</h3>
-        <p className="text-sm text-amber-700 dark:text-amber-400 mb-0">
+      <div className="bg-secondary dark:bg-primary/10 p-6 rounded-3xl border border-border my-8">
+        <h3 className="text-foreground/80 mt-0">🚀 Mastery Tip</h3>
+        <p className="text-sm text-foreground dark:text-foreground/70 mb-0">
           Try changing the text inside the <code>print()</code> function in the playground on the right! 
           Hit "Run" to see your code come to life instantly.
         </p>
