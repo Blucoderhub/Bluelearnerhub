@@ -2,14 +2,8 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import {
-  ArrowRight,
-  GraduationCap,
-  ChevronDown,
-} from 'lucide-react'
+import { ArrowRight, GraduationCap, ChevronDown } from 'lucide-react'
 import IsometricScene from './IsometricScene'
-import CodingCharacter from './characters/CodingCharacter'
-import LearningCharacter from './characters/LearningCharacter'
 
 export default function IsometricHero() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -26,22 +20,20 @@ export default function IsometricHero() {
       ref={containerRef}
       className="relative min-h-screen overflow-hidden flex flex-col"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050201] via-[#0c0502] to-[#0a0604]" />
+      {/* Clean dark background */}
+      <div className="absolute inset-0 bg-background" />
 
-      <div className="absolute inset-0 opacity-[0.03]">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 1px 1px, rgba(255,166,77,0.3) 1px, transparent 0)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </div>
+      {/* Subtle dot grid */}
+      <div className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 0)',
+          backgroundSize: '32px 32px',
+        }}
+      />
 
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-primary/20 via-primary/5 to-transparent blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-primary/10 to-transparent blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-primary/5 to-transparent blur-3xl hidden lg:block" />
+      {/* Soft radial glow */}
+      <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] rounded-full bg-foreground/[0.03] blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-foreground/[0.02] blur-3xl pointer-events-none" />
 
       <motion.div
         style={{ y, opacity }}
@@ -62,15 +54,6 @@ export default function IsometricHero() {
               </span>
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
-            >
-              Master complex software engineering disciplines, compete in global innovation challenges, and reach peak technical expertise — all on one premium platform built for the next generation of software engineers. Master Computer Science, Web Tech, and AI.
-            </motion.p>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -89,158 +72,12 @@ export default function IsometricHero() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: 30 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{
-              type: 'spring',
-              stiffness: 70,
-              damping: 20,
-              delay: 0.4
-            }}
-            className="flex-1 relative w-full max-w-xl lg:max-w-none"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'spring', stiffness: 70, damping: 20, delay: 0.3 }}
+            className="flex-1 w-full max-w-xl lg:max-w-none"
           >
-            <div className="relative w-full aspect-square max-h-[550px]">
-              <IsometricScene />
-
-              <motion.div
-                className="absolute bottom-[8%] left-[2%] z-20 hidden md:block"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 70,
-                  damping: 15,
-                  delay: 1.0
-                }}
-              >
-                <motion.div
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  <CodingCharacter size={90} />
-                </motion.div>
-              </motion.div>
-
-              <motion.div
-                className="absolute bottom-[15%] right-[5%] z-20 hidden md:block"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 70,
-                  damping: 15,
-                  delay: 1.2
-                }}
-              >
-                <motion.div
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                >
-                  <LearningCharacter size={80} />
-                </motion.div>
-              </motion.div>
-
-              <motion.div
-                className="absolute top-[8%] left-[30%] z-30 hidden md:block"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.8, duration: 0.5, type: 'spring' }}
-              >
-                <motion.div
-                  animate={{ y: [0, -6, 0], rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="px-3 py-1.5 rounded-lg bg-primary/15 border border-primary/25 backdrop-blur-sm"
-                >
-                  <span className="text-[11px] font-bold text-primary flex items-center gap-1">
-                    🏆 Achievement Unlocked!
-                  </span>
-                </motion.div>
-              </motion.div>
-
-              <motion.div
-                className="absolute bottom-[35%] left-[0%] z-30 hidden lg:block"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 2.0, duration: 0.5, type: 'spring' }}
-              >
-                <motion.div
-                  animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-                  className="px-2.5 py-1 rounded-md bg-primary/15 border border-primary/25 backdrop-blur-sm"
-                >
-                  <span className="text-[10px] font-bold text-primary">⚡ +250 XP</span>
-                </motion.div>
-              </motion.div>
-
-              <motion.div
-                className="absolute top-[40%] right-[0%] z-30 hidden lg:block"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 2.2, duration: 0.5, type: 'spring' }}
-              >
-                <motion.div
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                  className="px-2.5 py-1 rounded-md bg-primary/15 border border-primary/25 backdrop-blur-sm"
-                >
-                  <span className="text-[10px] font-bold text-primary">🔥 5-Day Streak</span>
-                </motion.div>
-              </motion.div>
-
-              <motion.div
-                className="absolute top-[60%] right-[12%] z-30 hidden lg:block"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 2.4, duration: 0.5, type: 'spring' }}
-              >
-                <motion.div
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-                  className="px-2.5 py-1 rounded-md bg-primary/10 border border-primary/20 backdrop-blur-sm"
-                >
-                  <span className="text-[10px] font-bold text-primary">🤖 AI Ready</span>
-                </motion.div>
-              </motion.div>
-
-              {[
-                { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#f38d58' },
-                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#ffb380' },
-                { s: 3, l: 58, t: 38, dy: -45, dur: 3.8, bg: '#ff9966' },
-                { s: 4.5, l: 70, t: 55, dy: -55, dur: 4.2, bg: '#ffd1b3' },
-                { s: 3.5, l: 35, t: 60, dy: -48, dur: 3.2, bg: '#f38d58' },
-                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#ffb380' },
-              ].map((p, i) => (
-                <motion.div
-                  key={`xp-particle-${i}`}
-                  className="absolute rounded-full hidden md:block"
-                  style={{
-                    width: p.s,
-                    height: p.s,
-                    left: `${p.l}%`,
-                    top: `${p.t}%`,
-                    background: p.bg,
-                    willChange: 'transform, opacity',
-                  }}
-                  animate={{
-                    y: [0, p.dy],
-                    opacity: [0, 0.7, 0],
-                  }}
-                  transition={{
-                    duration: p.dur,
-                    repeat: Infinity,
-                    delay: i * 0.6,
-                    ease: 'easeOut',
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="block lg:hidden mt-4">
-              <div className="flex justify-center gap-3">
-                <CodingCharacter size={60} />
-                <LearningCharacter size={60} />
-              </div>
-            </div>
+            <IsometricScene />
           </motion.div>
         </div>
       </motion.div>

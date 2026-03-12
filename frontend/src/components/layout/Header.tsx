@@ -25,7 +25,6 @@ import {
   Code2,
   Hammer,
   Zap,
-  ExternalLink,
   GraduationCap,
   BarChart3,
   PlusCircle,
@@ -34,16 +33,28 @@ import {
   UserPlus,
   Users,
   Award,
+  Globe,
+  GitFork,
+  Eye,
+  FolderOpen,
 } from 'lucide-react'
 import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
 
-const hackathons = [
-  { name: 'MLH Hackathons', description: 'Major League Hacking — official student hackathons', href: 'https://mlh.io/seasons/2025/events', logo: '🏆' },
-  { name: 'Devfolio', description: "India's largest hackathon platform", href: 'https://devfolio.co/hackathons', logo: '⚡' },
-  { name: 'HackerEarth', description: 'Developer challenges & hackathons', href: 'https://www.hackerearth.com/hackathon/explore/', logo: '🌐' },
-  { name: 'Unstop', description: 'Competitions, hackathons & challenges', href: 'https://unstop.com/hackathons', logo: '🚀' },
-  { name: 'Devpost', description: 'The home of virtual hackathons', href: 'https://devpost.com/hackathons', logo: '💻' },
+const hackathonLinks = [
+  { name: 'Browse Hackathons', description: 'Explore all active and upcoming hackathons', href: '/hackathons', icon: 'Trophy' },
+  { name: 'My Registrations', description: 'View hackathons you have joined', href: '/hackathons/my', icon: 'Bookmark' },
+  { name: 'My Team', description: 'Manage your team and collaborators', href: '/hackathons/team', icon: 'Users' },
+  { name: 'Leaderboard', description: 'See top performers and rankings', href: '/hackathons/leaderboard', icon: 'BarChart3' },
+  { name: 'Past Hackathons', description: 'Results and winner showcases', href: '/hackathons/past', icon: 'Archive' },
+  { name: 'Host a Hackathon', description: 'Corporates — create and manage a hackathon', href: '/contact?type=corporate', icon: 'PlusCircle' },
+]
+
+const spacesLinks = [
+  { name: 'Create a Space', description: 'Start a new HTML/CSS/JS or React project', href: '/spaces/new', icon: FolderOpen },
+  { name: 'My Spaces', description: 'Manage your published and private projects', href: '/spaces/my', icon: Globe },
+  { name: 'Explore Community', description: 'Browse thousands of learner-built projects', href: '/spaces/explore', icon: Eye },
+  { name: 'Fork a Project', description: 'Clone any public Space and remix it', href: '/spaces/explore', icon: GitFork },
 ]
 
 const mentorFeatures = [
@@ -55,7 +66,7 @@ const mentorFeatures = [
   { name: 'Certification Issuing', description: 'Award certificates to your learners', href: '/mentor/certificates', icon: Award },
 ]
 
-type MenuKey = 'tutorials' | 'hackathon' | 'mentor' | 'getin' | null
+type MenuKey = 'tutorials' | 'hackathon' | 'spaces' | 'mentor' | 'getin' | null
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -136,7 +147,7 @@ export default function Header() {
               </button>
               {openMenu === 'tutorials' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[780px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl p-8 z-50"
+                  className="absolute top-full left-0 mt-0 w-[780px] bg-background border border-border/60 rounded-b-2xl shadow-2xl p-8 z-50"
                   onMouseEnter={() => openHover('tutorials')}
                   onMouseLeave={closeHover}
                 >
@@ -197,31 +208,95 @@ export default function Header() {
               </button>
               {openMenu === 'hackathon' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[400px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl p-6 z-50"
+                  className="absolute top-full left-0 mt-0 w-[420px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
                   onMouseEnter={() => openHover('hackathon')}
                   onMouseLeave={closeHover}
                 >
-                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">External Platforms</p>
-                  <div className="flex flex-col gap-1">
-                    {hackathons.map((h) => (
-                      <a
+                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-[13px] font-black text-foreground">Hackathons</p>
+                      <p className="text-[11px] text-muted-foreground">Compete, build, and win on our platform</p>
+                    </div>
+                    <Link
+                      href="/hackathons"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-black hover:bg-primary/90 transition-all"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      View All <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                  <div className="p-3 grid grid-cols-2 gap-1">
+                    {hackathonLinks.map((h) => (
+                      <Link
                         key={h.name}
                         href={h.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="group flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all"
                         onClick={() => setOpenMenu(null)}
                       >
-                        <span className="text-xl shrink-0 mt-0.5">{h.logo}</span>
+                        <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 group-hover:bg-primary/10 transition-colors">
+                          <Trophy className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
                         <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[13px] font-bold text-foreground group-hover:text-primary transition-colors">{h.name}</span>
-                            <ExternalLink className="h-3 w-3 text-muted-foreground/60 group-hover:text-primary transition-colors" />
-                          </div>
+                          <p className="text-[12px] font-bold text-foreground group-hover:text-primary transition-colors leading-tight">{h.name}</p>
                           <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{h.description}</p>
                         </div>
-                      </a>
+                      </Link>
                     ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Spaces — hover panel */}
+            <div
+              className="relative h-full"
+              onMouseEnter={() => openHover('spaces')}
+              onMouseLeave={closeHover}
+            >
+              <button className={navLinkCls(!!pathname?.startsWith('/spaces'))}>
+                <Globe className="h-3.5 w-3.5 opacity-60" />
+                Spaces
+                <ChevronDown className={`h-3 w-3 opacity-40 transition-transform duration-200 ${openMenu === 'spaces' ? 'rotate-180' : ''}`} />
+              </button>
+              {openMenu === 'spaces' && (
+                <div
+                  className="absolute top-full left-0 mt-0 w-[400px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  onMouseEnter={() => openHover('spaces')}
+                  onMouseLeave={closeHover}
+                >
+                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-[13px] font-black text-foreground">Bluelearnerhub Spaces</p>
+                      <p className="text-[11px] text-muted-foreground">Build, host & share web projects — free</p>
+                    </div>
+                    <Link
+                      href="/spaces"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-[11px] font-black hover:bg-primary/90 transition-all"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      Learn More <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                  <div className="p-3 grid grid-cols-2 gap-1">
+                    {spacesLinks.map((s) => {
+                      const Icon = s.icon
+                      return (
+                        <Link
+                          key={s.name}
+                          href={s.href}
+                          className="group flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-all"
+                          onClick={() => setOpenMenu(null)}
+                        >
+                          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 group-hover:bg-primary/10 transition-colors">
+                            <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                          </div>
+                          <div>
+                            <p className="text-[12px] font-bold text-foreground group-hover:text-primary transition-colors leading-tight">{s.name}</p>
+                            <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{s.description}</p>
+                          </div>
+                        </Link>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -239,7 +314,7 @@ export default function Header() {
               </button>
               {openMenu === 'mentor' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[480px] bg-background/98 backdrop-blur-xl border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  className="absolute top-full left-0 mt-0 w-[480px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
                   onMouseEnter={() => openHover('mentor')}
                   onMouseLeave={closeHover}
                 >
@@ -347,7 +422,7 @@ export default function Header() {
                 </button>
                 {openMenu === 'getin' && (
                   <div
-                    className="absolute top-full right-0 mt-1.5 w-52 bg-background/98 backdrop-blur-xl border border-border/60 rounded-2xl shadow-2xl overflow-hidden z-50"
+                    className="absolute top-full right-0 mt-1.5 w-52 bg-background border border-border/60 rounded-2xl shadow-2xl overflow-hidden z-50"
                     onMouseEnter={() => openHover('getin')}
                     onMouseLeave={closeHover}
                   >
@@ -470,12 +545,35 @@ export default function Header() {
             </button>
             {expandedDomain === 'hackathon' && (
               <div className="pl-3 space-y-0.5">
-                {hackathons.map((h) => (
-                  <a key={h.name} href={h.href} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}
+                {hackathonLinks.map((h) => (
+                  <Link key={h.name} href={h.href} onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all font-medium">
-                    <span>{h.logo}</span> {h.name} <ExternalLink className="ml-auto h-3 w-3 opacity-40" />
-                  </a>
+                    <Trophy className="h-4 w-4 shrink-0" /> {h.name}
+                  </Link>
                 ))}
+              </div>
+            )}
+
+            {/* Spaces */}
+            <button
+              onClick={() => setExpandedDomain(expandedDomain === 'spaces' ? null : 'spaces')}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] font-semibold text-foreground/80 hover:bg-muted/50 transition-all"
+            >
+              <Globe className="h-5 w-5 shrink-0" />
+              Spaces
+              <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${expandedDomain === 'spaces' ? 'rotate-180' : ''}`} />
+            </button>
+            {expandedDomain === 'spaces' && (
+              <div className="pl-3 space-y-0.5">
+                {spacesLinks.map((s) => {
+                  const Icon = s.icon
+                  return (
+                    <Link key={s.name} href={s.href} onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all font-medium">
+                      <Icon className="h-4 w-4 shrink-0" /> {s.name}
+                    </Link>
+                  )
+                })}
               </div>
             )}
 

@@ -5,40 +5,6 @@ import { Twitter, Linkedin, Github, Youtube, ArrowRight, Building2, GraduationCa
 import { PoweredByBadge } from '@/components/branding/Logo'
 
 export default function Footer() {
-  const sections = [
-    {
-      title: 'Product',
-      links: [
-        { name: 'Tutorials', href: '/tutorials' },
-        { name: 'Courses', href: '/courses' },
-        { name: 'Hackathons', href: '/hackathons' },
-        { name: 'Mentor', href: '/mentor' },
-        { name: 'Community', href: '/community' },
-        { name: 'Daily Quiz', href: '/daily-quiz' },
-      ],
-    },
-    {
-      title: 'Domains',
-      links: [
-        { name: 'Computer Science', href: '/tutorials/computer-science' },
-        { name: 'Mechanical', href: '/tutorials/mechanical' },
-        { name: 'Electrical', href: '/tutorials/electrical' },
-        { name: 'Civil', href: '/tutorials/civil' },
-        { name: 'Management', href: '/tutorials/management' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Blog', href: '/blog' },
-        { name: 'Careers', href: '/careers' },
-        { name: 'Contact', href: '/contact' },
-        { name: 'Help Center', href: '/help' },
-      ],
-    },
-  ]
-
   const socialLinks = [
     { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@bluelearnerhub' },
     { name: 'Twitter / X', icon: Twitter, href: 'https://twitter.com/bluelearnerhub' },
@@ -123,10 +89,10 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-12">
 
           {/* Brand + Social */}
-          <div className="md:col-span-2 space-y-7">
+          <div className="space-y-7">
             <div className="flex items-center gap-2.5">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
                 <span className="text-xl font-black text-primary-foreground">BL</span>
@@ -157,27 +123,6 @@ export default function Footer() {
                 )
               })}
             </div>
-          </div>
-
-          {/* Link Columns */}
-          <div className="md:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-10">
-            {sections.map((section) => (
-              <div key={section.title} className="space-y-5">
-                <h3 className="text-[11px] font-black uppercase tracking-widest text-primary">{section.title}</h3>
-                <ul className="space-y-3">
-                  {section.links.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </div>
 
         </div>
