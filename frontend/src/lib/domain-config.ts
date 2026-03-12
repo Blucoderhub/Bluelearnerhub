@@ -275,21 +275,17 @@ export function getDomain(id: DomainId) {
   return DOMAINS[id]
 }
 
-// Get all domains as array
+// Get all domains as array (Temporarily filtered to CS only)
 export function getAllDomains() {
-  return Object.values(DOMAINS)
+  return [DOMAINS.COMPUTER_SCIENCE]
 }
 
 // Get engineering domains
 export function getEngineeringDomains() {
-  return Object.values(DOMAINS).filter(d => 
-    !['MANAGEMENT', 'DATA_SCIENCE'].includes(d.id.toUpperCase().replace(/-/g, '_'))
-  )
+  return [DOMAINS.COMPUTER_SCIENCE]
 }
 
 // Get management domains
 export function getManagementDomains() {
-  return Object.values(DOMAINS).filter(d => 
-    ['MANAGEMENT', 'DATA_SCIENCE'].includes(d.id.toUpperCase().replace(/-/g, '_'))
-  )
+  return [] // Temporarily disabled
 }

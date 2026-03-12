@@ -1,212 +1,119 @@
-'use client';
+"use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import {
-    ShieldCheck,
-    GraduationCap,
-    Briefcase,
-    Users,
-    UserCircle,
-    School,
-    ArrowRight,
-    UserCheck,
-    Building2,
-    Lock,
-    UserPlus
+import { 
+    Users, 
+    Lock, 
+    UserPlus,
+    GraduationCap
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
-const roles = [
-    {
-        id: 'STUDENT',
-        title: 'Student',
-        description: 'Access courses, labs, and track your learning progress.',
-        icon: GraduationCap,
-        color: 'text-blue-400',
-        borderColor: 'border-blue-500/20',
-        hoverColor: 'hover:border-blue-500/50',
-        bgGradient: 'from-blue-500/10 to-transparent',
-        loginHref: '/login/student',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'CANDIDATE',
-        title: 'Candidate',
-        description: 'Showcase your skills, join hackathons, and get hired.',
-        icon: UserCheck,
-        color: 'text-purple-400',
-        borderColor: 'border-purple-500/20',
-        hoverColor: 'hover:border-purple-500/50',
-        bgGradient: 'from-purple-500/10 to-transparent',
-        loginHref: '/login/candidate',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'FACULTY',
-        title: 'Mentor',
-        description: 'Guided learning, student management, and academic tracks.',
-        icon: Users,
-        color: 'text-amber-400',
-        borderColor: 'border-amber-500/20',
-        hoverColor: 'hover:border-amber-500/50',
-        bgGradient: 'from-amber-500/10 to-transparent',
-        loginHref: '/login/mentor',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'INSTITUTION',
-        title: 'Institution',
-        description: 'Monitor overall performance and manage institutional data.',
-        icon: Building2,
-        color: 'text-orange-400',
-        borderColor: 'border-orange-500/20',
-        hoverColor: 'hover:border-orange-500/50',
-        bgGradient: 'from-orange-500/10 to-transparent',
-        loginHref: '/login/university',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'CORPORATE',
-        title: 'Corporate',
-        description: 'Host hackathons, view talent analytics, and judge projects.',
-        icon: Briefcase,
-        color: 'text-pink-400',
-        borderColor: 'border-pink-500/20',
-        hoverColor: 'hover:border-pink-500/50',
-        bgGradient: 'from-pink-500/10 to-transparent',
-        loginHref: '/login/corporate',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'HR',
-        title: 'HR',
-        description: 'Search candidates, recruit talent, and manage hiring.',
-        icon: UserCircle,
-        color: 'text-cyan-400',
-        borderColor: 'border-cyan-500/20',
-        hoverColor: 'hover:border-cyan-500/50',
-        bgGradient: 'from-cyan-500/10 to-transparent',
-        loginHref: '/login/hr',
-        signupHref: '/select-role',
-    },
-    {
-        id: 'ADMIN',
-        title: 'Admin',
-        description: 'Full system management and monitoring capabilities.',
-        icon: ShieldCheck,
-        color: 'text-red-400',
-        borderColor: 'border-red-500/20',
-        hoverColor: 'hover:border-red-500/50',
-        bgGradient: 'from-red-500/10 to-transparent',
-        loginHref: '/login/admin',
-        signupHref: '/select-role',
-    }
-];
+import { StudentSignupForm } from '@/components/auth/StudentSignupForm';
+import { StudentLoginForm } from '@/components/auth/StudentLoginForm';
 
 export default function GetStartedPage() {
+    const handleAuth = async (data: any) => {
+        console.log("Auth Action:", data);
+    };
+
     return (
-        <div className="min-h-screen bg-[#020617] text-white py-16 px-4 relative overflow-hidden">
-            {/* Background Decor */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="min-h-screen bg-background text-foreground py-20 px-4 relative overflow-hidden flex items-center justify-center">
+            {/* Premium Background Effects */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-primary/5 blur-[150px] rounded-full animate-pulse" />
+                <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-primary/5 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
             </div>
 
-            <div className="max-w-6xl mx-auto relative z-10">
+            <div className="max-w-[500px] w-full relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-amber-400 to-purple-400">
+                    <div className="flex justify-center mb-6">
+                        <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20">
+                            <GraduationCap className="w-10 h-10 text-primary-foreground" />
+                        </div>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase">
                         Join the Ecosystem
                     </h1>
-                    <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium">
-                        Select your specialized portal to continue your journey.
+                    <p className="text-muted-foreground text-sm font-medium uppercase tracking-widest">
+                        Master Elite Engineering & Management
                     </p>
                 </motion.div>
 
-                <Tabs defaultValue="login" className="w-full">
-                    <div className="flex justify-center mb-12">
-                        <TabsList className="bg-slate-900/50 border border-slate-800 p-1.5 h-14 rounded-2xl">
-                            <TabsTrigger
-                                value="login"
-                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white transition-all font-bold"
-                            >
-                                <Lock className="w-4 h-4" />
-                                Log In
-                            </TabsTrigger>
+                <Tabs defaultValue="signup" className="w-full bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+                    <div className="flex justify-center mb-10">
+                        <TabsList className="bg-muted/50 border border-border/30 p-1.5 h-14 rounded-2xl">
                             <TabsTrigger
                                 value="signup"
-                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white transition-all font-bold"
+                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-black uppercase tracking-widest text-[10px]"
                             >
                                 <UserPlus className="w-4 h-4" />
-                                Create Account
+                                Join
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="login"
+                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-black uppercase tracking-widest text-[10px]"
+                            >
+                                <Lock className="w-4 h-4" />
+                                Login
                             </TabsTrigger>
                         </TabsList>
                     </div>
 
-                    <TabsContent value="login" className="mt-0">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {roles.map((role, index) => (
-                                <RoleCard key={role.id} role={role} index={index} type="login" />
-                            ))}
-                        </div>
+                    <TabsContent value="signup" className="mt-0 focus-visible:outline-none">
+                        <StudentSignupForm onSubmit={handleAuth} />
                     </TabsContent>
 
-                    <TabsContent value="signup" className="mt-0">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {roles.map((role, index) => (
-                                <RoleCard key={role.id} role={role} index={index} type="signup" />
-                            ))}
-                        </div>
+                    <TabsContent value="login" className="mt-0 focus-visible:outline-none">
+                        <StudentLoginForm onSubmit={handleAuth} />
                     </TabsContent>
+
+                    {/* Specialized Access Link */}
+                    <div className="mt-10 pt-8 border-t border-border/50">
+                        <Link 
+                            href="/login/mentor" 
+                            className="group flex items-center justify-between p-4 rounded-2xl bg-muted/30 border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                    <Users size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-primary">Specialized Access</div>
+                                    <div className="text-sm font-bold text-foreground">Mentor Mode</div>
+                                </div>
+                            </div>
+                            <div className="text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </Link>
+                        
+                        <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em] leading-relaxed">
+                            Corporate, University & Admin portals <br />
+                            accessible via footer links
+                        </p>
+                    </div>
                 </Tabs>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="text-center mt-12"
+                >
+                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors">
+                        Back to Home
+                    </Link>
+                </motion.div>
             </div>
         </div>
-    );
-}
-
-function RoleCard({ role, index, type }: { role: any, index: number, type: 'login' | 'signup' }) {
-    const href = type === 'login' ? role.loginHref : role.signupHref;
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-            <Link href={href}>
-                <Card
-                    className={`group cursor-pointer bg-slate-900/40 border ${role.borderColor} ${role.hoverColor} transition-all duration-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)] h-full overflow-hidden relative shadow-2xl rounded-[2rem]`}
-                >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${role.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                    <CardHeader className="relative z-10 p-8 pb-0">
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-slate-800/50 border ${role.borderColor} group-hover:scale-110 group-hover:bg-primary transition-all duration-500`}>
-                            <role.icon className={`w-7 h-7 ${role.color} group-hover:text-white transition-colors duration-500`} />
-                        </div>
-                        <CardTitle className="text-2xl font-black group-hover:text-primary transition-colors duration-500">
-                            {role.title}
-                        </CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="relative z-10 p-8 pt-4">
-                        <CardDescription className="text-slate-400 text-sm leading-relaxed font-medium mb-8">
-                            {role.description}
-                        </CardDescription>
-
-                        <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-primary/70 group-hover:text-primary transition-colors">
-                            <span>{type === 'login' ? 'Access Portal' : 'Select Path'}</span>
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                    </CardContent>
-                </Card>
-            </Link>
-        </motion.div>
     );
 }

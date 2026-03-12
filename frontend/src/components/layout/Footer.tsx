@@ -91,6 +91,15 @@ export default function Footer() {
         { name: 'Status', href: '/status' },
       ],
     },
+    {
+      title: 'Portals',
+      links: [
+        { name: 'Corporate Login', href: '/login/corporate' },
+        { name: 'College Login', href: '/login/university' },
+        { name: 'Mentor Login', href: '/login/mentor' },
+        { name: 'Admin Portal', href: '/login/admin' },
+      ],
+    },
   ]
 
   const legalLinks = [
@@ -109,24 +118,24 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-card/80 border-t border-border/50">
-      <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-8">
-          <div className="col-span-1 md:col-span-2 mb-8 md:mb-0">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/20">
-                <span className="text-lg font-bold text-white">BL</span>
+    <footer className="bg-background border-t border-border/50 py-16">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-12">
+          <div className="col-span-1 md:col-span-2 space-y-8">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
+                <span className="text-xl font-black text-primary-foreground">BL</span>
               </div>
               <div>
-                <div className="text-base font-bold text-white">Bluelearnerhub</div>
+                <div className="text-lg font-black tracking-tighter">BLUELEARNERHUB</div>
                 <PoweredByBadge />
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-xs">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs font-medium">
               The world&apos;s first all-engineering & management learning platform.
               Master any domain, compete in hackathons, and reach peak expertise.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               {socialLinks.map((social) => {
                 const Icon = social.icon
                 return (
@@ -135,10 +144,10 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                    className="w-10 h-10 rounded-xl bg-muted/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
                     aria-label={social.name}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-5 h-5" />
                   </a>
                 )
               })}
@@ -146,22 +155,16 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 md:col-span-4">
-            <div className="md:hidden">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               {sections.map((section) => (
-                <AccordionSection key={section.title} section={section} />
-              ))}
-            </div>
-
-            <div className="hidden md:grid md:grid-cols-4 gap-8">
-              {sections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="text-white font-semibold text-sm mb-4">{section.title}</h3>
-                  <ul className="space-y-2.5">
+                <div key={section.title} className="space-y-6">
+                  <h3 className="font-black text-xs uppercase tracking-widest text-primary">{section.title}</h3>
+                  <ul className="space-y-4">
                     {section.links.map((link) => (
                       <li key={link.name}>
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                          className="text-sm text-muted-foreground hover:text-foreground transition-all duration-200 block font-medium"
                         >
                           {link.name}
                         </Link>

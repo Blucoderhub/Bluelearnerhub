@@ -12,13 +12,11 @@ export default function CandidateLogin() {
 
     return (
         <LoginLayout
-            role="candidate"
-            title="Candidate Dash"
-            subtitle="View job applications, prepare for interviews, and showcase your portfolio."
-            accentColor="#0ea5e9" // Emerald
-            icon={<UserCircle size={48} />}
+            title="Candidate Portal"
+            subtitle="Elite Career & Skill Assessment"
+            icon={<UserCircle size={32} />}
         >
-            <LoginForm role="candidate" accentColor="#0ea5e9" onSubmit={handleSubmit} />
+            <LoginForm onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

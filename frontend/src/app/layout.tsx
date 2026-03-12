@@ -24,9 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Bluelearnerhub - Learn, Practice, Compete, Get Hired',
-  description: 'The world\'s first all-engineering & management learning platform. Master any domain, compete in hackathons, and land your dream job.',
-  keywords: ['education', 'engineering', 'management', 'hackathon', 'learning', 'careers'],
+  title: 'Bluelearnerhub - Master Computer Science & Software Engineering',
+  description: 'The world\'s first elite Computer Science & Software Engineering learning platform. Master coding, algorithms, and system design, compete in hackathons, and land your dream job.',
+  keywords: ['education', 'computer science', 'software engineering', 'coding', 'algorithms', 'hackathon', 'learning', 'careers'],
   authors: [{ name: 'Bluecoderhub' }],
   openGraph: {
     title: 'Bluelearnerhub',

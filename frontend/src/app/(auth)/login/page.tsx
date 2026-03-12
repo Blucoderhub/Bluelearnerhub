@@ -3,126 +3,76 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-    ShieldCheck,
-    GraduationCap,
-    Briefcase,
-    Users,
-    UserCircle,
-    School,
-    ArrowRight
-} from "lucide-react";
-
-const roles = [
-    {
-        id: "student",
-        title: "Student",
-        description: "Start your learning journey",
-        icon: <GraduationCap size={32} />,
-        color: "#3b82f6",
-        href: "/auth/login/student",
-    },
-    {
-        id: "candidate",
-        title: "Candidate",
-        description: "Find your dream job",
-        icon: <UserCircle size={32} />,
-        color: "#0ea5e9",
-        href: "/auth/login/candidate",
-    },
-    {
-        id: "corporate",
-        title: "Corporate",
-        description: "Hire and manage talent",
-        icon: <Briefcase size={32} />,
-        color: "#6366f1",
-        href: "/auth/login/corporate",
-    },
-    {
-        id: "hr",
-        title: "HR Portal",
-        description: "Optimize hiring pipelines",
-        icon: <Users size={32} />,
-        color: "#f59e0b",
-        href: "/auth/login/hr",
-    },
-    {
-        id: "university",
-        title: "University",
-        description: "Academic management",
-        icon: <School size={32} />,
-        color: "#8b5cf6",
-        href: "/auth/login/university",
-    },
-    {
-        id: "admin",
-        title: "Admin",
-        description: "System administration",
-        icon: <ShieldCheck size={32} />,
-        color: "#ef4444",
-        href: "/auth/login/admin",
-    },
-];
+import { StudentLoginForm } from "@/components/auth/StudentLoginForm";
+import { Users, GraduationCap } from "lucide-react";
 
 export default function LoginPortal() {
+    const handleSubmit = async (data: any) => {
+        console.log("General Login:", data);
+    };
+
     return (
-        <div className="relative w-full py-12 px-6 overflow-hidden">
-            {/* Background Decor */}
-            <div className="liquid-bg-container overflow-hidden">
-                <div className="liquid-blob w-[600px] h-[600px] -top-40 -left-40 opacity-10 bg-blue-500" />
-                <div className="liquid-blob w-[500px] h-[500px] -bottom-20 -right-20 opacity-10 bg-purple-500" style={{ animationDelay: "-7s" }} />
+        <div className="relative min-h-[90vh] w-full flex flex-col items-center justify-center py-12 px-4 overflow-hidden bg-background">
+            {/* Premium Background Effects */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
             </div>
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="relative z-10 w-full max-w-4xl text-center mb-12"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="relative z-10 w-full max-w-md bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-12 shadow-2xl"
             >
-                <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-                    Welcome to <span className="text-blue-600">Bluelearnerhub</span>
-                </h1>
-                <p className="text-lg text-slate-600 dark:text-zinc-400">
-                    Please select your portal to continue
-                </p>
-            </motion.div>
+                <div className="flex justify-center mb-10">
+                    <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20">
+                        <GraduationCap className="w-10 h-10 text-primary-foreground" />
+                    </div>
+                </div>
 
-            <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {roles.map((role, index) => (
-                    <motion.div
-                        key={role.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                    >
-                        <Link href={role.href} className="group">
-                            <div className="h-full p-8 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 relative overflow-hidden">
-                                <div
-                                    className="absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 opacity-5 transition-transform group-hover:scale-110"
-                                    style={{ backgroundColor: role.color, borderRadius: '50%' }}
-                                />
+                <StudentLoginForm onSubmit={handleSubmit} />
 
-                                <div
-                                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 transition-transform"
-                                    style={{ backgroundColor: role.color }}
-                                >
-                                    {role.icon}
+                {/* Secondary Access */}
+                <div className="mt-12 pt-8 border-t border-border/50">
+                    <div className="flex flex-col gap-4">
+                        <Link 
+                            href="/login/mentor" 
+                            className="group flex items-center justify-between p-4 rounded-2xl bg-muted/30 border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                    <Users size={20} />
                                 </div>
-
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{role.title}</h3>
-                                <p className="text-slate-500 dark:text-zinc-400 mb-6">{role.description}</p>
-
-                                <div className="flex items-center text-sm font-bold group-hover:gap-2 transition-all" style={{ color: role.color }}>
-                                    Enter Portal <ArrowRight size={16} className="ml-1" />
+                                <div>
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-primary">Specialized Access</div>
+                                    <div className="text-sm font-bold text-foreground">Mentor Mode</div>
                                 </div>
                             </div>
+                            <div className="text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
                         </Link>
-                    </motion.div>
-                ))}
-            </div>
+                    </div>
+                    
+                    <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em]">
+                        Corporate & University portals accessible via footer
+                    </p>
+                </div>
+            </motion.div>
 
-            <p className="relative z-10 mt-12 text-slate-500 dark:text-zinc-500 text-sm">
-                Need help accessing your account? <a href="#" className="text-blue-600 font-semibold hover:underline">Contact Support</a>
-            </p>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="relative z-10 mt-12"
+            >
+                <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors">
+                    Back to Home
+                </Link>
+            </motion.div>
         </div>
     );
 }

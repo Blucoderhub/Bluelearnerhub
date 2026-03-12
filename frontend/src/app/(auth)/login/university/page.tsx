@@ -12,13 +12,11 @@ export default function UniversityLogin() {
 
     return (
         <LoginLayout
-            role="university"
             title="University Hub"
-            subtitle="Coordinate student learning paths, monitor academic progress, and manage campus events."
-            accentColor="#8b5cf6" // Violet
-            icon={<School size={48} />}
+            subtitle="Academic Path Coordination"
+            icon={<School size={32} />}
         >
-            <LoginForm role="university" accentColor="#8b5cf6" onSubmit={handleSubmit} />
+            <LoginForm onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

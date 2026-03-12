@@ -15,7 +15,7 @@ const steps = [
     title: 'Choose Your Path',
     description: 'Start as a student or corporate user. Select learning paths tailored to your skill development goals.',
     icon: Compass,
-    color: 'from-blue-500 to-amber-500',
+    color: 'from-primary/20 to-primary/40',
     Character: LearningCharacter,
   },
   {
@@ -23,7 +23,7 @@ const steps = [
     title: 'Learn & Practice',
     description: 'Complete interactive labs and challenges tailored to your chosen skill path.',
     icon: Code2,
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-primary/30 to-primary/50',
     Character: CodingCharacter,
   },
   {
@@ -31,7 +31,7 @@ const steps = [
     title: 'Innovate & Showcase',
     description: 'Participate in innovation challenges, solve complex problems, and build a world-class portfolio.',
     icon: Rocket,
-    color: 'from-amber-500 to-orange-500',
+    color: 'from-primary/40 to-primary/60',
     Character: CollaboratingCharacters,
   },
   {
@@ -39,7 +39,7 @@ const steps = [
     title: 'Get Certified',
     description: 'Validate your skills with expert-led assessments and showcase your mastery to the world.',
     icon: BadgeCheck,
-    color: 'from-amber-500 to-blue-500',
+    color: 'from-primary/50 to-primary/70',
     Character: CelebrationCharacter,
   },
 ]
@@ -55,22 +55,22 @@ export default function HowItWorks() {
           viewport={{ once: true }}
           className="text-center mb-12 md:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest mb-4">
             Simple Process
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">
             Your Journey to{' '}
-            <span className="bg-gradient-to-r from-amber-400 to-blue-100 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-primary/70 to-white bg-clip-text text-transparent">
               Success
             </span>
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto font-medium">
             From learning to mastery, in 4 simple steps
           </p>
         </motion.div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/20 via-amber-500/20 via-blue-300/20 to-white/20 -translate-y-1/2" />
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/10 via-primary/30 to-primary/10 -translate-y-1/2" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {steps.map((step, idx) => {
@@ -85,22 +85,22 @@ export default function HowItWorks() {
                   viewport={{ once: true }}
                   className="relative"
                 >
-                  <div className="relative z-10 text-center p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card transition-all duration-300 group">
-                    <div className="relative mx-auto mb-5">
+                  <div className="relative z-10 text-center p-8 rounded-2xl border border-primary/10 bg-card/30 backdrop-blur-md hover:bg-card/50 hover:border-primary/30 transition-all duration-500 group">
+                    <div className="relative mx-auto mb-6">
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
-                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mx-auto shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                        className={`w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto shadow-xl shadow-primary/20 group-hover:shadow-primary/40 transition-shadow duration-500`}
                       >
-                        <Icon className="w-8 h-8 text-white" />
+                        <Icon className="w-8 h-8 text-primary-foreground" />
                       </motion.div>
-                      <div className={`absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-md`}>
-                        <span className="text-xs font-bold text-white">{step.number}</span>
+                      <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full bg-primary-foreground border-2 border-primary flex items-center justify-center shadow-lg`}>
+                        <span className="text-xs font-black text-primary">{step.number}</span>
                       </div>
                     </div>
-                    <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                    <h3 className="text-lg md:text-xl font-black text-foreground mb-3 uppercase tracking-tight">
                       {step.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-medium">
                       {step.description}
                     </p>
                     <motion.div
@@ -116,9 +116,9 @@ export default function HowItWorks() {
 
                   {idx < steps.length - 1 && (
                     <div className="hidden lg:flex absolute top-1/2 -right-4 z-20 -translate-y-1/2">
-                      <div className="w-8 h-8 rounded-full bg-muted border border-border/50 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
                     </div>

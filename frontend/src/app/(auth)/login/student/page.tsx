@@ -7,7 +7,6 @@ import { StudentLoginForm } from '@/components/auth/StudentLoginForm';
 export default function StudentLogin() {
     const handleSubmit = async (data: any) => {
         console.log("Student Login:", data);
-        // Add actual login logic here when ready
     };
 
     return (
