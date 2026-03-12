@@ -26,22 +26,22 @@ export default function IsometricHero() {
       ref={containerRef}
       className="relative min-h-screen overflow-hidden flex flex-col"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#020502] via-[#041005] to-[#050806]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050201] via-[#0c0502] to-[#0a0604]" />
 
       <div className="absolute inset-0 opacity-[0.03]">
         <div
           className="w-full h-full"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0)',
+              'radial-gradient(circle at 1px 1px, rgba(255,166,77,0.3) 1px, transparent 0)',
             backgroundSize: '40px 40px',
           }}
         />
       </div>
 
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-amber-600/10 via-blue-500/5 to-transparent blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-amber-600/5 to-transparent blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-blue-500/5 to-transparent blur-3xl hidden lg:block" />
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-primary/20 via-primary/5 to-transparent blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-primary/10 to-transparent blur-3xl" />
+      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-primary/5 to-transparent blur-3xl hidden lg:block" />
 
       <motion.div
         style={{ y, opacity }}
@@ -57,7 +57,7 @@ export default function IsometricHero() {
             >
               <span className="text-white">Learn. Build.</span>
               <br />
-              <span className="bg-gradient-to-r from-amber-400 via-blue-300 to-white bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-primary/70 to-white bg-clip-text text-transparent">
                 Master Skills.
               </span>
             </motion.h1>
@@ -68,7 +68,7 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-xl font-medium"
             >
-              Master complex disciplines, compete in global innovation challenges, and reach peak expertise — all on one premium platform built for the next generation of professionals across Engineering, Management, and beyond.
+              Master complex software engineering disciplines, compete in global innovation challenges, and reach peak technical expertise — all on one premium platform built for the next generation of software engineers. Master Computer Science, Web Tech, and AI.
             </motion.p>
 
             <motion.div
@@ -77,10 +77,13 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 shimmer reflective-glaze">
+              <button
+                onClick={() => window.location.href = '/login'}
+                className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-10 py-5 bg-primary text-primary-foreground font-black uppercase tracking-widest text-xs rounded-full transition-all duration-300 shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 shimmer"
+              >
                 <GraduationCap className="w-5 h-5" />
                 <span>Get Started Free</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
             </motion.div>
           </div>
@@ -146,9 +149,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -6, 0], rotate: [0, 5, -5, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/25 backdrop-blur-sm"
+                  className="px-3 py-1.5 rounded-lg bg-primary/15 border border-primary/25 backdrop-blur-sm"
                 >
-                  <span className="text-[11px] font-bold text-amber-400 flex items-center gap-1">
+                  <span className="text-[11px] font-bold text-primary flex items-center gap-1">
                     🏆 Achievement Unlocked!
                   </span>
                 </motion.div>
@@ -163,9 +166,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-                  className="px-2.5 py-1 rounded-md bg-blue-500/15 border border-blue-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-primary/15 border border-primary/25 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-blue-400">⚡ +250 XP</span>
+                  <span className="text-[10px] font-bold text-primary">⚡ +250 XP</span>
                 </motion.div>
               </motion.div>
 
@@ -178,9 +181,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                  className="px-2.5 py-1 rounded-md bg-amber-500/15 border border-amber-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-primary/15 border border-primary/25 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-amber-400">🔥 5-Day Streak</span>
+                  <span className="text-[10px] font-bold text-primary">🔥 5-Day Streak</span>
                 </motion.div>
               </motion.div>
 
@@ -193,19 +196,19 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-                  className="px-2.5 py-1 rounded-md bg-purple-500/15 border border-purple-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-primary/10 border border-primary/20 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-purple-400">🤖 AI Ready</span>
+                  <span className="text-[10px] font-bold text-primary">🤖 AI Ready</span>
                 </motion.div>
               </motion.div>
 
               {[
-                { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#60a5fa' },
-                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#93c5fd' },
-                { s: 3, l: 58, t: 38, dy: -45, dur: 3.8, bg: '#a78bfa' },
-                { s: 4.5, l: 70, t: 55, dy: -55, dur: 4.2, bg: '#fbbf24' },
-                { s: 3.5, l: 35, t: 60, dy: -48, dur: 3.2, bg: '#f472b6' },
-                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#dbeafe' },
+                { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#f38d58' },
+                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#ffb380' },
+                { s: 3, l: 58, t: 38, dy: -45, dur: 3.8, bg: '#ff9966' },
+                { s: 4.5, l: 70, t: 55, dy: -55, dur: 4.2, bg: '#ffd1b3' },
+                { s: 3.5, l: 35, t: 60, dy: -48, dur: 3.2, bg: '#f38d58' },
+                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#ffb380' },
               ].map((p, i) => (
                 <motion.div
                   key={`xp-particle-${i}`}
@@ -250,7 +253,7 @@ export default function IsometricHero() {
       >
         <span className="text-xs text-white/30 tracking-wide uppercase">
           Powered by{' '}
-          <span className="text-amber-400/60 font-semibold">
+          <span className="text-primary/60 font-semibold">
             Bluecoderhub
           </span>
         </span>
@@ -258,7 +261,7 @@ export default function IsometricHero() {
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <ChevronDown className="w-5 h-5 text-white/20" />
+          <ChevronDown className="w-5 h-5 text-primary/30" />
         </motion.div>
       </motion.div>
     </section>

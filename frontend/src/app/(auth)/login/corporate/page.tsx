@@ -12,13 +12,11 @@ export default function CorporateLogin() {
 
     return (
         <LoginLayout
-            role="corporate"
-            title="Corporate Dashboard"
-            subtitle="Manage your organization's talent, host hackathons, and view analytics."
-            accentColor="#6366f1" // Indigo
-            icon={<Briefcase size={48} />}
+            title="Corporate Portal"
+            subtitle="Talent Management & Analytics"
+            icon={<Briefcase size={32} />}
         >
-            <LoginForm role="corporate" accentColor="#6366f1" onSubmit={handleSubmit} />
+            <LoginForm onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

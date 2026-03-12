@@ -12,13 +12,11 @@ export default function HRLogin() {
 
     return (
         <LoginLayout
-            role="hr"
             title="HR Talent Portal"
-            subtitle="Source top candidates, review interview results, and manage hiring pipelines."
-            accentColor="#f59e0b" // Amber
-            icon={<Users size={48} />}
+            subtitle="Recruitment & Pipeline Management"
+            icon={<Users size={32} />}
         >
-            <LoginForm role="hr" accentColor="#f59e0b" onSubmit={handleSubmit} />
+            <LoginForm onSubmit={handleSubmit} />
         </LoginLayout>
     );
 }

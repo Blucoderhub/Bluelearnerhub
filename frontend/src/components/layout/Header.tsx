@@ -89,14 +89,42 @@ export default function Header() {
 
   return (
     <>
+    <>
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
           ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
           : 'bg-background/80 backdrop-blur-md border-b border-transparent'
           }`}
       >
+        {/* Top Bar: Brand, Search, Auth */}
         <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-6 flex-1">
+            <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25 group-hover:shadow-primary/40 group-hover:scale-105 transition-all duration-200">
+                <span className="text-lg font-bold text-primary-foreground">BL</span>
+              </div>
+              <span className="hidden sm:block font-black text-xl tracking-tighter">
+                BLUELEARNERHUB
+              </span>
+            </Link>
+
+            {/* Psychological Attraction: Centralized Search */}
+            <div className="hidden md:flex flex-1 max-w-xl relative group">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <Zap className="h-4 w-4 text-primary group-focus-within:animate-pulse" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Search tutorials, courses, or documentation..."
+                className="w-full pl-10 h-10 bg-muted/30 border-border/50 rounded-2xl focus-visible:ring-primary/30 focus-visible:border-primary transition-all text-sm"
+              />
+              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <span className="text-[10px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded border border-border/50">⌘K</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-muted/50 active:scale-95 transition-all"
@@ -109,159 +137,18 @@ export default function Header() {
               )}
             </button>
 
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25 group-hover:shadow-primary/40 group-hover:scale-105 transition-all duration-200">
-                <span className="text-sm font-bold text-white">BL</span>
-              </div>
-              <span className="hidden sm:block font-bold text-lg tracking-tight">
-                Bluelearnerhub
-              </span>
-            </Link>
-
-            <nav className="hidden lg:flex items-center ml-6 gap-1">
-              {mainNavigation.map((item) => {
-                const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
-
-                if (item.isMega) {
-                  return (
-                    <DropdownMenu key={item.name}>
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none ${isActive
-                            ? 'text-primary bg-primary/10'
-                            : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
-                            }`}
-                        >
-                          <item.icon className="h-4 w-4" />
-                          {item.name}
-                          <ChevronDown className="h-3.5 w-3.5 opacity-50" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="start"
-                        sideOffset={15}
-                        className="w-[90vw] max-w-[1200px] p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 rounded-2xl shadow-2xl border-border/50 bg-background/95 backdrop-blur-xl"
-                      >
-                        {allDomains.map((domain) => (
-                          <div key={domain.id} className="space-y-4">
-                            <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-bold text-foreground">
-                              <span className="text-lg">{domain.icon}</span>
-                              {domain.name}
-                            </DropdownMenuLabel>
-                            <div className="flex flex-col gap-1.5">
-                              {domain.categories.slice(0, 6).map((category) => (
-                                <Link
-                                  key={category}
-                                  href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                                  className="text-[13px] text-muted-foreground hover:text-primary transition-colors py-0.5"
-                                >
-                                  {category}
-                                </Link>
-                              ))}
-                              {domain.categories.length > 6 && (
-                                <Link
-                                  href={`/tutorials/${domain.id}`}
-                                  className="text-[12px] text-primary/70 hover:text-primary font-medium mt-1 underline-offset-4 hover:underline"
-                                >
-                                  View all {domain.categories.length} topics →
-                                </Link>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Developer Ecosystem Section */}
-                        <div className="space-y-4 lg:col-span-1 border-l border-border/50 pl-10 ml-2">
-                          <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-black text-primary uppercase tracking-widest">
-                            <Sparkles className="h-4 w-4" />
-                            Developer Ecosystem
-                          </DropdownMenuLabel>
-                          <div className="flex flex-col gap-3">
-                            <Link
-                              href="/ide"
-                              className="group flex items-start gap-3 p-3 rounded-xl hover:bg-primary/5 transition-all"
-                            >
-                              <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
-                                <Code2 className="h-4 w-4" />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-[13px] font-bold text-foreground">IDE Sandbox</span>
-                                <span className="text-[11px] text-muted-foreground leading-tight">Elite HackerRank-level coding environment.</span>
-                              </div>
-                            </Link>
-
-                            <Link
-                              href="/tools"
-                              className="group flex items-start gap-3 p-3 rounded-xl hover:bg-amber-500/5 transition-all"
-                            >
-                              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 group-hover:scale-110 transition-transform">
-                                <Hammer className="h-4 w-4" />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-[13px] font-bold text-foreground">Engineering Tools</span>
-                                <span className="text-[11px] text-muted-foreground leading-tight">Converters, formatters, and simulators.</span>
-                              </div>
-                            </Link>
-                          </div>
-                        </div>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )
-                }
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.badge ? '#' : item.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
-                      ? 'text-primary bg-primary/10'
-                      : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
-                      } ${item.badge ? 'cursor-not-allowed opacity-80' : ''}`}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.name}
-                    {item.badge && (
-                      <span className="ml-1.5 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-sm">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                )
-              })}
-            </nav>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <nav className="hidden lg:flex items-center gap-1">
-              {secondaryNavigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${item.isHighlight
-                    ? 'text-amber-400 hover:text-amber-300 hover:bg-amber-400/10'
-                    : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
-                    }`}
-                >
-                  {item.isHighlight && <Sparkles className="h-3.5 w-3.5" />}
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="hidden lg:block h-6 w-px bg-border/50 mx-1" />
-
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2 px-1.5 py-1.5 rounded-xl hover:bg-muted/50 focus:outline-none transition-all group">
                     <div className="relative">
-                      <Avatar className="h-8 w-8 border-2 border-transparent group-hover:border-primary/50 transition-all">
+                      <Avatar className="h-9 w-9 border-2 border-transparent group-hover:border-primary/50 transition-all">
                         <AvatarImage src={user.profilePicture} />
                         <AvatarFallback className="bg-primary/10 text-primary text-sm font-bold">
                           {user.fullName?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-blue-500 border-2 border-background rounded-full" />
+                      <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-primary border-2 border-background rounded-full" />
                     </div>
                     <ChevronDown className="hidden sm:block h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                   </button>
@@ -279,9 +166,6 @@ export default function Header() {
                   <DropdownMenuItem className="rounded-lg focus:bg-primary/10 focus:text-primary cursor-pointer" asChild>
                     <Link href="/dashboard"><Trophy className="mr-2 h-4 w-4" />Dashboard</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-lg focus:bg-primary/10 focus:text-primary cursor-pointer" asChild>
-                    <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={logout}
@@ -292,11 +176,16 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2">
-                <Button asChild className="bg-primary text-white hover:bg-primary/90 font-bold px-6 h-10 text-sm rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all group">
-                  <Link href="/get-started" className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/login"
+                  className="hidden sm:block text-sm font-bold text-foreground/70 hover:text-primary transition-colors px-3 py-2"
+                >
+                  Log In
+                </Link>
+                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 font-black px-6 h-10 text-xs uppercase tracking-widest rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all group">
+                  <Link href="/login" className="flex items-center gap-2">
                     Get Started
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
               </div>
@@ -304,6 +193,104 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Sub-Navbar: Navigation (W3Schools Style) */}
+        <nav className="hidden lg:flex border-t border-border/30 h-12 bg-muted/10">
+          <div className="mx-auto flex h-full items-center px-4 sm:px-6 lg:px-8 max-w-[1400px] w-full gap-1 overflow-x-auto scrollbar-hide">
+            {mainNavigation.map((item) => {
+              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
+
+              if (item.isMega) {
+                return (
+                  <DropdownMenu key={item.name}>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold transition-all duration-200 focus:outline-none border-b-2 ${isActive
+                          ? 'text-primary border-primary bg-primary/5'
+                          : 'text-foreground/70 border-transparent hover:text-foreground hover:bg-muted/50'
+                          }`}
+                      >
+                        {item.name}
+                        <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="start"
+                      sideOffset={0}
+                      className="w-[90vw] max-w-[1200px] p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10 rounded-b-2xl rounded-t-none shadow-2xl border-border/50 bg-background/95 backdrop-blur-xl"
+                    >
+                      {allDomains.map((domain) => (
+                        <div key={domain.id} className="space-y-4">
+                          <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-bold text-foreground">
+                            <span className="text-lg">{domain.icon}</span>
+                            {domain.name}
+                          </DropdownMenuLabel>
+                          <div className="flex flex-col gap-1.5">
+                            {domain.categories.slice(0, 6).map((category) => (
+                              <Link
+                                key={category}
+                                href={`/tutorials/${domain.id}/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                                className="text-[13px] text-muted-foreground hover:text-primary transition-colors py-0.5"
+                              >
+                                {category}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="space-y-4 border-l border-border/50 pl-10 ml-2">
+                        <DropdownMenuLabel className="flex items-center gap-2 p-0 text-sm font-black text-primary uppercase tracking-widest">
+                          Deep Dive
+                        </DropdownMenuLabel>
+                        <div className="flex flex-col gap-3">
+                          <Link href="/ide" className="group flex items-center gap-3 p-2 rounded-xl hover:bg-primary/5 transition-all">
+                            <Code2 className="h-4 w-4 text-primary" />
+                            <span className="text-[13px] font-bold">IDE Sandbox</span>
+                          </Link>
+                          <Link href="/tools" className="group flex items-center gap-3 p-2 rounded-xl hover:bg-primary/5 transition-all">
+                            <Hammer className="h-4 w-4 text-primary" />
+                            <span className="text-[13px] font-bold">Tools</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.badge ? '#' : item.href}
+                  className={`relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold transition-all duration-200 border-b-2 ${isActive
+                    ? 'text-primary border-primary bg-primary/5'
+                    : 'text-foreground/70 border-transparent hover:text-foreground hover:bg-muted/50'
+                    } ${item.badge ? 'cursor-not-allowed opacity-50' : ''}`}
+                >
+                  {item.name}
+                  {item.badge && (
+                    <span className="px-1.5 py-0.5 text-[8px] font-black uppercase tracking-tighter bg-primary/10 text-primary rounded-sm">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              )
+            })}
+            <div className="flex-1" />
+            {secondaryNavigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`px-4 h-full text-[12px] font-bold transition-all duration-200 flex items-center gap-2 ${item.isHighlight
+                  ? 'text-primary hover:bg-primary/10'
+                  : 'text-foreground/60 hover:text-foreground hover:bg-muted/50'
+                  }`}
+              >
+                {item.isHighlight && <Sparkles className="h-3.5 w-3.5" />}
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </nav>
       </header>
 
       {mobileMenuOpen && (

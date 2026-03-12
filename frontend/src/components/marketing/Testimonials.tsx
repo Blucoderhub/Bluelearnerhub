@@ -16,9 +16,9 @@ const testimonials = [
   },
   {
     name: 'Raj Patel',
-    role: 'Product Manager',
+    role: 'Backend Developer',
     company: 'Meta',
-    content: 'The interview prep module is incredible. I went through 10 mock interviews and got confidence for my real interviews.',
+    content: 'The system design and algorithm modules are top-notch. I went through the entire CS track and it significantly improved my technical interview performance.',
     rating: 5,
     initials: 'RP',
     color: 'from-purple-500 to-pink-500',
@@ -34,9 +34,9 @@ const testimonials = [
   },
   {
     name: 'Alex Kumar',
-    role: 'Data Scientist',
+    role: 'Frontend Architect',
     company: 'Microsoft',
-    content: 'The community aspect is amazing. Getting feedback from peers on my code submissions helped me improve so much.',
+    content: 'The Deep Dive tutorials on React and Next.js are the best I have found. The community feedback on my code reviews helped me master clean code principles.',
     rating: 5,
     initials: 'AK',
     color: 'from-amber-500 to-orange-500',
