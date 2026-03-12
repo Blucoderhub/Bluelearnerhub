@@ -18,5 +18,7 @@ router.post('/:id/submit', apiLimiter, authenticate, commonValidators.idParam, h
 router.post('/:id/run', apiLimiter, authenticate, commonValidators.idParam, validate, controller.runCode.bind(controller));
 router.get('/:id/submissions', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getUserSubmissions.bind(controller));
 router.get('/:id/matches', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getPotentialMatches.bind(controller));
+router.post('/:id/behavior-events', apiLimiter, authenticate, commonValidators.idParam, hackathonValidators.behaviorEvent, validate, controller.createBehaviorEvent.bind(controller));
+router.get('/:id/adaptive-guidance', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getAdaptiveGuidance.bind(controller));
 
 export default router;

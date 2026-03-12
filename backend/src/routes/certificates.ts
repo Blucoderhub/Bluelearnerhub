@@ -6,6 +6,6 @@ const router = Router();
 
 router.get('/me',                  authenticate, ctrl.getMyCertificates);
 router.get('/verify/:credentialId',              ctrl.verifyCertificate);   // Public
-router.post('/issue',              authenticate, authorize(['ADMIN']), ctrl.issueCertificate);
+router.post('/issue',              authenticate, authorize('ADMIN'), ctrl.issueCertificate);
 
 export default router;

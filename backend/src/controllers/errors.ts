@@ -1,8 +1,33 @@
 import { Request, Response } from 'express';
 import { body } from 'express-validator';
+import crypto from 'crypto';
 import { asyncHandler } from '../middleware/error.middleware';
 import { pool } from '../utils/database';
 import logger from '../utils/logger';
+
+const ENABLE_FULL_PII_LOGGING = process.env.ENABLE_FULL_PII_LOGGING === 'true';
+const DEFAULT_RETENTION_DAYS = 30;
+const MAX_RETENTION_DAYS = 3650;
+
+const pseudonymize = (value: string | null | undefined): string | null => {
+  if (!value) return null;
+  return crypto.createHash('sha256').update(value).digest('hex');
+};
+
+const getSinceDateForRange = (timeRange: string): { since: Date; normalizedRange: '1h' | '24h' | '7d' | '30d' } => {
+  const now = Date.now();
+  switch (timeRange) {
+    case '1h':
+      return { since: new Date(now - 60 * 60 * 1000), normalizedRange: '1h' };
+    case '7d':
+      return { since: new Date(now - 7 * 24 * 60 * 60 * 1000), normalizedRange: '7d' };
+    case '30d':
+      return { since: new Date(now - 30 * 24 * 60 * 60 * 1000), normalizedRange: '30d' };
+    case '24h':
+    default:
+      return { since: new Date(now - 24 * 60 * 60 * 1000), normalizedRange: '24h' };
+  }
+};
 
 // Validation rules for error reports
 export const errorReportValidation = [
@@ -34,6 +59,9 @@ export const reportError = asyncHandler(async (req: Request, res: Response): Pro
     // Extract user information if available
     const userId = req.user?.id || null;
     const userEmail = req.user?.email || null;
+    const ipAddress = req.ip || null;
+    const userEmailHash = pseudonymize(userEmail);
+    const ipAddressHash = pseudonymize(ipAddress);
 
     // Prepare error data for database
     const errorData = {
@@ -47,8 +75,8 @@ export const reportError = asyncHandler(async (req: Request, res: Response): Pro
       url: context?.url || null,
       user_agent: context?.userAgent || req.get('User-Agent') || null,
       user_id: userId,
-      user_email: userEmail,
-      ip_address: req.ip,
+      user_email: ENABLE_FULL_PII_LOGGING ? userEmail : null,
+      ip_address: ENABLE_FULL_PII_LOGGING ? ipAddress : null,
       session_id: (req as any).sessionID || null,
       timestamp: new Date(),
       metadata: {
@@ -58,6 +86,9 @@ export const reportError = asyncHandler(async (req: Request, res: Response): Pro
           'accept-language': req.get('Accept-Language'),
           'accept-encoding': req.get('Accept-Encoding'),
         },
+        piiMode: ENABLE_FULL_PII_LOGGING ? 'full' : 'pseudonymized',
+        userEmailHash,
+        ipAddressHash,
         context: context,
       }
     };
@@ -136,83 +167,74 @@ export const reportError = asyncHandler(async (req: Request, res: Response): Pro
  * GET /api/errors/stats
  */
 export const getErrorStats = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const timeRange = req.query.range as string || '24h';
-  let timeFilter = '';
-  
-  switch (timeRange) {
-    case '1h':
-      timeFilter = "created_at >= NOW() - INTERVAL '1 hour'";
-      break;
-    case '24h':
-      timeFilter = "created_at >= NOW() - INTERVAL '24 hours'";
-      break;
-    case '7d':
-      timeFilter = "created_at >= NOW() - INTERVAL '7 days'";
-      break;
-    case '30d':
-      timeFilter = "created_at >= NOW() - INTERVAL '30 days'";
-      break;
-    default:
-      timeFilter = "created_at >= NOW() - INTERVAL '24 hours'";
+  const requestedRange = req.query.range as string || '24h';
+  const { since, normalizedRange } = getSinceDateForRange(requestedRange);
+
+  try {
+    const queries = await Promise.all([
+      // Total errors
+      pool.query('SELECT COUNT(*) as total FROM frontend_errors WHERE created_at >= $1', [since]),
+      
+      // Errors by level
+      pool.query(`
+        SELECT error_level, COUNT(*) as count 
+        FROM frontend_errors 
+        WHERE created_at >= $1
+        GROUP BY error_level 
+        ORDER BY count DESC
+      `, [since]),
+      
+      // Top error messages
+      pool.query(`
+        SELECT error_name, error_message, COUNT(*) as count 
+        FROM frontend_errors 
+        WHERE created_at >= $1
+        GROUP BY error_name, error_message 
+        ORDER BY count DESC 
+        LIMIT 10
+      `, [since]),
+      
+      // Errors by component
+      pool.query(`
+        SELECT component_name, COUNT(*) as count 
+        FROM frontend_errors 
+        WHERE created_at >= $1 AND component_name IS NOT NULL
+        GROUP BY component_name 
+        ORDER BY count DESC 
+        LIMIT 10
+      `, [since]),
+      
+      // Errors over time (hourly for last 24h)
+      pool.query(`
+        SELECT 
+          DATE_TRUNC('hour', created_at) as hour,
+          COUNT(*) as count
+        FROM frontend_errors 
+        WHERE created_at >= $1
+        GROUP BY hour 
+        ORDER BY hour DESC
+        LIMIT 24
+      `, [since])
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        total: parseInt(queries[0].rows[0].total),
+        byLevel: queries[1].rows,
+        topErrors: queries[2].rows,
+        byComponent: queries[3].rows,
+        overTime: queries[4].rows,
+        timeRange: normalizedRange
+      }
+    });
+  } catch (err) {
+    logger.error('Failed to fetch error stats:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch error stats',
+    });
   }
-
-  const queries = await Promise.all([
-    // Total errors
-    pool.query(`SELECT COUNT(*) as total FROM frontend_errors WHERE ${timeFilter}`),
-    
-    // Errors by level
-    pool.query(`
-      SELECT error_level, COUNT(*) as count 
-      FROM frontend_errors 
-      WHERE ${timeFilter}
-      GROUP BY error_level 
-      ORDER BY count DESC
-    `),
-    
-    // Top error messages
-    pool.query(`
-      SELECT error_name, error_message, COUNT(*) as count 
-      FROM frontend_errors 
-      WHERE ${timeFilter}
-      GROUP BY error_name, error_message 
-      ORDER BY count DESC 
-      LIMIT 10
-    `),
-    
-    // Errors by component
-    pool.query(`
-      SELECT component_name, COUNT(*) as count 
-      FROM frontend_errors 
-      WHERE ${timeFilter} AND component_name IS NOT NULL
-      GROUP BY component_name 
-      ORDER BY count DESC 
-      LIMIT 10
-    `),
-    
-    // Errors over time (hourly for last 24h)
-    pool.query(`
-      SELECT 
-        DATE_TRUNC('hour', created_at) as hour,
-        COUNT(*) as count
-      FROM frontend_errors 
-      WHERE ${timeFilter}
-      GROUP BY hour 
-      ORDER BY hour DESC
-      LIMIT 24
-    `)
-  ]);
-
-  res.json({
-    success: true,
-    data: {
-      total: parseInt(queries[0].rows[0].total),
-      byLevel: queries[1].rows,
-      topErrors: queries[2].rows,
-      byComponent: queries[3].rows,
-      overTime: queries[4].rows,
-      timeRange
-    }
-  });
 });
 
 /**
@@ -264,17 +286,34 @@ async function checkErrorPatterns(errorData: any) {
  * DELETE /api/errors/cleanup
  */
 export const cleanupOldErrors = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const retentionDays = parseInt(req.query.days as string) || 30;
-  
-  const result = await pool.query(`
-    DELETE FROM frontend_errors 
-    WHERE created_at < NOW() - INTERVAL '${retentionDays} days'
-  `);
+  const parsedDays = Number.parseInt(String(req.query.days ?? DEFAULT_RETENTION_DAYS), 10);
+  if (!Number.isInteger(parsedDays) || parsedDays < 1 || parsedDays > MAX_RETENTION_DAYS) {
+    res.status(400).json({
+      success: false,
+      message: `days must be an integer between 1 and ${MAX_RETENTION_DAYS}`,
+    });
+    return;
+  }
 
-  logger.info(`Cleaned up ${result.rowCount} old frontend error records`);
+  const retentionDays = parsedDays;
 
-  res.json({
-    success: true,
-    message: `Cleaned up ${result.rowCount} error records older than ${retentionDays} days`
-  });
+  try {
+    const result = await pool.query(`
+      DELETE FROM frontend_errors 
+      WHERE created_at < NOW() - make_interval(days => $1)
+    `, [retentionDays]);
+
+    logger.info(`Cleaned up ${result.rowCount} old frontend error records`);
+
+    res.json({
+      success: true,
+      message: `Cleaned up ${result.rowCount} error records older than ${retentionDays} days`
+    });
+  } catch (err) {
+    logger.error('Failed to cleanup old frontend errors:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to cleanup old errors',
+    });
+  }
 });

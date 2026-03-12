@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as multer from 'multer';
+import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { config } from '@/config';
@@ -7,7 +7,7 @@ import { AppError } from '@/middleware/error';
 import imageSize from 'image-size';
 
 // Configure storage
-const storage = (multer as any).diskStorage({
+const storage = multer.diskStorage({
   destination: (req: any, file: any, cb: any) => {
     cb(null, config.upload.uploadDir);
   },

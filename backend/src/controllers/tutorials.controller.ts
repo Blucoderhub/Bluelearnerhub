@@ -22,11 +22,13 @@ import {
   tutorialSections,
   tutorialProgress,
   tutorialCompletions,
+  learningBehaviorEvents,
 } from '../db/schema-v2';
 import { users } from '../db/schema';
 import { GamificationService } from '../services/gamification.service';
 import { config } from '../config';
 import logger from '../utils/logger';
+import { fetchAdaptiveGuidanceFromAI, fallbackTutorialGuidance } from '@/services/adaptiveGuidance';
 
 // ────────────────────────────────────────────────────────────────────────────
 // BROWSE & SEARCH
@@ -300,5 +302,110 @@ export const runCode = async (req: Request, res: Response) => {
   } catch (err) {
     logger.error('runCode error', err);
     res.status(500).json({ success: false, message: 'Code execution failed' });
+  }
+};
+
+// ────────────────────────────────────────────────────────────────────────────
+// BEHAVIOR EVENTS + ADAPTIVE GUIDANCE
+// ────────────────────────────────────────────────────────────────────────────
+
+export const createTutorialBehaviorEvent = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const tutorialId = parseInt(req.params.id, 10);
+    const { eventType, eventPayload } = req.body || {};
+
+    if (!Number.isInteger(tutorialId) || tutorialId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid tutorial id' });
+    }
+    if (!eventType || typeof eventType !== 'string') {
+      return res.status(400).json({ success: false, message: 'eventType is required' });
+    }
+
+    await db.insert(learningBehaviorEvents).values({
+      userId,
+      moduleType: 'tutorial',
+      targetId: tutorialId,
+      eventType: eventType.trim().slice(0, 100),
+      eventPayload: eventPayload && typeof eventPayload === 'object' ? eventPayload : {},
+    });
+
+    res.status(201).json({ success: true });
+  } catch (err) {
+    logger.error('createTutorialBehaviorEvent error', err);
+    res.status(500).json({ success: false, message: 'Failed to record behavior event' });
+  }
+};
+
+export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const tutorialId = parseInt(req.params.id, 10);
+    if (!Number.isInteger(tutorialId) || tutorialId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid tutorial id' });
+    }
+
+    const [tutorial] = await db.select().from(tutorials).where(eq(tutorials.id, tutorialId));
+    if (!tutorial) {
+      return res.status(404).json({ success: false, message: 'Tutorial not found' });
+    }
+
+    const [sections, completedRows, recentEvents] = await Promise.all([
+      db.select({ id: tutorialSections.id }).from(tutorialSections).where(eq(tutorialSections.tutorialId, tutorialId)),
+      db.select({ sectionId: tutorialProgress.sectionId }).from(tutorialProgress).where(and(eq(tutorialProgress.tutorialId, tutorialId), eq(tutorialProgress.userId, userId))),
+      db.select({ eventType: learningBehaviorEvents.eventType, eventPayload: learningBehaviorEvents.eventPayload, createdAt: learningBehaviorEvents.createdAt })
+        .from(learningBehaviorEvents)
+        .where(and(
+          eq(learningBehaviorEvents.userId, userId),
+          eq(learningBehaviorEvents.moduleType, 'tutorial'),
+          eq(learningBehaviorEvents.targetId, tutorialId),
+        ))
+        .orderBy(desc(learningBehaviorEvents.createdAt))
+        .limit(80),
+    ]);
+
+    const runCodeEvents = recentEvents.filter((event) => String(event.eventType || '').toLowerCase().includes('run_code')).length;
+    const errorEvents = recentEvents.filter((event) => event.eventType.toLowerCase().includes('error')).length;
+
+    const snapshot = {
+      completionPercent: sections.length ? Math.round((completedRows.length / sections.length) * 100) : 0,
+      completedSections: completedRows.length,
+      totalSections: sections.length,
+      runCodeEvents,
+      errorEvents,
+    };
+
+    const fallbackGuidance = fallbackTutorialGuidance(snapshot);
+
+    try {
+      const data = await fetchAdaptiveGuidanceFromAI('tutorial', String((req as any).requestId || 'unknown'), {
+        target_id: tutorialId,
+        target_title: tutorial.title,
+        metrics: snapshot,
+        events: recentEvents.map((event) => ({
+          event_type: event.eventType,
+          event_payload: event.eventPayload,
+          created_at: event.createdAt,
+        })),
+      });
+
+      return res.json({
+        success: true,
+        guidance: Array.isArray(data?.guidance) && data.guidance.length > 0 ? data.guidance : fallbackGuidance,
+        behaviorSummary: data?.behavior_summary || snapshot,
+        generatedAt: data?.generated_at || new Date().toISOString(),
+      });
+    } catch (upstreamErr) {
+      logger.warn('getTutorialAdaptiveGuidance upstream fallback', upstreamErr);
+      return res.json({
+        success: true,
+        guidance: fallbackGuidance,
+        behaviorSummary: snapshot,
+        generatedAt: new Date().toISOString(),
+      });
+    }
+  } catch (err) {
+    logger.error('getTutorialAdaptiveGuidance error', err);
+    res.status(500).json({ success: false, message: 'Failed to generate adaptive guidance' });
   }
 };

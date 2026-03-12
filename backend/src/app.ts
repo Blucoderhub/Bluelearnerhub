@@ -8,6 +8,7 @@ import { config } from './config';
 import routes from './routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 import { generalLimiter } from './middleware/rateLimit.middleware';
+import { requestContext } from './middleware/requestContext';
 import logger from './utils/logger';
 
 export function createApp(): Application {
@@ -104,6 +105,9 @@ export function createApp(): Application {
 
   // Compression
   app.use(compression());
+
+  // Request correlation id for logs and upstream calls
+  app.use(requestContext);
 
   // Logging
   if (config.nodeEnv === 'development') {

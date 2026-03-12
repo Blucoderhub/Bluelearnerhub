@@ -1,8 +1,32 @@
+const nodeEnv = process.env.NODE_ENV || 'development';
+
+const jwtSecret = process.env.JWT_SECRET || '';
+const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET || '';
+
+const looksPlaceholderSecret = (value: string) => {
+  const lower = value.toLowerCase();
+  return (
+    lower.includes('change-in-production') ||
+    lower.includes('your-super-secret') ||
+    lower.includes('replace-me') ||
+    lower.includes('default-secret')
+  );
+};
+
+if (nodeEnv !== 'test') {
+  if (!jwtSecret || jwtSecret.length < 32 || looksPlaceholderSecret(jwtSecret)) {
+    throw new Error('Invalid JWT_SECRET: set a strong secret (>=32 chars) via environment variables.');
+  }
+  if (!jwtRefreshSecret || jwtRefreshSecret.length < 32 || looksPlaceholderSecret(jwtRefreshSecret)) {
+    throw new Error('Invalid JWT_REFRESH_SECRET: set a strong secret (>=32 chars) via environment variables.');
+  }
+}
+
 export const config = {
   // Server
   port: parseInt(process.env.PORT || '5000'),
   host: process.env.HOST || '0.0.0.0',
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv,
 
   // Frontend
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -36,9 +60,9 @@ export const config = {
 
   // JWT
   jwt: {
-    secret: process.env.JWT_SECRET || '',
+    secret: jwtSecret,
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || '',
+    refreshSecret: jwtRefreshSecret,
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
   },
 
