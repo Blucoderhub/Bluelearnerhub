@@ -74,7 +74,7 @@ const MOCK_QUIZ = {
 };
 
 const DIFFICULTY_COLORS = {
-  easy:   'bg-emerald-900/50 text-emerald-400',
+  easy:   'bg-amber-900/50 text-amber-400',
   medium: 'bg-blue-900/50 text-blue-400',
   hard:   'bg-purple-900/50 text-purple-400',
 };
@@ -211,7 +211,7 @@ export default function DailyQuizPage() {
                   {q.options.map((opt, idx) => {
                     let style = 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600';
                     if (revealed) {
-                      if (idx === q.correctIndex)   style = 'border-emerald-600 bg-emerald-900/30 text-emerald-300';
+                      if (idx === q.correctIndex)   style = 'border-amber-600 bg-amber-900/30 text-amber-300';
                       else if (idx === chosen)       style = 'border-red-600 bg-red-900/30 text-red-300';
                       else                           style = 'border-gray-800 bg-gray-900/50 text-gray-600';
                     } else if (chosen === idx) {
@@ -229,7 +229,7 @@ export default function DailyQuizPage() {
                           {String.fromCharCode(65 + idx)}
                         </span>
                         <span className="flex-1">{opt}</span>
-                        {revealed && idx === q.correctIndex && <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />}
+                        {revealed && idx === q.correctIndex && <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />}
                         {revealed && idx === chosen && idx !== q.correctIndex && <XCircle className="h-4 w-4 text-red-400 shrink-0" />}
                       </button>
                     );
@@ -286,7 +286,7 @@ export default function DailyQuizPage() {
                     <p className="text-xs text-gray-500">Score</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-emerald-400">{correctCount}</p>
+                    <p className="text-3xl font-bold text-amber-400">{correctCount}</p>
                     <p className="text-xs text-gray-500">Correct</p>
                   </div>
                   <div>
@@ -305,7 +305,7 @@ export default function DailyQuizPage() {
                     return (
                       <div key={i} className="flex items-start gap-2 text-sm">
                         {correct
-                          ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                          ? <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
                           : <XCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
                         }
                         <span className={`text-xs leading-relaxed ${correct ? 'text-gray-300' : 'text-gray-500'}`}>

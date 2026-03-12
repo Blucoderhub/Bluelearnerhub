@@ -52,29 +52,29 @@ export function DailyChallenge({
   }, [timeRemaining])
 
   const difficultyColors = {
-    Easy: 'text-green-400 bg-green-400/10 border-green-400/20',
+    Easy: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
     Medium: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
     Hard: 'text-red-400 bg-red-400/10 border-red-400/20',
   }
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-emerald-500/5 p-8 md:p-10 shadow-2xl shadow-emerald-500/10 group"
+      className="relative overflow-hidden rounded-[2.5rem] border border-amber-500/20 bg-amber-500/5 p-8 md:p-10 shadow-2xl shadow-amber-500/10 group"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, borderColor: 'rgba(16, 185, 129, 0.4)' }}
       transition={{ duration: 0.3 }}
     >
       {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/5 blur-[60px] rounded-full translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/5 blur-[60px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
       <div className="relative flex flex-col md:flex-row gap-8 items-center">
         {/* Character/Visual Side */}
-        <div className="hidden md:flex flex-col items-center justify-center p-6 rounded-[2rem] bg-white/5 border border-white/10 relative overflow-hidden group-hover:bg-emerald-500/10 transition-colors">
+        <div className="hidden md:flex flex-col items-center justify-center p-6 rounded-[2rem] bg-white/5 border border-white/10 relative overflow-hidden group-hover:bg-amber-500/10 transition-colors">
            <CodingCharacter size={120} />
            <div className="mt-4 text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">CHALLENGE_STATUS</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">CHALLENGE_STATUS</p>
               <p className="text-xs font-bold text-white/40">{completed ? 'VERIFIED' : 'PENDING...'}</p>
            </div>
         </div>
@@ -82,9 +82,9 @@ export function DailyChallenge({
         {/* Content Side */}
         <div className="flex-1 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">DAILY_REVENUE_CHALLENGE</span>
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400">DAILY_REVENUE_CHALLENGE</span>
             </div>
             
             {!completed && timeRemaining > 0 && (
@@ -96,7 +96,7 @@ export function DailyChallenge({
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-3xl md:text-4xl font-black italic tracking-tighter text-white group-hover:text-emerald-400 transition-colors">
+            <h4 className="text-3xl md:text-4xl font-black italic tracking-tighter text-white group-hover:text-amber-400 transition-colors">
               {title}
             </h4>
             <p className="text-lg text-slate-400 font-medium leading-relaxed max-w-2xl">
@@ -119,14 +119,14 @@ export function DailyChallenge({
 
           <div className="pt-4 flex items-center gap-6">
             {completed ? (
-              <div className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-black italic tracking-tight text-lg">
+              <div className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-black italic tracking-tight text-lg">
                 <CheckCircle2 className="w-6 h-6" />
                 CHALLENGE_SOLVED
               </div>
             ) : (
               <Button
                 onClick={onStart}
-                className="h-16 px-10 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl italic tracking-tighter rounded-2xl shadow-2xl shadow-emerald-500/30 group/btn transition-all active:scale-95"
+                className="h-16 px-10 bg-amber-500 hover:bg-amber-600 text-white font-black text-xl italic tracking-tighter rounded-2xl shadow-2xl shadow-amber-500/30 group/btn transition-all active:scale-95"
               >
                 SOLVE_NOW
                 <ArrowRight className="w-6 h-6 ml-3 group-hover/btn:translate-x-2 transition-transform" />

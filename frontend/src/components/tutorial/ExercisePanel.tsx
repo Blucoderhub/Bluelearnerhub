@@ -124,7 +124,7 @@ export default function ExercisePanel({
                   <span className="text-gray-800 dark:text-gray-200">{tc.input}</span>
                   <br />
                   <span className="text-gray-500">Expected: </span>
-                  <span className="text-emerald-700 dark:text-emerald-400">{tc.expectedOutput}</span>
+                  <span className="text-amber-700 dark:text-amber-400">{tc.expectedOutput}</span>
                 </div>
               ))}
             </div>
@@ -145,13 +145,13 @@ export default function ExercisePanel({
         {testResults.length > 0 && (
           <div className="border-t border-gray-200 px-4 py-3 dark:border-gray-800">
             {allPassed ? (
-              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 dark:bg-emerald-950">
-                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+              <div className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 dark:bg-amber-950">
+                <CheckCircle2 className="h-5 w-5 text-amber-600" />
                 <div>
-                  <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                  <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
                     All tests passed!
                   </p>
-                  <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                  <p className="text-xs text-amber-600 dark:text-amber-400">
                     +{xpReward} XP awarded
                   </p>
                 </div>
@@ -165,7 +165,7 @@ export default function ExercisePanel({
                     className={cn(
                       'flex items-start gap-2 rounded-lg px-3 py-2 text-xs font-mono',
                       r.passed
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
                         : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
                     )}
                   >

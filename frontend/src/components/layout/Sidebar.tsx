@@ -19,7 +19,8 @@ import {
   Calendar,
   ChevronDown,
   ChevronRight,
-  GraduationCap
+  GraduationCap,
+  BookMarked,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
@@ -128,6 +129,11 @@ export default function Sidebar() {
       icon: Award,
     },
     {
+      name: 'Study Notebooks',
+      href: '/notebooks',
+      icon: BookMarked,
+    },
+    {
       name: 'Settings',
       href: '/profile/settings',
       icon: Settings,
@@ -202,7 +208,7 @@ export default function Sidebar() {
                             className={cn(
                               'flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors',
                                 pathname === subItem.href
-                                  ? 'bg-green-600 text-white'
+                                  ? 'bg-blue-600 text-white'
                                   : 'text-gray-400 hover:bg-neutral-800 hover:text-white'
                             )}
                           >
@@ -221,7 +227,7 @@ export default function Sidebar() {
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                     pathname === item.href
-                      ? 'bg-green-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'text-gray-300 hover:bg-neutral-800'
                   )}
                 >
@@ -245,11 +251,11 @@ export default function Sidebar() {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">Total XP</span>
-                <span className="font-bold text-green-400">{userTotalPoints}</span>
+                <span className="font-bold text-blue-400">{userTotalPoints}</span>
               </div>
               <div className="w-full bg-gray-800 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-emerald-400 h-2 rounded-full"
+                  className="bg-gradient-to-r from-blue-500 to-amber-400 h-2 rounded-full"
                   style={{ width: `${(userTotalPoints % 1000) / 10}%` }}
                 />
               </div>

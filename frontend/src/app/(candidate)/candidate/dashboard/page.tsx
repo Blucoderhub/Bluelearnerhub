@@ -24,7 +24,7 @@ import { Badge } from '@/components/ui/badge';
 const stats = [
     { title: 'Active Applications', value: '8', icon: Briefcase, color: 'text-blue-400', bg: 'bg-blue-500/10', change: '+3 this week' },
     { title: 'Upcoming Interviews', value: '3', icon: Video, color: 'text-purple-400', bg: 'bg-purple-500/10', change: 'Next: Tomorrow' },
-    { title: 'Profile Completion', value: '95%', icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10', change: 'Almost done' },
+    { title: 'Profile Completion', value: '95%', icon: CheckCircle2, color: 'text-amber-400', bg: 'bg-amber-500/10', change: 'Almost done' },
     { title: 'Profile Views', value: '142', icon: Eye, color: 'text-orange-400', bg: 'bg-orange-500/10', change: '+28% this month' },
 ];
 
@@ -121,7 +121,7 @@ export default function CandidateDashboardPage() {
                                             <div className="hidden md:block text-right">
                                                 <Badge className={`text-[10px] font-bold border-none ${
                                                     app.status === 'Interview' ? 'bg-purple-500/10 text-purple-400' :
-                                                    app.status === 'Shortlisted' ? 'bg-emerald-500/10 text-emerald-400' :
+                                                    app.status === 'Shortlisted' ? 'bg-amber-500/10 text-amber-400' :
                                                     'bg-blue-500/10 text-blue-400'
                                                 }`}>
                                                     {app.status}
@@ -171,7 +171,7 @@ export default function CandidateDashboardPage() {
                         <Card className="bg-slate-900/40 border-slate-800">
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-base font-bold flex items-center gap-2">
-                                    <TrendingUp className="w-4 h-4 text-emerald-400" />
+                                    <TrendingUp className="w-4 h-4 text-amber-400" />
                                     Activity Overview
                                 </CardTitle>
                             </CardHeader>
@@ -207,7 +207,7 @@ export default function CandidateDashboardPage() {
                                 <div key={i} className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest">{interview.time}</span>
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                        <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                                     </div>
                                     <p className="text-sm font-bold text-white">{interview.role}</p>
                                     <p className="text-xs text-slate-500">{interview.company}</p>

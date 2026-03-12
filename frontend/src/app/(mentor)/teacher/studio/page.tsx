@@ -91,7 +91,7 @@ export default function TeacherStudioPage() {
 
   const STATS = [
     { label: 'Enrolled Students', value: '0', icon: Users, color: 'text-blue-400' },
-    { label: 'Completions',       value: '0', icon: CheckCircle2, color: 'text-emerald-400' },
+    { label: 'Completions',       value: '0', icon: CheckCircle2, color: 'text-amber-400' },
     { label: 'Avg Rating',        value: '—', icon: BarChart3, color: 'text-amber-400' },
   ];
 
@@ -117,7 +117,7 @@ export default function TeacherStudioPage() {
           <Button
             size="sm"
             onClick={handlePublish}
-            className={`gap-1.5 text-xs ${published ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-blue-600 hover:bg-blue-700'}`}
+            className={`gap-1.5 text-xs ${published ? 'bg-amber-700 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700'}`}
           >
             {published ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Upload className="h-3.5 w-3.5" />}
             {published ? 'Published' : 'Publish'}
@@ -254,7 +254,7 @@ export default function TeacherStudioPage() {
                                 value={block.content}
                                 onChange={(e) => updateBlock(block.id, e.target.value)}
                                 placeholder={`# Write ${block.language ?? 'code'} here...`}
-                                className="min-h-[140px] bg-gray-800 border-gray-700 font-mono text-sm text-green-300 placeholder:text-gray-600"
+                                className="min-h-[140px] bg-gray-800 border-gray-700 font-mono text-sm text-blue-300 placeholder:text-gray-600"
                               />
                             </div>
                           )}

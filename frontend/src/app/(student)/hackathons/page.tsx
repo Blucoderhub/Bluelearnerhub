@@ -56,7 +56,7 @@ const hackathons = [
     participants: 890,
     daysLeft: 3,
     icon: Briefcase,
-    gradient: 'from-emerald-600/20 to-teal-600/20',
+    gradient: 'from-amber-600/20 to-cyan-600/20',
   },
   {
     id: 4,
@@ -68,7 +68,7 @@ const hackathons = [
     participants: 600,
     daysLeft: 0,
     icon: Building2,
-    gradient: 'from-green-600/20 to-blue-600/20',
+    gradient: 'from-blue-600/20 to-blue-600/20',
   },
 ];
 
@@ -130,7 +130,7 @@ export default function HackathonsPage() {
                     <hack.icon className="w-5 h-5 text-primary" />
                   </div>
                   {hack.status === 'OPEN' ? (
-                    <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px] items-center gap-1.5 flex uppercase font-black italic">
+                    <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-[10px] items-center gap-1.5 flex uppercase font-black italic">
                       <Zap className="w-2.5 h-2.5 fill-current" /> Registration Open
                     </Badge>
                   ) : (

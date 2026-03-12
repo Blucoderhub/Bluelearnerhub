@@ -74,7 +74,7 @@ function ContributionGraph() {
   });
 
   const levelColor = (l: number) =>
-    ['bg-gray-800', 'bg-emerald-900', 'bg-emerald-700', 'bg-emerald-500', 'bg-emerald-400'][l];
+    ['bg-gray-800', 'bg-amber-900', 'bg-amber-700', 'bg-amber-500', 'bg-amber-400'][l];
 
   return (
     <div className="overflow-x-auto">
@@ -218,7 +218,7 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
               {[
                 { label: 'Repositories', value: repos.length, icon: Code2, color: 'text-blue-400' },
                 { label: 'Total Stars', value: user.totalStars, icon: Star, color: 'text-amber-400' },
-                { label: 'Commits', value: user.totalCommits.toLocaleString(), icon: Activity, color: 'text-emerald-400' },
+                { label: 'Commits', value: user.totalCommits.toLocaleString(), icon: Activity, color: 'text-amber-400' },
               ].map(({ label, value, icon: Icon, color }) => (
                 <Card key={label} className="bg-gray-900 border-gray-800">
                   <CardContent className="p-4 flex items-center gap-3">
@@ -242,7 +242,7 @@ export default function DeveloperProfilePage({ params }: { params: Promise<{ use
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-emerald-400" />
+                      <Activity className="h-4 w-4 text-amber-400" />
                       Contribution Activity
                     </h2>
                     <span className="text-xs text-gray-600">{user.totalCommits.toLocaleString()} contributions in the last year</span>

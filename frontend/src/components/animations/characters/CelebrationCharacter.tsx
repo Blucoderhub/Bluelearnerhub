@@ -9,7 +9,7 @@ interface CelebrationCharacterProps {
 
 const confettiPieces = [
   { x: 60, y: 30, color: '#fbbf24', delay: 0, dx: -15, size: 5 },
-  { x: 80, y: 20, color: '#34d399', delay: 0.2, dx: -5, size: 4 },
+  { x: 80, y: 20, color: '#60a5fa', delay: 0.2, dx: -5, size: 4 },
   { x: 100, y: 15, color: '#f472b6', delay: 0.1, dx: 3, size: 6 },
   { x: 120, y: 22, color: '#60a5fa', delay: 0.3, dx: 8, size: 4 },
   { x: 140, y: 28, color: '#a78bfa', delay: 0.15, dx: 15, size: 5 },
@@ -17,7 +17,7 @@ const confettiPieces = [
   { x: 130, y: 38, color: '#22d3ee', delay: 0.35, dx: 12, size: 3 },
   { x: 90, y: 25, color: '#e879f9', delay: 0.4, dx: -3, size: 5 },
   { x: 110, y: 30, color: '#fbbf24', delay: 0.1, dx: 6, size: 4 },
-  { x: 75, y: 35, color: '#34d399', delay: 0.3, dx: -8, size: 3 },
+  { x: 75, y: 35, color: '#60a5fa', delay: 0.3, dx: -8, size: 3 },
 ]
 
 export default function CelebrationCharacter({ className = '', size = 200 }: CelebrationCharacterProps) {

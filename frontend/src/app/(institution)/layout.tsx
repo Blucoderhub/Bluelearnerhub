@@ -140,7 +140,7 @@ export default function InstitutionLayout({
                         </button>
                         <Search className="w-4 h-4 text-slate-500 hover:text-orange-400 transition-colors cursor-pointer" />
                         <div className="hidden md:block h-4 w-[1px] bg-slate-800" />
-                        <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">All Systems Operational</span>
+                        <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-bold">All Systems Operational</span>
                     </div>
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="relative cursor-pointer group">

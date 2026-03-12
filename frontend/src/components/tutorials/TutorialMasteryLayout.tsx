@@ -53,14 +53,14 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
             className="border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col shrink-0"
           >
             <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-              <h2 className="text-sm font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-1">Course Content</h2>
+              <h2 className="text-sm font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-1">Course Content</h2>
               <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">{sidebarTitle}</h3>
               <div className="mt-4 space-y-1.5">
                 <div className="flex justify-between text-[10px] font-black uppercase text-slate-400">
                   <span>Overall Progress</span>
                   <span>{progress}%</span>
                 </div>
-                <Progress value={progress} className="h-1.5 bg-emerald-500/10" />
+                <Progress value={progress} className="h-1.5 bg-amber-500/10" />
               </div>
             </div>
 
@@ -71,12 +71,12 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                     key={lesson.id}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all group ${
                       lesson.active 
-                        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                        ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' 
                         : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     {lesson.completed ? (
-                      <CheckCircle2 size={16} className={lesson.active ? 'text-white' : 'text-emerald-500'} />
+                      <CheckCircle2 size={16} className={lesson.active ? 'text-white' : 'text-amber-500'} />
                     ) : (
                       <div className={`w-4 h-4 rounded-full border-2 ${lesson.active ? 'border-white' : 'border-slate-300 dark:border-slate-700'}`} />
                     )}
@@ -115,7 +115,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
               className={`rounded-xl font-black text-[10px] uppercase tracking-widest gap-2 h-9 px-4 transition-all ${
                 isPlaygroundOpen 
                 ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200' 
-                : 'bg-emerald-500 text-white hover:bg-emerald-600'
+                : 'bg-amber-500 text-white hover:bg-amber-600'
               }`}
             >
               <Play size={14} className={isPlaygroundOpen ? '' : 'fill-current'} />
@@ -131,7 +131,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
               <motion.article 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="prose dark:prose-invert prose-emerald max-w-none 
+                className="prose dark:prose-invert prose-blue max-w-none 
                   prose-headings:font-black prose-headings:tracking-tighter
                   prose-h1:text-4xl prose-h1:mb-8
                   prose-p:text-lg prose-p:leading-relaxed prose-p:text-slate-600 dark:prose-p:text-slate-300
@@ -145,7 +145,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
                 <Button variant="outline" className="h-12 px-6 rounded-2xl font-bold gap-2">
                   <ChevronLeft size={18} /> Previous
                 </Button>
-                <Button className="h-12 px-10 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-black italic tracking-tighter gap-2 shadow-lg shadow-emerald-500/20">
+                <Button className="h-12 px-10 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black italic tracking-tighter gap-2 shadow-lg shadow-amber-500/20">
                   Next Chapter <ChevronRight size={18} />
                 </Button>
               </div>
@@ -163,7 +163,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
               >
                 <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 bg-[#0f172a]">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Live Playground</span>
                   </div>
                   <div className="flex items-center gap-2">

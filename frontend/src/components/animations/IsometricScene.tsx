@@ -39,8 +39,8 @@ const buildings = [
   {
     icon: BookOpen,
     label: 'Learning Hub',
-    color: '#10b981',
-    glowColor: 'rgba(16,185,129,0.3)',
+    color: '#0ea5e9',
+    glowColor: 'rgba(59,130,246,0.3)',
     position: { x: '10%', y: '65%' },
     mobilePosition: { x: '5%', y: '65%' },
     delay: 0.8,
@@ -218,9 +218,9 @@ export default function IsometricScene() {
         <motion.div
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-          className="px-2 py-1 rounded-md bg-emerald-500/20 border border-emerald-500/30 backdrop-blur-sm"
+          className="px-2 py-1 rounded-md bg-amber-500/20 border border-amber-500/30 backdrop-blur-sm"
         >
-          <span className="text-[9px] font-bold text-emerald-400">✨ Level Up!</span>
+          <span className="text-[9px] font-bold text-amber-400">✨ Level Up!</span>
         </motion.div>
       </motion.div>
 

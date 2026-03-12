@@ -18,7 +18,7 @@ const stats = [
     { title: 'Total Candidates', value: '1,248', icon: Users, color: 'text-cyan-400' },
     { title: 'New Applications', value: '84', icon: Calendar, color: 'text-purple-400' },
     { title: 'Interviews Today', value: '12', icon: Search, color: 'text-blue-400' },
-    { title: 'Placement Rate', value: '92%', icon: TrendingUp, color: 'text-emerald-400' },
+    { title: 'Placement Rate', value: '92%', icon: TrendingUp, color: 'text-amber-400' },
 ];
 
 export default function HRDashboard() {
@@ -62,7 +62,7 @@ export default function HRDashboard() {
                             <CardContent>
                                 <div className="text-2xl font-bold text-white">{stat.value}</div>
                                 <p className="text-xs text-slate-500 mt-1">
-                                    <span className="text-emerald-400 text-xs font-medium">+14% </span>
+                                    <span className="text-amber-400 text-xs font-medium">+14% </span>
                                     from last month
                                 </p>
                             </CardContent>
@@ -133,7 +133,7 @@ export default function HRDashboard() {
                                 <div key={interview} className="p-3 rounded-lg bg-slate-900/50 border border-slate-800">
                                     <div className="flex items-center justify-between mb-2">
                                         <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Today, 2:00 PM</span>
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                        <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                                     </div>
                                     <p className="text-sm font-bold">Project Manager Interview</p>
                                     <p className="text-xs text-slate-500 mt-1">Candidate: Shankar R.</p>

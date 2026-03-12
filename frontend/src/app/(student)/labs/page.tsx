@@ -57,8 +57,8 @@ const labCategories = [
         domain: 'CIVIL / ARCH',
         status: 'BETA',
         href: '/labs/civil',
-        color: 'text-emerald-400',
-        bg: 'bg-emerald-500/10'
+        color: 'text-amber-400',
+        bg: 'bg-amber-500/10'
     },
     {
         title: 'BIOMEDICAL_ANALYTICS',

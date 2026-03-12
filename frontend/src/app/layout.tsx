@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Outfit } from 'next/font/google'
+import { Sora, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import '../styles/animations.css'
 import { Providers } from './providers'
 import { AIAssistant } from '@/components/ai/AIAssistant'
 
-const inter = Inter({
+const sora = Sora({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sora',
   display: 'swap',
 })
 
-const outfit = Outfit({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  variable: '--font-space-grotesk',
   display: 'swap',
 })
 
@@ -42,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className="dark">
-      <body className={`${inter.variable} ${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground selection:bg-primary/30 selection:text-primary`}>
+      <body className={`${sora.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground selection:bg-primary/30 selection:text-primary`}>
         <Providers>
           {children}
           <AIAssistant />

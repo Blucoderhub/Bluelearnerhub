@@ -113,9 +113,9 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
         <div className="mb-4 flex items-center gap-1.5 text-sm">
           <Link href="/dev" className="text-blue-400 hover:underline">dev</Link>
           <ChevronRight className="h-3.5 w-3.5 text-gray-600" />
-          <Link href={`/dev/${params.username}`} className="text-blue-400 hover:underline">{params.username}</Link>
+          <Link href={`/dev/${username}`} className="text-blue-400 hover:underline">{username}</Link>
           <ChevronRight className="h-3.5 w-3.5 text-gray-600" />
-          <span className="font-semibold text-white">{params.repo}</span>
+          <span className="font-semibold text-white">{repo}</span>
           <Badge className="ml-1 bg-gray-800 text-gray-400 text-[10px]">{MOCK_REPO.visibility}</Badge>
         </div>
 
@@ -251,14 +251,14 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
                 <button className="text-sm font-medium text-white border-b-2 border-orange-400 pb-1">Open ({MOCK_ISSUES.filter(i => i.status === 'open').length})</button>
                 <button className="text-sm text-gray-500 pb-1">Closed</button>
               </div>
-              <Button size="sm" className="bg-green-700 hover:bg-green-600 gap-1.5 text-xs">
+              <Button size="sm" className="bg-blue-700 hover:bg-blue-600 gap-1.5 text-xs">
                 <Bug className="h-3.5 w-3.5" /> New Issue
               </Button>
             </div>
             <Card className="bg-gray-900 border-gray-800">
               {MOCK_ISSUES.map((issue, i) => (
                 <div key={issue.id} className={`flex items-start gap-3 px-4 py-3.5 ${i < MOCK_ISSUES.length - 1 ? 'border-b border-gray-800' : ''}`}>
-                  <Bug className={`mt-0.5 h-4 w-4 shrink-0 ${issue.status === 'open' ? 'text-green-400' : 'text-purple-400'}`} />
+                  <Bug className={`mt-0.5 h-4 w-4 shrink-0 ${issue.status === 'open' ? 'text-blue-400' : 'text-purple-400'}`} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white">{issue.title}</p>
                     <p className="text-xs text-gray-500 mt-0.5">#{issue.number} opened {issue.time} by {issue.author}</p>
@@ -283,7 +283,7 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
                     <p className="text-xs text-gray-500 mt-0.5">{c.author} · {c.time}</p>
                   </div>
                   <div className="flex items-center gap-3 text-xs shrink-0">
-                    <span className="text-green-400">+{c.additions}</span>
+                    <span className="text-blue-400">+{c.additions}</span>
                     <span className="text-red-400">-{c.deletions}</span>
                     <span className="font-mono text-blue-400 bg-gray-800 px-2 py-0.5 rounded">{c.sha}</span>
                   </div>
@@ -296,7 +296,7 @@ export default function RepositoryPage({ params }: { params: Promise<{ username:
           <TabsContent value="pulls" className="pt-4">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-gray-400">0 open pull requests</p>
-              <Button size="sm" className="bg-green-700 hover:bg-green-600 gap-1.5 text-xs">
+              <Button size="sm" className="bg-blue-700 hover:bg-blue-600 gap-1.5 text-xs">
                 <GitMerge className="h-3.5 w-3.5" /> New Pull Request
               </Button>
             </div>

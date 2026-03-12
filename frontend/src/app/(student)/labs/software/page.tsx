@@ -42,7 +42,7 @@ export default function SoftwareLabPage() {
                         <Cpu className="w-5 h-5 text-primary" />
                         <h2 className="text-sm font-black italic tracking-widest text-white uppercase">SOFTWARE_LAB_v2.0</h2>
                     </div>
-                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px] font-black italic uppercase">
+                    <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-[10px] font-black italic uppercase">
                         Connected: BlueNode-Mumbai-01
                     </Badge>
                 </div>
@@ -51,7 +51,7 @@ export default function SoftwareLabPage() {
                         <Save className="w-3.5 h-3.5 mr-2" /> Save
                     </Button>
                     <div className="w-px h-4 bg-slate-800 mx-1" />
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-8 px-4 rounded-lg">
+                    <Button size="sm" className="bg-amber-600 hover:bg-amber-500 text-white font-bold h-8 px-4 rounded-lg">
                         <Play className="w-3.5 h-3.5 mr-2 fill-current" /> RUN_PROJECT
                     </Button>
                     <Button size="sm" variant="outline" className="border-primary/20 bg-primary/5 text-primary font-bold h-8 px-4 rounded-lg">
@@ -86,7 +86,7 @@ export default function SoftwareLabPage() {
                     </div>
                     <div className="p-4 bg-slate-900/40 border-t border-slate-800">
                         <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                             <p className="text-[9px] text-slate-500 font-bold uppercase">Synced with GitHub</p>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ export default function SoftwareLabPage() {
                                     <pre className="text-blue-200"><span className="text-purple-400">import</span> numpy <span className="text-purple-400">as</span> np</pre>
                                     <pre className="text-slate-500 italic mt-2"># Bluelearner-AI specialized agent initialization</pre>
                                     <pre className="text-blue-200">model = tf.keras.Sequential([</pre>
-                                    <pre className="text-blue-200">    tf.keras.layers.Dense(<span className="text-yellow-400">128</span>, activation=<span className="text-emerald-400">'relu'</span>),</pre>
+                                    <pre className="text-blue-200">    tf.keras.layers.Dense(<span className="text-yellow-400">128</span>, activation=<span className="text-amber-400">'relu'</span>),</pre>
                                     <pre className="text-blue-200">    tf.keras.layers.Dropout(<span className="text-yellow-400">0.2</span>),</pre>
                                     <pre className="text-blue-200">    tf.keras.layers.Dense(<span className="text-yellow-400">10</span>)</pre>
                                     <pre className="text-blue-200">])</pre>
@@ -157,12 +157,12 @@ export default function SoftwareLabPage() {
                         <div className="flex-1 p-4 font-mono text-xs text-slate-400 overflow-y-auto">
                             {terminalOutput.map((line, i) => (
                                 <div key={i} className="mb-1 leading-relaxed">
-                                    <span className="text-emerald-500 mr-2">➜</span>
+                                    <span className="text-amber-500 mr-2">➜</span>
                                     {line}
                                 </div>
                             ))}
                             <div className="flex mt-1">
-                                <span className="text-emerald-500 mr-2">➜</span>
+                                <span className="text-amber-500 mr-2">➜</span>
                                 <input className="bg-transparent border-none outline-none flex-1 text-slate-200" autoFocus />
                             </div>
                         </div>

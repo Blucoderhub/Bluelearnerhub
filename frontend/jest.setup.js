@@ -25,6 +25,11 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
+// polyfill fetch for environments like Jest
+import fetch from 'cross-fetch'
+
+global.fetch = fetch
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}

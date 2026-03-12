@@ -150,7 +150,7 @@ export default function CorporateLayout({
                         </button>
                         <Search className="w-4 h-4 text-slate-500 hover:text-primary transition-colors cursor-pointer" />
                         <div className="h-4 w-[1px] bg-slate-800" />
-                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black uppercase italic">Network Status: Stable</Badge>
+                        <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-none text-[8px] font-black uppercase italic">Network Status: Stable</Badge>
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="relative cursor-pointer group">

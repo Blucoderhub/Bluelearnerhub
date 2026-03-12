@@ -95,11 +95,11 @@ export function GamificationSidebar() {
             {/* Recent Achievements */}
             <div className="p-4 rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
                 <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <Award className="w-3 h-3 text-emerald-400" /> Recent Unlock
+                    <Award className="w-3 h-3 text-amber-400" /> Recent Unlock
                 </h4>
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                        <Target className="w-5 h-5 text-emerald-500" />
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                        <Target className="w-5 h-5 text-amber-500" />
                     </div>
                     <div>
                         <h5 className="text-xs font-bold text-white uppercase italic">CODE_WARRIOR</h5>

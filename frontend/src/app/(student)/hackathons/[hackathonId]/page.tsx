@@ -2,15 +2,47 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import CountdownTimer from '@/components/hackathon/CountdownTimer'
 import LeaderboardTable from '@/components/hackathon/LeaderboardTable'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { hackathonsAPI } from '@/lib/api-civilization'
 
 export default function HackathonDetailsPage() {
   const params = useParams()
   const [registered, setRegistered] = useState(false)
+  const [activeTab, setActiveTab] = useState('overview')
+  const [adaptiveGuidance, setAdaptiveGuidance] = useState<string[]>([])
+
+  const hackathonId = useMemo(() => {
+    const rawId = Array.isArray(params.hackathonId) ? params.hackathonId[0] : params.hackathonId
+    const parsed = Number(rawId)
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null
+  }, [params.hackathonId])
+
+  useEffect(() => {
+    if (!hackathonId) return
+
+    void hackathonsAPI.trackBehavior(hackathonId, 'hackathon_opened').catch(() => undefined)
+    void hackathonsAPI.adaptiveGuidance(hackathonId)
+      .then((data) => {
+        const guidance = Array.isArray(data?.guidance) ? data.guidance.filter((item: unknown) => typeof item === 'string') : []
+        setAdaptiveGuidance(guidance.slice(0, 3))
+      })
+      .catch(() => setAdaptiveGuidance([]))
+  }, [hackathonId])
+
+  useEffect(() => {
+    if (!hackathonId) return
+    void hackathonsAPI.trackBehavior(hackathonId, 'tab_viewed', { tab: activeTab }).catch(() => undefined)
+  }, [activeTab, hackathonId])
+
+  const handleRegister = () => {
+    setRegistered(true)
+    if (!hackathonId) return
+    void hackathonsAPI.trackBehavior(hackathonId, 'hackathon_registered').catch(() => undefined)
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -43,22 +75,33 @@ export default function HackathonDetailsPage() {
 
         {!registered ? (
           <button 
-            onClick={() => setRegistered(true)}
+            onClick={handleRegister}
             className="mt-6 px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition"
           >
             Register Now
           </button>
         ) : (
           <button 
-            className="mt-6 px-8 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition"
+            className="mt-6 px-8 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition"
           >
             ✓ Registered - Go to Dashboard
           </button>
         )}
       </div>
 
+      {adaptiveGuidance.length > 0 && (
+        <div className="mb-6 rounded-lg border border-indigo-200 bg-indigo-50 p-4 dark:border-indigo-500/30 dark:bg-indigo-500/10">
+          <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-indigo-700 dark:text-indigo-300">Adaptive Coaching</h3>
+          <ul className="list-disc pl-5 text-sm text-indigo-900 dark:text-indigo-100">
+            {adaptiveGuidance.map((tip, index) => (
+              <li key={`${tip}-${index}`}>{tip}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Tabs */}
-      <Tabs defaultValue="overview" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="problems">Problems</TabsTrigger>

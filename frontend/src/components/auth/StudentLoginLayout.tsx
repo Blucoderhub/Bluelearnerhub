@@ -19,7 +19,7 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
         className="mb-10 flex flex-col items-center gap-2"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+          <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-amber-500/20">
             <GraduationCap size={24} />
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Bluelearnerhub</span>
@@ -45,7 +45,7 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
         className="mt-8 text-center"
       >
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Not a student? <a href="/login" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">Switch role</a>
+          Not a student? <a href="/login" className="text-amber-600 dark:text-amber-400 font-semibold hover:underline">Switch role</a>
         </p>
       </motion.div>
     </div>

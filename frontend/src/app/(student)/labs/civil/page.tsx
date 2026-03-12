@@ -30,10 +30,10 @@ export default function CivilLabPage() {
             <div className="flex items-center justify-between bg-slate-900/50 border border-slate-800 p-3 rounded-xl backdrop-blur-md">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <Building2 className="w-5 h-5 text-emerald-400" />
-                        <h2 className="text-sm font-black italic tracking-widest text-white uppercase text-emerald-400">STRUCTURE_LAB_v0.5</h2>
+                        <Building2 className="w-5 h-5 text-amber-400" />
+                        <h2 className="text-sm font-black italic tracking-widest text-white uppercase text-amber-400">STRUCTURE_LAB_v0.5</h2>
                     </div>
-                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px] font-black italic uppercase">
+                    <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-[10px] font-black italic uppercase">
                         BIM_SYNC: ESTABLISHED
                     </Badge>
                 </div>
@@ -45,7 +45,7 @@ export default function CivilLabPage() {
                     <Button
                         onClick={() => setIsAnalyzing(!isAnalyzing)}
                         size="sm"
-                        className={`${isAnalyzing ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-slate-800 hover:bg-slate-700'} text-white font-bold h-8 px-4 rounded-lg transition-all`}
+                        className={`${isAnalyzing ? 'bg-amber-600 hover:bg-amber-500' : 'bg-slate-800 hover:bg-slate-700'} text-white font-bold h-8 px-4 rounded-lg transition-all`}
                     >
                         {isAnalyzing ? 'LIVE_ANALYSIS_ON' : 'RUN_STRUCTURAL_LOAD'}
                     </Button>
@@ -64,17 +64,17 @@ export default function CivilLabPage() {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-xl">
                                     <div className="flex items-center gap-3">
-                                        <Box className="w-4 h-4 text-emerald-500" />
+                                        <Box className="w-4 h-4 text-amber-500" />
                                         <span className="text-[10px] text-white font-bold">REINFORCED_CONCRETE_P1</span>
                                     </div>
-                                    <Badge className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black">PASS</Badge>
+                                    <Badge className="bg-amber-500/10 text-amber-400 border-none text-[8px] font-black">PASS</Badge>
                                 </div>
                                 <div className="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-xl">
                                     <div className="flex items-center gap-3">
-                                        <Box className="w-4 h-4 text-emerald-500" />
+                                        <Box className="w-4 h-4 text-amber-500" />
                                         <span className="text-[10px] text-white font-bold">STEEL_BEAM_W12x65</span>
                                     </div>
-                                    <Badge className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black">PASS</Badge>
+                                    <Badge className="bg-amber-500/10 text-amber-400 border-none text-[8px] font-black">PASS</Badge>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@ export default function CivilLabPage() {
                                 max="2000"
                                 value={load}
                                 onChange={(e) => setLoad(parseInt(e.target.value))}
-                                className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-emerald-500"
+                                className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-amber-500"
                             />
                         </div>
 
@@ -102,7 +102,7 @@ export default function CivilLabPage() {
                             </div>
                             <div className="flex justify-between text-[11px] font-bold">
                                 <span className="text-slate-500">Soil Condition</span>
-                                <span className="text-emerald-400">STABLE</span>
+                                <span className="text-amber-400">STABLE</span>
                             </div>
                         </div>
                     </div>
@@ -132,19 +132,19 @@ export default function CivilLabPage() {
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-y-8">
                                     <div className="bg-red-500 w-2 h-2 rounded-full animate-ping mx-auto" />
                                     <div className="bg-red-500 w-3 h-3 rounded-full animate-pulse border-2 border-red-200" />
-                                    <div className="bg-emerald-500 w-2 h-2 rounded-full animate-ping mx-auto" />
+                                    <div className="bg-amber-500 w-2 h-2 rounded-full animate-ping mx-auto" />
                                 </div>
                             )}
                         </motion.div>
 
                         {/* AI Engineering Insights */}
-                        <div className={`absolute bottom-8 right-8 w-80 bg-slate-900/90 border border-emerald-500/20 p-5 rounded-2xl backdrop-blur-xl shadow-2xl transition-all duration-500 ${isAnalyzing ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'}`}>
+                        <div className={`absolute bottom-8 right-8 w-80 bg-slate-900/90 border border-amber-500/20 p-5 rounded-2xl backdrop-blur-xl shadow-2xl transition-all duration-500 ${isAnalyzing ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'}`}>
                             <div className="flex items-center gap-2 mb-3">
-                                <Zap className="w-5 h-5 text-emerald-400 shrink-0" />
+                                <Zap className="w-5 h-5 text-amber-400 shrink-0" />
                                 <h4 className="text-[10px] font-black text-white uppercase italic tracking-widest">Structural_Alert_System</h4>
                             </div>
-                            <p className="text-xs text-slate-400 leading-relaxed font-bold">Column stability under <span className="text-emerald-400">{load}kN</span> load is within the 1.5x safety factor margin. <span className="text-emerald-400 font-black">CLEAR_TO_PROCEED</span>.</p>
-                            <Button variant="ghost" className="w-full mt-4 h-9 text-[10px] font-black uppercase text-emerald-400 hover:bg-emerald-500/10 border border-emerald-500/10">
+                            <p className="text-xs text-slate-400 leading-relaxed font-bold">Column stability under <span className="text-amber-400">{load}kN</span> load is within the 1.5x safety factor margin. <span className="text-amber-400 font-black">CLEAR_TO_PROCEED</span>.</p>
+                            <Button variant="ghost" className="w-full mt-4 h-9 text-[10px] font-black uppercase text-amber-400 hover:bg-amber-500/10 border border-amber-500/10">
                                 Export Load Case <ChevronRight className="w-3.5 h-3.5 ml-2" />
                             </Button>
                         </div>

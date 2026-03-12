@@ -179,7 +179,7 @@ export default function WaveformAnalyzer() {
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   />
-                  <Bar dataKey="magnitude" fill="#10b981" />
+                  <Bar dataKey="magnitude" fill="#0ea5e9" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -244,7 +244,7 @@ function QualityIndicator({
   status: 'good' | 'warning' | 'bad'
 }) {
   const colors = {
-    good: 'text-green-400',
+    good: 'text-blue-400',
     warning: 'text-yellow-400',
     bad: 'text-red-400',
   }

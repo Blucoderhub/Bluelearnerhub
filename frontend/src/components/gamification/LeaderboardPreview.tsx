@@ -75,7 +75,7 @@ export function LeaderboardPreview({ entries, currentUserRank, totalUsers }: Lea
               <span className="text-sm font-bold font-mono text-foreground">
                 {entry.xp.toLocaleString()}
               </span>
-              {entry.trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-green-400" />}
+              {entry.trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-blue-400" />}
               {entry.trend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-400" />}
               {entry.trend === 'same' && <Minus className="w-3.5 h-3.5 text-muted-foreground" />}
             </div>

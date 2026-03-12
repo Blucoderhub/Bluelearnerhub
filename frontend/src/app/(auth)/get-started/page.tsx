@@ -49,10 +49,10 @@ const roles = [
         title: 'Mentor',
         description: 'Guided learning, student management, and academic tracks.',
         icon: Users,
-        color: 'text-emerald-400',
-        borderColor: 'border-emerald-500/20',
-        hoverColor: 'hover:border-emerald-500/50',
-        bgGradient: 'from-emerald-500/10 to-transparent',
+        color: 'text-amber-400',
+        borderColor: 'border-amber-500/20',
+        hoverColor: 'hover:border-amber-500/50',
+        bgGradient: 'from-amber-500/10 to-transparent',
         loginHref: '/login/mentor',
         signupHref: '/select-role',
     },
@@ -122,7 +122,7 @@ export default function GetStartedPage() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-emerald-400 to-purple-400">
+                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-amber-400 to-purple-400">
                         Join the Ecosystem
                     </h1>
                     <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium">

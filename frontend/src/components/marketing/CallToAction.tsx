@@ -10,7 +10,7 @@ export default function CallToAction() {
 
   return (
     <section className="py-16 md:py-24 px-4 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-green-600/5 to-emerald-500/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-600/5 to-amber-500/5" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent" />
 
       <div className="relative max-w-4xl mx-auto">
@@ -34,7 +34,7 @@ export default function CallToAction() {
 
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 leading-tight">
             Ready to Transform{' '}
-            <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-green-100 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-amber-400 to-blue-100 bg-clip-text text-transparent">
               Your Expertise?
             </span>
           </h2>
@@ -53,7 +53,7 @@ export default function CallToAction() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 hover:from-green-500 hover:via-green-400 hover:to-emerald-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-green-500/25 hover:shadow-green-500/40 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-500 to-amber-500 hover:from-blue-500 hover:via-blue-400 hover:to-amber-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
               >
                 <Rocket className="w-5 h-5" />
                 Start Learning Free
@@ -80,11 +80,11 @@ export default function CallToAction() {
             className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-muted-foreground/70 text-sm"
           >
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               No credit card required
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
               Free tutorials included
             </span>
             <span className="flex items-center gap-1.5">

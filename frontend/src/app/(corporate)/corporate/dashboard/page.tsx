@@ -24,7 +24,7 @@ export default function CorporateDashboardPage() {
   const stats = [
     { label: 'Active Hackathons', value: '03', icon: Trophy, color: 'text-blue-400', bg: 'bg-blue-500/10' },
     { label: 'Open Positions', value: '12', icon: Briefcase, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-    { label: 'Total Applicants', value: '458', icon: Users, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+    { label: 'Total Applicants', value: '458', icon: Users, color: 'text-amber-400', bg: 'bg-amber-500/10' },
     { label: 'Brand Reach', value: '12.4K', icon: LineChart, color: 'text-orange-400', bg: 'bg-orange-500/10' },
   ];
 
@@ -93,7 +93,7 @@ export default function CorporateDashboardPage() {
                 { d: 'CS', v: '85%', color: 'bg-blue-500' },
                 { d: 'MECH', v: '45%', color: 'bg-orange-500' },
                 { d: 'ELEC', v: '62%', color: 'bg-yellow-500' },
-                { d: 'CIVIL', v: '30%', color: 'bg-emerald-500' },
+                { d: 'CIVIL', v: '30%', color: 'bg-amber-500' },
                 { d: 'FIN', v: '78%', color: 'bg-purple-500' },
                 { d: 'MBA', v: '92%', color: 'bg-rose-500' },
               ].map((bar, i) => (
@@ -170,7 +170,7 @@ export default function CorporateDashboardPage() {
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 mb-2" />
-                  <Badge className="bg-emerald-500/10 text-emerald-400 border-none text-[8px] font-black italic">{talent.score} PROOF_SCORE</Badge>
+                  <Badge className="bg-amber-500/10 text-amber-400 border-none text-[8px] font-black italic">{talent.score} PROOF_SCORE</Badge>
                 </div>
                 <CardTitle className="text-lg font-black italic text-white">{talent.name}</CardTitle>
                 <CardDescription className="text-[9px] text-slate-500 font-bold uppercase">{talent.domain} • {talent.tag}</CardDescription>

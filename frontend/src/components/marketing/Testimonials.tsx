@@ -12,7 +12,7 @@ const testimonials = [
     content: 'Bluelearnerhub helped me transition from bootcamp graduate to working at Google. The hackathons gave me real-world experience!',
     rating: 5,
     initials: 'SC',
-    color: 'from-green-500 to-emerald-500',
+    color: 'from-blue-500 to-amber-500',
   },
   {
     name: 'Raj Patel',
@@ -30,7 +30,7 @@ const testimonials = [
     content: 'I loved the interactive tutorials. Learning by doing actually stuck with me, unlike traditional courses.',
     rating: 5,
     initials: 'EW',
-    color: 'from-emerald-500 to-green-500',
+    color: 'from-amber-500 to-blue-500',
   },
   {
     name: 'Alex Kumar',

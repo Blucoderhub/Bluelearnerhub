@@ -39,9 +39,9 @@ export default function IsometricHero() {
         />
       </div>
 
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-emerald-600/10 via-green-500/5 to-transparent blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-emerald-600/5 to-transparent blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-green-500/5 to-transparent blur-3xl hidden lg:block" />
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-gradient-to-br from-amber-600/10 via-blue-500/5 to-transparent blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-amber-600/5 to-transparent blur-3xl" />
+      <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-blue-500/5 to-transparent blur-3xl hidden lg:block" />
 
       <motion.div
         style={{ y, opacity }}
@@ -57,7 +57,7 @@ export default function IsometricHero() {
             >
               <span className="text-white">Learn. Build.</span>
               <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-green-300 to-white bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-400 via-blue-300 to-white bg-clip-text text-transparent">
                 Master Skills.
               </span>
             </motion.h1>
@@ -77,7 +77,7 @@ export default function IsometricHero() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 shimmer reflective-glaze">
+              <button className="w-full sm:w-auto group flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 shimmer reflective-glaze">
                 <GraduationCap className="w-5 h-5" />
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -163,9 +163,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-                  className="px-2.5 py-1 rounded-md bg-green-500/15 border border-green-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-blue-500/15 border border-blue-500/25 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-green-400">⚡ +250 XP</span>
+                  <span className="text-[10px] font-bold text-blue-400">⚡ +250 XP</span>
                 </motion.div>
               </motion.div>
 
@@ -178,9 +178,9 @@ export default function IsometricHero() {
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                  className="px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-500/25 backdrop-blur-sm"
+                  className="px-2.5 py-1 rounded-md bg-amber-500/15 border border-amber-500/25 backdrop-blur-sm"
                 >
-                  <span className="text-[10px] font-bold text-emerald-400">🔥 5-Day Streak</span>
+                  <span className="text-[10px] font-bold text-amber-400">🔥 5-Day Streak</span>
                 </motion.div>
               </motion.div>
 
@@ -200,12 +200,12 @@ export default function IsometricHero() {
               </motion.div>
 
               {[
-                { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#34d399' },
-                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#86efac' },
+                { s: 4, l: 25, t: 35, dy: -50, dur: 3.5, bg: '#60a5fa' },
+                { s: 5, l: 42, t: 48, dy: -60, dur: 4.0, bg: '#93c5fd' },
                 { s: 3, l: 58, t: 38, dy: -45, dur: 3.8, bg: '#a78bfa' },
                 { s: 4.5, l: 70, t: 55, dy: -55, dur: 4.2, bg: '#fbbf24' },
                 { s: 3.5, l: 35, t: 60, dy: -48, dur: 3.2, bg: '#f472b6' },
-                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#dcfce7' },
+                { s: 5, l: 55, t: 42, dy: -65, dur: 4.5, bg: '#dbeafe' },
               ].map((p, i) => (
                 <motion.div
                   key={`xp-particle-${i}`}
@@ -250,7 +250,7 @@ export default function IsometricHero() {
       >
         <span className="text-xs text-white/30 tracking-wide uppercase">
           Powered by{' '}
-          <span className="text-emerald-400/60 font-semibold">
+          <span className="text-amber-400/60 font-semibold">
             Bluecoderhub
           </span>
         </span>

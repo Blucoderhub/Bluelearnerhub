@@ -174,15 +174,15 @@ export default function PostJobPage() {
                                     />
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 flex items-center gap-4 group hover:border-emerald-500/30 transition-all">
-                                        <div className="p-3 bg-emerald-500/10 rounded-xl">
-                                            <ShieldCheck className="w-6 h-6 text-emerald-500" />
+                                    <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 flex items-center gap-4 group hover:border-amber-500/30 transition-all">
+                                        <div className="p-3 bg-amber-500/10 rounded-xl">
+                                            <ShieldCheck className="w-6 h-6 text-amber-500" />
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-black text-white uppercase italic">Health_Protection_v1</p>
                                             <p className="text-[9px] text-slate-500 font-bold uppercase mt-1">Full Global Medical Coverage</p>
                                         </div>
-                                        <Input type="checkbox" defaultChecked className="ml-auto w-5 h-5 accent-emerald-500" />
+                                        <Input type="checkbox" defaultChecked className="ml-auto w-5 h-5 accent-amber-500" />
                                     </div>
                                     <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 flex items-center gap-4 group hover:border-blue-500/30 transition-all">
                                         <div className="p-3 bg-blue-500/10 rounded-xl">

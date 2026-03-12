@@ -104,7 +104,7 @@ export default function MechanicalLabPage() {
                                 </div>
                                 <div className="flex justify-between text-[10px] font-bold">
                                     <span className="text-slate-500">Fatigue Life</span>
-                                    <span className="text-emerald-400 font-black">EXCELLENT</span>
+                                    <span className="text-amber-400 font-black">EXCELLENT</span>
                                 </div>
                             </div>
                         </div>

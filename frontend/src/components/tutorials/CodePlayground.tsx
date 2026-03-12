@@ -72,7 +72,7 @@ export default function CodePlayground({
             onClick={handleRun}
             disabled={isRunning}
             size="sm"
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-blue-600 hover:bg-blue-700"
           >
             <Play className="w-4 h-4 mr-1" />
             {isRunning ? 'Running...' : 'Run'}
@@ -105,7 +105,7 @@ export default function CodePlayground({
             />
           </TabsContent>
 
-          <TabsContent value="output" className="flex-1 m-0 p-4 bg-black text-green-400 font-mono text-sm overflow-auto">
+          <TabsContent value="output" className="flex-1 m-0 p-4 bg-black text-blue-400 font-mono text-sm overflow-auto">
             {output.length > 0 ? (
               <div className="space-y-2">
                 {output.map((line, i) => (

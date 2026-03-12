@@ -349,7 +349,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
             <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
               <span className="text-sm text-gray-400">Safety Factor</span>
               <span className={`font-mono ${
-                results.safetyFactor > 2 ? 'text-green-400' : 
+                results.safetyFactor > 2 ? 'text-blue-400' : 
                 results.safetyFactor > 1 ? 'text-yellow-400' : 
                 'text-red-400'
               }`}>
@@ -360,7 +360,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
 
           {/* Safety Status */}
           <div className={`p-3 rounded text-sm text-center font-semibold ${
-            results.safetyFactor > 2 ? 'bg-green-900/30 text-green-400' :
+            results.safetyFactor > 2 ? 'bg-blue-900/30 text-blue-400' :
             results.safetyFactor > 1 ? 'bg-yellow-900/30 text-yellow-400' :
             'bg-red-900/30 text-red-400'
           }`}>

@@ -134,8 +134,8 @@ export default function ElectricalLabPage() {
                             </div>
                             <div className="flex items-center gap-3 pr-2">
                                 <div className="flex items-center gap-1.5">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                    <span className="text-[9px] font-mono text-emerald-500">5.02V</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                    <span className="text-[9px] font-mono text-amber-500">5.02V</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
@@ -147,7 +147,7 @@ export default function ElectricalLabPage() {
                             {/* Scope Grid */}
                             <div className="absolute inset-0 grid grid-cols-[repeat(10,minmax(0,1fr))] grid-rows-[repeat(6,minmax(0,1fr))] opacity-10 pointer-events-none">
                                 {Array.from({ length: 60 }).map((_, i) => (
-                                    <div key={i} className="border-[0.5px] border-emerald-500/50" />
+                                    <div key={i} className="border-[0.5px] border-amber-500/50" />
                                 ))}
                             </div>
 
@@ -156,7 +156,7 @@ export default function ElectricalLabPage() {
                                 <svg viewBox="0 0 600 100" className="w-full h-full overflow-visible">
                                     <motion.path
                                         d="M0,50 Q15,10 30,50 T60,50 T90,50 T120,50 T150,50 T180,50 T210,50 T240,50 T270,50 T300,50 T330,50 T360,50 T390,50 T420,50 T450,50 T480,50 T510,50 T540,50 T570,50 T600,50"
-                                        className={`stroke-emerald-400 stroke-[2] fill-none drop-shadow-[0_0_8px_rgba(52,211,153,0.3)] transition-all ${isPowerOn ? 'opacity-100' : 'opacity-20'}`}
+                                        className={`stroke-amber-400 stroke-[2] fill-none drop-shadow-[0_0_8px_rgba(59,130,246,0.35)] transition-all ${isPowerOn ? 'opacity-100' : 'opacity-20'}`}
                                         animate={isPowerOn ? {
                                             d: [
                                                 "M0,50 Q15,10 30,50 T60,50 T90,50 T120,50 T150,50 T180,50 T210,50 T240,50 T270,50 T300,50 T330,50 T360,50 T390,50 T420,50 T450,50 T480,50 T510,50 T540,50 T570,50 T600,50",
@@ -180,7 +180,7 @@ export default function ElectricalLabPage() {
                                 <div className="space-y-1">
                                     <div className="flex justify-between text-[8px] text-slate-600 font-black uppercase">
                                         <span>Trigger</span>
-                                        <span className="text-emerald-400">AUTO</span>
+                                        <span className="text-amber-400">AUTO</span>
                                     </div>
                                     <Progress value={65} className="h-1 bg-slate-950" />
                                 </div>

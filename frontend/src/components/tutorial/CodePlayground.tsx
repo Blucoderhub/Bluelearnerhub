@@ -95,7 +95,7 @@ export default function CodePlayground({
             onClick={handleCopy}
             className="flex items-center gap-1 rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
           >
-            {copied ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+            {copied ? <Check className="h-3 w-3 text-amber-500" /> : <Copy className="h-3 w-3" />}
             {copied ? 'Copied' : 'Copy'}
           </button>
           <button
@@ -159,7 +159,7 @@ export default function CodePlayground({
               className={cn(
                 'inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold',
                 output.success
-                  ? 'bg-emerald-900 text-emerald-300'
+                  ? 'bg-amber-900 text-amber-300'
                   : 'bg-red-900 text-red-300',
               )}
             >
@@ -167,7 +167,7 @@ export default function CodePlayground({
             </span>
           </div>
           {output.stdout && (
-            <pre className="whitespace-pre-wrap text-emerald-300">{output.stdout}</pre>
+            <pre className="whitespace-pre-wrap text-amber-300">{output.stdout}</pre>
           )}
           {output.stderr && (
             <pre className="whitespace-pre-wrap text-red-400">{output.stderr}</pre>

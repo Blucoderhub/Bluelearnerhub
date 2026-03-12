@@ -51,11 +51,11 @@ export default function FacultyLayout({
             )}>
                 <div className="flex h-20 items-center justify-between border-b border-slate-800/60 px-8">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
                             <GraduationCap className="w-5 h-5 text-white" />
                         </div>
                         <h2 className="text-sm font-black tracking-tight text-white uppercase">
-                            Mentor <span className="text-emerald-400">Portal</span>
+                            Mentor <span className="text-amber-400">Portal</span>
                         </h2>
                     </div>
                     <button
@@ -81,19 +81,19 @@ export default function FacultyLayout({
                                     className={cn(
                                         'group flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-300 relative',
                                         isActive
-                                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                                             : 'text-slate-400 hover:bg-slate-900 hover:text-white border border-transparent'
                                     )}
                                 >
                                     <div className="flex items-center gap-3.5">
                                         <Icon className={cn(
                                             "w-4 h-4 transition-transform duration-300 group-hover:scale-110",
-                                            isActive ? "text-emerald-400" : "text-slate-500 group-hover:text-emerald-400"
+                                            isActive ? "text-amber-400" : "text-slate-500 group-hover:text-amber-400"
                                         )} />
                                         <span>{item.title}</span>
                                     </div>
                                     {isActive && (
-                                        <ChevronRight className="w-3 h-3 text-emerald-400 animate-pulse" />
+                                        <ChevronRight className="w-3 h-3 text-amber-400 animate-pulse" />
                                     )}
                                 </Link>
                             )
@@ -102,10 +102,10 @@ export default function FacultyLayout({
 
                     <div className="px-4">
                         <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+                            <div className="absolute top-0 left-0 w-1 h-full bg-amber-500" />
                             <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Pending Reviews</h4>
                             <p className="text-[10px] text-slate-500 font-medium mt-2">5 assignments awaiting grading</p>
-                            <Link href="/assignments" className="inline-block text-[10px] font-bold text-emerald-400 mt-4 hover:underline">
+                            <Link href="/assignments" className="inline-block text-[10px] font-bold text-amber-400 mt-4 hover:underline">
                                 Review Now →
                             </Link>
                         </div>
@@ -116,7 +116,7 @@ export default function FacultyLayout({
                     <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10 border border-slate-800">
                             <AvatarImage src="" />
-                            <AvatarFallback className="bg-emerald-500/20 text-emerald-400 font-bold">FC</AvatarFallback>
+                            <AvatarFallback className="bg-amber-500/20 text-amber-400 font-bold">FC</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                             <p className="text-xs font-bold text-white truncate">Elite Mentor</p>
@@ -138,14 +138,14 @@ export default function FacultyLayout({
                         >
                             <Menu className="w-5 h-5" />
                         </button>
-                        <Search className="w-4 h-4 text-slate-500 hover:text-emerald-400 transition-colors cursor-pointer" />
+                        <Search className="w-4 h-4 text-slate-500 hover:text-amber-400 transition-colors cursor-pointer" />
                         <div className="hidden md:block h-4 w-[1px] bg-slate-800" />
-                        <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Academic Session Active</span>
+                        <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-bold">Academic Session Active</span>
                     </div>
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="relative cursor-pointer group">
                             <Bell className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors" />
-                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#020617] rounded-full" />
+                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 border-2 border-[#020617] rounded-full" />
                         </div>
                     </div>
                 </header>

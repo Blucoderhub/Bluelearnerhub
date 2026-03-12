@@ -7,7 +7,7 @@ import type { NextRequest } from 'next/server';
  * If it is absent the user is redirected to /login with a callbackUrl so
  * they are returned to their intended page after sign-in.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Check for the accessToken cookie (set as HttpOnly + Signed by Express backend)

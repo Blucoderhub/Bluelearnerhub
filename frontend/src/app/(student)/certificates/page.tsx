@@ -48,7 +48,7 @@ const MOCK_CERTS = [
     issuerName: 'BlueLearnerHub',
     skills: ['Python', 'scikit-learn', 'Neural Networks', 'Data Analysis'],
     verificationUrl: '/certificates/verify/BLH-2026-CR-003F6G7H',
-    gradient: 'from-emerald-500 to-teal-600',
+    gradient: 'from-amber-500 to-cyan-600',
   },
 ];
 
@@ -99,7 +99,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
             Issued {format(new Date(cert.issuedAt), 'MMMM d, yyyy')} by {cert.issuerName}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+            <CheckCircle2 className="h-3.5 w-3.5 text-amber-500" />
             Credential ID: <span className="font-mono text-gray-400">{cert.credentialId}</span>
           </div>
         </div>
@@ -119,7 +119,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
             </Button>
           </Link>
           <Button onClick={copyLink} variant="outline" size="sm" className="gap-1.5 border-gray-700 text-gray-300 hover:text-white text-xs">
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3.5 w-3.5 text-amber-400" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied' : 'Share'}
           </Button>
           <Button variant="outline" size="sm" className="gap-1.5 border-gray-700 text-gray-300 hover:text-white text-xs">

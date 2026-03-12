@@ -45,8 +45,8 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
           animate={{ y: [0, -5, 0], opacity: [0, 0.6, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
         >
-          <circle cx="60" cy="55" r="6" fill="#34d399" opacity="0.3" />
-          <circle cx="60" cy="55" r="4" fill="#34d399" opacity="0.5" />
+          <circle cx="60" cy="55" r="6" fill="#60a5fa" opacity="0.3" />
+          <circle cx="60" cy="55" r="4" fill="#60a5fa" opacity="0.5" />
         </motion.g>
 
         {/* Floor shadow */}
@@ -131,7 +131,7 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
           cx="130"
           cy="80"
           r="1.5"
-          fill="#34d399"
+          fill="#60a5fa"
           animate={{ y: [0, -12, 0], opacity: [0, 0.5, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         />

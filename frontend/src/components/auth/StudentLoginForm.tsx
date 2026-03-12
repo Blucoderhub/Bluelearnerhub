@@ -67,21 +67,21 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit }) 
             placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-14 rounded-2xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 focus:ring-emerald-500 ring-offset-emerald-500"
+            className="h-14 rounded-2xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 focus:ring-amber-500 ring-offset-amber-500"
             required
           />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between">
             <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-widest">Password</label>
-            <a href="#" className="text-xs text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Forgot?</a>
+            <a href="#" className="text-xs text-amber-600 dark:text-amber-400 font-bold hover:underline">Forgot?</a>
           </div>
           <Input
             type="password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-14 rounded-2xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 focus:ring-emerald-500"
+            className="h-14 rounded-2xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 focus:ring-amber-500"
             required
           />
         </div>
@@ -89,7 +89,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit }) 
         <Button 
           type="submit" 
           disabled={loading}
-          className="w-full h-14 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all"
+          className="w-full h-14 bg-amber-500 hover:bg-amber-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-amber-500/20 active:scale-[0.98] transition-all"
         >
           {loading ? 'Logging in...' : 'Log in'}
         </Button>
@@ -97,7 +97,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit }) 
 
       <div className="text-center">
         <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-          Don't have an account? <a href="/signup" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Sign up</a>
+          Don't have an account? <a href="/signup" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">Sign up</a>
         </p>
       </div>
     </div>

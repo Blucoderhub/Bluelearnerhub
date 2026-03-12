@@ -119,7 +119,7 @@ export default function AICompanionPage() {
                                 AI Companion <Sparkles className="h-4 w-4 text-primary" />
                             </h3>
                             <div className="flex items-center gap-2">
-                                <span className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                <span className="h-2 w-2 bg-blue-500 rounded-full animate-pulse" />
                                 <span className="text-xs text-muted-foreground font-medium">Processing at the edge</span>
                             </div>
                         </div>
