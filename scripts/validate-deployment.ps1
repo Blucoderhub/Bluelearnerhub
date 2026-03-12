@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 
-Write-Host "🔍 BluelearnerHub Deployment Validation" -ForegroundColor Cyan
+Write-Host "[INFO] BluelearnerHub Deployment Validation" -ForegroundColor Cyan
 Write-Host "=======================================" -ForegroundColor Cyan
 
 # Validation results
@@ -33,7 +33,7 @@ function Add-ValidationResult {
         Severity = $Severity
     }
     
-    $Icon = if ($Passed) { "✓" } else { if ($Severity -eq "Warning") { "⚠" } else { "✗" } }
+    $Icon = if ($Passed) { "[OK]" } else { if ($Severity -eq "Warning") { "[WARN]" } else { "[FAIL]" } }
     $Color = if ($Passed) { "Green" } else { if ($Severity -eq "Warning") { "Yellow" } else { "Red" } }
     
     if ($Verbose -or -not $Passed) {
@@ -184,7 +184,7 @@ function Test-RailwayConfiguration {
             Add-ValidationResult "Railway" "Services configuration" $HasServices "Required for multi-service deployment"
             
             if ($HasServices) {
-                $ServiceCount = $RailwayConfig.services.PSObject.Properties.Count
+                $ServiceCount = @($RailwayConfig.services).Count
                 # Expecting at least 3 services: frontend, backend, ai-services
                 $HasAllServices = $ServiceCount -ge 3
                 Add-ValidationResult "Railway" "All services defined" $HasAllServices "Found $ServiceCount services, expected 3+"
@@ -370,7 +370,7 @@ function Start-Validation {
 # Generate summary report
 function Write-ValidationSummary {
     Write-Host ""
-    Write-Host "🔍 Validation Summary" -ForegroundColor Cyan
+    Write-Host "[INFO] Validation Summary" -ForegroundColor Cyan
     Write-Host "====================" -ForegroundColor Cyan
     
     $GroupedResults = $script:ValidationResults | Group-Object Category
@@ -403,12 +403,12 @@ function Write-ValidationSummary {
     Write-Host "Overall: $TotalPassed/$TotalChecks passed" -ForegroundColor $(if ($TotalErrors -eq 0) { "Green" } else { "Red" })
     
     if ($TotalErrors -eq 0 -and $TotalWarnings -eq 0) {
-        Write-Host "🎉 All checks passed! Platform is ready for deployment." -ForegroundColor Green
+        Write-Host "[READY] All checks passed. Platform is ready for deployment." -ForegroundColor Green
     } elseif ($TotalErrors -eq 0) {
-        Write-Host "✅ No critical errors found. $TotalWarnings warnings should be addressed." -ForegroundColor Yellow
+        Write-Host "[PASS] No critical errors found. $TotalWarnings warnings should be addressed." -ForegroundColor Yellow
     } else {
-        Write-Host "❌ $TotalErrors critical errors must be fixed before deployment." -ForegroundColor Red
-        Write-Host "⚠️  $TotalWarnings warnings should also be addressed." -ForegroundColor Yellow
+        Write-Host "[BLOCKED] $TotalErrors critical errors must be fixed before deployment." -ForegroundColor Red
+        Write-Host "[WARN] $TotalWarnings warnings should also be addressed." -ForegroundColor Yellow
     }
     
     return $TotalErrors -eq 0

@@ -26,7 +26,14 @@ export class QuizService {
         }).returning();
 
         // Save questions
-        for (const q of quizData.questions) {
+        const generatedQuestions = (quizData.questions ?? []) as Array<{
+            type: string;
+            content: string;
+            options: unknown;
+            correctAnswer: string;
+        }>;
+
+        for (const q of generatedQuestions) {
             await db.insert(questions).values({
                 quizId: newQuiz[0].id,
                 type: q.type,
@@ -36,7 +43,7 @@ export class QuizService {
             });
         }
 
-        return { quiz: newQuiz[0], questions: quizData.questions };
+        return { quiz: newQuiz[0], questions: generatedQuestions };
     }
 
     static async submitQuiz(userId: number, quizId: number, answers: any[]) {

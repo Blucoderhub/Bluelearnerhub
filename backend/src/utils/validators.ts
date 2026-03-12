@@ -1,12 +1,14 @@
 import { body, param, query } from 'express-validator';
 
+const PASSWORD_COMPLEXITY_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+
 export const authValidators = {
   register: [
     body('email').isEmail().normalizeEmail().withMessage('Invalid email address'),
     body('password')
       .isLength({ min: 8 })
       .withMessage('Password must be at least 8 characters')
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+      .matches(PASSWORD_COMPLEXITY_REGEX)
       .withMessage('Password must contain uppercase, lowercase, number and special character'),
     body('fullName').trim().notEmpty().withMessage('Full name is required'),
     body('role').isIn(['student', 'corporate', 'college']).withMessage('Invalid role'),
@@ -21,7 +23,9 @@ export const authValidators = {
     body('currentPassword').notEmpty().withMessage('Current password is required'),
     body('newPassword')
       .isLength({ min: 8 })
-      .withMessage('New password must be at least 8 characters'),
+      .withMessage('New password must be at least 8 characters')
+      .matches(PASSWORD_COMPLEXITY_REGEX)
+      .withMessage('New password must contain uppercase, lowercase, number and special character'),
   ],
 };
 
@@ -52,6 +56,11 @@ export const hackathonValidators = {
   submitCode: [
     body('language').notEmpty().withMessage('Programming language is required'),
     body('sourceCode').notEmpty().withMessage('Source code is required'),
+  ],
+
+  behaviorEvent: [
+    body('eventType').isString().trim().isLength({ min: 1, max: 100 }).withMessage('eventType is required'),
+    body('eventPayload').optional().isObject({ strict: true }).withMessage('eventPayload must be a plain object'),
   ],
 };
 

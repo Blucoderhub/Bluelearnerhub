@@ -16,6 +16,7 @@ import certificateRoutes  from './certificates';
 import trackRoutes        from './tracks';
 import organizationRoutes from './organizations';
 import dailyQuizRoutes    from './dailyQuiz';
+import notebookRoutes     from './notebooks';
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.use('/certificates',  certificateRoutes);  // Verifiable Credentials
 router.use('/tracks',        trackRoutes);        // Learning Tracks
 router.use('/organizations', organizationRoutes); // Corporate & University
 router.use('/daily-quiz',    dailyQuizRoutes);    // AI Daily Quiz
+router.use('/notebooks',     notebookRoutes);     // Study Notebooks (NotebookLM)
 
 router.get('/health', (_req, res) => {
   res.json({

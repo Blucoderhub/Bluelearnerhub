@@ -339,7 +339,7 @@ export class HackathonService {
     );
 
     // Simple scoring logic based on domain complementarity
-    return matchesResult.rows.map(match => {
+    return matchesResult.rows.map((match: any) => {
       let score = 50; // Base score
 
       // Complementary domain check

@@ -30,6 +30,9 @@ build/
 htmlcov/
 .pytest_cache/
 .jest_cache/
+coverage/
+**/coverage/
+**/lcov-report/
 
 # Logs
 logs/
@@ -54,3 +57,5 @@ data/models/
 venv/
 env/
 ENV/
+.vercel
+.env*.local

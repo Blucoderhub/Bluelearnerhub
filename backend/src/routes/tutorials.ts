@@ -14,5 +14,7 @@ router.get('/:slug',      ctrl.getTutorial);
 router.post('/',                  authenticate, ctrl.createTutorial);       // Teacher+
 router.post('/:id/progress',      authenticate, ctrl.markSectionComplete);
 router.post('/:id/run-code',      authenticate, checkCredits, ctrl.runCode);
+router.post('/:id/behavior-events', authenticate, ctrl.createTutorialBehaviorEvent);
+router.get('/:id/adaptive-guidance', authenticate, ctrl.getTutorialAdaptiveGuidance);
 
 export default router;

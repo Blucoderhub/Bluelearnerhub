@@ -119,6 +119,7 @@ export function errorHandler(err: any, req: Request, res: Response, _next: NextF
       stack: config.nodeEnv === 'development' ? err.stack : undefined,
     },
     request: {
+      requestId: (req as any).requestId,
       method: req.method,
       url: req.url,
       ip: req.ip,
@@ -138,6 +139,7 @@ export function errorHandler(err: any, req: Request, res: Response, _next: NextF
   const responseError = {
     success: false,
     message: error.message,
+    requestId: (req as any).requestId,
     ...(config.nodeEnv === 'development' && {
       stack: err.stack,
       error: err,
@@ -151,6 +153,7 @@ export function notFound(req: Request, res: Response) {
   const message = `Route ${req.originalUrl} not found`;
   
   logger.warn('Route not found:', {
+    requestId: (req as any).requestId,
     method: req.method,
     url: req.originalUrl,
     ip: req.ip,
@@ -160,6 +163,7 @@ export function notFound(req: Request, res: Response) {
   res.status(404).json({
     success: false,
     message,
+    requestId: (req as any).requestId,
   });
 }
 

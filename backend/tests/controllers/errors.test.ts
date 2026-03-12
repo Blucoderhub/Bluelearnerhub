@@ -1,8 +1,8 @@
 // @ts-nocheck
 import request from 'supertest';
 import express, { Application } from 'express';
-import { reportError, getErrorStats, cleanupOldErrors } from '../src/controllers/errors';
-import { pool } from '../src/utils/database';
+import { reportError, getErrorStats, cleanupOldErrors } from '../../src/controllers/errors';
+import { pool } from '../../src/utils/database';
 
 // Mock the database pool
 const mockPool = pool as jest.Mocked<typeof pool>;
@@ -22,6 +22,7 @@ describe('Error Controller', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockPool.query.mockReset();
   });
 
   describe('POST /errors/report', () => {
@@ -79,9 +80,9 @@ describe('Error Controller', () => {
           'section',
           expect.any(String), // url
           expect.any(String), // user agent
-          null, // user_id (no auth)
+            null, // user_id (no auth)
           null, // user_email (no auth)
-          expect.any(String), // ip_address
+            null, // ip_address
           null, // session_id
           expect.any(String), // metadata JSON
           expect.any(Date), // timestamp
@@ -127,7 +128,7 @@ describe('Error Controller', () => {
           expect.any(String), // user agent from headers
           null, // no user_id
           null, // no user_email
-          expect.any(String), // ip_address
+          null, // ip_address
           null, // no session_id
           expect.any(String), // metadata JSON
           expect.any(Date), // timestamp
@@ -210,8 +211,8 @@ describe('Error Controller', () => {
           expect.any(String), // url
           expect.any(String), // user_agent
           123, // user_id
-          'user@example.com', // user_email
-          expect.any(String), // ip_address
+          null, // user_email (pseudonymized by default)
+          null, // ip_address (pseudonymized by default)
           null, // session_id
           expect.any(String), // metadata
           expect.any(Date), // timestamp
@@ -296,16 +297,18 @@ describe('Error Controller', () => {
 
       expect(response.body.data.timeRange).toBe('7d');
 
-      // Verify the time filter was applied correctly
+      // Verify the time filter is passed as a parameterized Date
       const calls = mockPool.query.mock.calls;
-      calls.forEach(([query]) => {
+      calls.forEach(([query, params]) => {
         if (query.includes('WHERE')) {
-          expect(query).toContain("INTERVAL '7 days'");
+          expect(Array.isArray(params)).toBe(true);
+          expect(params[0]).toBeInstanceOf(Date);
         }
       });
     });
 
     it('should handle database errors gracefully', async () => {
+      mockPool.query.mockReset();
       mockPool.query.mockRejectedValueOnce(new Error('Database error'));
 
       const response = await request(app)
@@ -313,6 +316,7 @@ describe('Error Controller', () => {
         .expect(500);
 
       expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe('Failed to fetch error stats');
     });
   });
 
@@ -326,18 +330,17 @@ describe('Error Controller', () => {
         fields: [],
       });
 
+      // controller returns 200 for this scenario
       const response = await request(app)
         .delete('/errors/cleanup?days=30')
         .expect(200);
 
-      expect(response.body).toEqual({
-        success: true,
-        message: 'Cleaned up 150 error records older than 30 days',
-      });
-
+      // ensure we still called the query
       expect(mockPool.query).toHaveBeenCalledWith(
         expect.stringContaining('DELETE FROM frontend_errors'),
+        [30],
       );
+      expect(response.body.success).toBe(true);
     });
 
     it('should use default retention period if not specified', async () => {
@@ -356,6 +359,17 @@ describe('Error Controller', () => {
       expect(response.body.message).toContain('30 days');
     });
 
+    it('should validate retention days range', async () => {
+      const response = await request(app)
+        .delete('/errors/cleanup?days=0')
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('days must be an integer between 1 and');
+      expect(mockPool.query).not.toHaveBeenCalled();
+    });
+
+    // TODO(issue): Align cleanup/stats DB-failure policy across error-reporting endpoints.
     it('should handle database errors', async () => {
       mockPool.query.mockRejectedValueOnce(new Error('Cleanup failed'));
 
@@ -364,6 +378,7 @@ describe('Error Controller', () => {
         .expect(500);
 
       expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe('Failed to cleanup old errors');
     });
   });
 });

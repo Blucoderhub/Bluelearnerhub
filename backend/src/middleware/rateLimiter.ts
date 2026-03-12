@@ -30,3 +30,21 @@ export const apiLimiter = rateLimit({
     message: 'API rate limit exceeded',
   },
 });
+
+export const notebookIngestLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 8, // ingestion is expensive
+  message: {
+    success: false,
+    message: 'Notebook source ingestion rate limit exceeded',
+  },
+});
+
+export const notebookAiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20, // chat/generate are AI-heavy
+  message: {
+    success: false,
+    message: 'Notebook AI request rate limit exceeded',
+  },
+});

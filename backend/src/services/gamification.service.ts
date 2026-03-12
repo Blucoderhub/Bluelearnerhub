@@ -3,6 +3,10 @@ import { users, userAchievements, achievements } from '../db/schema';
 import { eq, sql } from 'drizzle-orm';
 
 export class GamificationService {
+    static async awardXP(userId: number, amount: number, _reason?: string) {
+        return await this.addExperience(userId, amount);
+    }
+
     static async addExperience(userId: number, amount: number) {
         const user = await db.select().from(users).where(eq(users.id, userId));
         if (!user.length) return null;

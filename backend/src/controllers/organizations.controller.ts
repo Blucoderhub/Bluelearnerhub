@@ -11,7 +11,6 @@ import {
   organizations, orgMembers, talentPool, innovationChallenges,
 } from '../db/schema-v2';
 import { users } from '../db/schema';
-import { v4 as uuidv4 } from 'uuid';
 import logger from '../utils/logger';
 
 // ─── Organizations ────────────────────────────────────────────────────────────
@@ -23,7 +22,7 @@ export const listOrganizations = async (req: Request, res: Response) => {
     let query = db.select().from(organizations).$dynamic();
 
     if (type) {
-      query = query.where(eq(organizations.orgType, type as any));
+      query = query.where(eq(organizations.type, type as any));
     }
 
     const rows = await query.orderBy(desc(organizations.createdAt));
@@ -63,7 +62,7 @@ export const getOrganization = async (req: Request, res: Response) => {
     const challenges = await db
       .select()
       .from(innovationChallenges)
-      .where(and(eq(innovationChallenges.orgId, org.id), eq(innovationChallenges.isActive, true)))
+      .where(and(eq(innovationChallenges.orgId, org.id), eq(innovationChallenges.status, 'active')))
       .orderBy(desc(innovationChallenges.createdAt));
 
     res.json({ success: true, data: { ...org, members, challenges } });
@@ -90,7 +89,7 @@ export const createOrganization = async (req: Request, res: Response) => {
 
     const [org] = await db
       .insert(organizations)
-      .values({ name, slug, description, orgType, website, logoUrl, adminId })
+      .values({ name, slug, description, type: orgType, website, logoUrl })
       .returning();
 
     // Auto-add creator as ADMIN member
@@ -164,9 +163,9 @@ export const listTalentPool = async (req: Request, res: Response) => {
     const pool = await db
       .select({ entry: talentPool, user: users })
       .from(talentPool)
-      .leftJoin(users, eq(talentPool.userId, users.id))
+      .leftJoin(users, eq(talentPool.candidateId, users.id))
       .where(eq(talentPool.orgId, orgId))
-      .orderBy(desc(talentPool.score));
+      .orderBy(desc(talentPool.addedAt));
 
     res.json({ success: true, data: pool });
   } catch (err) {
@@ -179,25 +178,25 @@ export const addToTalentPool = async (req: Request, res: Response) => {
   try {
     const orgId  = parseInt(req.params.id);
     const userId = (req as any).user.id;
-    const { skills, score, resumeUrl, notes } = req.body;
+    const { stage = 'prospects', notes } = req.body;
 
     const [existing] = await db
       .select()
       .from(talentPool)
-      .where(and(eq(talentPool.orgId, orgId), eq(talentPool.userId, userId)));
+      .where(and(eq(talentPool.orgId, orgId), eq(talentPool.candidateId, userId)));
 
     if (existing) {
       const [updated] = await db
         .update(talentPool)
-        .set({ skills, score, resumeUrl, notes })
-        .where(and(eq(talentPool.orgId, orgId), eq(talentPool.userId, userId)))
+        .set({ stage, notes })
+        .where(and(eq(talentPool.orgId, orgId), eq(talentPool.candidateId, userId)))
         .returning();
       return res.json({ success: true, data: updated });
     }
 
     const [entry] = await db
       .insert(talentPool)
-      .values({ orgId, userId, skills, score, resumeUrl, notes })
+      .values({ orgId, candidateId: userId, stage, notes })
       .returning();
 
     res.status(201).json({ success: true, data: entry });
@@ -216,7 +215,7 @@ export const listChallenges = async (req: Request, res: Response) => {
     let query = db.select().from(innovationChallenges).$dynamic();
 
     if (active === 'true') {
-      query = query.where(eq(innovationChallenges.isActive, true));
+      query = query.where(eq(innovationChallenges.status, 'active'));
     }
 
     const challenges = await query.orderBy(desc(innovationChallenges.createdAt));
@@ -232,7 +231,7 @@ export const createChallenge = async (req: Request, res: Response) => {
   try {
     const orgId     = parseInt(req.params.id);
     const creatorId = (req as any).user.id;
-    const { title, description, domain, prizePool, deadline, requirements } = req.body;
+    const { title, description, deadline, prizeDescription, evaluationCriteria } = req.body;
 
     // Verify creator is org member
     const [member] = await db
@@ -246,7 +245,14 @@ export const createChallenge = async (req: Request, res: Response) => {
 
     const [challenge] = await db
       .insert(innovationChallenges)
-      .values({ orgId, title, description, domain, prizePool, deadline: new Date(deadline), requirements, createdBy: creatorId })
+      .values({
+        orgId,
+        title,
+        description,
+        deadline: deadline ? new Date(deadline) : null,
+        prizeDescription,
+        evaluationCriteria,
+      })
       .returning();
 
     res.status(201).json({ success: true, data: challenge });

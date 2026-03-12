@@ -491,6 +491,119 @@ export const contentEmbeddings = pgTable('content_embeddings_manifest', {
 }));
 
 // ────────────────────────────────────────────────────────────────────────────
+// MODULE 8: STUDY NOTEBOOKS  (NotebookLM-style AI Research Assistant)
+// ────────────────────────────────────────────────────────────────────────────
+
+export const notebookSourceTypeEnum = pgEnum('notebook_source_type',   ['pdf', 'text', 'url']);
+export const notebookSourceStatusEnum = pgEnum('notebook_source_status', ['pending', 'processing', 'ready', 'failed']);
+export const notebookGenerateTypeEnum = pgEnum('notebook_generate_type', ['summary', 'study_guide', 'notebook_guide', 'faq', 'flashcards', 'quiz', 'audio_overview', 'compare_sources']);
+
+/**
+ * notebooks — a user's study workspace that can hold multiple source documents.
+ * Inspired by Google NotebookLM: each notebook is a grounded AI research assistant.
+ */
+export const notebooks = pgTable('notebooks', {
+  id:          serial('id').primaryKey(),
+  userId:      integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  title:       varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  emoji:       varchar('emoji', { length: 10 }).default('📓').notNull(),
+  sourceCount: integer('source_count').default(0).notNull(),
+  createdAt:   timestamp('created_at').defaultNow().notNull(),
+  updatedAt:   timestamp('updated_at').defaultNow().notNull(),
+});
+
+/**
+ * notebook_sources — individual documents or text snippets added to a notebook.
+ * Text is extracted, chunked, and embedded by the AI service.
+ */
+export const notebookSources = pgTable('notebook_sources', {
+  id:         serial('id').primaryKey(),
+  notebookId: integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }).notNull(),
+  title:      varchar('title', { length: 255 }).notNull(),
+  sourceType: notebookSourceTypeEnum('source_type').notNull(),
+  content:    text('content'),                                          // raw / extracted text
+  url:        text('url'),                                              // URL sources
+  s3Key:      text('s3_key'),                                          // uploaded PDF S3 path
+  chunkCount: integer('chunk_count').default(0).notNull(),
+  wordCount:  integer('word_count').default(0).notNull(),
+  status:     notebookSourceStatusEnum('status').default('pending').notNull(),
+  createdAt:  timestamp('created_at').defaultNow().notNull(),
+});
+
+/**
+ * notebook_chats — persisted conversation history for a notebook.
+ * messages: ChatMessage[] — { role: 'user'|'assistant', content: string, sources?: CitationRef[] }
+ */
+export const notebookChats = pgTable('notebook_chats', {
+  id:         serial('id').primaryKey(),
+  notebookId: integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }).notNull(),
+  userId:     integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  messages:   jsonb('messages').default([]).notNull(),
+  createdAt:  timestamp('created_at').defaultNow().notNull(),
+  updatedAt:  timestamp('updated_at').defaultNow().notNull(),
+});
+
+/**
+ * notebook_generations — AI-generated study artefacts (study guides, FAQs, quizzes, etc.).
+ * Stored so users can browse their generated materials without re-generating.
+ */
+export const notebookGenerations = pgTable('notebook_generations', {
+  id:         serial('id').primaryKey(),
+  notebookId: integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }).notNull(),
+  type:       notebookGenerateTypeEnum('type').notNull(),
+  title:      varchar('title', { length: 255 }).notNull(),
+  content:    text('content').notNull(),                                // Markdown / JSON string
+  createdAt:  timestamp('created_at').defaultNow().notNull(),
+});
+
+/**
+ * notebook_source_annotations — saved highlights and user notes tied to source chunks.
+ */
+export const notebookSourceAnnotations = pgTable('notebook_source_annotations', {
+  id:         serial('id').primaryKey(),
+  notebookId: integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }).notNull(),
+  sourceId:   integer('source_id').references(() => notebookSources.id, { onDelete: 'cascade' }).notNull(),
+  userId:     integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  quote:      text('quote').notNull(),
+  note:       text('note'),
+  chunkIndex: integer('chunk_index'),
+  createdAt:  timestamp('created_at').defaultNow().notNull(),
+});
+
+/**
+ * notebook_behavior_events — user interaction stream used for adaptive guidance.
+ */
+export const notebookBehaviorEvents = pgTable('notebook_behavior_events', {
+  id:          serial('id').primaryKey(),
+  notebookId:  integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }).notNull(),
+  userId:      integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  eventType:   varchar('event_type', { length: 100 }).notNull(),
+  eventPayload: jsonb('event_payload').default({}).notNull(),
+  createdAt:   timestamp('created_at').defaultNow().notNull(),
+}, (t) => ({
+  notebookIdx: index('idx_notebook_behavior_events_notebook').on(t.notebookId, t.createdAt),
+  userIdx:     index('idx_notebook_behavior_events_user').on(t.userId, t.createdAt),
+}));
+
+/**
+ * learning_behavior_events — shared behavior telemetry for adaptive guidance
+ * in tutorials, hackathons, and quizzes.
+ */
+export const learningBehaviorEvents = pgTable('learning_behavior_events', {
+  id:           serial('id').primaryKey(),
+  userId:       integer('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  moduleType:   varchar('module_type', { length: 50 }).notNull(), // tutorial | hackathon | quiz
+  targetId:     integer('target_id').notNull(),
+  eventType:    varchar('event_type', { length: 100 }).notNull(),
+  eventPayload: jsonb('event_payload').default({}).notNull(),
+  createdAt:    timestamp('created_at').defaultNow().notNull(),
+}, (t) => ({
+  moduleIdx: index('idx_learning_behavior_module').on(t.moduleType, t.targetId, t.createdAt),
+  userIdx:   index('idx_learning_behavior_user').on(t.userId, t.createdAt),
+}));
+
+// ────────────────────────────────────────────────────────────────────────────
 // RELATIONS
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -535,4 +648,44 @@ export const organizationsRelations = relations(organizations, ({ many }) => ({
 export const learningTracksRelations = relations(learningTracks, ({ many }) => ({
   courses:     many(trackCourses),
   enrollments: many(trackEnrollments),
+}));
+
+// ── MODULE 8 RELATIONS ────────────────────────────────────────────────────
+
+export const notebooksRelations = relations(notebooks, ({ one, many }) => ({
+  user:        one(users,               { fields: [notebooks.userId],      references: [users.id] }),
+  sources:     many(notebookSources),
+  chats:       many(notebookChats),
+  generations: many(notebookGenerations),
+  annotations: many(notebookSourceAnnotations),
+  behaviorEvents: many(notebookBehaviorEvents),
+}));
+
+export const notebookSourcesRelations = relations(notebookSources, ({ one, many }) => ({
+  notebook: one(notebooks, { fields: [notebookSources.notebookId], references: [notebooks.id] }),
+  annotations: many(notebookSourceAnnotations),
+}));
+
+export const notebookChatsRelations = relations(notebookChats, ({ one }) => ({
+  notebook: one(notebooks, { fields: [notebookChats.notebookId], references: [notebooks.id] }),
+  user:     one(users,     { fields: [notebookChats.userId],     references: [users.id] }),
+}));
+
+export const notebookGenerationsRelations = relations(notebookGenerations, ({ one }) => ({
+  notebook: one(notebooks, { fields: [notebookGenerations.notebookId], references: [notebooks.id] }),
+}));
+
+export const notebookSourceAnnotationsRelations = relations(notebookSourceAnnotations, ({ one }) => ({
+  notebook: one(notebooks, { fields: [notebookSourceAnnotations.notebookId], references: [notebooks.id] }),
+  source:   one(notebookSources, { fields: [notebookSourceAnnotations.sourceId], references: [notebookSources.id] }),
+  user:     one(users, { fields: [notebookSourceAnnotations.userId], references: [users.id] }),
+}));
+
+export const notebookBehaviorEventsRelations = relations(notebookBehaviorEvents, ({ one }) => ({
+  notebook: one(notebooks, { fields: [notebookBehaviorEvents.notebookId], references: [notebooks.id] }),
+  user:     one(users, { fields: [notebookBehaviorEvents.userId], references: [users.id] }),
+}));
+
+export const learningBehaviorEventsRelations = relations(learningBehaviorEvents, ({ one }) => ({
+  user: one(users, { fields: [learningBehaviorEvents.userId], references: [users.id] }),
 }));
