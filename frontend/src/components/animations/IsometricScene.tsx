@@ -1,21 +1,168 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Code2, Brain, Trophy, BookOpen } from 'lucide-react'
-import IsometricBuilding from './IsometricBuilding'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Users, BookOpen, Trophy, Award, Code2, Brain, Zap } from 'lucide-react'
 
-const buildings = [
-  {
-    icon: Code2,
-    label: 'Code Editor',
-    color: '#3b82f6',
-    glowColor: 'rgba(59,130,246,0.3)',
-    position: { x: '5%', y: '30%' },
-    mobilePosition: { x: '2%', y: '25%' },
-    delay: 0.2,
-    size: 'lg' as const,
-  },
+const CODE_LINES = [
+  { text: '// BluelearnerHub — Your Learning OS', dim: true },
+  { text: '', dim: false },
+  { text: 'const engineer = new Student({', dim: false },
+  { text: '  name: "You",', dim: true },
+  { text: '  domains: ["CS", "AI", "Mech", "Civil"],', dim: true },
+  { text: '  goal: "Become Unstoppable",', dim: true },
+  { text: '})', dim: false },
+  { text: '', dim: false },
+  { text: 'await engineer', dim: false },
+  { text: '  .study(1400 + " guided lessons")', dim: true },
+  { text: '  .compete(50 + " hackathons")', dim: true },
+  { text: '  .learnFrom("industry mentors")', dim: true },
+  { text: '  .getCertified()', dim: true },
+  { text: '', dim: false },
+  { text: '// 🚀  Career unlocked.', dim: true },
+]
+
+const STATS = [
+  { icon: Users, value: '12,000+', label: 'Active Learners', delay: 0.4 },
+  { icon: BookOpen, value: '1,400+', label: 'Lessons', delay: 0.55 },
+  { icon: Trophy, value: '50+', label: 'Hackathons', delay: 0.7 },
+  { icon: Award, value: '200+', label: 'Certificates', delay: 0.85 },
+]
+
+const BADGES = [
+  { icon: Zap, text: '+500 XP Earned', delay: 2.0 },
+  { icon: Brain, text: 'AI Mentor Active', delay: 2.8 },
+  { icon: Code2, text: 'Challenge Complete', delay: 3.6 },
+]
+
+function TypewriterCode() {
+  const [visibleLines, setVisibleLines] = useState(0)
+  const [charCount, setCharCount] = useState(0)
+
+  useEffect(() => {
+    if (visibleLines >= CODE_LINES.length) return
+    const line = CODE_LINES[visibleLines].text
+    if (charCount < line.length) {
+      const t = setTimeout(() => setCharCount(c => c + 1), 25)
+      return () => clearTimeout(t)
+    } else {
+      const t = setTimeout(() => {
+        setVisibleLines(v => v + 1)
+        setCharCount(0)
+      }, line === '' ? 60 : 90)
+      return () => clearTimeout(t)
+    }
+  }, [visibleLines, charCount])
+
+  return (
+    <div className="font-mono text-[11px] sm:text-[12px] leading-6 space-y-0">
+      {CODE_LINES.slice(0, visibleLines).map((line, i) => (
+        <div key={i} className="flex gap-4">
+          <span className="select-none text-foreground/15 w-5 text-right shrink-0 tabular-nums">{i + 1}</span>
+          <span className={line.dim ? 'text-foreground/40' : 'text-foreground/90'}>{line.text || '\u00A0'}</span>
+        </div>
+      ))}
+      {visibleLines < CODE_LINES.length && (
+        <div className="flex gap-4">
+          <span className="select-none text-foreground/15 w-5 text-right shrink-0 tabular-nums">{visibleLines + 1}</span>
+          <span className={CODE_LINES[visibleLines].dim ? 'text-foreground/40' : 'text-foreground/90'}>
+            {CODE_LINES[visibleLines].text.slice(0, charCount)}
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
+              className="inline-block w-[2px] h-[13px] bg-foreground/80 align-middle ml-[1px]"
+            />
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function IsometricScene() {
+  const [toastIndex, setToastIndex] = useState<number | null>(null)
+
+  useEffect(() => {
+    let i = 0
+    const cycle = () => {
+      setToastIndex(i % BADGES.length)
+      setTimeout(() => setToastIndex(null), 2200)
+      i++
+      setTimeout(cycle, 3200)
+    }
+    const t = setTimeout(cycle, 2000)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="relative w-full h-full flex flex-col gap-4">
+
+      {/* Code Editor Window */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="relative rounded-2xl border border-border/60 bg-card overflow-hidden shadow-2xl"
+      >
+        {/* Title bar */}
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-muted/30">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-foreground/15" />
+            <div className="w-3 h-3 rounded-full bg-foreground/15" />
+            <div className="w-3 h-3 rounded-full bg-foreground/15" />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <span className="text-[11px] text-foreground/30 font-mono">main.ts — BluelearnerHub</span>
+          </div>
+        </div>
+
+        {/* Code content */}
+        <div className="p-5 min-h-[200px]">
+          <TypewriterCode />
+        </div>
+
+        {/* Toast notification */}
+        <AnimatePresence>
+          {toastIndex !== null && (
+            <motion.div
+              key={toastIndex}
+              initial={{ opacity: 0, x: 40, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 40, scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl bg-background border border-border shadow-xl"
+            >
+              {(() => { const Icon = BADGES[toastIndex].icon; return <Icon className="h-3.5 w-3.5 text-foreground/70 shrink-0" /> })()}
+              <span className="text-[11px] font-bold text-foreground/80 whitespace-nowrap">{BADGES[toastIndex].text}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-4 gap-3">
+        {STATS.map((stat, i) => {
+          const Icon = stat.icon
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: stat.delay, ease: 'easeOut' }}
+              className="flex flex-col items-center gap-1 p-3 rounded-xl border border-border/50 bg-card/80 hover:border-border hover:bg-card transition-all duration-200"
+            >
+              <Icon className="h-3.5 w-3.5 text-foreground/40 shrink-0" />
+              <span className="text-sm sm:text-base font-black text-foreground tracking-tight leading-none">{stat.value}</span>
+              <span className="text-[10px] text-foreground/40 font-medium text-center leading-tight">{stat.label}</span>
+            </motion.div>
+          )
+        })}
+      </div>
+
+    </div>
+  )
+}
+
   {
     icon: Brain,
     label: 'AI Lab',
