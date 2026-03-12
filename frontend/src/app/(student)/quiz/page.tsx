@@ -16,8 +16,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import { quizzesAPI } from '@/lib/api-civilization';
 
 export default function DailyQuizPage() {
     const [step, setStep] = useState<'intro' | 'active' | 'result'>('intro');
@@ -27,6 +27,13 @@ export default function DailyQuizPage() {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
     const [isLoading, setIsLoading] = useState(false);
+    const [quizId, setQuizId] = useState<number | null>(null);
+    const [adaptiveGuidance, setAdaptiveGuidance] = useState<string[]>([]);
+
+    const trackQuizBehavior = (eventType: string, eventPayload?: Record<string, unknown>) => {
+        if (!quizId) return;
+        void quizzesAPI.trackBehavior(quizId, eventType, eventPayload).catch(() => undefined);
+    };
 
     const fetchQuiz = async () => {
         setIsLoading(true);
@@ -34,6 +41,19 @@ export default function DailyQuizPage() {
             const res = await fetch('/api/ai/quiz');
             const data = await res.json();
             setQuestions(data.questions);
+            const parsedQuizId = Number(data?.quizId);
+            const nextQuizId = Number.isInteger(parsedQuizId) && parsedQuizId > 0 ? parsedQuizId : null;
+            setQuizId(nextQuizId);
+            if (nextQuizId) {
+                void quizzesAPI.adaptiveGuidance(nextQuizId)
+                    .then((guidanceData) => {
+                        const guidance = Array.isArray(guidanceData?.guidance) ? guidanceData.guidance.filter((item: unknown) => typeof item === 'string') : [];
+                        setAdaptiveGuidance(guidance.slice(0, 3));
+                    })
+                    .catch(() => setAdaptiveGuidance([]));
+            } else {
+                setAdaptiveGuidance([]);
+            }
             setStep('active');
         } catch (error) {
             console.error('Failed to fetch quiz');
@@ -51,7 +71,27 @@ export default function DailyQuizPage() {
         }
     }, [step, timeLeft]);
 
+    useEffect(() => {
+        if (!quizId) return;
+        trackQuizBehavior('quiz_opened', { step: 'active' });
+    }, [quizId]);
+
+    useEffect(() => {
+        if (step === 'result') {
+            trackQuizBehavior('quiz_completed', {
+                score,
+                totalQuestions: questions.length,
+                accuracy: questions.length > 0 ? score / questions.length : 0,
+            });
+        }
+    }, [step, score, questions.length]);
+
     const handleNext = () => {
+        trackQuizBehavior('question_answered', {
+            index: currentQuestionIndex,
+            selectedAnswer,
+        });
+
         if (selectedAnswer === questions[currentQuestionIndex].correctAnswer) {
             setScore(score + 1);
         }
@@ -66,8 +106,17 @@ export default function DailyQuizPage() {
 
     if (step === 'intro') {
         return (
-            <div className="flex items-center justify-center min-h-[70vh]">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full text-center space-y-6">
+            <div className="relative flex min-h-[70vh] items-center justify-center overflow-hidden">
+                <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
+                    <div className="absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl" />
+                </div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative max-w-md w-full text-center space-y-6 rounded-3xl border border-white/10 bg-slate-950/50 p-8 shadow-[0_24px_90px_rgba(8,47,73,0.35)] backdrop-blur-xl"
+                >
                     <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20 animate-pulse">
                         <Brain className="w-10 h-10 text-primary" />
                     </div>
@@ -78,13 +127,23 @@ export default function DailyQuizPage() {
                     <div className="flex flex-col gap-3 pt-4">
                         <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800">
                             <span className="text-xs text-slate-500 uppercase font-bold">Reward</span>
-                            <span className="text-xs text-emerald-400 font-black">+100 XP</span>
+                            <span className="text-xs text-amber-400 font-black">+100 XP</span>
                         </div>
                         <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800">
                             <span className="text-xs text-slate-500 uppercase font-bold">Time Limit</span>
                             <span className="text-xs text-orange-400 font-black">2 Minutes</span>
                         </div>
                     </div>
+                    {adaptiveGuidance.length > 0 && (
+                        <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-3 text-left">
+                            <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-cyan-300">Adaptive Guidance</p>
+                            <ul className="list-disc pl-5 text-xs text-cyan-100">
+                                {adaptiveGuidance.map((tip) => (
+                                    <li key={tip}>{tip}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     <Button
                         onClick={fetchQuiz}
                         disabled={isLoading}
@@ -102,8 +161,10 @@ export default function DailyQuizPage() {
         const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
         return (
-            <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
-                <div className="flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md py-4 z-10 border-b border-white/5">
+            <div className="relative max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+                <div className="pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-40 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+                <div className="relative flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md py-4 z-10 border-b border-white/5">
                     <div className="flex items-center gap-4">
                         <Badge variant="outline" className="text-primary font-mono">{currentQuestionIndex + 1} / {questions.length}</Badge>
                         <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
@@ -118,8 +179,20 @@ export default function DailyQuizPage() {
                     </div>
                 </div>
 
-                <Card className="bg-slate-900/40 border-slate-800 shadow-2xl relative overflow-hidden ring-1 ring-white/5">
+                {adaptiveGuidance.length > 0 && (
+                    <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-3 text-left">
+                        <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-cyan-300">Adaptive Guidance</p>
+                        <ul className="list-disc pl-5 text-xs text-cyan-100">
+                            {adaptiveGuidance.map((tip, idx) => (
+                                <li key={idx}>{tip}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                <Card className="relative overflow-hidden border border-white/10 bg-slate-950/55 shadow-[0_28px_80px_rgba(2,6,23,0.55)] ring-1 ring-blue-400/15 backdrop-blur-xl">
                     <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-blue-500/10 to-transparent" />
                     <CardHeader className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Badge className="bg-blue-500/10 text-blue-400 border-none text-[10px] uppercase font-black">{q.type}</Badge>
@@ -131,10 +204,12 @@ export default function DailyQuizPage() {
                     <CardContent>
                         <div className="space-y-3">
                             {q.options.map((option: string) => (
-                                <div
+                                <button
+                                    type="button"
                                     key={option}
                                     onClick={() => setSelectedAnswer(option)}
-                                    className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer group ${selectedAnswer === option
+                                    aria-pressed={selectedAnswer === option}
+                                    className={`flex w-full items-center gap-3 p-4 rounded-xl border text-left transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 ${selectedAnswer === option
                                         ? 'bg-primary/10 border-primary shadow-[0_0_15px_rgba(var(--primary),0.1)]'
                                         : 'bg-slate-950/40 border-slate-800 hover:border-slate-700'
                                         }`}
@@ -143,16 +218,10 @@ export default function DailyQuizPage() {
                                         }`}>
                                         {selectedAnswer === option && <div className="w-2 h-2 rounded-full bg-white" />}
                                     </div>
-                                    <input
-                                        type="radio"
-                                        className="sr-only"
-                                        checked={selectedAnswer === option}
-                                        onChange={() => setSelectedAnswer(option)}
-                                    />
                                     <span className={`text-sm ${selectedAnswer === option ? 'text-white font-medium' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                         {option}
                                     </span>
-                                </div>
+                                </button>
                             ))}
                         </div>
                     </CardContent>
@@ -174,10 +243,20 @@ export default function DailyQuizPage() {
     if (step === 'result') {
         const isSuccess = score >= questions.length * 0.6;
         return (
-            <div className="flex items-center justify-center min-h-[70vh]">
-                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="max-w-md w-full">
-                    <Card className="bg-slate-950 border-slate-800 text-center relative overflow-hidden">
+            <div className="relative flex items-center justify-center min-h-[70vh] overflow-hidden">
+                <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-500/15 blur-3xl" />
+                    <div className="absolute -right-16 bottom-4 h-64 w-64 rounded-full bg-amber-500/15 blur-3xl" />
+                </div>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="max-w-md w-full"
+                >
+                    <Card className="relative overflow-hidden border border-white/10 bg-slate-950/70 text-center shadow-[0_28px_80px_rgba(2,6,23,0.6)] backdrop-blur-xl">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
+                        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-500/10 to-transparent" />
                         <CardHeader>
                             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
                                 <Trophy className={`w-10 h-10 ${isSuccess ? 'text-yellow-400' : 'text-slate-400'}`} />
@@ -193,7 +272,7 @@ export default function DailyQuizPage() {
                                 </div>
                                 <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                                     <p className="text-xs text-slate-500 uppercase font-bold mb-1">XP Earned</p>
-                                    <p className="text-2xl font-black text-emerald-400">+{score * 20}</p>
+                                    <p className="text-2xl font-black text-amber-400">+{score * 20}</p>
                                 </div>
                             </div>
 
