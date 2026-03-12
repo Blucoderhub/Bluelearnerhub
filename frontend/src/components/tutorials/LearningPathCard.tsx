@@ -52,7 +52,7 @@ export default function LearningPathCard({
     >
       <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-blue-500 transition-all h-full flex flex-col">
         {/* Thumbnail */}
-        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-600 to-amber-500">
+        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-600 to-primary">
           {thumbnail ? (
             <img
               src={thumbnail}

@@ -159,12 +159,12 @@ export default function UniversalSearch() {
 
   const getTypeColor = (type: SearchResult['type']) => {
     const colors = {
-      tutorial: 'bg-blue-500/10 text-blue-500',
+      tutorial: 'bg-blue-500/10 text-primary/80',
       course: 'bg-purple-500/10 text-purple-500',
-      problem: 'bg-blue-500/10 text-blue-500',
-      hackathon: 'bg-orange-500/10 text-orange-500',
-      opening: 'bg-amber-500/10 text-amber-500',
-      academy: 'bg-amber-500/10 text-amber-400',
+      problem: 'bg-blue-500/10 text-primary/80',
+      hackathon: 'bg-primary/10 text-foreground/80',
+      opening: 'bg-primary/10 text-foreground/80',
+      academy: 'bg-primary/10 text-foreground/70',
       question: 'bg-yellow-500/10 text-yellow-500',
     }
     return colors[type]

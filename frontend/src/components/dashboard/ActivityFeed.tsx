@@ -64,7 +64,7 @@ export default function ActivityFeed() {
         ))}
       </div>
 
-      <button className="mt-6 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+      <button className="mt-6 text-sm font-semibold text-primary dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
         View all activity →
       </button>
     </motion.div>

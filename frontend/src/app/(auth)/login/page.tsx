@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { StudentLoginForm } from "@/components/auth/StudentLoginForm";
-import { Users, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 
 export default function LoginPortal() {
     const handleSubmit = async (data: any) => {
@@ -33,34 +33,10 @@ export default function LoginPortal() {
 
                 <StudentLoginForm onSubmit={handleSubmit} />
 
-                {/* Secondary Access */}
-                <div className="mt-12 pt-8 border-t border-border/50">
-                    <div className="flex flex-col gap-4">
-                        <Link 
-                            href="/login/mentor" 
-                            className="group flex items-center justify-between p-4 rounded-2xl bg-muted/30 border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                    <Users size={20} />
-                                </div>
-                                <div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-primary">Specialized Access</div>
-                                    <div className="text-sm font-bold text-foreground">Mentor Mode</div>
-                                </div>
-                            </div>
-                            <div className="text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                                </svg>
-                            </div>
-                        </Link>
-                    </div>
-                    
-                    <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em]">
-                        Corporate & University portals accessible via footer
-                    </p>
-                </div>
+                <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em]">
+                    Don&apos;t have an account?{" "}
+                    <Link href="/get-started" className="text-foreground hover:underline font-bold">Sign up</Link>
+                </p>
             </motion.div>
 
             <motion.div

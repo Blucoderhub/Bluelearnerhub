@@ -127,11 +127,11 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] h-[85vh] p-0 overflow-hidden border border-white/10 bg-slate-950/70 backdrop-blur-2xl">
+      <DialogContent className="max-w-4xl w-[95vw] h-[85vh] p-0 overflow-hidden border border-white/10 bg-background/70 backdrop-blur-2xl">
         <div className="flex flex-col h-full">
           <DialogHeader className="px-6 py-4 border-b border-white/10 bg-white/70 dark:bg-gray-900/60 backdrop-blur">
             <DialogTitle className="flex items-center gap-2 text-left">
-              <ScrollText className="w-5 h-5 text-blue-500" />
+              <ScrollText className="w-5 h-5 text-primary/80" />
               {source?.title || 'Citation Inspector'}
             </DialogTitle>
             <DialogDescription className="text-left">
@@ -193,9 +193,9 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                 </div>
 
                 {focusSnippet ? (
-                  <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-3">
-                    <div className="text-xs font-medium text-amber-700 dark:text-amber-300 mb-1">Referenced snippet</div>
-                    <div className="text-sm text-amber-900 dark:text-amber-100 whitespace-pre-wrap">{focusSnippet}</div>
+                  <div className="rounded-xl border border-border dark:border-border bg-secondary dark:bg-muted/20 p-3">
+                    <div className="text-xs font-medium text-foreground dark:text-foreground/60 mb-1">Referenced snippet</div>
+                    <div className="text-sm text-foreground dark:text-foreground/90 whitespace-pre-wrap">{focusSnippet}</div>
                   </div>
                 ) : null}
 
@@ -253,7 +253,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-100">
-                    <Layers3 className="w-4 h-4 text-blue-500" />
+                    <Layers3 className="w-4 h-4 text-primary/80" />
                     Extracted chunks
                   </div>
                   {source.chunks.length > 0 ? (
@@ -269,7 +269,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                             }}
                             className={`rounded-xl border p-3 ${
                               matchesFocus
-                                ? 'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20'
+                                ? 'border-border dark:border-border bg-secondary dark:bg-muted/20'
                                 : 'border-blue-100/70 dark:border-gray-700 bg-white/90 dark:bg-gray-900/80 backdrop-blur'
                             }`}
                           >
@@ -283,7 +283,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                                   setSelectedQuote(chunk.content)
                                   setSelectedChunkIndex(chunk.chunkIndex)
                                 }}
-                                className="text-xs text-blue-600 dark:text-blue-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 rounded"
+                                className="text-xs text-primary dark:text-blue-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 rounded"
                               >
                                 Use as highlight
                               </button>

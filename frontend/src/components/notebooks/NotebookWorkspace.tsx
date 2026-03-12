@@ -284,7 +284,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary/80" />
       </div>
     )
   }
@@ -351,9 +351,9 @@ export default function NotebookWorkspace({ notebookId }: Props) {
     }
     if (failureRatio > 0 || metric.avg_latency_ms > 1200) {
       return {
-        dot: 'bg-amber-500',
-        border: 'border-amber-200 dark:border-amber-900/40',
-        bg: 'bg-amber-50 dark:bg-amber-950/20',
+        dot: 'bg-primary',
+        border: 'border-border dark:border-border/40',
+        bg: 'bg-secondary dark:bg-background/20',
       }
     }
     return {
@@ -364,10 +364,10 @@ export default function NotebookWorkspace({ notebookId }: Props) {
   }
 
   return (
-    <div className="relative flex flex-col h-[calc(100vh-4rem)] max-w-[1600px] mx-auto overflow-hidden rounded-2xl border border-white/10 bg-slate-950/35 shadow-[0_30px_90px_rgba(2,6,23,0.45)] backdrop-blur-xl">
+    <div className="relative flex flex-col h-[calc(100vh-4rem)] max-w-[1600px] mx-auto overflow-hidden rounded-2xl border border-white/10 bg-background/35 shadow-[0_30px_90px_rgba(2,6,23,0.45)] backdrop-blur-xl">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/12 blur-3xl" />
-        <div className="absolute -right-20 top-16 h-64 w-64 rounded-full bg-amber-500/12 blur-3xl" />
+        <div className="absolute -right-20 top-16 h-64 w-64 rounded-full bg-primary/12 blur-3xl" />
       </div>
       {/* Top bar */}
       <div className="relative px-4 py-3 border-b border-white/10 bg-white/85 dark:bg-gray-900/75 backdrop-blur-xl shrink-0">
@@ -386,7 +386,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
           </span>
         )}
         <div className="ml-auto flex items-center gap-2 rounded-lg border border-blue-100/80 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 px-2.5 py-1.5 text-xs shadow-sm">
-          <span className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-amber-500' : 'bg-blue-500'}`} />
+          <span className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-primary' : 'bg-blue-500'}`} />
           <span className="text-gray-600 dark:text-gray-300">
             AI Health:{' '}
             {healthError
@@ -484,7 +484,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                   <svg viewBox="0 0 180 34" className="h-9 w-full">
                     <path d="M0,33 L180,33" stroke="currentColor" className="text-gray-200 dark:text-gray-700" strokeWidth="1" fill="none" />
                     {sparklinePath && (
-                      <path d={sparklinePath} stroke="currentColor" className="text-blue-500" strokeWidth="2" fill="none" />
+                      <path d={sparklinePath} stroke="currentColor" className="text-primary/80" strokeWidth="2" fill="none" />
                     )}
                   </svg>
                 </div>
@@ -523,7 +523,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                 onClick={() => setLeftTab(tab)}
                 className={`flex-1 px-3 py-2 text-xs font-medium capitalize border-b-2 transition-colors ${
                   leftTab === tab
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    ? 'border-blue-500 text-primary dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
@@ -567,7 +567,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         </aside>
 
         {/* CENTER: Chat / Generate (tabbed) */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-slate-950/10">
+        <main className="flex-1 flex flex-col overflow-hidden bg-background/10">
           {/* Tab bar */}
           <div className="flex border-b border-white/10 px-4 bg-white/75 dark:bg-gray-900/65 backdrop-blur shrink-0">
             {(['chat', 'generate'] as const).map(tab => (
@@ -576,7 +576,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-3 text-sm font-medium capitalize border-b-2 transition-colors ${
                   activeTab === tab
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    ? 'border-blue-500 text-primary dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >

@@ -208,7 +208,7 @@ export default function Sidebar() {
                             className={cn(
                               'flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors',
                                 pathname === subItem.href
-                                  ? 'bg-blue-600 text-white'
+                                  ? 'bg-primary text-white'
                                   : 'text-gray-400 hover:bg-neutral-800 hover:text-white'
                             )}
                           >
@@ -227,7 +227,7 @@ export default function Sidebar() {
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                     pathname === item.href
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'text-gray-300 hover:bg-neutral-800'
                   )}
                 >
@@ -245,7 +245,7 @@ export default function Sidebar() {
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">Current Streak</span>
-                <span className="font-bold text-orange-400 flex items-center gap-1">
+                <span className="font-bold text-foreground/70 flex items-center gap-1">
                   🔥 {userStreak} days
                 </span>
               </div>
@@ -255,7 +255,7 @@ export default function Sidebar() {
               </div>
               <div className="w-full bg-gray-800 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-amber-400 h-2 rounded-full"
+                  className="bg-gradient-to-r from-blue-500 to-primary/80 h-2 rounded-full"
                   style={{ width: `${(userTotalPoints % 1000) / 10}%` }}
                 />
               </div>

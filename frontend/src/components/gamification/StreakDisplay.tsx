@@ -15,8 +15,8 @@ export function StreakDisplay({ currentStreak, longestStreak, hasStreakProtectio
 
   const streakColors = {
     start: 'text-muted-foreground',
-    good: 'text-orange-400',
-    great: 'text-orange-500',
+    good: 'text-foreground/70',
+    great: 'text-foreground/80',
     epic: 'text-[var(--streak-orange)]',
     legendary: 'text-red-500',
   }

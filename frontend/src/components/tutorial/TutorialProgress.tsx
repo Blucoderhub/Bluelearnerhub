@@ -15,7 +15,7 @@ export default function TutorialProgress({ completed, total, percent, xpReward }
   return (
     <div className="flex items-center gap-4">
       {/* XP badge */}
-      <div className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+      <div className="flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs font-bold text-foreground dark:bg-muted dark:text-foreground/60">
         <Zap className="h-3 w-3" />
         {xpReward} XP
       </div>
@@ -26,7 +26,7 @@ export default function TutorialProgress({ completed, total, percent, xpReward }
           <div
             className={cn(
               'h-full rounded-full transition-all duration-500',
-              percent === 100 ? 'bg-amber-500' : 'bg-blue-500',
+              percent === 100 ? 'bg-primary' : 'bg-blue-500',
             )}
             style={{ width: `${percent}%` }}
           />

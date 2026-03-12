@@ -214,7 +214,7 @@ export default function CodeEditor({
               <Button
                 onClick={handleRun}
                 disabled={isRunning || readOnly}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-primary hover:bg-primary/90"
                 size="sm"
               >
                 <Play className="w-4 h-4 mr-1" />
@@ -238,7 +238,7 @@ export default function CodeEditor({
             {/* Copy Button */}
             <Button onClick={handleCopy} variant="outline" size="sm">
               {copied ? (
-                <Check className="w-4 h-4 text-blue-500" />
+                <Check className="w-4 h-4 text-primary/80" />
               ) : (
                 <Copy className="w-4 h-4" />
               )}

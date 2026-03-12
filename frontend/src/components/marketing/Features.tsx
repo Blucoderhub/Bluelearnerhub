@@ -124,7 +124,7 @@ export default function Features() {
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Everything You Need to{' '}
-            <span className="bg-gradient-to-r from-blue-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-primary/80 bg-clip-text text-transparent">
               Succeed
             </span>
           </h2>

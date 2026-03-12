@@ -120,7 +120,7 @@ function VoteWidget({ score, onUpvote, onDownvote, isAccepted }: {
     <div className="flex flex-col items-center gap-1 w-10">
       <button
         onClick={() => { onUpvote(); setVoted('up'); }}
-        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-blue-400 hover:bg-gray-800'}`}
+        className={`rounded-full p-1.5 transition-colors ${voted === 'up' ? 'bg-primary text-white' : 'text-gray-500 hover:text-blue-400 hover:bg-gray-800'}`}
       >
         <ChevronUp className="h-5 w-5" />
       </button>
@@ -134,8 +134,8 @@ function VoteWidget({ score, onUpvote, onDownvote, isAccepted }: {
         <ChevronDown className="h-5 w-5" />
       </button>
       {isAccepted && (
-        <div className="mt-1 rounded-full bg-amber-900 p-1.5">
-          <CheckCircle2 className="h-4 w-4 text-amber-400" />
+        <div className="mt-1 rounded-full bg-muted p-1.5">
+          <CheckCircle2 className="h-4 w-4 text-foreground/70" />
         </div>
       )}
     </div>
@@ -236,10 +236,10 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
         <div className="flex flex-col gap-4 mb-8">
           {answers.map((a, i) => (
             <motion.div key={a.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-              <Card className={`border ${a.isAccepted ? 'border-amber-800 bg-amber-950/30' : 'border-gray-800 bg-gray-900'}`}>
+              <Card className={`border ${a.isAccepted ? 'border-border bg-background/30' : 'border-gray-800 bg-gray-900'}`}>
                 <CardContent className="p-6">
                   {a.isAccepted && (
-                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-400">
+                    <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-foreground/70">
                       <CheckCircle2 className="h-4 w-4" /> Accepted Answer
                     </div>
                   )}
@@ -252,10 +252,10 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
                           <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-300"><Share2 className="h-3.5 w-3.5" /> Share</button>
                         </div>
                         <div className="flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-1.5">
-                          <div className="h-6 w-6 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center text-xs font-bold">{a.authorName[0]}</div>
+                          <div className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-pink-500 flex items-center justify-center text-xs font-bold">{a.authorName[0]}</div>
                           <div>
                             <p className="text-xs font-medium text-white">{a.authorName}</p>
-                            <p className="text-[10px] text-amber-400 font-bold">{a.authorRep.toLocaleString()} rep</p>
+                            <p className="text-[10px] text-foreground/70 font-bold">{a.authorRep.toLocaleString()} rep</p>
                           </div>
                         </div>
                       </div>
@@ -284,7 +284,7 @@ export default function QuestionDetailPage({ params }: { params: Promise<{ id: s
               <Button
                 onClick={handleSubmitAnswer}
                 disabled={!answerBody.trim() || submitting}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {submitting ? 'Posting...' : 'Post Answer'}
               </Button>

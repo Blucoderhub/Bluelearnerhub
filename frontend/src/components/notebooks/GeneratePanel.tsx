@@ -29,7 +29,7 @@ const GEN_TYPES = [
     label: 'Notebook Guide',
     icon: Sparkles,
     desc: 'NotebookLM-style structured research brief',
-    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400',
+    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
   },
   {
     id: 'summary',
@@ -43,21 +43,21 @@ const GEN_TYPES = [
     label: 'Study Guide',
     icon: Layers,
     desc: 'Key concepts, principles & review questions',
-    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400',
+    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
   },
   {
     id: 'faq',
     label: 'FAQ',
     icon: HelpCircle,
     desc: '10+ Q&A pairs from your materials',
-    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400',
+    color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-primary dark:text-blue-400',
   },
   {
     id: 'flashcards',
     label: 'Flashcards',
     icon: Brain,
     desc: '15 term ↔ definition pairs',
-    color: 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400',
+    color: 'bg-secondary dark:bg-muted/20 border-border dark:border-border text-foreground/80 dark:text-foreground/70',
   },
   {
     id: 'quiz',
@@ -133,7 +133,7 @@ function QuizViewer({ content }: { content: string }) {
             {i + 1}. {q.question}
           </p>
           {!q?.options || typeof q.options !== 'object' ? (
-            <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-700 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+            <div className="rounded-lg border border-border bg-secondary px-3 py-2 text-xs text-foreground dark:border-border dark:bg-muted/20 dark:text-foreground/60">
               Options unavailable for this question.
             </div>
           ) : (
@@ -169,7 +169,7 @@ function QuizViewer({ content }: { content: string }) {
           {selected[i] && !revealed[i] && (
             <button
               onClick={() => setRevealed(r => ({ ...r, [i]: true }))}
-              className="text-xs text-blue-500 hover:underline"
+              className="text-xs text-primary/80 hover:underline"
             >
               Check answer
             </button>

@@ -91,8 +91,8 @@ export default function TeacherStudioPage() {
 
   const STATS = [
     { label: 'Enrolled Students', value: '0', icon: Users, color: 'text-blue-400' },
-    { label: 'Completions',       value: '0', icon: CheckCircle2, color: 'text-amber-400' },
-    { label: 'Avg Rating',        value: '—', icon: BarChart3, color: 'text-amber-400' },
+    { label: 'Completions',       value: '0', icon: CheckCircle2, color: 'text-foreground/70' },
+    { label: 'Avg Rating',        value: '—', icon: BarChart3, color: 'text-foreground/70' },
   ];
 
   return (
@@ -117,7 +117,7 @@ export default function TeacherStudioPage() {
           <Button
             size="sm"
             onClick={handlePublish}
-            className={`gap-1.5 text-xs ${published ? 'bg-amber-700 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700'}`}
+            className={`gap-1.5 text-xs ${published ? 'bg-primary/80 hover:bg-primary/90' : 'bg-primary hover:bg-primary/90'}`}
           >
             {published ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Upload className="h-3.5 w-3.5" />}
             {published ? 'Published' : 'Publish'}
@@ -305,7 +305,7 @@ export default function TeacherStudioPage() {
                     placeholder="e.g. Create 3 exercises about binary trees..."
                     className="bg-gray-900 border-gray-700 text-white placeholder:text-gray-600"
                   />
-                  <Button onClick={handleAIGenerate} disabled={generating} className="bg-blue-600 hover:bg-blue-700 gap-1.5 shrink-0">
+                  <Button onClick={handleAIGenerate} disabled={generating} className="bg-primary hover:bg-primary/90 gap-1.5 shrink-0">
                     <Sparkles className="h-4 w-4" />
                     {generating ? 'Generating...' : 'Generate'}
                   </Button>

@@ -76,13 +76,13 @@ export default function HackathonDetailsPage() {
         {!registered ? (
           <button 
             onClick={handleRegister}
-            className="mt-6 px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition"
+            className="mt-6 px-8 py-3 bg-white text-primary rounded-lg font-semibold hover:bg-blue-50 transition"
           >
             Register Now
           </button>
         ) : (
           <button 
-            className="mt-6 px-8 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition"
+            className="mt-6 px-8 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-primary transition"
           >
             ✓ Registered - Go to Dashboard
           </button>

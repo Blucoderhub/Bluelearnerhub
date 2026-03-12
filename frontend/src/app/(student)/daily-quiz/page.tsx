@@ -74,7 +74,7 @@ const MOCK_QUIZ = {
 };
 
 const DIFFICULTY_COLORS = {
-  easy:   'bg-amber-900/50 text-amber-400',
+  easy:   'bg-muted text-foreground/70',
   medium: 'bg-blue-900/50 text-blue-400',
   hard:   'bg-purple-900/50 text-purple-400',
 };
@@ -147,9 +147,9 @@ export default function DailyQuizPage() {
       {/* Hero */}
       <div className="border-b border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 px-6 py-10">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-900/30 border border-amber-700/30 px-4 py-1.5 mb-4">
-            <Zap className="h-4 w-4 text-amber-400" />
-            <span className="text-sm font-medium text-amber-400">Daily Challenge · {quiz.date}</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 border border-border px-4 py-1.5 mb-4">
+            <Zap className="h-4 w-4 text-foreground/70" />
+            <span className="text-sm font-medium text-foreground/70">Daily Challenge · {quiz.date}</span>
           </div>
           <h1 className="text-3xl font-bold mb-2">Daily Quiz</h1>
           <p className="text-gray-400 text-sm">5 questions · AI-generated · New every day · Earn XP</p>
@@ -169,7 +169,7 @@ export default function DailyQuizPage() {
                   onClick={() => setDomain(d)}
                   className={`rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
                     selectedDomain === d
-                      ? 'border-amber-500 bg-amber-900/20 text-amber-400'
+                      ? 'border-primary bg-muted/20 text-foreground/70'
                       : 'border-gray-700 bg-gray-900 text-gray-400 hover:border-gray-600'
                   }`}
                 >
@@ -180,7 +180,7 @@ export default function DailyQuizPage() {
             <Button
               onClick={startQuiz}
               disabled={loadingQuiz}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 font-semibold h-12 text-base"
+              className="w-full bg-gradient-to-r from-primary to-primary hover:opacity-90 font-semibold h-12 text-base"
             >
               {loadingQuiz ? 'Loading…' : `Start ${selectedDomain} Quiz`} <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -193,7 +193,7 @@ export default function DailyQuizPage() {
             {/* Progress */}
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-500">Question {current + 1} of {total}</span>
-              <div className="flex items-center gap-2 text-sm text-amber-400">
+              <div className="flex items-center gap-2 text-sm text-foreground/70">
                 <Zap className="h-3.5 w-3.5" />
                 {xpEarned} XP
               </div>
@@ -211,7 +211,7 @@ export default function DailyQuizPage() {
                   {q.options.map((opt, idx) => {
                     let style = 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600';
                     if (revealed) {
-                      if (idx === q.correctIndex)   style = 'border-amber-600 bg-amber-900/30 text-amber-300';
+                      if (idx === q.correctIndex)   style = 'border-primary bg-muted/60 text-foreground/60';
                       else if (idx === chosen)       style = 'border-red-600 bg-red-900/30 text-red-300';
                       else                           style = 'border-gray-800 bg-gray-900/50 text-gray-600';
                     } else if (chosen === idx) {
@@ -229,7 +229,7 @@ export default function DailyQuizPage() {
                           {String.fromCharCode(65 + idx)}
                         </span>
                         <span className="flex-1">{opt}</span>
-                        {revealed && idx === q.correctIndex && <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />}
+                        {revealed && idx === q.correctIndex && <CheckCircle2 className="h-4 w-4 text-foreground/70 shrink-0" />}
                         {revealed && idx === chosen && idx !== q.correctIndex && <XCircle className="h-4 w-4 text-red-400 shrink-0" />}
                       </button>
                     );
@@ -270,7 +270,7 @@ export default function DailyQuizPage() {
         {state === 'completed' && (
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <div className="text-center mb-8">
-              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 mb-4 shadow-lg shadow-amber-500/30">
+              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary mb-4 shadow-lg shadow-primary/20">
                 <Trophy className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-1">Quiz Complete!</h2>
@@ -286,11 +286,11 @@ export default function DailyQuizPage() {
                     <p className="text-xs text-gray-500">Score</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-amber-400">{correctCount}</p>
+                    <p className="text-3xl font-bold text-foreground/70">{correctCount}</p>
                     <p className="text-xs text-gray-500">Correct</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-amber-400">+{xpEarned}</p>
+                    <p className="text-3xl font-bold text-foreground/70">+{xpEarned}</p>
                     <p className="text-xs text-gray-500">XP Earned</p>
                   </div>
                 </div>
@@ -305,7 +305,7 @@ export default function DailyQuizPage() {
                     return (
                       <div key={i} className="flex items-start gap-2 text-sm">
                         {correct
-                          ? <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                          ? <CheckCircle2 className="h-4 w-4 text-foreground/70 shrink-0 mt-0.5" />
                           : <XCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
                         }
                         <span className={`text-xs leading-relaxed ${correct ? 'text-gray-300' : 'text-gray-500'}`}>

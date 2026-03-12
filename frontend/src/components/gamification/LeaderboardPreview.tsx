@@ -21,8 +21,8 @@ interface LeaderboardPreviewProps {
 }
 
 export function LeaderboardPreview({ entries, currentUserRank, totalUsers }: LeaderboardPreviewProps) {
-  const rankColors = ['text-[var(--xp-gold)]', 'text-gray-400', 'text-amber-700']
-  const rankBgs = ['bg-[var(--xp-gold)]/10', 'bg-gray-400/10', 'bg-amber-700/10']
+  const rankColors = ['text-[var(--xp-gold)]', 'text-gray-400', 'text-foreground']
+  const rankBgs = ['bg-[var(--xp-gold)]/10', 'bg-gray-400/10', 'bg-primary/80/10']
 
   return (
     <div className="space-y-4">

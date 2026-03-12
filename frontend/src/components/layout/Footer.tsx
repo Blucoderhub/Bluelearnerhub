@@ -1,127 +1,132 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { Facebook, Twitter, Linkedin, Github, Instagram, ChevronDown } from 'lucide-react'
+import { Twitter, Linkedin, Github, Youtube, ArrowRight, Building2, GraduationCap, Mail } from 'lucide-react'
 import { PoweredByBadge } from '@/components/branding/Logo'
 
-interface FooterSection {
-  title: string
-  links: { name: string; href: string }[]
-}
-
-function AccordionSection({ section }: { section: FooterSection }) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div className="md:hidden border-b border-white/[0.06] last:border-b-0">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full py-4 text-left"
-      >
-        <span className="text-white font-semibold text-sm">{section.title}</span>
-        <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
-            }`}
-        />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-64 pb-4' : 'max-h-0'
-          }`}
-      >
-        <ul className="space-y-2.5">
-          {section.links.map((link) => (
-            <li key={link.name}>
-              <Link
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
 export default function Footer() {
-  const sections: FooterSection[] = [
+  const sections = [
     {
       title: 'Product',
       links: [
-        { name: 'Learn', href: '/learn' },
+        { name: 'Tutorials', href: '/tutorials' },
         { name: 'Courses', href: '/courses' },
-        { name: 'Academy', href: '/mentors' },
-        { name: 'Practice', href: '/practice' },
         { name: 'Hackathons', href: '/hackathons' },
+        { name: 'Mentor', href: '/mentor' },
         { name: 'Community', href: '/community' },
-        { name: 'Updates', href: '/updates' },
+        { name: 'Daily Quiz', href: '/daily-quiz' },
       ],
     },
     {
       title: 'Domains',
       links: [
-        { name: 'Computer Science', href: '/learn/computer-science' },
-        { name: 'Mechanical', href: '/learn/mechanical' },
-        { name: 'Electrical', href: '/learn/electrical' },
-        { name: 'Civil', href: '/learn/civil' },
-        { name: 'Management', href: '/learn/management' },
-        { name: 'Resources', href: '/resources' },
+        { name: 'Computer Science', href: '/tutorials/computer-science' },
+        { name: 'Mechanical', href: '/tutorials/mechanical' },
+        { name: 'Electrical', href: '/tutorials/electrical' },
+        { name: 'Civil', href: '/tutorials/civil' },
+        { name: 'Management', href: '/tutorials/management' },
       ],
     },
     {
       title: 'Company',
       links: [
         { name: 'About Us', href: '/about' },
-        { name: 'Pricing', href: '/pricing' },
-        { name: 'Contact', href: '/contact' },
-        { name: 'Culture', href: '/about/culture' },
         { name: 'Blog', href: '/blog' },
-      ],
-    },
-    {
-      title: 'Resources',
-      links: [
-        { name: 'Documentation', href: '/docs' },
+        { name: 'Careers', href: '/careers' },
+        { name: 'Contact', href: '/contact' },
         { name: 'Help Center', href: '/help' },
-        { name: 'FAQ', href: '/faq' },
-        { name: 'API', href: '/api' },
-        { name: 'Status', href: '/status' },
       ],
     },
-    {
-      title: 'Portals',
-      links: [
-        { name: 'Corporate Login', href: '/login/corporate' },
-        { name: 'College Login', href: '/login/university' },
-        { name: 'Mentor Login', href: '/login/mentor' },
-        { name: 'Admin Portal', href: '/login/admin' },
-      ],
-    },
-  ]
-
-  const legalLinks = [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Cookie Policy', href: '/cookies' },
-    { name: 'GDPR', href: '/gdpr' },
   ]
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: 'https://facebook.com' },
-    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com' },
-    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com' },
-    { name: 'GitHub', icon: Github, href: 'https://github.com' },
-    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com' },
+    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@bluelearnerhub' },
+    { name: 'Twitter / X', icon: Twitter, href: 'https://twitter.com/bluelearnerhub' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/bluelearnerhub' },
+    { name: 'GitHub', icon: Github, href: 'https://github.com/bluelearnerhub' },
   ]
 
   return (
-    <footer className="bg-background border-t border-border/50 py-16">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-12">
-          <div className="col-span-1 md:col-span-2 space-y-8">
+    <footer className="bg-background border-t border-border/50">
+
+      {/* Partnership CTA Strip */}
+      <div className="border-b border-border/50">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <p className="text-xs font-black uppercase tracking-widest text-primary mb-6">Partner With Us</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {/* For Colleges */}
+            <div className="group relative rounded-2xl border border-border/60 bg-card/50 p-8 hover:border-primary/40 hover:bg-card transition-all duration-300">
+              <div className="flex items-start gap-5">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
+                  <GraduationCap className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-black text-lg tracking-tight mb-1">For Colleges & Universities</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                    Get a dedicated institutional portal for your students — custom branding, placement tracking, lab access, and performance dashboards. Built for engineering colleges.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/contact?type=college"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] group/btn"
+                    >
+                      Request a College Portal
+                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                    </Link>
+                    <a
+                      href="mailto:colleges@bluelearnerhub.com"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border/70 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-border transition-all"
+                    >
+                      <Mail className="h-4 w-4" />
+                      colleges@bluelearnerhub.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* For Corporates */}
+            <div className="group relative rounded-2xl border border-border/60 bg-card/50 p-8 hover:border-primary/40 hover:bg-card transition-all duration-300">
+              <div className="flex items-start gap-5">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
+                  <Building2 className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-black text-lg tracking-tight mb-1">For Corporates & Startups</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                    Host hackathons, discover pre-vetted engineering talent, and upskill your team. Get a corporate portal with hiring tools, sponsored challenges, and analytics.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/contact?type=corporate"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] group/btn"
+                    >
+                      Request a Corporate Portal
+                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                    </Link>
+                    <a
+                      href="mailto:corporate@bluelearnerhub.com"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border/70 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-border transition-all"
+                    >
+                      <Mail className="h-4 w-4" />
+                      corporate@bluelearnerhub.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer */}
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+
+          {/* Brand + Social */}
+          <div className="md:col-span-2 space-y-7">
             <div className="flex items-center gap-2.5">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
                 <span className="text-xl font-black text-primary-foreground">BL</span>
@@ -131,11 +136,11 @@ export default function Footer() {
                 <PoweredByBadge />
               </div>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs font-medium">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               The world&apos;s first all-engineering & management learning platform.
               Master any domain, compete in hackathons, and reach peak expertise.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               {socialLinks.map((social) => {
                 const Icon = social.icon
                 return (
@@ -144,55 +149,54 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-muted/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/50 bg-muted/30 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
                     aria-label={social.name}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-[18px] w-[18px]" />
                   </a>
                 )
               })}
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-              {sections.map((section) => (
-                <div key={section.title} className="space-y-6">
-                  <h3 className="font-black text-xs uppercase tracking-widest text-primary">{section.title}</h3>
-                  <ul className="space-y-4">
-                    {section.links.map((link) => (
-                      <li key={link.name}>
-                        <Link
-                          href={link.href}
-                          className="text-sm text-muted-foreground hover:text-foreground transition-all duration-200 block font-medium"
-                        >
-                          {link.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+          {/* Link Columns */}
+          <div className="md:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-10">
+            {sections.map((section) => (
+              <div key={section.title} className="space-y-5">
+                <h3 className="text-[11px] font-black uppercase tracking-widest text-primary">{section.title}</h3>
+                <ul className="space-y-3">
+                  {section.links.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
+
         </div>
 
-        <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-white/[0.06]">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-muted-foreground/60 order-2 md:order-1">
-              &copy; {new Date().getFullYear()} Bluelearnerhub. All rights reserved.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6 order-1 md:order-2">
-              {legalLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors duration-200"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground/50 order-2 sm:order-1">
+            &copy; {new Date().getFullYear()} Bluelearnerhub. All rights reserved.
+          </p>
+          <div className="flex flex-wrap justify-center gap-5 order-1 sm:order-2">
+            <Link href="/terms" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+              Terms &amp; Conditions
+            </Link>
+            <Link href="/privacy" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/cookies" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>

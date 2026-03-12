@@ -37,8 +37,8 @@ const labCategories = [
         domain: 'MECHANICAL / AUTO',
         status: 'ACTIVE',
         href: '/labs/mechanical',
-        color: 'text-orange-400',
-        bg: 'bg-orange-500/10'
+        color: 'text-foreground/70',
+        bg: 'bg-primary/10'
     },
     {
         title: 'ELECTRICAL_CIRCUITS',
@@ -57,8 +57,8 @@ const labCategories = [
         domain: 'CIVIL / ARCH',
         status: 'BETA',
         href: '/labs/civil',
-        color: 'text-amber-400',
-        bg: 'bg-amber-500/10'
+        color: 'text-foreground/70',
+        bg: 'bg-primary/10'
     },
     {
         title: 'BIOMEDICAL_ANALYTICS',
@@ -80,13 +80,13 @@ export default function LabsPage() {
                     <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white uppercase">
                         VIRTUAL <span className="text-primary ai-glow">SIM_CENTER</span>
                     </h1>
-                    <p className="text-slate-400 max-w-xl font-medium">
+                    <p className="text-muted-foreground max-w-xl font-medium">
                         Interact with industry-standard tools and environments without any hardware limitations. Low-latency, high-performance simulations.
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <div className="bg-slate-900/50 border border-slate-800 rounded-2xl px-6 py-3">
-                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Active Sessions</p>
+                    <div className="bg-card/50 border border-border rounded-2xl px-6 py-3">
+                        <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Active Sessions</p>
                         <p className="text-xl font-black text-white">02</p>
                     </div>
                 </div>
@@ -100,17 +100,17 @@ export default function LabsPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.1 }}
                     >
-                        <Card className="bg-slate-900/40 border-slate-800 hover:bg-slate-900/60 transition-all group overflow-hidden h-full flex flex-col cursor-pointer ring-1 ring-white/5 hover:ring-primary/20">
+                        <Card className="bg-slate-900/40 border-border hover:bg-card/60 transition-all group overflow-hidden h-full flex flex-col cursor-pointer ring-1 ring-white/5 hover:ring-primary/20">
                             <CardHeader className="relative">
                                 <div className={`w-12 h-12 rounded-2xl ${lab.bg} flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
                                     <lab.icon className={`w-6 h-6 ${lab.color}`} />
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <Badge variant="outline" className="text-[10px] text-slate-500 border-slate-800 font-bold tracking-widest uppercase">
+                                    <Badge variant="outline" className="text-[10px] text-muted-foreground border-border font-bold tracking-widest uppercase">
                                         {lab.domain}
                                     </Badge>
                                     {lab.status === 'BETA' && (
-                                        <Badge className="bg-orange-500/10 text-orange-400 border-none text-[9px] uppercase font-black italic">
+                                        <Badge className="bg-primary/10 text-foreground/70 border-none text-[9px] uppercase font-black italic">
                                             BETA_ACCESS
                                         </Badge>
                                     )}
@@ -120,14 +120,14 @@ export default function LabsPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="flex-1">
-                                <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                                     {lab.description}
                                 </p>
                             </CardContent>
-                            <CardFooter className="p-6 bg-slate-950/20 border-t border-slate-800 flex justify-between items-center group/footer">
+                            <CardFooter className="p-6 bg-background/20 border-t border-border flex justify-between items-center group/footer">
                                 <div className="flex gap-2">
-                                    <MousePointer2 className="w-3.5 h-3.5 text-slate-600" />
-                                    <p className="text-[10px] text-slate-600 uppercase font-black">Browser-Based</p>
+                                    <MousePointer2 className="w-3.5 h-3.5 text-muted-foreground" />
+                                    <p className="text-[10px] text-muted-foreground uppercase font-black">Browser-Based</p>
                                 </div>
                                 <Button size="sm" asChild className="bg-white text-black hover:bg-white/90 font-black italic tracking-widest group-hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                                     <Link href={lab.href}>
@@ -146,19 +146,19 @@ export default function LabsPage() {
                     transition={{ delay: 0.5 }}
                     className="h-full"
                 >
-                    <div className="h-full bg-slate-950/40 border border-dashed border-slate-800 rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-6 group cursor-pointer hover:border-primary/20 transition-all group">
-                        <div className="w-20 h-20 rounded-full bg-slate-900 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <div className="h-full bg-background/40 border border-dashed border-border rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-6 group cursor-pointer hover:border-primary/20 transition-all group">
+                        <div className="w-20 h-20 rounded-full bg-card flex items-center justify-center group-hover:bg-primary/5 transition-colors">
                             <Blocks className="w-10 h-10 text-slate-700 group-hover:text-primary transition-colors" />
                         </div>
                         <div>
-                            <h4 className="text-xl font-black italic text-slate-300 group-hover:text-white uppercase tracking-tighter">CREATE_SANDBOX</h4>
-                            <p className="text-xs text-slate-600 max-w-[200px] mt-2 font-medium">
+                            <h4 className="text-xl font-black italic text-foreground/80 group-hover:text-white uppercase tracking-tighter">CREATE_SANDBOX</h4>
+                            <p className="text-xs text-muted-foreground max-w-[200px] mt-2 font-medium">
                                 Setup a custom multi-domain environment for your team's specific project.
                             </p>
                         </div>
                         <div className="flex gap-2">
-                            <Badge variant="secondary" className="bg-slate-900 text-slate-500 border-none text-[8px] uppercase font-black">MULTI_MODAL</Badge>
-                            <Badge variant="secondary" className="bg-slate-900 text-slate-500 border-none text-[8px] uppercase font-black">AI_ASSISTED</Badge>
+                            <Badge variant="secondary" className="bg-card text-muted-foreground border-none text-[8px] uppercase font-black">MULTI_MODAL</Badge>
+                            <Badge variant="secondary" className="bg-card text-muted-foreground border-none text-[8px] uppercase font-black">AI_ASSISTED</Badge>
                         </div>
                     </div>
                 </motion.div>

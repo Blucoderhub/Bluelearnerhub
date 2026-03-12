@@ -106,8 +106,8 @@ export default function CodeEditor() {
                         onClick={runCode}
                         disabled={isRunning}
                         className={`flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-sm transition-all ${isRunning
-                                ? 'bg-amber-500/20 text-amber-500 cursor-not-allowed'
-                                : 'bg-amber-500 text-white hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/20 active:scale-95'
+                                ? 'bg-primary/15 text-foreground/80 cursor-not-allowed'
+                                : 'bg-primary text-white hover:bg-primary/70 hover:shadow-lg hover:shadow-primary/15 active:scale-95'
                             }`}
                     >
                         {isRunning ? (
@@ -153,7 +153,7 @@ export default function CodeEditor() {
                         <Terminal className="w-4 h-4" />
                         Console Output
                     </div>
-                    <div className="flex-1 p-6 font-mono text-[13px] text-amber-400/90 leading-relaxed overflow-y-auto whitespace-pre-wrap">
+                    <div className="flex-1 p-6 font-mono text-[13px] text-foreground/70/90 leading-relaxed overflow-y-auto whitespace-pre-wrap">
                         {output || 'Run your code to see the result...'}
                     </div>
                 </div>

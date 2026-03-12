@@ -15,9 +15,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 
 const stats = [
-    { title: 'Total Enrollment', value: '4,820', icon: GraduationCap, color: 'text-orange-400' },
+    { title: 'Total Enrollment', value: '4,820', icon: GraduationCap, color: 'text-foreground/70' },
     { title: 'Faculty Members', value: '156', icon: Users, color: 'text-blue-400' },
-    { title: 'Average CGPA', value: '3.4', icon: BarChart3, color: 'text-amber-400' },
+    { title: 'Average CGPA', value: '3.4', icon: BarChart3, color: 'text-foreground/70' },
     { title: 'Placement Rate', value: '88%', icon: PieChart, color: 'text-purple-400' },
 ];
 
@@ -27,18 +27,18 @@ export default function InstitutionDashboard() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-                        Institution <span className="text-orange-400">Headquarters</span>
+                        Institution <span className="text-foreground/70">Headquarters</span>
                     </h1>
-                    <p className="text-slate-400 mt-2">
+                    <p className="text-muted-foreground mt-2">
                         Global overview of academic performance, faculty activity, and institutional growth.
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" className="border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-white">
+                    <Button variant="outline" className="border-border bg-card/50 hover:bg-secondary text-white">
                         <Settings className="w-4 h-4 mr-2" />
                         Institution Settings
                     </Button>
-                    <Button className="bg-orange-600 hover:bg-orange-500 text-white shadow-[0_0_20px_rgba(234,88,12,0.3)]">
+                    <Button className="bg-primary hover:bg-primary text-white shadow-[0_0_20px_rgba(234,88,12,0.3)]">
                         <PieChart className="w-4 h-4 mr-2" />
                         Generate Annual Report
                     </Button>
@@ -54,9 +54,9 @@ export default function InstitutionDashboard() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.4, delay: index * 0.1 }}
                     >
-                        <Card className="bg-slate-900/40 border-slate-800 border-b-2 border-b-transparent hover:border-b-orange-500 transition-all group">
+                        <Card className="bg-slate-900/40 border-border border-b-2 border-b-transparent hover:border-b-primary transition-all group">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.title}</CardTitle>
+                                <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{stat.title}</CardTitle>
                                 <stat.icon className={`w-4 h-4 ${stat.color} group-hover:rotate-12 transition-transform`} />
                             </CardHeader>
                             <CardContent>
@@ -70,23 +70,23 @@ export default function InstitutionDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Analytics Section */}
                 <div className="lg:col-span-2 space-y-6">
-                    <Card className="bg-slate-900/40 border-slate-800">
+                    <Card className="bg-slate-900/40 border-border">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-lg font-bold">Domain Growth Analytics</CardTitle>
                                 <CardDescription>Enrollment and performance trends across different domains.</CardDescription>
                             </div>
-                            <ArrowUpRight className="w-5 h-5 text-slate-500" />
+                            <ArrowUpRight className="w-5 h-5 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="h-[300px] flex items-center justify-center text-slate-600 border border-slate-800/50 rounded-xl bg-slate-950/20 italic">
+                            <div className="h-[300px] flex items-center justify-center text-muted-foreground border border-slate-800/50 rounded-xl bg-background/20 italic">
                                 Growth visualization would render here
                             </div>
                         </CardContent>
                     </Card>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="bg-slate-900/40 border-slate-800">
+                        <Card className="bg-slate-900/40 border-border">
                             <CardHeader>
                                 <CardTitle className="text-base font-bold">Top Performing Faculty</CardTitle>
                             </CardHeader>
@@ -94,16 +94,16 @@ export default function InstitutionDashboard() {
                                 {[1, 2, 3].map((f) => (
                                     <div key={f} className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700" />
+                                            <div className="w-8 h-8 rounded-lg bg-secondary border border-border" />
                                             <span className="text-sm font-medium">Faculty Member {f}</span>
                                         </div>
-                                        <span className="text-xs font-bold text-amber-400">9.2 Rating</span>
+                                        <span className="text-xs font-bold text-foreground/70">9.2 Rating</span>
                                     </div>
                                 ))}
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-slate-900/40 border-slate-800">
+                        <Card className="bg-slate-900/40 border-border">
                             <CardHeader>
                                 <CardTitle className="text-base font-bold">Student Success Rate</CardTitle>
                             </CardHeader>
@@ -115,10 +115,10 @@ export default function InstitutionDashboard() {
                                     <div key={i} className="space-y-1">
                                         <div className="flex justify-between text-xs">
                                             <span>{d.domain}</span>
-                                            <span className="text-orange-400 font-bold">{d.rate}%</span>
+                                            <span className="text-foreground/70 font-bold">{d.rate}%</span>
                                         </div>
-                                        <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-                                            <div className="h-full bg-orange-500" style={{ width: `${d.rate}%` }} />
+                                        <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                                            <div className="h-full bg-primary" style={{ width: `${d.rate}%` }} />
                                         </div>
                                     </div>
                                 ))}
@@ -129,28 +129,28 @@ export default function InstitutionDashboard() {
 
                 {/* Sidebar */}
                 <div className="space-y-6">
-                    <Card className="bg-slate-950/40 border-slate-800">
+                    <Card className="bg-background/40 border-border">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-base font-bold">Governance & Compliance</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="flex items-start gap-3 p-3 rounded-lg bg-orange-500/5 border border-orange-500/10">
-                                <ShieldCheck className="w-4 h-4 text-orange-400 mt-1 shrink-0" />
-                                <p className="text-xs text-slate-400 leading-relaxed">
+                            <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                                <ShieldCheck className="w-4 h-4 text-foreground/70 mt-1 shrink-0" />
+                                <p className="text-xs text-muted-foreground leading-relaxed">
                                     All academic records for <span className="text-white font-medium">Winter 2026</span> are synchronized and secured.
                                 </p>
                             </div>
-                            <Button variant="outline" className="w-full text-xs border-slate-800 h-10 hover:bg-slate-800">
+                            <Button variant="outline" className="w-full text-xs border-border h-10 hover:bg-secondary">
                                 Audit Registry
                             </Button>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-t from-orange-900/20 to-slate-950/40 border-slate-800 overflow-hidden group">
+                    <Card className="bg-gradient-to-t from-muted/20 to-background/40 border-border overflow-hidden group">
                         <div className="p-6">
-                            <Building2 className="w-10 h-10 text-orange-500/50 mb-4 group-hover:scale-110 transition-transform" />
+                            <Building2 className="w-10 h-10 text-foreground/80/50 mb-4 group-hover:scale-110 transition-transform" />
                             <h4 className="text-lg font-black italic tracking-tight">INSTITUTIONAL AI</h4>
-                            <p className="text-xs text-slate-400 mt-2 mb-4">
+                            <p className="text-xs text-muted-foreground mt-2 mb-4">
                                 Leverage predictive analytics to forecast enrollment trends and student success bottlenecks.
                             </p>
                             <Button size="sm" className="w-full bg-slate-100 hover:bg-white text-black text-[10px] font-black tracking-widest h-10">

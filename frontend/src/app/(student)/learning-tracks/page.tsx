@@ -40,7 +40,7 @@ const TRACKS_FALLBACK = [
     domain: 'Mechanical', careerOutcome: 'Become a Design Engineer',
     estimatedWeeks: 20, difficulty: 'intermediate', enrollmentCount: 3800,
     rating: 4.7, courseCount: 7, icon: Settings,
-    gradient: 'from-orange-600 to-red-600',
+    gradient: 'from-primary/90 to-red-600',
     skills: ['CAD/CAM', 'FEM Analysis', 'Thermodynamics', 'Dynamics', 'GD&T'],
     description: 'Solid mechanical foundations + simulation tools + industry design standards.',
     hasCertificate: true,
@@ -50,7 +50,7 @@ const TRACKS_FALLBACK = [
     domain: 'Finance', careerOutcome: 'Become an IB Analyst',
     estimatedWeeks: 16, difficulty: 'advanced', enrollmentCount: 4100,
     rating: 4.9, courseCount: 6, icon: TrendingUp,
-    gradient: 'from-amber-600 to-cyan-600',
+    gradient: 'from-primary/90 to-cyan-600',
     skills: ['Financial Modeling', 'DCF', 'M&A Analysis', 'LBO', 'Excel'],
     description: 'Master the analytical toolkit of top-tier investment banks.',
     hasCertificate: true,
@@ -70,7 +70,7 @@ const TRACKS_FALLBACK = [
     domain: 'Electrical', careerOutcome: 'Become a Systems Engineer',
     estimatedWeeks: 22, difficulty: 'intermediate', enrollmentCount: 2900,
     rating: 4.7, courseCount: 8, icon: Zap,
-    gradient: 'from-yellow-500 to-orange-500',
+    gradient: 'from-yellow-500 to-primary',
     skills: ['Circuit Design', 'Control Systems', 'Power Electronics', 'MATLAB', 'FPGA'],
     description: 'From circuit theory to embedded systems and power electronics.',
     hasCertificate: true,
@@ -79,7 +79,7 @@ const TRACKS_FALLBACK = [
 
 const DOMAINS = ['All', 'Software', 'AI/ML', 'Mechanical', 'Electrical', 'Finance', 'Data'];
 const DIFFICULTY_COLORS = {
-  beginner: 'bg-amber-900 text-amber-400',
+  beginner: 'bg-muted text-foreground/70',
   intermediate: 'bg-blue-900 text-blue-400',
   advanced: 'bg-purple-900 text-purple-400',
 };
@@ -105,8 +105,8 @@ export default function LearningTracksPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 -left-24 h-[28rem] w-[28rem] rounded-full bg-blue-600/15 blur-3xl" />
-        <div className="absolute top-28 -right-20 h-[24rem] w-[24rem] rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="absolute -top-40 -left-24 h-[28rem] w-[28rem] rounded-full bg-primary/15 blur-3xl" />
+        <div className="absolute top-28 -right-20 h-[24rem] w-[24rem] rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-0 left-1/3 h-[20rem] w-[20rem] rounded-full bg-cyan-500/10 blur-3xl" />
       </div>
       {/* Hero */}
@@ -127,7 +127,7 @@ export default function LearningTracksPage() {
             {[
               { label: 'Tracks', value: tracks.length, icon: Map, color: 'text-purple-400' },
               { label: 'Enrolled', value: '32K+', icon: Users, color: 'text-blue-400' },
-              { label: 'Completed', value: '8.4K', icon: Award, color: 'text-amber-400' },
+              { label: 'Completed', value: '8.4K', icon: Award, color: 'text-foreground/70' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -192,7 +192,7 @@ export default function LearningTracksPage() {
                           {track.difficulty}
                         </Badge>
                         {track.hasCertificate && (
-                          <Badge className="bg-amber-900/50 text-amber-400 text-[10px]">
+                          <Badge className="bg-muted text-foreground/70 text-[10px]">
                             <Award className="h-2.5 w-2.5 mr-1" /> Cert
                           </Badge>
                         )}
@@ -217,7 +217,7 @@ export default function LearningTracksPage() {
                       <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{track.estimatedWeeks}w</span>
                       <span className="flex items-center gap-1"><BookOpen className="h-3.5 w-3.5" />{track.courseCount} courses</span>
                       <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{(track.enrollmentCount / 1000).toFixed(1)}k enrolled</span>
-                      <span className="flex items-center gap-1 text-amber-400"><Star className="h-3.5 w-3.5 fill-amber-400" />{track.rating}</span>
+                      <span className="flex items-center gap-1 text-foreground/70"><Star className="h-3.5 w-3.5 fill-foreground/70" />{track.rating}</span>
                     </div>
 
                     {/* Action */}
@@ -230,7 +230,7 @@ export default function LearningTracksPage() {
                       <Button
                         size="sm"
                         onClick={() => setEnrolled(isEnrolled ? enrolled.filter((id) => id !== track.id) : [...enrolled, track.id])}
-                        className={`text-xs px-4 ${isEnrolled ? 'bg-amber-700 hover:bg-amber-600' : `bg-gradient-to-r ${track.gradient} hover:opacity-90`}`}
+                        className={`text-xs px-4 ${isEnrolled ? 'bg-primary/80 hover:bg-primary/90' : `bg-gradient-to-r ${track.gradient} hover:opacity-90`}`}
                       >
                         {isEnrolled ? '✓ Enrolled' : 'Enroll'}
                       </Button>
