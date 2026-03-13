@@ -198,9 +198,6 @@ export function AIAssistant() {
                     }`}
             >
                 {isOpen ? <MessageSquare className="w-6 h-6 text-white" /> : <Bot className="w-7 h-7 text-blue-400" />}
-                {!isOpen && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-border rounded-full" />
-                )}
             </motion.button>
         </div>
     );
