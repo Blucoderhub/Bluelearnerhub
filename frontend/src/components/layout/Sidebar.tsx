@@ -135,7 +135,7 @@ export default function Sidebar() {
     },
     {
       name: 'Settings',
-      href: '/profile/settings',
+      href: '/student/profile',
       icon: Settings,
     },
   ]

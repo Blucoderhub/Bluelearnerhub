@@ -10,6 +10,7 @@ import { XPProgressBar } from '@/components/gamification/XPProgressBar'
 import { StreakDisplay } from '@/components/gamification/StreakDisplay'
 import CodingCharacter from '@/components/animations/characters/CodingCharacter'
 import { useAuth } from '@/hooks/useAuth'
+import { generateAvatarURL } from '@/utils/generateAvatar'
 import {
   LayoutDashboard,
   BookOpen,
@@ -136,8 +137,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
         <div className="p-3 border-t border-border/50">
           <div className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/20">
-            <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-sm">
-              {initials}
+            <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-sm overflow-hidden">
+              {user?.avatarConfig ? (
+                <img src={generateAvatarURL(user.avatarConfig)} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                initials
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">{displayName}</p>

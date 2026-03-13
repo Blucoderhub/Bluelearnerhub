@@ -13,8 +13,14 @@ export class AuthService {
       throw new AppError('Email already registered', 400);
     }
 
-    // Create user
-    const user = await UserModel.create(data);
+    // Create user with default avatar config
+    const user = await UserModel.create({
+      ...data,
+      avatarConfig: {
+        seed: data.email.split('@')[0],
+        style: 'adventurer',
+      }
+    });
 
     // Generate tokens
     const accessToken = signAccessToken({

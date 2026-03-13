@@ -37,14 +37,6 @@ const sampleAchievements = [
   { id: '8', title: 'Speed Demon', description: 'Complete a quiz in under 60s', icon: '⚡', status: 'locked' as const },
 ]
 
-const sampleLeaderboard = [
-  { rank: 1, name: 'Alex Chen', xp: 12450, level: 12, avatar: '🧑‍💻', trend: 'up' as const },
-  { rank: 2, name: 'Priya Sharma', xp: 11200, level: 11, avatar: '👩‍💻', trend: 'same' as const },
-  { rank: 3, name: 'Jordan Lee', xp: 10800, level: 10, avatar: '🧑‍🎓', trend: 'up' as const },
-  { rank: 4, name: 'Sam Torres', xp: 9500, level: 9, avatar: '🧑‍🔬', trend: 'down' as const },
-  { rank: 5, name: 'You', xp: 2450, level: 5, avatar: '🎓', trend: 'up' as const, isCurrentUser: true },
-]
-
 const quickActions = [
   { label: 'Continue Learning', icon: BookOpen, href: '/tutorials', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
   { label: 'Daily Quiz', icon: Target, href: '/quiz', color: 'bg-[var(--streak-orange)]/10 text-[var(--streak-orange)] border-[var(--streak-orange)]/20' },
@@ -54,6 +46,15 @@ const quickActions = [
 
 export default function StudentDashboard() {
   const { user } = useAuth()
+  
+  const sampleLeaderboard = [
+    { rank: 1, name: 'Alex Chen', xp: 12450, level: 12, avatar: '🧑‍💻', trend: 'up' as const },
+    { rank: 2, name: 'Priya Sharma', xp: 11200, level: 11, avatar: '👩‍💻', trend: 'same' as const },
+    { rank: 3, name: 'Jordan Lee', xp: 10800, level: 10, avatar: '🧑‍🎓', trend: 'up' as const },
+    { rank: 4, name: 'Sam Torres', xp: 9500, level: 9, avatar: '🧑‍🔬', trend: 'down' as const },
+    { rank: 5, name: 'You', xp: 2450, level: 5, avatar: '🎓', trend: 'up' as const, isCurrentUser: true, avatarConfig: user?.avatarConfig },
+  ]
+
   const [showConfetti, setShowConfetti] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
 

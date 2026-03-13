@@ -40,6 +40,7 @@ import {
 } from 'lucide-react'
 import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
+import { generateAvatarURL } from '@/utils/generateAvatar'
 
 const hackathonLinks = [
   { name: 'Browse Hackathons', description: 'Explore all active and upcoming hackathons', href: '/hackathons', icon: 'Trophy' },
@@ -380,7 +381,7 @@ export default function Header() {
                   <button className="flex items-center gap-2 px-1.5 py-1.5 rounded-xl hover:bg-muted/50 focus:outline-none transition-all group">
                     <div className="relative">
                       <Avatar className="h-8 w-8 border-2 border-transparent group-hover:border-primary/50 transition-all">
-                        <AvatarImage src={user.profilePicture} />
+                        <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
                         <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                           {user.fullName?.charAt(0) || 'U'}
                         </AvatarFallback>
@@ -398,7 +399,7 @@ export default function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="rounded-lg focus:bg-primary/10 focus:text-primary cursor-pointer" asChild>
-                    <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
+                    <Link href="/student/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="rounded-lg focus:bg-primary/10 focus:text-primary cursor-pointer" asChild>
                     <Link href="/dashboard"><Trophy className="mr-2 h-4 w-4" />Dashboard</Link>
@@ -606,7 +607,7 @@ export default function Header() {
             {user ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
                 <Avatar className="h-9 w-9 border-2 border-primary/30">
-                  <AvatarImage src={user.profilePicture} />
+                  <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
                     {user.fullName?.charAt(0) || 'U'}
                   </AvatarFallback>

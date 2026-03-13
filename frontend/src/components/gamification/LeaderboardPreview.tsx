@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Trophy, TrendingUp, TrendingDown, Minus, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { generateAvatarURL } from '@/utils/generateAvatar'
 
 interface LeaderboardEntry {
   rank: number
@@ -10,6 +11,7 @@ interface LeaderboardEntry {
   xp: number
   level: number
   avatar: string
+  avatarConfig?: any
   trend: 'up' | 'down' | 'same'
   isCurrentUser?: boolean
 }
@@ -58,8 +60,12 @@ export function LeaderboardPreview({ entries, currentUserRank, totalUsers }: Lea
               {entry.rank}
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm">
-              {entry.avatar}
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm overflow-hidden">
+              {entry.avatarConfig ? (
+                <img src={generateAvatarURL(entry.avatarConfig)} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                entry.avatar
+              )}
             </div>
 
             <div className="flex-1 min-w-0">

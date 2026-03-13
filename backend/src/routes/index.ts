@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authRoutes from './auth';
+import avatarRoutes from './avatar';
 import quizRoutes from './quiz';
 import hackathonRoutes from './hackathon';
 import jobRoutes from './job';
@@ -21,6 +22,7 @@ import notebookRoutes     from './notebooks';
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/avatar', avatarRoutes);
 router.use('/quiz', quizRoutes);
 router.use('/hackathons', hackathonRoutes);
 router.use('/jobs', jobRoutes);

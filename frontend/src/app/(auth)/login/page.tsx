@@ -1,14 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { StudentLoginForm } from "@/components/auth/StudentLoginForm";
 import { GraduationCap } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPortal() {
+    const { login, isAuthenticated } = useAuth();
+    const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push("/dashboard");
+        }
+    }, [isAuthenticated, router]);
+
     const handleSubmit = async (data: any) => {
-        console.log("General Login:", data);
+        setError(null);
+        try {
+            await login(data.email, data.password);
+            router.push("/dashboard");
+        } catch (err: any) {
+            setError(err.response?.data?.message || err.message || "Failed to initialize secure session.");
+        }
     };
 
     return (
@@ -20,22 +38,26 @@ export default function LoginPortal() {
             </div>
 
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="relative z-10 w-full max-w-md bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-12 shadow-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative z-10 w-full max-w-[400px] sm:max-w-[380px] bg-card/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden"
             >
-                <div className="flex justify-center mb-10">
-                    <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20">
-                        <GraduationCap className="w-10 h-10 text-primary-foreground" />
+                {/* Refined Card Inner Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                
+                <div className="flex justify-center mb-8">
+                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 relative group">
+                        <div className="absolute inset-0 rounded-2xl bg-primary animate-ping opacity-20 group-hover:opacity-40 transition-opacity" />
+                        <GraduationCap className="w-8 h-8 text-primary-foreground relative z-10" />
                     </div>
                 </div>
 
-                <StudentLoginForm onSubmit={handleSubmit} />
+                <StudentLoginForm onSubmit={handleSubmit} error={error} />
 
                 <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em]">
                     Don&apos;t have an account?{" "}
-                    <Link href="/get-started" className="text-foreground hover:underline font-bold">Sign up</Link>
+                    <Link href="/get-started" className="text-primary hover:text-primary/80 transition-colors font-bold">Sign up</Link>
                 </p>
             </motion.div>
 

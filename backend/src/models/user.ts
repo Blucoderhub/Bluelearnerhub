@@ -30,6 +30,7 @@ export interface User {
   failed_login_attempts?: number;
   locked_until?: Date;
   last_login_at?: Date;
+  avatar_config?: any;
   preferences: any;
   notification_settings: any;
   created_at: Date;
@@ -43,6 +44,7 @@ export interface CreateUserDTO {
   role: 'student' | 'corporate' | 'college';
   collegeName?: string;
   company?: string;
+  avatarConfig?: any;
 }
 
 export interface UpdateUserDTO {
@@ -59,6 +61,7 @@ export interface UpdateUserDTO {
   linkedinUrl?: string;
   githubUrl?: string;
   portfolioUrl?: string;
+  avatarConfig?: any;
   failed_login_attempts?: number;
   locked_until?: Date | null;
 }
@@ -70,8 +73,8 @@ export class UserModel {
     const query = `
       INSERT INTO users (
         email, password_hash, full_name, role, 
-        college_name, company
-      ) VALUES ($1, $2, $3, $4, $5, $6)
+        college_name, company, avatar_config
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
     `;
 
@@ -82,6 +85,7 @@ export class UserModel {
       data.role,
       data.collegeName || null,
       data.company || null,
+      JSON.stringify(data.avatarConfig || {}),
     ];
 
     const result = await pool.query(query, values);
