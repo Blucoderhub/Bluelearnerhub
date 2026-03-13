@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { MessageSquare, Eye, ChevronUp, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { generateAvatarURL } from '@/utils/generateAvatar';
 
 interface QuestionCardProps {
   id:          number;
@@ -21,12 +22,13 @@ interface QuestionCardProps {
   isAnswered:  boolean;
   tags?:       string[];
   authorName:  string;
+  authorAvatarConfig?: any;
   createdAt:   string;
 }
 
 export default function QuestionCard({
   id, title, domain, voteScore, answerCount, viewCount,
-  isAnswered, tags = [], authorName, createdAt,
+  isAnswered, tags = [], authorName, authorAvatarConfig, createdAt,
 }: QuestionCardProps) {
   return (
     <div className="group flex gap-4 rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-900">
@@ -80,7 +82,18 @@ export default function QuestionCard({
               <span>·</span>
             </>
           )}
-          <span>{authorName}</span>
+          <div className="flex items-center gap-1.5">
+            <div className="h-4 w-4 rounded-full bg-muted overflow-hidden">
+              {authorAvatarConfig ? (
+                <img src={generateAvatarURL(authorAvatarConfig)} alt={authorName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-primary/10 text-[8px] font-bold text-primary">
+                  {authorName.charAt(0)}
+                </div>
+              )}
+            </div>
+            <span>{authorName}</span>
+          </div>
           <span>·</span>
           <span>{formatDistanceToNow(new Date(createdAt), { addSuffix: true })}</span>
         </div>

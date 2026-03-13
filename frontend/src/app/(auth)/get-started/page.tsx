@@ -8,9 +8,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StudentSignupForm } from '@/components/auth/StudentSignupForm';
 import { StudentLoginForm } from '@/components/auth/StudentLoginForm';
 
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+
 export default function GetStartedPage() {
+    const { login, register, isAuthenticated } = useAuth();
+    const router = useRouter();
+    const [error, setError] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        if (isAuthenticated) {
+            router.push("/dashboard");
+        }
+    }, [isAuthenticated, router]);
+
     const handleAuth = async (data: any) => {
-        console.log("Auth Action:", data);
+        setError(null);
+        try {
+            if (data.name) {
+                // Register flow
+                await register({ ...data, role: 'student' });
+            } else {
+                // Login flow
+                await login(data.email, data.password);
+            }
+            router.push("/dashboard");
+        } catch (err: any) {
+            setError(err.response?.data?.message || err.message || "Protocole initialization failed.");
+        }
     };
 
     return (
@@ -21,56 +46,58 @@ export default function GetStartedPage() {
                 <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-primary/5 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
             </div>
 
-            <div className="max-w-[500px] w-full relative z-10">
+            <div className="max-w-[420px] w-full relative z-10 px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-12"
+                    className="text-center mb-10"
                 >
                     <div className="flex justify-center mb-6">
-                        <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20">
-                            <GraduationCap className="w-10 h-10 text-primary-foreground" />
+                        <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 relative group">
+                            <div className="absolute inset-0 rounded-2xl bg-primary animate-ping opacity-20 group-hover:opacity-40 transition-opacity" />
+                            <GraduationCap className="w-8 h-8 text-primary-foreground relative z-10" />
                         </div>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase">
-                        Join the Ecosystem
+                    <h1 className="text-3xl md:text-4xl font-black mb-3 tracking-tighter uppercase font-mono">
+                        Join System
                     </h1>
-                    <p className="text-muted-foreground text-sm font-medium uppercase tracking-widest">
+                    <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest leading-loose">
                         Master Elite Engineering & Management
                     </p>
                 </motion.div>
 
-                <Tabs defaultValue="signup" className="w-full bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-                    <div className="flex justify-center mb-10">
-                        <TabsList className="bg-muted/50 border border-border/30 p-1.5 h-14 rounded-2xl">
+                <div className="w-full bg-card/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                    
+                    <Tabs defaultValue="signup" className="w-full relative z-10">
+                        <div className="flex justify-center mb-8">
+                            <TabsList className="bg-white/5 border border-white/10 p-1 h-12 rounded-xl">
                             <TabsTrigger
                                 value="signup"
-                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-black uppercase tracking-widest text-[10px]"
+                                className="px-6 flex items-center gap-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-bold uppercase tracking-widest text-[9px] font-mono"
                             >
-                                <UserPlus className="w-4 h-4" />
+                                <UserPlus className="w-3.5 h-3.5" />
                                 Join
                             </TabsTrigger>
                             <TabsTrigger
                                 value="login"
-                                className="px-8 flex items-center gap-2 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-black uppercase tracking-widest text-[10px]"
+                                className="px-6 flex items-center gap-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all font-bold uppercase tracking-widest text-[9px] font-mono"
                             >
-                                <Lock className="w-4 h-4" />
+                                <Lock className="w-3.5 h-3.5" />
                                 Login
                             </TabsTrigger>
                         </TabsList>
                     </div>
 
                     <TabsContent value="signup" className="mt-0 focus-visible:outline-none">
-                        <StudentSignupForm onSubmit={handleAuth} />
+                        <StudentSignupForm onSubmit={handleAuth} error={error} />
                     </TabsContent>
 
                     <TabsContent value="login" className="mt-0 focus-visible:outline-none">
-                        <StudentLoginForm onSubmit={handleAuth} />
+                        <StudentLoginForm onSubmit={handleAuth} error={error} />
                     </TabsContent>
-
-
-                </Tabs>
+                </div>
 
                 <motion.div
                     initial={{ opacity: 0 }}

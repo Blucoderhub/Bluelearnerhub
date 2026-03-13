@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, timestamp, integer, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, timestamp, integer, boolean, pgEnum, jsonb } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // Enums
@@ -42,6 +42,7 @@ export const users = pgTable('users', {
     xp: integer('xp').default(0).notNull(),
     level: integer('level').default(1).notNull(),
     streak: integer('streak').default(0).notNull(),
+    avatarConfig: jsonb('avatar_config'),
     lastActive: timestamp('last_active').defaultNow().notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),

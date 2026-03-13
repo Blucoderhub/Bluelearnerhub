@@ -11,6 +11,7 @@ export interface User {
   level?: number  // User level/tier
   totalPoints?: number  // Total XP/points earned
   currentStreak?: number  // Current learning streak in days
+  avatarConfig?: any
   createdAt: Date
 }
 
