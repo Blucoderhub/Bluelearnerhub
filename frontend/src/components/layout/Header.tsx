@@ -147,7 +147,7 @@ export default function Header() {
               </button>
               {openMenu === 'tutorials' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[780px] bg-background border border-border/60 rounded-b-2xl shadow-2xl p-8 z-50"
+                  className="absolute top-full left-0 mt-0 w-[780px] bg-black border border-border/60 rounded-b-2xl shadow-2xl p-8 z-50"
                   onMouseEnter={() => openHover('tutorials')}
                   onMouseLeave={closeHover}
                 >
@@ -208,7 +208,7 @@ export default function Header() {
               </button>
               {openMenu === 'hackathon' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[420px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  className="absolute top-full left-0 mt-0 w-[420px] bg-black border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
                   onMouseEnter={() => openHover('hackathon')}
                   onMouseLeave={closeHover}
                 >
@@ -260,7 +260,7 @@ export default function Header() {
               </button>
               {openMenu === 'spaces' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[400px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  className="absolute top-full left-0 mt-0 w-[400px] bg-black border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
                   onMouseEnter={() => openHover('spaces')}
                   onMouseLeave={closeHover}
                 >
@@ -314,7 +314,7 @@ export default function Header() {
               </button>
               {openMenu === 'mentor' && (
                 <div
-                  className="absolute top-full left-0 mt-0 w-[480px] bg-background border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
+                  className="absolute top-full left-0 mt-0 w-[480px] bg-black border border-border/60 rounded-b-2xl shadow-2xl z-50 overflow-hidden"
                   onMouseEnter={() => openHover('mentor')}
                   onMouseLeave={closeHover}
                 >
@@ -422,7 +422,7 @@ export default function Header() {
                 </button>
                 {openMenu === 'getin' && (
                   <div
-                    className="absolute top-full right-0 mt-1.5 w-52 bg-background border border-border/60 rounded-2xl shadow-2xl overflow-hidden z-50"
+                    className="absolute top-full right-0 mt-1.5 w-52 bg-black border border-border/60 rounded-2xl shadow-2xl overflow-hidden z-50"
                     onMouseEnter={() => openHover('getin')}
                     onMouseLeave={closeHover}
                   >
