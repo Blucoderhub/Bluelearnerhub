@@ -116,8 +116,8 @@ export default function Header() {
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? 'bg-background/95 backdrop-blur-xl shadow-lg border-b border-border/50'
-            : 'bg-background/80 backdrop-blur-md border-b border-transparent'
+            ? 'bg-black shadow-lg border-b border-border/50'
+            : 'bg-black border-b border-transparent'
         }`}
       >
         <div className="mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
@@ -213,7 +213,7 @@ export default function Header() {
                   onMouseEnter={() => openHover('hackathon')}
                   onMouseLeave={closeHover}
                 >
-                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center justify-between">
+                  <div className="bg-neutral-900 border-b border-border/50 px-6 py-4 flex items-center justify-between">
                     <div>
                       <p className="text-[13px] font-black text-foreground">Hackathons</p>
                       <p className="text-[11px] text-muted-foreground">Compete, build, and win on our platform</p>
@@ -265,7 +265,7 @@ export default function Header() {
                   onMouseEnter={() => openHover('spaces')}
                   onMouseLeave={closeHover}
                 >
-                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center justify-between">
+                  <div className="bg-neutral-900 border-b border-border/50 px-6 py-4 flex items-center justify-between">
                     <div>
                       <p className="text-[13px] font-black text-foreground">Bluelearnerhub Spaces</p>
                       <p className="text-[11px] text-muted-foreground">Build, host & share web projects — free</p>
@@ -320,7 +320,7 @@ export default function Header() {
                   onMouseLeave={closeHover}
                 >
                   {/* Header banner */}
-                  <div className="bg-primary/8 border-b border-border/50 px-6 py-4 flex items-center gap-3">
+                  <div className="bg-neutral-900 border-b border-border/50 px-6 py-4 flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 border border-primary/20">
                       <GraduationCap className="h-5 w-5 text-primary" />
                     </div>
@@ -472,7 +472,7 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-black shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -605,7 +605,7 @@ export default function Header() {
           {/* Bottom auth */}
           <div className="p-4 border-t border-border/50 space-y-2">
             {user ? (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-900">
                 <Avatar className="h-9 w-9 border-2 border-primary/30">
                   <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-sm">
