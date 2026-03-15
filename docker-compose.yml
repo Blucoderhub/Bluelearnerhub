@@ -48,6 +48,8 @@ services:
       - HOST=0.0.0.0
       
       # Database Configuration
+      # DATABASE_URL used by Drizzle ORM (db/index.ts) — standard postgres:// for local Docker
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/edtech_platform
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=edtech_platform
@@ -63,13 +65,13 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-redis123}
       - REDIS_DB=0
       
-      # Security
-      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-change-in-production}
-      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your-refresh-secret-change-in-production}
+      # Security — defaults are dev-only values (override in production via .env)
+      - JWT_SECRET=${JWT_SECRET:-bluelearnerhub-jwt-dev-secret-key-32-plus-chars}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-bluelearnerhub-refresh-dev-secret-32-plus-c}
       - JWT_EXPIRES_IN=7d
       - JWT_REFRESH_EXPIRES_IN=30d
-      - SESSION_SECRET=${SESSION_SECRET:-your-session-secret-change-in-production}
-      - COOKIE_SECRET=${COOKIE_SECRET:-your-cookie-secret-change-in-production}
+      - SESSION_SECRET=${SESSION_SECRET:-bluelearnerhub-session-dev-secret-key-32plus}
+      - COOKIE_SECRET=${COOKIE_SECRET:-bluelearnerhub-cookie-dev-secret-key-32plus!}
       
       # External Services
       - AI_SERVICE_URL=http://ai-services:8000
@@ -148,6 +150,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - BUILD_STANDALONE=true
     container_name: edtech_frontend
     environment:
       # API Configuration
