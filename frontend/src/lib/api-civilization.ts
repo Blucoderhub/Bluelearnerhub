@@ -33,6 +33,25 @@ export const tutorialsAPI = {
 // ─── Study Notebooks ───────────────────────────────────────────────────────
 
 export const notebooksAPI = {
+  // CRUD
+  list:           ()                       => api.get('/notebooks').then((r) => r.data),
+  get:            (id: number)             => api.get(`/notebooks/${id}`).then((r) => r.data),
+  create:         (body: { title: string; description?: string; emoji?: string }) =>
+                    api.post('/notebooks', body).then((r) => r.data),
+  update:         (id: number, body: { title?: string; description?: string; emoji?: string }) =>
+                    api.patch(`/notebooks/${id}`, body).then((r) => r.data),
+  delete:         (id: number)             => api.delete(`/notebooks/${id}`).then((r) => r.data),
+  // Sources
+  addSource:      (id: number, body: { title: string; sourceType: string; content?: string; url?: string }) =>
+                    api.post(`/notebooks/${id}/sources`, body).then((r) => r.data),
+  deleteSource:   (id: number, sourceId: number) =>
+                    api.delete(`/notebooks/${id}/sources/${sourceId}`).then((r) => r.data),
+  // AI Chat & Generation
+  chat:           (id: number, message: string) =>
+                    api.post(`/notebooks/${id}/chat`, { message }).then((r) => r.data),
+  generate:       (id: number, type: string) =>
+                    api.post(`/notebooks/${id}/generate`, { type }).then((r) => r.data),
+  // Behavior & Guidance
   trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
                 api.post(`/notebooks/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
   adaptiveGuidance: (id: number) =>
@@ -42,6 +61,9 @@ export const notebooksAPI = {
 // ─── Hackathons ────────────────────────────────────────────────────────────
 
 export const hackathonsAPI = {
+  list:     (params?: Record<string, string>) => api.get('/hackathons', { params }).then((r) => r.data),
+  get:      (id: number)   => api.get(`/hackathons/${id}`).then((r) => r.data),
+  register: (id: number)   => api.post(`/hackathons/${id}/register`).then((r) => r.data),
   trackBehavior: (id: number, eventType: string, eventPayload?: Record<string, unknown>) =>
                 api.post(`/hackathons/${id}/behavior-events`, { eventType, eventPayload }).then((r) => r.data),
   adaptiveGuidance: (id: number) =>
@@ -125,6 +147,22 @@ export const orgsAPI = {
 export const dailyQuizAPI = {
   domains: ()              => api.get('/daily-quiz/domains').then((r) => r.data),
   getQuiz: (domain: string) => api.get(`/daily-quiz/${encodeURIComponent(domain)}`).then((r) => r.data),
+};
+
+// ─── Gamification ────────────────────────────────────────────────────────────
+
+export const gamificationAPI = {
+  achievements: () => api.get('/gamification/achievements').then((r) => r.data),
+  leaderboard:  (limit?: number) =>
+    api.get('/gamification/leaderboard', { params: limit ? { limit } : undefined }).then((r) => r.data),
+};
+
+// ─── Exercises ───────────────────────────────────────────────────────────────
+
+export const exercisesAPI = {
+  list: (params?: { domain?: string; search?: string; sort?: string; page?: number; limit?: number }) =>
+    api.get('/exercises', { params }).then((r) => r.data),
+  get:  (id: string | number) => api.get(`/exercises/${id}`).then((r) => r.data),
 };
 
 // ─── AI Services ─────────────────────────────────────────────────────────────

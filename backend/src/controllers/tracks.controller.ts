@@ -6,7 +6,7 @@
 
 import { Request, Response } from 'express';
 import { db } from '../db';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, sql } from 'drizzle-orm';
 import { learningTracks, trackCourses, trackEnrollments, certificates, certificateTemplates } from '../db/schema-v2';
 import { courses } from '../db/schema';
 import { GamificationService } from '../services/gamification.service';
@@ -20,7 +20,13 @@ export const listTracks = async (req: Request, res: Response) => {
     const rows = await db
       .select()
       .from(learningTracks)
-      .where(eq(learningTracks.isPublished, true))
+      .where(
+        and(
+          eq(learningTracks.isPublished, true),
+          domain ? eq(learningTracks.domain, domain) : undefined,
+          difficulty ? eq(learningTracks.difficulty, difficulty as 'beginner' | 'intermediate' | 'advanced' | 'expert') : undefined,
+        )
+      )
       .orderBy(desc(learningTracks.enrollmentCount));
 
     res.json({ success: true, data: rows });
@@ -33,7 +39,7 @@ export const listTracks = async (req: Request, res: Response) => {
 export const getTrack = async (req: Request, res: Response) => {
   try {
     const { slug }  = req.params;
-    const userId    = (req as any).user?.id;
+    const userId    = req.user?.id;
 
     const [track] = await db
       .select()
@@ -69,7 +75,7 @@ export const getTrack = async (req: Request, res: Response) => {
 
 export const enrollInTrack = async (req: Request, res: Response) => {
   try {
-    const userId  = (req as any).user.id;
+    const userId  = req.user!.id;
     const trackId = parseInt(req.params.id);
 
     const [existing] = await db
@@ -84,10 +90,10 @@ export const enrollInTrack = async (req: Request, res: Response) => {
       .values({ userId, trackId, progressPercentage: 0 })
       .returning();
 
-    // Increment enrollment counter
+    // Increment enrollment counter atomically
     await db
       .update(learningTracks)
-      .set({ enrollmentCount: db.select({ v: learningTracks.enrollmentCount }).from(learningTracks).where(eq(learningTracks.id, trackId)) as any })
+      .set({ enrollmentCount: sql`${learningTracks.enrollmentCount} + 1` })
       .where(eq(learningTracks.id, trackId));
 
     await GamificationService.awardXP(userId, 10, 'TRACK_ENROLLED');
@@ -101,7 +107,7 @@ export const enrollInTrack = async (req: Request, res: Response) => {
 
 export const getTrackProgress = async (req: Request, res: Response) => {
   try {
-    const userId  = (req as any).user.id;
+    const userId  = req.user!.id;
     const trackId = parseInt(req.params.id);
 
     const [enrollment] = await db

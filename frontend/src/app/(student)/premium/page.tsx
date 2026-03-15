@@ -21,6 +21,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/lib/api';
+import { toast } from 'sonner';
 
 const tiers = [
     {
@@ -83,18 +85,13 @@ export default function PremiumHubPage() {
     const handleSubscribe = async (tier: string) => {
         setLoading(tier);
         try {
-            const res = await fetch('/api/payments/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Simple auth for demo
-                },
-                body: JSON.stringify({ tier }),
-            });
-            const { url } = await res.json();
-            if (url) window.location.href = url;
-        } catch (error) {
-            console.error('Subscription error:', error);
+            const { data } = await api.post('/payments/checkout', { tier });
+            if (data?.url) {
+                toast.success(`Redirecting to ${tier} checkout...`);
+                window.location.href = data.url; // Stripe hosted checkout — external URL requires full redirect
+            }
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || 'Failed to start checkout. Please try again.');
         } finally {
             setLoading(null);
         }

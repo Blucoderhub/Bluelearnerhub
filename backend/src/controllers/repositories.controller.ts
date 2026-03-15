@@ -39,7 +39,7 @@ import logger from '../utils/logger';
 export const getUserRepositories = async (req: Request, res: Response) => {
   try {
     const { username } = req.params;
-    const requesterId  = (req as any).user?.id;
+    const requesterId  = req.user?.id;
 
     const [owner] = await db
       .select({ id: users.id })
@@ -75,7 +75,7 @@ export const getUserRepositories = async (req: Request, res: Response) => {
 export const getRepository = async (req: Request, res: Response) => {
   try {
     const { username, slug } = req.params;
-    const requesterId = (req as any).user?.id;
+    const requesterId = req.user?.id;
 
     const [owner] = await db
       .select({ id: users.id, fullName: users.fullName })
@@ -184,7 +184,7 @@ export const getFileContent = async (req: Request, res: Response) => {
 
 export const createRepository = async (req: Request, res: Response) => {
   try {
-    const ownerId = (req as any).user.id;
+    const ownerId = req.user!.id;
     const { name, description, visibility, language, topics, license } = req.body;
 
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -219,7 +219,7 @@ export const createRepository = async (req: Request, res: Response) => {
 export const createCommit = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
-    const authorId = (req as any).user.id;
+    const authorId = req.user!.id;
     const { message, files, branch = 'main' } = req.body;
     // files: [{ path, content, language }]
 
@@ -302,7 +302,7 @@ export const listIssues = async (req: Request, res: Response) => {
 export const createIssue = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
-    const authorId = (req as any).user.id;
+    const authorId = req.user!.id;
     const { title, body, labels } = req.body;
 
     // Get next issue number for this repo
@@ -345,7 +345,7 @@ export const listPullRequests = async (req: Request, res: Response) => {
 export const createPullRequest = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
-    const authorId = (req as any).user.id;
+    const authorId = req.user!.id;
     const { title, description, sourceBranch, targetBranch = 'main', diffContent } = req.body;
 
     const [{ count }] = await db
@@ -417,7 +417,7 @@ async function triggerAICodeReview(prId: number, diffContent: string): Promise<s
 
 export const toggleStar = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const repoId = parseInt(req.params.id);
 
     const [existing] = await db

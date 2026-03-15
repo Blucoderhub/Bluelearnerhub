@@ -92,11 +92,11 @@ export default function LearningTracksPage() {
 
   useEffect(() => {
     tracksAPI.list()
-      .then((d) => { if (d.data?.length) setTracks(d.data); })
-      .catch(() => { /* keep fallback */ });
+      .then((d) => { if (d?.length) setTracks(d); })
+      .catch(() => {/* keep fallback data */});
   }, []);
 
-  const filtered = tracks.filter((t: any) => {
+  const filtered = tracks.filter((t) => {
     const matchSearch = !search || t.title.toLowerCase().includes(search.toLowerCase());
     const matchDomain = domain === 'All' || t.domain === domain;
     return matchSearch && matchDomain;

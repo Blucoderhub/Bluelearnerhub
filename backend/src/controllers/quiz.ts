@@ -216,7 +216,7 @@ export class QuizController {
       const fallbackGuidance = fallbackQuizGuidance(snapshot);
 
       try {
-        const data = await fetchAdaptiveGuidanceFromAI('quiz', String((req as any).requestId || 'unknown'), {
+        const data = await fetchAdaptiveGuidanceFromAI('quiz', String(req.requestId || 'unknown'), {
           target_id: quizId,
           target_title: quiz?.title || `Quiz ${quizId}`,
           metrics: snapshot,

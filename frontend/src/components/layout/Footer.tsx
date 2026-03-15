@@ -1,150 +1,105 @@
 'use client'
 
 import Link from 'next/link'
-import { Twitter, Linkedin, Github, Youtube, ArrowRight, Building2, GraduationCap, Mail } from 'lucide-react'
-import { PoweredByBadge } from '@/components/branding/Logo'
+import { Twitter, Linkedin, Github, Youtube } from 'lucide-react'
 
 export default function Footer() {
   const socialLinks = [
     { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@bluelearnerhub' },
-    { name: 'Twitter / X', icon: Twitter, href: 'https://twitter.com/bluelearnerhub' },
+    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/bluelearnerhub' },
     { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/bluelearnerhub' },
     { name: 'GitHub', icon: Github, href: 'https://github.com/bluelearnerhub' },
   ]
 
   return (
-    <footer className="bg-background border-t border-border/50">
-
-      {/* Partnership CTA Strip */}
-      <div className="border-b border-border/50">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <p className="text-xs font-black uppercase tracking-widest text-primary mb-6">Partner With Us</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+    <footer className="bg-white border-t border-border">
+      {/* Partnership Strip */}
+      <div className="border-b border-border">
+        <div className="max-w-[1400px] mx-auto px-6 py-14">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-8">
+            Partner With Us
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* For Colleges */}
-            <div className="group relative rounded-2xl border border-border/60 bg-card/50 p-8 hover:border-primary/40 hover:bg-card transition-all duration-300">
-              <div className="flex items-start gap-5">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-black text-lg tracking-tight mb-1">For Colleges & Universities</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                    Get a dedicated institutional portal for your students — custom branding, placement tracking, lab access, and performance dashboards. Built for engineering colleges.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href="/contact?type=college"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] group/btn"
-                    >
-                      Request a College Portal
-                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform" />
-                    </Link>
-                    <a
-                      href="mailto:colleges@bluelearnerhub.com"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border/70 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-border transition-all"
-                    >
-                      <Mail className="h-4 w-4" />
-                      colleges@bluelearnerhub.com
-                    </a>
-                  </div>
-                </div>
+            <div className="p-8 rounded-2xl border border-border bg-surface hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200 group">
+              <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center mb-5">
+                <span className="text-lg">🎓</span>
               </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">For Institutions</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                Dedicated portals for colleges. Placement tracking, lab synchronization, and student performance analytics.
+              </p>
+              <Link
+                href="/contact?type=college"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-brand-light transition-colors duration-200"
+              >
+                Request a Demo →
+              </Link>
             </div>
 
             {/* For Corporates */}
-            <div className="group relative rounded-2xl border border-border/60 bg-card/50 p-8 hover:border-primary/40 hover:bg-card transition-all duration-300">
-              <div className="flex items-start gap-5">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
-                  <Building2 className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-black text-lg tracking-tight mb-1">For Corporates & Startups</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                    Host hackathons, discover pre-vetted engineering talent, and upskill your team. Get a corporate portal with hiring tools, sponsored challenges, and analytics.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href="/contact?type=corporate"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] group/btn"
-                    >
-                      Request a Corporate Portal
-                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform" />
-                    </Link>
-                    <a
-                      href="mailto:corporate@bluelearnerhub.com"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border/70 text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-border transition-all"
-                    >
-                      <Mail className="h-4 w-4" />
-                      corporate@bluelearnerhub.com
-                    </a>
-                  </div>
-                </div>
+            <div className="p-8 rounded-2xl border border-border bg-surface hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200 group">
+              <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center mb-5">
+                <span className="text-lg">🏢</span>
               </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">For Corporates</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                Host hackathons and discover elite engineering talent. Performance analytics for scaling your team efficiently.
+              </p>
+              <Link
+                href="/contact?type=corporate"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-brand-light transition-colors duration-200"
+              >
+                Get Started →
+              </Link>
             </div>
-
           </div>
         </div>
       </div>
 
       {/* Main Footer */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-12">
-
-          {/* Brand + Social */}
-          <div className="space-y-7">
+      <div className="max-w-[1400px] mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10">
+          <div className="space-y-4 max-w-xs">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
-                <span className="text-xl font-black text-primary-foreground">BL</span>
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand to-brand-light flex items-center justify-center">
+                <span className="text-xs font-extrabold text-white">BL</span>
               </div>
-              <div>
-                <div className="text-lg font-black tracking-tighter">BLUELEARNERHUB</div>
-                <PoweredByBadge />
-              </div>
+              <span className="font-bold text-[15px] tracking-tight text-foreground">Bluelearnerhub</span>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              The world&apos;s first all-engineering & management learning platform.
-              Master any domain, compete in hackathons, and reach peak expertise.
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              The world's first elite Computer Science &amp; Engineering learning platform. Learn, practice, compete, and get hired.
             </p>
             <div className="flex gap-3">
-              {socialLinks.map((social) => {
-                const Icon = social.icon
+              {socialLinks.map((s) => {
+                const Icon = s.icon
                 return (
                   <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/50 bg-muted/30 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
-                    aria-label={social.name}
+                    key={s.name}
+                    href={s.href}
+                    aria-label={s.name}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary hover:bg-accent transition-all duration-200"
                   >
-                    <Icon className="h-[18px] w-[18px]" />
+                    <Icon className="h-4 w-4" />
                   </a>
                 )
               })}
             </div>
           </div>
 
+          <div className="flex flex-wrap gap-8 text-sm text-muted-foreground">
+            <Link href="/terms" className="hover:text-foreground transition-colors duration-200">Terms</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors duration-200">Privacy</Link>
+            <Link href="/cookies" className="hover:text-foreground transition-colors duration-200">Cookies</Link>
+          </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground/50 order-2 sm:order-1">
-            &copy; {new Date().getFullYear()} Bluelearnerhub. All rights reserved.
-          </p>
-          <div className="flex flex-wrap justify-center gap-5 order-1 sm:order-2">
-            <Link href="/terms" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
-              Terms &amp; Conditions
-            </Link>
-            <Link href="/privacy" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/cookies" className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors">
-              Cookie Policy
-            </Link>
-          </div>
+        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-muted-foreground">
+          <span>© 2026 Bluelearnerhub. All rights reserved.</span>
+          <span className="text-muted-foreground/60">v1.0.0</span>
         </div>
       </div>
     </footer>
   )
 }
+

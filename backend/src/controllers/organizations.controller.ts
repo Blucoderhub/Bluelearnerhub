@@ -6,7 +6,7 @@
 
 import { Request, Response } from 'express';
 import { db } from '../db';
-import { eq, and, desc, ilike } from 'drizzle-orm';
+import { eq, and, desc, ilike, SQL } from 'drizzle-orm';
 import {
   organizations, orgMembers, talentPool, innovationChallenges,
 } from '../db/schema-v2';
@@ -19,10 +19,17 @@ export const listOrganizations = async (req: Request, res: Response) => {
   try {
     const { type, search } = req.query as Record<string, string>;
 
-    let query = db.select().from(organizations).$dynamic();
+    const VALID_ORG_TYPES = ['corporate', 'university', 'community'] as const;
+    type OrgType = typeof VALID_ORG_TYPES[number];
 
-    if (type) {
-      query = query.where(eq(organizations.type, type as any));
+    const conditions: (SQL | undefined)[] = [];
+    if (type && VALID_ORG_TYPES.includes(type as OrgType)) {
+      conditions.push(eq(organizations.type, type as OrgType));
+    }
+
+    let query = db.select().from(organizations).$dynamic();
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
     }
 
     const rows = await query.orderBy(desc(organizations.createdAt));
@@ -74,7 +81,7 @@ export const getOrganization = async (req: Request, res: Response) => {
 
 export const createOrganization = async (req: Request, res: Response) => {
   try {
-    const adminId = (req as any).user.id;
+    const adminId = req.user!.id;
     const { name, slug, description, orgType, website, logoUrl } = req.body;
 
     // Slug uniqueness check
@@ -108,7 +115,7 @@ export const createOrganization = async (req: Request, res: Response) => {
 
 export const inviteMember = async (req: Request, res: Response) => {
   try {
-    const adminId = (req as any).user.id;
+    const adminId = req.user!.id;
     const orgId   = parseInt(req.params.id);
     const { userId, role = 'MEMBER' } = req.body;
 
@@ -148,7 +155,7 @@ export const inviteMember = async (req: Request, res: Response) => {
 export const listTalentPool = async (req: Request, res: Response) => {
   try {
     const orgId = parseInt(req.params.id);
-    const adminId = (req as any).user.id;
+    const adminId = req.user!.id;
 
     // Verify requester has org access
     const [member] = await db
@@ -177,7 +184,7 @@ export const listTalentPool = async (req: Request, res: Response) => {
 export const addToTalentPool = async (req: Request, res: Response) => {
   try {
     const orgId  = parseInt(req.params.id);
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const { stage = 'prospects', notes } = req.body;
 
     const [existing] = await db
@@ -230,7 +237,7 @@ export const listChallenges = async (req: Request, res: Response) => {
 export const createChallenge = async (req: Request, res: Response) => {
   try {
     const orgId     = parseInt(req.params.id);
-    const creatorId = (req as any).user.id;
+    const creatorId = req.user!.id;
     const { title, description, deadline, prizeDescription, evaluationCriteria } = req.body;
 
     // Verify creator is org member

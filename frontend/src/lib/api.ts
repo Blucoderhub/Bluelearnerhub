@@ -16,9 +16,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Backend will clear cookies, we just need to handle the redirection
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login'
+      if (typeof window !== 'undefined' &&
+          !window.location.pathname.startsWith('/login') &&
+          !window.location.pathname.startsWith('/get-started') &&
+          window.location.pathname !== '/') {
+        const from = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/login?from=${from}`;
       }
     } else if (error.response?.status === 403) {
       console.warn('Access forbidden:', error.response.data?.message)

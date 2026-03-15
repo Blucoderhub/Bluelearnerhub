@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 
 export const checkCredits = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = (req as any).user.id;
+        const userId = req.user!.id;
 
         // Fetch user credits
         let credits = await db.query.userCredits.findFirst({

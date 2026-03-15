@@ -96,7 +96,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <Calendar className="h-3.5 w-3.5" />
-            Issued {format(new Date(cert.issuedAt), 'MMMM d, yyyy')} by {cert.issuerName}
+            Issued {cert.issuedAt ? format(new Date(cert.issuedAt), 'MMMM d, yyyy') : 'N/A'} by {cert.issuerName}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <CheckCircle2 className="h-3.5 w-3.5 text-foreground/80" />
@@ -106,7 +106,7 @@ function CertificateCard({ cert }: { cert: typeof MOCK_CERTS[0] }) {
 
         {/* Skills */}
         <div className="mb-4 flex flex-wrap gap-1.5">
-          {cert.skills.map((s) => (
+          {(cert.skills ?? (cert as any).metadata?.skills ?? []).map((s: string) => (
             <span key={s} className="rounded-md bg-gray-800 px-2 py-0.5 text-xs text-gray-300">{s}</span>
           ))}
         </div>
@@ -136,8 +136,8 @@ export default function CertificatesPage() {
 
   useEffect(() => {
     certificatesAPI.mine()
-      .then((d) => { if (d.data?.length) setCerts(d.data); })
-      .catch(() => {});
+      .then((d) => { if (d?.length) setCerts(d); })
+      .catch(() => {/* keep mock fallback */});
   }, []);
 
   return (
@@ -155,9 +155,9 @@ export default function CertificatesPage() {
 
           <div className="mt-6 flex gap-6">
             {[
-              { label: 'Earned',       value: MOCK_CERTS.length,                              icon: Award,        color: 'text-foreground/70' },
-              { label: 'Course Certs', value: MOCK_CERTS.filter(c => c.type === 'course').length, icon: Sparkles, color: 'text-blue-400' },
-              { label: 'Track Certs',  value: MOCK_CERTS.filter(c => c.type === 'track').length,  icon: Trophy,   color: 'text-purple-400' },
+              { label: 'Earned',       value: certs.length,                              icon: Award,        color: 'text-foreground/70' },
+              { label: 'Course Certs', value: certs.filter(c => c.type === 'course').length, icon: Sparkles, color: 'text-blue-400' },
+              { label: 'Track Certs',  value: certs.filter(c => c.type === 'track').length,  icon: Trophy,   color: 'text-purple-400' },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="flex items-center gap-2">
                 <Icon className={`h-4 w-4 ${color}`} />
@@ -181,7 +181,7 @@ export default function CertificatesPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {certs.map((cert: any, i: number) => (
+            {certs.map((cert, i: number) => (
               <motion.div
                 key={cert.id}
                 initial={{ opacity: 0, y: 16 }}

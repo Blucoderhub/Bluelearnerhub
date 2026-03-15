@@ -272,7 +272,7 @@ export class HackathonController {
       const fallbackGuidance = fallbackHackathonGuidance(snapshot);
 
       try {
-        const data = await fetchAdaptiveGuidanceFromAI('hackathon', String((req as any).requestId || 'unknown'), {
+        const data = await fetchAdaptiveGuidanceFromAI('hackathon', String(req.requestId || 'unknown'), {
           target_id: hackathonId,
           target_title: hackathon?.title || `Hackathon ${hackathonId}`,
           metrics: snapshot,

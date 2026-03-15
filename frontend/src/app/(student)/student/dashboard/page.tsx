@@ -1,7 +1,9 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import { gamificationAPI } from '@/lib/api-civilization'
 import { XPProgressBar } from '@/components/gamification/XPProgressBar'
 import { StreakDisplay } from '@/components/gamification/StreakDisplay'
 import { DailyChallenge } from '@/components/gamification/DailyChallenge'
@@ -15,50 +17,89 @@ import { LearningPathOverview } from '@/components/dashboard/LearningPathOvervie
 import { SkillProficiency } from '@/components/dashboard/SkillProficiency'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  BookOpen,
-  Code2,
-  Trophy,
-  Award,
-  ArrowRight,
-  Flame,
-  Target,
-  Sparkles,
+  BookOpen, Code2, Trophy, Award,
+  ArrowRight, Flame, Target, Sparkles,
 } from 'lucide-react'
 import Link from 'next/link'
 
-const sampleAchievements = [
-  { id: '1', title: 'First Steps', description: 'Complete your first lesson', icon: '🎯', status: 'unlocked' as const },
-  { id: '2', title: 'Code Ninja', description: 'Solve 50 challenges', icon: '🥷', status: 'unlocked' as const },
-  { id: '3', title: 'Week Warrior', description: '7-day streak', icon: '🔥', status: 'new' as const },
-  { id: '4', title: 'Hackathon Hero', description: 'Win a hackathon', icon: '🏆', status: 'locked' as const },
-  { id: '5', title: 'Team Player', description: 'Join 3 teams', icon: '🤝', status: 'locked' as const },
-  { id: '6', title: 'Certified Pro', description: 'Earn a certificate', icon: '📜', status: 'locked' as const },
-  { id: '7', title: 'AI Explorer', description: 'Use AI companion 10 times', icon: '🤖', status: 'unlocked' as const },
-  { id: '8', title: 'Speed Demon', description: 'Complete a quiz in under 60s', icon: '⚡', status: 'locked' as const },
+// XP needed to reach next level: level * 1000 (same formula as sidebar)
+function nextLevelThreshold(level: number) {
+  return (level + 1) * 1000
+}
+
+// XP progress within the current level
+function currentLevelXP(totalPoints: number) {
+  return totalPoints % 1000
+}
+
+const FALLBACK_ACHIEVEMENTS = [
+  { id: 'FIRST_STEPS',    title: 'First Steps',    description: 'Complete your first lesson',       icon: '🎯', status: 'locked'   as const },
+  { id: 'CODE_NINJA',     title: 'Code Ninja',     description: 'Solve 50 challenges',              icon: '🥷', status: 'locked'   as const },
+  { id: 'WEEK_WARRIOR',   title: 'Week Warrior',   description: 'Maintain a 7-day streak',          icon: '🔥', status: 'locked'   as const },
+  { id: 'HACKATHON_HERO', title: 'Hackathon Hero', description: 'Win a hackathon',                  icon: '🏆', status: 'locked'   as const },
+  { id: 'TEAM_PLAYER',    title: 'Team Player',    description: 'Join 3 teams',                     icon: '🤝', status: 'locked'   as const },
+  { id: 'CERTIFIED_PRO',  title: 'Certified Pro',  description: 'Earn a certificate',               icon: '📜', status: 'locked'   as const },
+  { id: 'AI_EXPLORER',    title: 'AI Explorer',    description: 'Use AI companion 10 times',        icon: '🤖', status: 'locked'   as const },
+  { id: 'SPEED_DEMON',    title: 'Speed Demon',    description: 'Complete a quiz in under 60s',     icon: '⚡', status: 'locked'   as const },
 ]
 
 const quickActions = [
-  { label: 'Continue Learning', icon: BookOpen, href: '/tutorials', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
-  { label: 'Daily Quiz', icon: Target, href: '/quiz', color: 'bg-[var(--streak-orange)]/10 text-[var(--streak-orange)] border-[var(--streak-orange)]/20' },
-  { label: 'Join Hackathon', icon: Trophy, href: '/hackathons', color: 'bg-[var(--xp-gold)]/10 text-[var(--xp-gold)] border-[var(--xp-gold)]/20' },
-  { label: 'Practice Code', icon: Code2, href: '/ide', color: 'bg-[var(--level-purple)]/10 text-[var(--level-purple)] border-[var(--level-purple)]/20' },
+  { label: 'Continue Learning', icon: BookOpen, href: '/tutorials',  color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+  { label: 'Daily Quiz',        icon: Target,   href: '/daily-quiz', color: 'bg-[var(--streak-orange)]/10 text-[var(--streak-orange)] border-[var(--streak-orange)]/20' },
+  { label: 'Join Hackathon',    icon: Trophy,   href: '/hackathons', color: 'bg-[var(--xp-gold)]/10 text-[var(--xp-gold)] border-[var(--xp-gold)]/20' },
+  { label: 'Practice Code',     icon: Code2,    href: '/ide',        color: 'bg-[var(--level-purple)]/10 text-[var(--level-purple)] border-[var(--level-purple)]/20' },
 ]
 
 export default function StudentDashboard() {
   const { user } = useAuth()
-  
-  const sampleLeaderboard = [
-    { rank: 1, name: 'Alex Chen', xp: 12450, level: 12, avatar: '🧑‍💻', trend: 'up' as const },
+  const router = useRouter()
+
+  // ── Real user data with safe fallbacks ───────────────────────────────────
+  const xp             = user?.totalPoints ?? 0
+  const level          = user?.level ?? 1
+  const streak         = user?.currentStreak ?? 0
+  const longestStreak  = user?.longestStreak ?? 0
+  const quizzesTaken   = user?.stats?.quizzes_taken ?? 0
+  const hackathonCount = user?.stats?.hackathons_participated ?? 0
+  const enrolledPaths  = user?.stats?.enrolled_paths ?? 0
+  const firstName      = user?.fullName?.split(' ')[0] ?? ''
+  const hasProtection  = streak >= 7
+
+  const levelXP    = currentLevelXP(xp)
+  const nextXP     = nextLevelThreshold(level)
+
+  // Leaderboard — "You" entry uses real user data
+  const leaderboard = useMemo(() => [
+    { rank: 1, name: 'Alex Chen',    xp: 12450, level: 12, avatar: '🧑‍💻', trend: 'up'   as const },
     { rank: 2, name: 'Priya Sharma', xp: 11200, level: 11, avatar: '👩‍💻', trend: 'same' as const },
-    { rank: 3, name: 'Jordan Lee', xp: 10800, level: 10, avatar: '🧑‍🎓', trend: 'up' as const },
-    { rank: 4, name: 'Sam Torres', xp: 9500, level: 9, avatar: '🧑‍🔬', trend: 'down' as const },
-    { rank: 5, name: 'You', xp: 2450, level: 5, avatar: '🎓', trend: 'up' as const, isCurrentUser: true, avatarConfig: user?.avatarConfig },
-  ]
+    { rank: 3, name: 'Jordan Lee',   xp: 10800, level: 10, avatar: '🧑‍🎓', trend: 'up'   as const },
+    { rank: 4, name: 'Sam Torres',   xp: 9500,  level:  9, avatar: '🧑‍🔬', trend: 'down' as const },
+    {
+      rank: 5,
+      name: firstName ? `You (${firstName})` : 'You',
+      xp:   xp,
+      level: level,
+      avatar: '🎓',
+      trend: 'up' as const,
+      isCurrentUser: true,
+      avatarConfig: user?.avatarConfig,
+    },
+  ], [firstName, xp, level, user?.avatarConfig])
 
-  const [showConfetti, setShowConfetti] = useState(false)
+  const [showConfetti,    setShowConfetti]    = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
+  const [achievements,    setAchievements]    = useState<typeof FALLBACK_ACHIEVEMENTS>(FALLBACK_ACHIEVEMENTS)
 
-  const newAchievements = sampleAchievements.filter(a => a.status === 'new')
+  useEffect(() => {
+    gamificationAPI.achievements()
+      .then((d: any) => {
+        const list = d?.data ?? d
+        if (Array.isArray(list) && list.length > 0) setAchievements(list)
+      })
+      .catch(() => { /* silently keep fallback */ })
+  }, [])
+
+  const newAchievements   = achievements.filter(a => a.status === 'new')
   const hasNewAchievement = newAchievements.length > 0
 
   const handleCelebrate = useCallback(() => {
@@ -69,6 +110,13 @@ export default function StudentDashboard() {
       setShowCelebration(false)
     }, 3500)
   }, [])
+
+  const statCards = useMemo(() => [
+    { label: 'Total XP',         value: xp.toLocaleString(),       icon: Flame,  iconColor: 'text-[var(--xp-gold)]',           trend: '+12%' },
+    { label: 'Quizzes Taken',    value: quizzesTaken.toString(),    icon: Target, iconColor: 'text-primary',                    trend: `+${Math.max(0, quizzesTaken - 5)}` },
+    { label: 'Hackathons',       value: hackathonCount.toString(),  icon: Trophy, iconColor: 'text-[var(--streak-orange)]',     trend: `+${hackathonCount}` },
+    { label: 'Enrolled Tracks',  value: enrolledPaths.toString(),   icon: Award,  iconColor: 'text-[var(--level-purple)]',      trend: `+${enrolledPaths}` },
+  ], [xp, quizzesTaken, hackathonCount, enrolledPaths])
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -91,11 +139,13 @@ export default function StudentDashboard() {
             >
               <CelebrationCharacter size={120} />
               <p className="text-lg font-bold font-heading text-foreground">Achievement Unlocked!</p>
-              <p className="text-sm text-muted-foreground">You earned a new badge 🎉</p>
+              <p className="text-sm text-muted-foreground">You earned a new badge!</p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Welcome header ─────────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -105,27 +155,31 @@ export default function StudentDashboard() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-foreground">
-              Welcome back{user?.fullName ? `, ${user.fullName.split(' ')[0]}` : ''}
+              Welcome back{firstName ? `, ${firstName}` : ''}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1.5">
-              You're in the top <span className="text-primary font-bold">5%</span> of learners this week. Keep going!
+              {level >= 5
+                ? <>You're in the top <span className="text-primary font-bold">5%</span> of learners this week. Keep going!</>
+                : <>Keep learning to climb the leaderboard!</>
+              }
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <StreakDisplay currentStreak={12} longestStreak={21} hasStreakProtection compact />
+            <StreakDisplay currentStreak={streak} longestStreak={longestStreak} hasStreakProtection={hasProtection} compact />
           </div>
         </div>
 
-        <XPProgressBar currentXP={2450} nextLevelXP={3000} level={5} />
+        <XPProgressBar currentXP={levelXP} nextLevelXP={nextXP} level={level} />
       </motion.div>
 
+      {/* ── Quick actions ───────────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className="grid grid-cols-2 sm:grid-cols-4 gap-3"
       >
-        {quickActions.map((action, i) => {
+        {quickActions.map((action) => {
           const Icon = action.icon
           return (
             <Link
@@ -140,21 +194,23 @@ export default function StudentDashboard() {
         })}
       </motion.div>
 
+      {/* ── Learning overview ───────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-           <div className="xl:col-span-2">
-              <LearningPathOverview />
-           </div>
-           <div className="xl:col-span-1 h-full">
-              <SkillProficiency />
-           </div>
+          <div className="xl:col-span-2">
+            <LearningPathOverview />
+          </div>
+          <div className="xl:col-span-1 h-full">
+            <SkillProficiency />
+          </div>
         </div>
       </motion.div>
 
+      {/* ── Daily challenge ─────────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -167,10 +223,11 @@ export default function StudentDashboard() {
           xpReward={150}
           category="Data Structures"
           timeRemaining={43200}
-          onStart={() => window.location.href = '/quiz'}
+          onStart={() => router.push('/daily-quiz')}
         />
       </motion.div>
 
+      {/* ── Main content grid ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div
           className="lg:col-span-2 space-y-6"
@@ -208,7 +265,7 @@ export default function StudentDashboard() {
                 <Sparkles className="w-5 h-5 text-[var(--xp-gold)] animate-pulse" />
               </motion.button>
             )}
-            <AchievementGrid achievements={sampleAchievements} />
+            <AchievementGrid achievements={achievements} />
           </div>
         </motion.div>
 
@@ -220,14 +277,14 @@ export default function StudentDashboard() {
         >
           <div className="p-5 rounded-2xl glass-card border border-border/50">
             <LeaderboardPreview
-              entries={sampleLeaderboard}
+              entries={leaderboard}
               currentUserRank={42}
               totalUsers={50000}
             />
           </div>
 
           <div className="p-5 rounded-2xl glass-card border border-border/50">
-            <StreakDisplay currentStreak={12} longestStreak={21} hasStreakProtection />
+            <StreakDisplay currentStreak={streak} longestStreak={longestStreak} hasStreakProtection={hasProtection} />
           </div>
 
           <div className="rounded-2xl glass-card border border-border/50 overflow-hidden">
@@ -242,18 +299,14 @@ export default function StudentDashboard() {
         </motion.div>
       </div>
 
+      {/* ── Stats row ───────────────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        {[
-          { label: 'Total XP', value: '2,450', icon: Flame, iconColor: 'text-[var(--xp-gold)]', trend: '+12%' },
-          { label: 'Challenges Solved', value: '145', icon: Code2, iconColor: 'text-primary', trend: '+8' },
-          { label: 'Hackathons', value: '7', icon: Trophy, iconColor: 'text-[var(--streak-orange)]', trend: '+2' },
-          { label: 'Certificates', value: '3', icon: Award, iconColor: 'text-[var(--level-purple)]', trend: '+1' },
-        ].map((stat, i) => {
+        {statCards.map((stat) => {
           const Icon = stat.icon
           return (
             <div key={stat.label} className="p-4 rounded-xl glass-card border border-border/50 flex items-center gap-3">

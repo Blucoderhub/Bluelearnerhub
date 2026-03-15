@@ -1,25 +1,38 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BookOpen, 
-  Search, 
-  Filter, 
-  ChevronRight, 
-  Zap, 
+import {
+  BookOpen,
+  Search,
+  ChevronRight,
+  Zap,
   Star,
   Cpu,
   Settings,
   Building2,
   Briefcase
 } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { tutorialsAPI } from '@/lib/api-civilization';
+import TutorialTrackSkeleton from '@/components/skeletons/TutorialTrackSkeleton';
 
-const tutorialTracks = [
+const DOMAIN_ICONS: Record<string, LucideIcon> = {
+  'computer-science': Cpu, 'software': Cpu, 'mechanical': Settings, 'electrical': Zap,
+  'civil': Building2, 'architecture': Building2, 'finance': Briefcase, 'management': Briefcase,
+};
+const LEVEL_ICONS: Record<string, LucideIcon> = {
+  beginner: BookOpen, intermediate: Star, advanced: Zap, expert: Cpu,
+};
+
+interface TutorialItem { id: string; title: string; lessons: number; level: string; progress: number; icon: LucideIcon; }
+interface TrackGroup { category: string; icon: LucideIcon; color: string; tutorials: TutorialItem[]; }
+
+const MOCK_TUTORIAL_TRACKS: TrackGroup[] = [
   {
     category: 'Engineering & Technology',
     icon: Cpu,
@@ -50,8 +63,47 @@ const tutorialTracks = [
   }
 ];
 
+function apiToTracks(tutorials: any[]): TrackGroup[] {
+  const grouped: Record<string, TutorialItem[]> = {};
+  const catIcons: Record<string, LucideIcon> = {};
+  tutorials.forEach((t: any) => {
+    const domain = (t.domain || 'general').toLowerCase();
+    const cat = domain.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+    if (!grouped[cat]) { grouped[cat] = []; catIcons[cat] = DOMAIN_ICONS[domain] || BookOpen; }
+    grouped[cat].push({
+      id: `${t.id}`,
+      title: t.title,
+      lessons: t.sectionCount ?? (t.estimatedMinutes ? Math.ceil(t.estimatedMinutes / 15) : 10),
+      level: t.difficulty ? t.difficulty.charAt(0).toUpperCase() + t.difficulty.slice(1) : 'Intermediate',
+      progress: t.userProgress?.progressPercent ?? 0,
+      icon: LEVEL_ICONS[t.difficulty] ?? Star,
+    });
+  });
+  return Object.entries(grouped).map(([category, tutorials]) => ({
+    category, icon: catIcons[category], color: 'text-primary/80', tutorials,
+  }));
+}
+
 export default function TutorialsLibrary() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [tutorialTracks, setTutorialTracks] = useState<TrackGroup[]>(MOCK_TUTORIAL_TRACKS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    tutorialsAPI.list()
+      .then((d: any) => { if (d?.length) setTutorialTracks(apiToTracks(d)); })
+      .catch(() => { /* keep mock */ })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const visibleTracks = tutorialTracks
+    .map(track => ({
+      ...track,
+      tutorials: track.tutorials.filter(t =>
+        !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter(track => track.tutorials.length > 0);
 
   return (
     <div className="max-w-7xl mx-auto space-y-16 pb-20 relative">
@@ -81,7 +133,9 @@ export default function TutorialsLibrary() {
 
       {/* Tracks */}
       <div className="space-y-20">
-        {tutorialTracks.map((track, i) => (
+        {loading
+          ? Array.from({ length: 2 }).map((_, i) => <TutorialTrackSkeleton key={i} />)
+          : visibleTracks.map((track, i) => (
           <motion.section 
             key={track.category}
             initial={{ opacity: 0, y: 30 }}

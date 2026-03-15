@@ -163,7 +163,7 @@ export const getQuestion = async (req: Request, res: Response) => {
 
 export const askQuestion = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const { title, body, domain, tagNames } = req.body;
 
     // 1. Check for semantic duplicates before publishing
@@ -230,7 +230,7 @@ export const askQuestion = async (req: Request, res: Response) => {
 
 export const postAnswer = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const questionId = parseInt(req.params.id);
     const { body }   = req.body;
 
@@ -260,7 +260,7 @@ export const postAnswer = async (req: Request, res: Response) => {
 
 export const castVote = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const { targetType, targetId, vote } = req.body;  // vote: 'up' | 'down'
 
     if (!['question', 'answer'].includes(targetType)) {
@@ -313,7 +313,7 @@ export const castVote = async (req: Request, res: Response) => {
 
 export const acceptAnswer = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const questionId = parseInt(req.params.id);
     const answerId   = parseInt(req.params.answerId);
 

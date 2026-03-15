@@ -97,7 +97,8 @@ export default function GetStartedPage() {
                     <TabsContent value="login" className="mt-0 focus-visible:outline-none">
                         <StudentLoginForm onSubmit={handleAuth} error={error} />
                     </TabsContent>
-                </div>
+                </Tabs>
+            </div>
 
                 <motion.div
                     initial={{ opacity: 0 }}

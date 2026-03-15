@@ -6,7 +6,7 @@ import { consumeCredit } from '../middleware/credits';
 export const chat = async (req: Request, res: Response) => {
     try {
         const { message, context, persona = 'tutor' } = req.body;
-        const user = (req as any).user;
+        const user = req.user;
 
         // Enrich context with user data
         const enrichedContext = {
@@ -46,7 +46,7 @@ export const chat = async (req: Request, res: Response) => {
 
 export const getDailyQuiz = async (req: Request, res: Response) => {
     try {
-        const userId = (req as any).user.id;
+        const userId = req.user!.id;
         const quiz = await QuizService.getDailyQuiz(userId);
         res.json(quiz);
     } catch (error) {
@@ -56,7 +56,7 @@ export const getDailyQuiz = async (req: Request, res: Response) => {
 
 export const submitQuiz = async (req: Request, res: Response) => {
     try {
-        const userId = (req as any).user.id;
+        const userId = req.user!.id;
         const { quizId, answers } = req.body;
         const result = await QuizService.submitQuiz(userId, quizId, answers);
         res.json(result);
@@ -68,7 +68,7 @@ export const submitQuiz = async (req: Request, res: Response) => {
 export const reviewProject = async (req: Request, res: Response) => {
     try {
         const { projectContent, domain, persona = 'technical' } = req.body;
-        const user = (req as any).user;
+        const user = req.user;
 
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
@@ -104,7 +104,7 @@ export const reviewProject = async (req: Request, res: Response) => {
 
 export const getRecommendations = async (req: Request, res: Response) => {
     try {
-        const user = (req as any).user;
+        const user = req.user;
 
         // In a real app, this would query the DB for user's skills and performance
         // For now, we'll use the AI to generate tailored recommendations
@@ -139,7 +139,7 @@ export const getHackathonHelp = async (req: Request, res: Response) => {
         res.json({ help });
 
         // Consume credit
-        const user = (req as any).user;
+        const user = req.user;
         await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
     } catch (error) {
         res.status(500).json({ error: 'Hackathon AI help failed' });
