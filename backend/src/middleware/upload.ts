@@ -49,7 +49,7 @@ export const uploadMultiple = (fieldName: string, maxCount: number) =>
 // Post-upload validations that run after multer has saved files to disk
 export const postUploadValidation = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const files: any[] = (req as any).file ? [(req as any).file] : ((req as any).files || []);
+    const files: any[] = req.file ? [req.file] : (req.files || []);
 
     for (const file of files) {
       const filePath = (file as any).path || file.path;
@@ -110,7 +110,7 @@ export const postUploadValidation = async (req: Request, res: Response, next: Ne
     return next();
   } catch (err: any) {
     // remove uploaded files on validation failure
-    const files: any[] = (req as any).file ? [(req as any).file] : ((req as any).files || []);
+    const files: any[] = req.file ? [req.file] : (req.files || []);
     for (const f of files) {
       try { fs.unlinkSync((f as any).path || f.path); } catch (e) { /* ignore */ }
     }

@@ -12,6 +12,8 @@ const controller = new AuthController();
 router.post('/register', authLimiter, authValidators.register, validate, controller.register.bind(controller));
 router.post('/login', authLimiter, authValidators.login, validate, controller.login.bind(controller));
 router.post('/refresh-token', controller.refreshToken.bind(controller));
+router.post('/forgot-password', authLimiter, controller.forgotPassword.bind(controller));
+router.post('/reset-password', authLimiter, controller.resetPassword.bind(controller));
 
 // endpoints requiring auth
 router.post('/logout', authenticate, controller.logout.bind(controller));

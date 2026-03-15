@@ -77,7 +77,7 @@ export const reportError = asyncHandler(async (req: Request, res: Response): Pro
       user_id: userId,
       user_email: ENABLE_FULL_PII_LOGGING ? userEmail : null,
       ip_address: ENABLE_FULL_PII_LOGGING ? ipAddress : null,
-      session_id: (req as any).sessionID || null,
+      session_id: req.sessionID || null,
       timestamp: new Date(),
       metadata: {
         referer: req.get('Referer'),

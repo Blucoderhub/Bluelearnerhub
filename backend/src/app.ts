@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import { config } from './config';
 import routes from './routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
-import { generalLimiter } from './middleware/rateLimit.middleware';
+import { generalLimiter } from './middleware/rateLimiter';
 import { requestContext } from './middleware/requestContext';
 import logger from './utils/logger';
 
@@ -96,10 +96,13 @@ export function createApp(): Application {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Cookie parser with session secret
-  const sessionSecret = config.sessionSecret || 'default-secret-change-in-production';
-  if (sessionSecret === 'default-secret-change-in-production') {
-    logger.warn('⚠️  Using default session secret. Set SESSION_SECRET environment variable.');
+  // Cookie parser with session secret — hard fail in production if not set
+  if (!config.sessionSecret && config.nodeEnv === 'production') {
+    throw new Error('SESSION_SECRET environment variable must be configured in production.');
+  }
+  const sessionSecret = config.sessionSecret || 'dev-secret-change-me-not-for-production';
+  if (config.nodeEnv !== 'production' && !config.sessionSecret) {
+    logger.warn('⚠️  SESSION_SECRET not set — using insecure development default. Never deploy without this.');
   }
   app.use(cookieParser(sessionSecret));
 

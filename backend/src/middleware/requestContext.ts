@@ -7,7 +7,7 @@ export const requestContext = (req: Request, res: Response, next: NextFunction) 
   const incoming = req.header(REQUEST_ID_HEADER);
   const requestId = (incoming && incoming.trim()) || randomUUID();
 
-  (req as any).requestId = requestId;
+  req.requestId = requestId;
   res.setHeader(REQUEST_ID_HEADER, requestId);
 
   next();

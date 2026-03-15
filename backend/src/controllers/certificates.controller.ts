@@ -24,7 +24,7 @@ import logger from '../utils/logger';
 
 export const getMyCertificates = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
 
     const rows = await db
       .select()

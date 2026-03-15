@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, CheckCircle2, XCircle, ChevronRight, Trophy, RotateCcw, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -82,6 +83,7 @@ const DIFFICULTY_COLORS = {
 type QuizState = 'domain-select' | 'in-progress' | 'completed';
 
 export default function DailyQuizPage() {
+  const router = useRouter();
   const [state, setState]         = useState<QuizState>('domain-select');
   const [selectedDomain, setDomain] = useState('TypeScript');
   const [current, setCurrent]     = useState(0);
@@ -95,15 +97,15 @@ export default function DailyQuizPage() {
 
   useEffect(() => {
     dailyQuizAPI.domains()
-      .then((d) => { if (d.data?.length) setDomains(d.data); })
-      .catch(() => {});
+      .then((d) => { if (d?.length) setDomains(d); })
+      .catch(() => {/* keep fallback domain list */});
   }, []);
 
   const loadQuiz = async (domain: string) => {
     setLoading(true);
     try {
       const d = await dailyQuizAPI.getQuiz(domain);
-      if (d.data?.questions?.length) setQuiz(d.data);
+      if (d?.questions?.length) setQuiz(d);
     } catch { /* keep mock */ }
     setLoading(false);
   };
@@ -328,7 +330,7 @@ export default function DailyQuizPage() {
               </Button>
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 font-semibold"
-                onClick={() => window.location.href = '/dashboard'}
+                onClick={() => router.push('/student/dashboard')}
               >
                 Back to Dashboard
               </Button>

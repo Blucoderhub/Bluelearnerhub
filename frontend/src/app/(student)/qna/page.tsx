@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import QuestionCard from '@/components/qna/QuestionCard';
+import QuestionCardSkeleton from '@/components/skeletons/QuestionCardSkeleton';
+import { qnaAPI } from '@/lib/api-civilization';
 
 const MOCK_QUESTIONS = [
   {
@@ -68,6 +70,17 @@ export default function QnAPage() {
   const [sort, setSort]             = useState('recent');
   const [activeTag, setActiveTag]   = useState<string | null>(null);
   const [questions, setQuestions]   = useState(MOCK_QUESTIONS);
+  const [loading, setLoading]       = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const params: Record<string, string> = { sort };
+    if (activeTag) params.tag = activeTag;
+    qnaAPI.listQuestions(params)
+      .then((d: any) => { if (d?.length) setQuestions(d); })
+      .catch(() => { /* keep mock */ })
+      .finally(() => setLoading(false));
+  }, [sort, activeTag]);
 
   const filtered = questions.filter((q) => {
     const matchSearch = !search || q.title.toLowerCase().includes(search.toLowerCase());
@@ -155,17 +168,20 @@ export default function QnAPage() {
 
             {/* Questions list */}
             <div className="flex flex-col gap-3">
-              {filtered.map((q, i) => (
-                <motion.div
-                  key={q.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <QuestionCard {...q} />
-                </motion.div>
-              ))}
-              {filtered.length === 0 && (
+              {loading
+                ? Array.from({ length: 5 }).map((_, i) => <QuestionCardSkeleton key={i} />)
+                : filtered.map((q, i) => (
+                    <motion.div
+                      key={q.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <QuestionCard {...q} />
+                    </motion.div>
+                  ))
+              }
+              {!loading && filtered.length === 0 && (
                 <div className="py-16 text-center text-gray-500">
                   <MessageSquare className="mx-auto mb-3 h-10 w-10 opacity-30" />
                   <p>No questions match your search.</p>

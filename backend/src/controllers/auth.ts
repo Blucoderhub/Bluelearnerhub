@@ -1,9 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
+import { randomBytes, createHash } from 'crypto';
 import { AuthService } from '@/services/auth';
 import { UserModel } from '@/models/user';
 import { pool } from '@/utils/database';
 import logger from '@/utils/logger';
 import { config } from '@/config';
+import { sendEmail, buildPasswordResetEmail } from '@/utils/email';
+
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+async function ensureResetTable() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id         SERIAL PRIMARY KEY,
+      email      TEXT NOT NULL,
+      token_hash TEXT NOT NULL UNIQUE,
+      expires_at TIMESTAMPTZ NOT NULL,
+      used       BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+}
 
 const authService = new AuthService();
 
@@ -161,6 +178,91 @@ export class AuthController {
         message: 'Profile updated successfully',
         data: user,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ success: false, message: 'Email is required.' });
+      }
+
+      await ensureResetTable();
+
+      // Always return success to prevent email enumeration
+      const userResult = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+      if (userResult.rows.length === 0) {
+        return res.json({ success: true, message: 'If that email is registered, a reset link has been sent.' });
+      }
+
+      // Invalidate any existing tokens for this email
+      await pool.query('UPDATE password_reset_tokens SET used = TRUE WHERE email = $1 AND used = FALSE', [email]);
+
+      const rawToken = randomBytes(32).toString('hex');
+      const tokenHash = createHash('sha256').update(rawToken).digest('hex');
+      const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+
+      await pool.query(
+        'INSERT INTO password_reset_tokens (email, token_hash, expires_at) VALUES ($1, $2, $3)',
+        [email.toLowerCase().trim(), tokenHash, expiresAt]
+      );
+
+      // Send password reset email
+      const resetUrl = `${config.frontendUrl}/reset-password?token=${rawToken}`;
+      await sendEmail(buildPasswordResetEmail(email.toLowerCase().trim(), resetUrl));
+
+      const responseData: Record<string, unknown> = { message: 'If that email is registered, a reset link has been sent.' };
+      // Expose token in non-production for easier testing without email setup
+      if (config.nodeEnv !== 'production') {
+        responseData.devToken = rawToken;
+        responseData.devResetUrl = resetUrl;
+      }
+
+      logger.info(`Password reset requested for ${email}`);
+      res.json({ success: true, ...responseData });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password) {
+        return res.status(400).json({ success: false, message: 'Token and new password are required.' });
+      }
+      if (typeof password !== 'string' || password.length < 8) {
+        return res.status(400).json({ success: false, message: 'Password must be at least 8 characters.' });
+      }
+
+      await ensureResetTable();
+
+      const tokenHash = createHash('sha256').update(token).digest('hex');
+      const result = await pool.query(
+        'SELECT email, expires_at, used FROM password_reset_tokens WHERE token_hash = $1',
+        [tokenHash]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(400).json({ success: false, message: 'Invalid or expired reset token.' });
+      }
+
+      const { email, expires_at, used } = result.rows[0];
+      if (used || new Date(expires_at) < new Date()) {
+        return res.status(400).json({ success: false, message: 'Reset token has expired. Please request a new one.' });
+      }
+
+      const { hashPassword } = await import('@/utils/encryption');
+      const hashedPassword = await hashPassword(password);
+
+      await pool.query('UPDATE users SET password_hash = $1 WHERE email = $2', [hashedPassword, email]);
+      await pool.query('UPDATE password_reset_tokens SET used = TRUE WHERE token_hash = $1', [tokenHash]);
+
+      logger.info(`Password reset completed for ${email}`);
+      res.json({ success: true, message: 'Password has been reset successfully. You can now log in.' });
     } catch (error) {
       next(error);
     }

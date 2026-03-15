@@ -35,8 +35,8 @@ const AI_SERVICE = () => process.env.AI_SERVICE_URL || config.aiServiceUrl || 'h
 const AI_REQUEST_TIMEOUT_MS = Number.parseInt(process.env.NOTEBOOK_AI_TIMEOUT_MS || '20000', 10);
 const MAX_HISTORY_LENGTH = 100;
 
-const reqId = (req: Request) => String((req as any).requestId || 'unknown');
-const userIdForLog = (req: Request) => (req as any).user?.id || null;
+const reqId = (req: Request) => String(req.requestId || 'unknown');
+const userIdForLog = (req: Request) => req.user?.id || null;
 const notebookError = (req: Request, action: string, err: unknown, extra: Record<string, unknown> = {}) => {
   logger.error(`[notebooks] ${action} failed`, {
     requestId: reqId(req),
@@ -191,7 +191,7 @@ const fallbackAdaptiveGuidance = (snapshot: {
 
 export const listNotebooks = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const rows = await db
       .select()
       .from(notebooks)
@@ -252,7 +252,7 @@ export const getNotebooksHealth = async (req: Request, res: Response) => {
 
 export const createBehaviorEvent = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const { eventType, eventPayload } = req.body || {};
@@ -290,7 +290,7 @@ export const createBehaviorEvent = async (req: Request, res: Response) => {
 
 export const getAdaptiveGuidance = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
 
@@ -371,7 +371,7 @@ export const getAdaptiveGuidance = async (req: Request, res: Response) => {
 
 export const createNotebook = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const { title, description, emoji } = req.body;
 
     if (!title || typeof title !== 'string' || title.trim().length === 0) {
@@ -401,7 +401,7 @@ export const createNotebook = async (req: Request, res: Response) => {
 
 export const getNotebook = async (req: Request, res: Response) => {
   try {
-    const userId   = (req as any).user.id;
+    const userId   = req.user!.id;
     const id = parseRequiredIntParam(req, res, 'id');
     if (id === null) return;
 
@@ -447,7 +447,7 @@ export const getNotebook = async (req: Request, res: Response) => {
 
 export const deleteNotebook = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const id = parseRequiredIntParam(req, res, 'id');
     if (id === null) return;
 
@@ -475,7 +475,7 @@ export const deleteNotebook = async (req: Request, res: Response) => {
 
 export const addSource = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const { title, sourceType, content, url } = req.body;
@@ -543,10 +543,10 @@ export const addSource = async (req: Request, res: Response) => {
 
 export const addPdfSource = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
-    const file       = (req as any).file;
+    const file       = req.file;
 
     if (!file) {
       return res.status(400).json({ success: false, error: 'PDF file is required' });
@@ -607,7 +607,7 @@ export const addPdfSource = async (req: Request, res: Response) => {
 
 export const deleteSource = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const sourceId = parseRequiredIntParam(req, res, 'sid');
@@ -656,7 +656,7 @@ export const deleteSource = async (req: Request, res: Response) => {
 
 export const getSourceDetail = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const sourceId = parseRequiredIntParam(req, res, 'sid');
@@ -687,12 +687,17 @@ export const getSourceDetail = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, error: 'Source not found' });
     }
 
-    const chunkResult = searchText
+    // Escape SQL LIKE wildcards to prevent unintended pattern matching
+    const escapedSearch = searchText
+      ? searchText.toLowerCase().replace(/[%_\\]/g, '\\$&')
+      : null;
+
+    const chunkResult = escapedSearch
       ? await db.execute(sql`
           SELECT chunk_index, content
           FROM notebook_chunks
           WHERE source_id = ${sourceId}
-            AND LOWER(content) LIKE ${`%${searchText.toLowerCase()}%`}
+            AND LOWER(content) LIKE ${'%' + escapedSearch + '%'}
           ORDER BY chunk_index ASC
           LIMIT 24
         `)
@@ -745,7 +750,7 @@ export const getSourceDetail = async (req: Request, res: Response) => {
 
 export const listSourceAnnotations = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const sourceId = parseRequiredIntParam(req, res, 'sid');
@@ -779,7 +784,7 @@ export const listSourceAnnotations = async (req: Request, res: Response) => {
 
 export const listNotebookAnnotations = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
 
@@ -821,7 +826,7 @@ export const listNotebookAnnotations = async (req: Request, res: Response) => {
 
 export const createSourceAnnotation = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const sourceId = parseRequiredIntParam(req, res, 'sid');
@@ -867,7 +872,7 @@ export const createSourceAnnotation = async (req: Request, res: Response) => {
 
 export const deleteSourceAnnotation = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const sourceId = parseRequiredIntParam(req, res, 'sid');
@@ -909,7 +914,7 @@ export const deleteSourceAnnotation = async (req: Request, res: Response) => {
 
 export const chat = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const { message } = req.body;
@@ -996,7 +1001,7 @@ export const generate = async (req: Request, res: Response) => {
   const VALID_TYPES = ['summary', 'study_guide', 'notebook_guide', 'faq', 'flashcards', 'quiz', 'audio_overview', 'compare_sources'];
 
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
     const { type }   = req.body;
@@ -1054,7 +1059,7 @@ export const generate = async (req: Request, res: Response) => {
 
 export const clearChat = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const notebookId = parseRequiredIntParam(req, res, 'id');
     if (notebookId === null) return;
 

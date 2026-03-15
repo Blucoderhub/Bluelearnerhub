@@ -106,7 +106,7 @@ export const searchTutorials = async (req: Request, res: Response) => {
 export const getTutorial = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
 
     const [tutorial] = await db
       .select()
@@ -171,7 +171,7 @@ export const getTutorial = async (req: Request, res: Response) => {
 
 export const createTutorial = async (req: Request, res: Response) => {
   try {
-    const authorId = (req as any).user.id;
+    const authorId = req.user!.id;
     const {
       title, slug, description, domain, subDomain, difficulty,
       estimatedMinutes, xpReward, tags, prerequisites, sections,
@@ -219,7 +219,7 @@ export const createTutorial = async (req: Request, res: Response) => {
 
 export const markSectionComplete = async (req: Request, res: Response) => {
   try {
-    const userId     = (req as any).user.id;
+    const userId     = req.user!.id;
     const tutorialId = parseInt(req.params.id);
     const { sectionId } = req.body;
 
@@ -311,7 +311,7 @@ export const runCode = async (req: Request, res: Response) => {
 
 export const createTutorialBehaviorEvent = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const tutorialId = parseInt(req.params.id, 10);
     const { eventType, eventPayload } = req.body || {};
 
@@ -339,7 +339,7 @@ export const createTutorialBehaviorEvent = async (req: Request, res: Response) =
 
 export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const tutorialId = parseInt(req.params.id, 10);
     if (!Number.isInteger(tutorialId) || tutorialId <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid tutorial id' });
@@ -378,7 +378,7 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
     const fallbackGuidance = fallbackTutorialGuidance(snapshot);
 
     try {
-      const data = await fetchAdaptiveGuidanceFromAI('tutorial', String((req as any).requestId || 'unknown'), {
+      const data = await fetchAdaptiveGuidanceFromAI('tutorial', String(req.requestId || 'unknown'), {
         target_id: tutorialId,
         target_title: tutorial.title,
         metrics: snapshot,

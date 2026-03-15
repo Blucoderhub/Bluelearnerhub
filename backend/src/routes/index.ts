@@ -18,6 +18,8 @@ import trackRoutes        from './tracks';
 import organizationRoutes from './organizations';
 import dailyQuizRoutes    from './dailyQuiz';
 import notebookRoutes     from './notebooks';
+import gamificationRoutes from './gamification';
+import exerciseRoutes     from './exercises';
 
 const router = Router();
 
@@ -40,6 +42,8 @@ router.use('/tracks',        trackRoutes);        // Learning Tracks
 router.use('/organizations', organizationRoutes); // Corporate & University
 router.use('/daily-quiz',    dailyQuizRoutes);    // AI Daily Quiz
 router.use('/notebooks',     notebookRoutes);     // Study Notebooks (NotebookLM)
+router.use('/gamification',  gamificationRoutes); // Achievements + Leaderboard
+router.use('/exercises',     exerciseRoutes);     // Practice Challenge Hub
 
 router.get('/health', (_req, res) => {
   res.json({

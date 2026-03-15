@@ -1,17 +1,39 @@
 // Core type definitions
 
+export interface UserStats {
+  total_points?: number
+  current_streak?: number
+  longest_streak?: number
+  level?: number
+  enrolled_paths?: number
+  quizzes_taken?: number
+  avg_quiz_score?: number
+  hackathons_participated?: number
+  jobs_applied?: number
+}
+
+export interface UserSkill {
+  skill_name: string
+  proficiency_level: number
+}
+
 export interface User {
   id: string
   email: string
   name: string
-  fullName?: string  // Optional: full display name
+  fullName?: string
   role: 'student' | 'candidate' | 'corporate' | 'hr' | 'admin'
   avatar?: string
-  profilePicture?: string  // Optional: profile picture URL
-  level?: number  // User level/tier
-  totalPoints?: number  // Total XP/points earned
-  currentStreak?: number  // Current learning streak in days
+  profilePicture?: string
+  level?: number
+  totalPoints?: number
+  currentStreak?: number
+  longestStreak?: number
   avatarConfig?: any
+  bio?: string
+  location?: string
+  stats?: UserStats
+  skills?: UserSkill[]
   createdAt: Date
 }
 

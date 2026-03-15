@@ -1,3 +1,9 @@
+import { resolve } from 'path';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from the parent directory of this file's directory (src/config -> backend/)
+dotenvConfig({ path: resolve(__dirname, '../../.env') });
+
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 const jwtSecret = process.env.JWT_SECRET || '';
@@ -99,10 +105,11 @@ export const config = {
     s3Bucket: process.env.AWS_S3_BUCKET,
   },
 
-  // Email
+  // Email (SendGrid or Resend — set either key to enable sending)
   email: {
     from: process.env.EMAIL_FROM || 'noreply@bluelearnerhub.com',
     sendgridApiKey: process.env.SENDGRID_API_KEY,
+    resendApiKey: process.env.RESEND_API_KEY,
   },
 
   // AI Service
