@@ -26,13 +26,13 @@ export function AchievementBadge({ achievement, size = 'md' }: AchievementBadgeP
 
   return (
     <motion.div
-      className="flex flex-col items-center gap-2 group cursor-pointer"
+      className="group flex cursor-pointer flex-col items-center gap-2"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
       <div className={`achievement-badge ${achievement.status} ${sizeClasses[size]}`}>
         {achievement.status === 'locked' ? (
-          <Lock className="w-5 h-5 text-muted-foreground" />
+          <Lock className="h-5 w-5 text-muted-foreground" />
         ) : (
           <motion.span
             initial={achievement.status === 'new' ? { scale: 0, rotate: -45 } : {}}
@@ -44,7 +44,9 @@ export function AchievementBadge({ achievement, size = 'md' }: AchievementBadgeP
         )}
       </div>
       <div className="text-center">
-        <p className={`text-xs font-semibold leading-tight ${achievement.status === 'locked' ? 'text-muted-foreground' : 'text-foreground'}`}>
+        <p
+          className={`text-xs font-semibold leading-tight ${achievement.status === 'locked' ? 'text-muted-foreground' : 'text-foreground'}`}
+        >
           {achievement.title}
         </p>
       </div>
@@ -60,12 +62,12 @@ export function AchievementGrid({ achievements }: AchievementGridProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold font-heading">Achievements</h3>
-        <span className="text-xs text-muted-foreground font-mono">
-          {achievements.filter(a => a.status !== 'locked').length}/{achievements.length}
+        <h3 className="font-heading text-lg font-bold">Achievements</h3>
+        <span className="font-mono text-xs text-muted-foreground">
+          {achievements.filter((a) => a.status !== 'locked').length}/{achievements.length}
         </span>
       </div>
-      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-4 gap-4 sm:grid-cols-5 md:grid-cols-6">
         {achievements.map((achievement, i) => (
           <motion.div
             key={achievement.id}

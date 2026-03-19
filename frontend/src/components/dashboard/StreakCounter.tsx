@@ -13,9 +13,9 @@ export default function StreakCounter({ currentStreak }: StreakCounterProps) {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex items-center gap-3 px-6 py-4 rounded-lg bg-gradient-to-r from-muted to-muted/60 dark:from-muted/60/30 dark:to-muted/30/30"
+      className="dark:from-muted/60/30 dark:to-muted/30/30 flex items-center gap-3 rounded-lg bg-gradient-to-r from-muted to-muted/60 px-6 py-4"
     >
-      <span className="text-4xl animate-pulse">🔥</span>
+      <span className="animate-pulse text-4xl">🔥</span>
       <div>
         <p className="text-sm text-gray-600 dark:text-gray-400">Current Streak</p>
         <p className="text-2xl font-bold text-foreground/80 dark:text-foreground/70">

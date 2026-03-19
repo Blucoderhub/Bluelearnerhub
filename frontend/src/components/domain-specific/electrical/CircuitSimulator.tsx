@@ -5,16 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { 
-  Play, 
-  Pause, 
-  Trash2, 
-  Download, 
-  Upload,
-  Zap,
-  Plus,
-  Minus
-} from 'lucide-react'
+import { Play, Pause, Trash2, Download, Upload, Zap, Plus, Minus } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -25,7 +16,14 @@ import {
 
 interface Component {
   id: string
-  type: 'resistor' | 'capacitor' | 'inductor' | 'voltage_source' | 'current_source' | 'ground' | 'wire'
+  type:
+    | 'resistor'
+    | 'capacitor'
+    | 'inductor'
+    | 'voltage_source'
+    | 'current_source'
+    | 'ground'
+    | 'wire'
   x: number
   y: number
   rotation: number
@@ -67,14 +65,14 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
     if (showGrid) {
       ctx.strokeStyle = '#333'
       ctx.lineWidth = 0.5
-      
+
       for (let x = 0; x <= canvas.width; x += gridSize) {
         ctx.beginPath()
         ctx.moveTo(x, 0)
         ctx.lineTo(x, canvas.height)
         ctx.stroke()
       }
-      
+
       for (let y = 0; y <= canvas.height; y += gridSize) {
         ctx.beginPath()
         ctx.moveTo(0, y)
@@ -84,7 +82,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
     }
 
     // Draw components
-    components.forEach(component => {
+    components.forEach((component) => {
       drawComponent(ctx, component)
     })
   }
@@ -173,12 +171,12 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
     ctx.beginPath()
     ctx.moveTo(-30, 0)
     ctx.lineTo(-20, 0)
-    
+
     for (let i = 0; i < 4; i++) {
       const x = -20 + i * 10
       ctx.arc(x + 5, 0, 5, Math.PI, 0, false)
     }
-    
+
     ctx.lineTo(30, 0)
     ctx.stroke()
 
@@ -293,7 +291,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
     const y = Math.round((e.clientY - rect.top) / gridSize) * gridSize
 
     // Check if clicking on existing component
-    const clickedComponent = components.find(c => {
+    const clickedComponent = components.find((c) => {
       const dist = Math.sqrt(Math.pow(c.x - x, 2) + Math.pow(c.y - y, 2))
       return dist < 40
     })
@@ -317,18 +315,18 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
 
   const handleDeleteSelected = () => {
     if (selectedComponent) {
-      setComponents(components.filter(c => c.id !== selectedComponent))
+      setComponents(components.filter((c) => c.id !== selectedComponent))
       setSelectedComponent(null)
     }
   }
 
   const handleRotateSelected = () => {
     if (selectedComponent) {
-      setComponents(components.map(c =>
-        c.id === selectedComponent
-          ? { ...c, rotation: (c.rotation + 90) % 360 }
-          : c
-      ))
+      setComponents(
+        components.map((c) =>
+          c.id === selectedComponent ? { ...c, rotation: (c.rotation + 90) % 360 } : c
+        )
+      )
     }
   }
 
@@ -336,8 +334,8 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
     setIsSimulating(true)
 
     // Simple circuit analysis (voltage divider example)
-    const resistors = components.filter(c => c.type === 'resistor')
-    const voltageSources = components.filter(c => c.type === 'voltage_source')
+    const resistors = components.filter((c) => c.type === 'resistor')
+    const voltageSources = components.filter((c) => c.type === 'voltage_source')
 
     if (resistors.length === 2 && voltageSources.length === 1) {
       const Vs = voltageSources[0].value
@@ -351,7 +349,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
       setSimulationResults({
         outputVoltage: Vout.toFixed(2),
         current: (I * 1000).toFixed(2), // Convert to mA
-        power: ((I * I * (R1 + R2)) * 1000).toFixed(2), // Convert to mW
+        power: (I * I * (R1 + R2) * 1000).toFixed(2), // Convert to mW
       })
     } else {
       setSimulationResults({
@@ -379,22 +377,22 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 h-full">
+    <div className="flex h-full flex-col gap-4 lg:flex-row">
       {/* Canvas */}
-      <div className="flex-1 flex flex-col bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-          <span className="text-white font-semibold text-sm">Circuit Designer</span>
-          
+      <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
+          <span className="text-sm font-semibold text-white">Circuit Designer</span>
+
           <div className="flex items-center gap-2">
             <Button onClick={handleSimulate} disabled={isSimulating} size="sm">
-              <Play className="w-4 h-4 mr-1" />
+              <Play className="mr-1 h-4 w-4" />
               Simulate
             </Button>
             <Button onClick={handleClear} variant="outline" size="sm">
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="h-4 w-4" />
             </Button>
             <Button onClick={handleExport} variant="outline" size="sm">
-              <Download className="w-4 h-4" />
+              <Download className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -410,10 +408,10 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
       </div>
 
       {/* Component Palette & Controls */}
-      <Card className="w-full lg:w-80 p-4 space-y-4 bg-gray-800 border-gray-700">
+      <Card className="w-full space-y-4 border-gray-700 bg-gray-800 p-4 lg:w-80">
         <div>
-          <h3 className="font-semibold text-white mb-3">Components</h3>
-          
+          <h3 className="mb-3 font-semibold text-white">Components</h3>
+
           <div className="grid grid-cols-2 gap-2">
             <ComponentButton
               type="resistor"
@@ -474,17 +472,17 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
               type="number"
               value={componentValue}
               onChange={(e) => setComponentValue(e.target.value)}
-              className="bg-gray-900 border-gray-600 text-white mt-2"
+              className="mt-2 border-gray-600 bg-gray-900 text-white"
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="mt-1 text-xs text-gray-400">
               {formatValue(parseFloat(componentValue), selectedTool)}
             </p>
           </div>
         )}
 
         {selectedComponent && (
-          <div className="pt-4 border-t border-gray-700">
-            <h3 className="font-semibold text-white mb-3">Selected Component</h3>
+          <div className="border-t border-gray-700 pt-4">
+            <h3 className="mb-3 font-semibold text-white">Selected Component</h3>
             <div className="flex gap-2">
               <Button onClick={handleRotateSelected} variant="outline" className="flex-1">
                 Rotate
@@ -497,11 +495,11 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
         )}
 
         {simulationResults && (
-          <div className="pt-4 border-t border-gray-700">
-            <h3 className="font-semibold text-white mb-3">Simulation Results</h3>
-            
+          <div className="border-t border-gray-700 pt-4">
+            <h3 className="mb-3 font-semibold text-white">Simulation Results</h3>
+
             {simulationResults.message ? (
-              <p className="text-gray-400 text-sm">{simulationResults.message}</p>
+              <p className="text-sm text-gray-400">{simulationResults.message}</p>
             ) : (
               <div className="space-y-2">
                 <ResultRow label="Output Voltage" value={`${simulationResults.outputVoltage} V`} />
@@ -512,7 +510,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
           </div>
         )}
 
-        <div className="text-xs text-gray-500 pt-4 border-t border-gray-700">
+        <div className="border-t border-gray-700 pt-4 text-xs text-gray-500">
           <p>Click on canvas to place components</p>
           <p>Click component to select</p>
           <p>Rotate/Delete selected component</p>
@@ -522,13 +520,13 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
   )
 }
 
-function ComponentButton({ 
-  type, 
-  icon, 
-  label, 
-  selected, 
-  onClick 
-}: { 
+function ComponentButton({
+  type,
+  icon,
+  label,
+  selected,
+  onClick,
+}: {
   type: string
   icon: string
   label: string
@@ -538,13 +536,13 @@ function ComponentButton({
   return (
     <button
       onClick={onClick}
-      className={`p-3 rounded-lg border-2 transition-all ${
+      className={`rounded-lg border-2 p-3 transition-all ${
         selected
           ? 'border-blue-500 bg-blue-500/20'
           : 'border-gray-600 bg-gray-900 hover:border-gray-500'
       }`}
     >
-      <div className="text-2xl mb-1">{icon}</div>
+      <div className="mb-1 text-2xl">{icon}</div>
       <div className="text-xs text-gray-400">{label}</div>
     </button>
   )
@@ -552,9 +550,9 @@ function ComponentButton({
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+    <div className="flex items-center justify-between rounded bg-gray-900 p-2">
       <span className="text-sm text-gray-400">{label}</span>
-      <span className="font-mono text-white text-sm">{value}</span>
+      <span className="font-mono text-sm text-white">{value}</span>
     </div>
   )
 }

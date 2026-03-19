@@ -26,7 +26,7 @@ export const studentNav = [
     icon: 'dashboard',
   },
   {
-    title: 'Tutorials',
+    title: 'Library',
     href: '/tutorials',
     icon: 'book',
   },

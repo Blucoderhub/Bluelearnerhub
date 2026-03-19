@@ -59,27 +59,18 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
-        /* Design system explicit palette */
-        brand: {
-          DEFAULT: '#2E75B6',
-          light: '#4A90E2',
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          200: '#BFDBFE',
-          500: '#2E75B6',
-          600: '#2563EB',
-        },
+        /* Semantic palette */
         success: { DEFAULT: '#10B981', light: '#D1FAE5', dark: '#065F46' },
         warning: { DEFAULT: '#F59E0B', light: '#FEF3C7', dark: '#92400E' },
-        error:   { DEFAULT: '#EF4444', light: '#FEE2E2', dark: '#991B1B' },
-        surface: '#F8FAFC',
+        error: { DEFAULT: '#EF4444', light: '#FEE2E2', dark: '#991B1B' },
+        surface: { DEFAULT: '#F8FAFC', dark: 'hsl(240 10% 6%)' },
 
         /* Gamification */
-        'xp-gold': 'var(--xp-gold)',
-        'streak-orange': 'var(--streak-orange)',
-        'level-purple': 'var(--level-purple)',
-        'achievement-cyan': 'var(--achievement-cyan)',
-        'reward-green': 'var(--reward-green)',
+        'xp-gold': '#F59E0B',
+        'streak-orange': '#F97316',
+        'level-purple': '#8B5CF6',
+        'achievement-cyan': '#06B6D4',
+        'reward-green': '#10B981',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -94,10 +85,10 @@ export default {
         mono: ['var(--font-mono)', 'monospace'],
       },
       boxShadow: {
-        'card': '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
         'card-md': '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
         'card-lg': '0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
-        'brand': '0 4px 14px 0 rgb(46 117 182 / 0.25)',
+        brand: '0 4px 14px 0 rgb(46 117 182 / 0.25)',
         'brand-lg': '0 8px 25px 0 rgb(46 117 182 / 0.3)',
       },
       animation: {
@@ -120,7 +111,7 @@ export default {
         },
       },
       transitionTimingFunction: {
-        'spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+        spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
     },
   },

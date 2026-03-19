@@ -5,12 +5,15 @@ import { useRef, useEffect, useState } from 'react'
 import { Users, Lightbulb, Trophy, Briefcase } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
-const CelebrationCharacter = dynamic(() => import('@/components/animations/characters/CelebrationCharacter'), { ssr: false })
+const CelebrationCharacter = dynamic(
+  () => import('@/components/animations/characters/CelebrationCharacter'),
+  { ssr: false }
+)
 
 interface StatItem {
   label: string
   value: string
-  icon: number  // index into iconComponents array
+  icon: number // index into iconComponents array
 }
 
 interface StatsProps {
@@ -27,7 +30,15 @@ const colorMap: Record<number, string> = {
   3: 'from-primary to-blue-500',
 }
 
-function AnimatedCounter({ value, inView, onComplete }: { value: string; inView: boolean; onComplete?: () => void }) {
+function AnimatedCounter({
+  value,
+  inView,
+  onComplete,
+}: {
+  value: string
+  inView: boolean
+  onComplete?: () => void
+}) {
   const [displayValue, setDisplayValue] = useState('0')
   const numericMatch = value.match(/^([\d,]+)/)
   const suffix = value.replace(/^[\d,]+/, '')
@@ -87,39 +98,39 @@ export default function Stats({ stats }: StatsProps) {
   }
 
   return (
-    <section className="py-16 md:py-20 px-4 relative">
-      <div className="max-w-6xl mx-auto" ref={ref}>
+    <section className="relative px-4 py-16 md:py-20">
+      <div className="mx-auto max-w-6xl" ref={ref}>
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
+          className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4"
         >
           {stats.map((stat, idx) => {
             const Icon = iconComponents[idx] ?? iconComponents[0]
             const gradient = colorMap[idx] ?? colorMap[0]
             return (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                className="relative group"
-              >
-                <div className="p-5 md:p-8 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm text-center hover:bg-card transition-all duration-300">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <Icon className="w-7 h-7 text-white" />
+              <motion.div key={idx} variants={itemVariants} className="group relative">
+                <div className="rounded-xl border border-border/50 bg-card/50 p-5 text-center backdrop-blur-sm transition-all duration-300 hover:bg-card md:p-8">
+                  <div
+                    className={`h-14 w-14 rounded-xl bg-gradient-to-br ${gradient} mx-auto mb-4 flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                  >
+                    <Icon className="h-7 w-7 text-white" />
                   </div>
-                  <div className="text-2xl md:text-4xl font-bold text-foreground mb-1">
+                  <div className="mb-1 text-2xl font-bold text-foreground md:text-4xl">
                     <AnimatedCounter
                       value={stat.value}
                       inView={inView}
-                      onComplete={idx === stats.length - 1 ? () => setShowCelebration(true) : undefined}
+                      onComplete={
+                        idx === stats.length - 1 ? () => setShowCelebration(true) : undefined
+                      }
                     />
                   </div>
-                  <p className="text-muted-foreground text-xs md:text-sm font-medium uppercase tracking-wider">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
                     {stat.label}
                   </p>
-                  <div className={`mt-4 mx-auto h-1 rounded-full bg-muted overflow-hidden`}>
+                  <div className={`mx-auto mt-4 h-1 overflow-hidden rounded-full bg-muted`}>
                     <motion.div
                       className={`h-full rounded-full bg-gradient-to-r ${gradient}`}
                       initial={{ width: '0%' }}
@@ -135,9 +146,11 @@ export default function Stats({ stats }: StatsProps) {
 
         <motion.div
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
-          animate={showCelebration ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.5, y: 20 }}
+          animate={
+            showCelebration ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.5, y: 20 }
+          }
           transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
-          className="flex justify-center mt-6"
+          className="mt-6 flex justify-center"
         >
           {showCelebration && <CelebrationCharacter size={80} />}
         </motion.div>

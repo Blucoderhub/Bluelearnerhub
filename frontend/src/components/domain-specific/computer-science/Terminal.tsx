@@ -34,20 +34,20 @@ export default function Terminal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!input.trim()) return
 
     // Add command to output
-    setOutput(prev => [...prev, `$ ${input}`])
-    
+    setOutput((prev) => [...prev, `$ ${input}`])
+
     // Add to history
-    setHistory(prev => [...prev, input])
+    setHistory((prev) => [...prev, input])
     setHistoryIndex(-1)
 
     // Execute command
     if (onCommand) {
       const result = await onCommand(input)
-      setOutput(prev => [...prev, result])
+      setOutput((prev) => [...prev, result])
     } else {
       // Default commands
       handleDefaultCommand(input)
@@ -63,9 +63,9 @@ export default function Terminal({
       case 'clear':
         setOutput([])
         break
-      
+
       case 'help':
-        setOutput(prev => [
+        setOutput((prev) => [
           ...prev,
           'Available commands:',
           '  clear  - Clear terminal',
@@ -73,13 +73,13 @@ export default function Terminal({
           '  echo   - Echo text',
         ])
         break
-      
+
       case 'echo':
-        setOutput(prev => [...prev, args.join(' ')])
+        setOutput((prev) => [...prev, args.join(' ')])
         break
-      
+
       default:
-        setOutput(prev => [...prev, `Command not found: ${command}`])
+        setOutput((prev) => [...prev, `Command not found: ${command}`])
     }
   }
 
@@ -88,11 +88,9 @@ export default function Terminal({
     if (e.key === 'ArrowUp') {
       e.preventDefault()
       if (history.length === 0) return
-      
-      const newIndex = historyIndex === -1 
-        ? history.length - 1 
-        : Math.max(0, historyIndex - 1)
-      
+
+      const newIndex = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1)
+
       setHistoryIndex(newIndex)
       setInput(history[newIndex])
     }
@@ -103,7 +101,7 @@ export default function Terminal({
       if (historyIndex === -1) return
 
       const newIndex = historyIndex + 1
-      
+
       if (newIndex >= history.length) {
         setHistoryIndex(-1)
         setInput('')
@@ -119,20 +117,20 @@ export default function Terminal({
   }
 
   return (
-    <div 
-      className={`flex flex-col bg-gray-900 rounded-lg overflow-hidden border border-gray-700 ${
+    <div
+      className={`flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 ${
         isFullscreen ? 'fixed inset-4 z-50' : ''
       }`}
       style={{ height: isFullscreen ? 'auto' : height }}
     >
       {/* Header */}
       {showHeader && (
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
           <div className="flex items-center gap-2 text-white">
-            <TerminalIcon className="w-4 h-4" />
+            <TerminalIcon className="h-4 w-4" />
             <span className="text-sm font-semibold">Terminal</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button
               onClick={handleClear}
@@ -148,11 +146,7 @@ export default function Terminal({
               size="sm"
               className="text-gray-400 hover:text-white"
             >
-              {isFullscreen ? (
-                <Minimize2 className="w-4 h-4" />
-              ) : (
-                <Maximize2 className="w-4 h-4" />
-              )}
+              {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </Button>
           </div>
         </div>
@@ -161,7 +155,7 @@ export default function Terminal({
       {/* Terminal Output */}
       <div
         ref={terminalRef}
-        className="flex-1 overflow-y-auto p-4 font-mono text-sm text-blue-400 bg-black"
+        className="flex-1 overflow-y-auto bg-black p-4 font-mono text-sm text-blue-400"
         onClick={() => inputRef.current?.focus()}
       >
         {output.map((line, i) => (
@@ -171,15 +165,15 @@ export default function Terminal({
         ))}
 
         {/* Input Line */}
-        <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-blue-400 mr-2">$</span>
+        <form onSubmit={handleSubmit} className="mt-2 flex items-center">
+          <span className="mr-2 text-blue-400">$</span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent outline-none text-blue-400"
+            className="flex-1 bg-transparent text-blue-400 outline-none"
             autoFocus
             spellCheck={false}
           />

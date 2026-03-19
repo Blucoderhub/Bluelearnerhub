@@ -3,10 +3,25 @@
 import React, { useState } from 'react'
 import CodeEditor from '@/components/ide/CodeEditor'
 import {
-  Trophy, Lightbulb, MessageSquare, ChevronRight, BookOpen,
-  Code2, Play, RotateCcw, Send, CheckCircle2, XCircle,
-  Clock, Users, ThumbsUp, ChevronDown, Terminal, Star,
-  ListFilter, Search,
+  Trophy,
+  Lightbulb,
+  MessageSquare,
+  ChevronRight,
+  BookOpen,
+  Code2,
+  Play,
+  RotateCcw,
+  Send,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Users,
+  ThumbsUp,
+  ChevronDown,
+  Terminal,
+  Star,
+  ListFilter,
+  Search,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -70,9 +85,10 @@ const diffColors: Record<string, string> = {
 }
 
 const statusIcon = (status: string) => {
-  if (status === 'solved') return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-  if (status === 'active') return <div className="w-3.5 h-3.5 rounded-full bg-primary animate-pulse" />
-  return <div className="w-3.5 h-3.5 rounded-full border border-border" />
+  if (status === 'solved') return <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+  if (status === 'active')
+    return <div className="h-3.5 w-3.5 animate-pulse rounded-full bg-primary" />
+  return <div className="h-3.5 w-3.5 rounded-full border border-border" />
 }
 
 type PanelTab = 'description' | 'hints' | 'discussion'
@@ -104,32 +120,36 @@ export default function CodingPracticePage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
+    <div className="-mx-4 flex h-[calc(100vh-120px)] flex-col overflow-hidden sm:-mx-6 lg:-mx-8">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/60 backdrop-blur-md shrink-0">
+      <div className="flex shrink-0 items-center justify-between border-b border-border bg-card/60 px-4 py-2 backdrop-blur-md">
         <div className="flex items-center gap-3">
           {/* Problem selector */}
           <button
             onClick={() => setShowProblems(!showProblems)}
-            className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-white transition-colors hover:text-primary"
           >
-            <Code2 className="w-4 h-4 text-primary" />
+            <Code2 className="h-4 w-4 text-primary" />
             {PROBLEM.title}
-            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${showProblems ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`h-4 w-4 text-muted-foreground transition-transform ${showProblems ? 'rotate-180' : ''}`}
+            />
           </button>
-          <div className="hidden sm:flex items-center gap-2">
-            <Badge className={`text-[10px] font-bold border-0 bg-emerald-500/10 ${diffColors[PROBLEM.difficulty]}`}>
+          <div className="hidden items-center gap-2 sm:flex">
+            <Badge
+              className={`border-0 bg-emerald-500/10 text-[10px] font-bold ${diffColors[PROBLEM.difficulty]}`}
+            >
               {PROBLEM.difficulty}
             </Badge>
-            <Badge variant="outline" className="text-[10px] border-border text-muted-foreground">
+            <Badge variant="outline" className="border-border text-[10px] text-muted-foreground">
               {PROBLEM.acceptance} acceptance
             </Badge>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+          <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
+            <Trophy className="h-3.5 w-3.5 text-amber-400" />
             <span className="font-bold">+50 XP</span>
           </div>
           <Button
@@ -137,18 +157,18 @@ export default function CodingPracticePage() {
             variant="outline"
             onClick={handleRun}
             disabled={running}
-            className="h-8 px-4 rounded-lg border-border text-xs font-bold gap-1.5 hover:bg-muted/50"
+            className="h-8 gap-1.5 rounded-lg border-border px-4 text-xs font-bold hover:bg-muted/50"
           >
-            <Play className="w-3.5 h-3.5" />
+            <Play className="h-3.5 w-3.5" />
             Run
           </Button>
           <Button
             size="sm"
             onClick={handleSubmit}
             disabled={running}
-            className="h-8 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-600/90 text-white text-xs font-bold gap-1.5"
+            className="h-8 gap-1.5 rounded-lg bg-emerald-600 px-4 text-xs font-bold text-white hover:bg-emerald-600/90"
           >
-            <Send className="w-3.5 h-3.5" />
+            <Send className="h-3.5 w-3.5" />
             Submit
           </Button>
           <Button
@@ -156,7 +176,7 @@ export default function CodingPracticePage() {
             variant="ghost"
             className="h-8 w-8 rounded-lg text-muted-foreground hover:text-white"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
@@ -168,20 +188,33 @@ export default function CodingPracticePage() {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="absolute top-[112px] left-4 z-50 w-72 bg-card border border-border rounded-2xl shadow-xl overflow-hidden"
+            className="absolute left-4 top-[112px] z-50 w-72 overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
           >
-            <div className="p-3 border-b border-border">
+            <div className="border-b border-border p-3">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-                <input className="w-full bg-background border border-border rounded-lg pl-9 pr-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary/30" placeholder="Search problems..." />
+                <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-3 text-xs outline-none focus:ring-1 focus:ring-primary/30"
+                  placeholder="Search problems..."
+                />
               </div>
             </div>
             <div className="max-h-64 overflow-y-auto py-1">
               {PROBLEM_LIST.map((p) => (
-                <button key={p.id} onClick={() => setShowProblems(false)} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-muted/40 transition-colors">
+                <button
+                  key={p.id}
+                  onClick={() => setShowProblems(false)}
+                  className="flex w-full items-center gap-3 px-4 py-2.5 transition-colors hover:bg-muted/40"
+                >
                   {statusIcon(p.status)}
-                  <span className={`text-sm flex-1 text-left ${p.status === 'active' ? 'text-primary font-bold' : 'text-foreground/80'}`}>{p.title}</span>
-                  <span className={`text-[10px] font-bold ${diffColors[p.difficulty]}`}>{p.difficulty}</span>
+                  <span
+                    className={`flex-1 text-left text-sm ${p.status === 'active' ? 'font-bold text-primary' : 'text-foreground/80'}`}
+                  >
+                    {p.title}
+                  </span>
+                  <span className={`text-[10px] font-bold ${diffColors[p.difficulty]}`}>
+                    {p.difficulty}
+                  </span>
                 </button>
               ))}
             </div>
@@ -190,10 +223,9 @@ export default function CodingPracticePage() {
       </AnimatePresence>
 
       {/* Main layout: left | center | right */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         {/* LEFT PANEL — Problem */}
-        <div className="hidden xl:flex w-[380px] shrink-0 flex-col border-r border-border bg-card/30">
+        <div className="hidden w-[380px] shrink-0 flex-col border-r border-border bg-card/30 xl:flex">
           {/* Panel tabs */}
           <div className="flex border-b border-border">
             {(['description', 'hints', 'discussion'] as PanelTab[]).map((tab) => (
@@ -201,7 +233,9 @@ export default function CodingPracticePage() {
                 key={tab}
                 onClick={() => setLeftPanel(tab)}
                 className={`flex-1 py-2.5 text-xs font-semibold capitalize transition-colors ${
-                  leftPanel === tab ? 'text-white border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'
+                  leftPanel === tab
+                    ? 'border-b-2 border-primary text-white'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {tab}
@@ -209,23 +243,38 @@ export default function CodingPracticePage() {
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex-1 space-y-6 overflow-y-auto p-6">
             {leftPanel === 'description' && (
               <>
                 <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{ __html: PROBLEM.description }} />
-                  <p className="text-sm text-muted-foreground leading-relaxed">{PROBLEM.note}</p>
+                  <p
+                    className="text-sm leading-relaxed text-muted-foreground"
+                    dangerouslySetInnerHTML={{ __html: PROBLEM.description }}
+                  />
+                  <p className="text-sm leading-relaxed text-muted-foreground">{PROBLEM.note}</p>
                 </div>
 
                 <div className="space-y-3">
                   {PROBLEM.examples.map((ex, i) => (
-                    <div key={i} className="p-4 rounded-xl bg-background/50 border border-border space-y-2">
+                    <div
+                      key={i}
+                      className="space-y-2 rounded-xl border border-border bg-background/50 p-4"
+                    >
                       <p className="text-xs font-bold text-white">Example {i + 1}</p>
                       <div className="space-y-1 font-mono text-xs">
-                        <p><span className="text-muted-foreground">Input: </span><span className="text-foreground/90">{ex.input}</span></p>
-                        <p><span className="text-muted-foreground">Output: </span><span className="text-foreground/90">{ex.output}</span></p>
+                        <p>
+                          <span className="text-muted-foreground">Input: </span>
+                          <span className="text-foreground/90">{ex.input}</span>
+                        </p>
+                        <p>
+                          <span className="text-muted-foreground">Output: </span>
+                          <span className="text-foreground/90">{ex.output}</span>
+                        </p>
                         {ex.explanation && (
-                          <p><span className="text-muted-foreground">Explanation: </span><span className="text-foreground/70">{ex.explanation}</span></p>
+                          <p>
+                            <span className="text-muted-foreground">Explanation: </span>
+                            <span className="text-foreground/70">{ex.explanation}</span>
+                          </p>
                         )}
                       </div>
                     </div>
@@ -233,24 +282,26 @@ export default function CodingPracticePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-white uppercase tracking-wider">Constraints</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-white">
+                    Constraints
+                  </p>
                   <ul className="space-y-1">
                     {PROBLEM.constraints.map((c, i) => (
                       <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
-                        <ChevronRight className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                        <ChevronRight className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
                         <code className="font-mono">{c}</code>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
-                  <button className="flex items-center gap-1.5 hover:text-white transition-colors">
-                    <ThumbsUp className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-4 border-t border-border pt-2 text-xs text-muted-foreground">
+                  <button className="flex items-center gap-1.5 transition-colors hover:text-white">
+                    <ThumbsUp className="h-3.5 w-3.5" />
                     {(PROBLEM.likes / 1000).toFixed(1)}K
                   </button>
                   <span className="flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5" />
+                    <Users className="h-3.5 w-3.5" />
                     {(PROBLEM.submissions / 1000).toFixed(1)}K submissions
                   </span>
                 </div>
@@ -260,35 +311,42 @@ export default function CodingPracticePage() {
             {leftPanel === 'hints' && (
               <div className="space-y-3">
                 {PROBLEM.hints.map((hint, i) => (
-                  <details key={i} className="group p-4 rounded-xl border border-border bg-background/50">
-                    <summary className="text-sm font-semibold text-foreground/90 cursor-pointer list-none flex items-center justify-between">
+                  <details
+                    key={i}
+                    className="group rounded-xl border border-border bg-background/50 p-4"
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-foreground/90">
                       <span className="flex items-center gap-2">
-                        <Lightbulb className="w-4 h-4 text-amber-400" />
+                        <Lightbulb className="h-4 w-4 text-amber-400" />
                         Hint {i + 1}
                       </span>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground group-open:rotate-180 transition-transform" />
+                      <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" />
                     </summary>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{hint}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{hint}</p>
                   </details>
                 ))}
               </div>
             )}
 
             {leftPanel === 'discussion' && (
-              <div className="flex flex-col items-center justify-center py-12 text-center gap-3 text-muted-foreground">
-                <MessageSquare className="w-10 h-10 opacity-30" />
-                <p className="text-sm">Join the discussion to ask questions and share approaches.</p>
-                <Button size="sm" variant="outline" className="border-border rounded-xl text-xs">Open Discussion</Button>
+              <div className="flex flex-col items-center justify-center gap-3 py-12 text-center text-muted-foreground">
+                <MessageSquare className="h-10 w-10 opacity-30" />
+                <p className="text-sm">
+                  Join the discussion to ask questions and share approaches.
+                </p>
+                <Button size="sm" variant="outline" className="rounded-xl border-border text-xs">
+                  Open Discussion
+                </Button>
               </div>
             )}
           </div>
         </div>
 
         {/* CENTER — Code Editor */}
-        <div className="flex-1 min-w-0 flex flex-col">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* Language selector */}
-          <div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-card/20 shrink-0">
-            <select className="bg-transparent border-none text-xs font-semibold text-foreground/80 focus:outline-none cursor-pointer">
+          <div className="flex shrink-0 items-center gap-3 border-b border-border bg-card/20 px-4 py-2">
+            <select className="cursor-pointer border-none bg-transparent text-xs font-semibold text-foreground/80 focus:outline-none">
               <option>Python 3</option>
               <option>JavaScript</option>
               <option>TypeScript</option>
@@ -300,13 +358,13 @@ export default function CodingPracticePage() {
             <span className="text-xs text-muted-foreground">Auto-save enabled</span>
           </div>
 
-          <div className="flex-1 min-h-0">
+          <div className="min-h-0 flex-1">
             <CodeEditor />
           </div>
         </div>
 
         {/* RIGHT PANEL — Test cases + Output */}
-        <div className="hidden lg:flex w-[320px] shrink-0 flex-col border-l border-border bg-card/30">
+        <div className="hidden w-[320px] shrink-0 flex-col border-l border-border bg-card/30 lg:flex">
           {/* Output tabs */}
           <div className="flex border-b border-border">
             {(['testcases', 'output'] as OutputTab[]).map((tab) => (
@@ -314,7 +372,9 @@ export default function CodingPracticePage() {
                 key={tab}
                 onClick={() => setOutputTab(tab)}
                 className={`flex-1 py-2.5 text-xs font-semibold capitalize transition-colors ${
-                  outputTab === tab ? 'text-white border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'
+                  outputTab === tab
+                    ? 'border-b-2 border-primary text-white'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {tab === 'testcases' ? 'Test Cases' : 'Output'}
@@ -322,7 +382,7 @@ export default function CodingPracticePage() {
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 space-y-4 overflow-y-auto p-4">
             {outputTab === 'testcases' && (
               <>
                 <div className="flex gap-2">
@@ -330,29 +390,35 @@ export default function CodingPracticePage() {
                     <button
                       key={tc.id}
                       onClick={() => setActiveCase(i)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                        activeCase === i ? 'bg-primary/10 border-primary/30 text-primary' : 'border-border text-muted-foreground hover:text-white'
+                      className={`rounded-lg border px-3 py-1.5 text-xs font-bold transition-all ${
+                        activeCase === i
+                          ? 'border-primary/30 bg-primary/10 text-primary'
+                          : 'border-border text-muted-foreground hover:text-white'
                       }`}
                     >
                       Case {i + 1}
                     </button>
                   ))}
-                  <button className="px-3 py-1.5 rounded-lg text-xs font-bold border border-dashed border-border text-muted-foreground hover:text-white hover:border-border/80 transition-all">
+                  <button className="rounded-lg border border-dashed border-border px-3 py-1.5 text-xs font-bold text-muted-foreground transition-all hover:border-border/80 hover:text-white">
                     + Add
                   </button>
                 </div>
 
                 <div className="space-y-3">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Input</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Input
+                    </label>
                     <textarea
                       defaultValue={TEST_CASES[activeCase].input}
-                      className="w-full h-20 bg-background/60 border border-border rounded-xl p-3 font-mono text-xs text-foreground/90 resize-none focus:outline-none focus:ring-1 focus:ring-primary/30"
+                      className="h-20 w-full resize-none rounded-xl border border-border bg-background/60 p-3 font-mono text-xs text-foreground/90 focus:outline-none focus:ring-1 focus:ring-primary/30"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Expected Output</label>
-                    <div className="w-full bg-background/60 border border-border rounded-xl p-3 font-mono text-xs text-foreground/90">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Expected Output
+                    </label>
+                    <div className="w-full rounded-xl border border-border bg-background/60 p-3 font-mono text-xs text-foreground/90">
                       {TEST_CASES[activeCase].expected}
                     </div>
                   </div>
@@ -363,14 +429,14 @@ export default function CodingPracticePage() {
             {outputTab === 'output' && (
               <div className="space-y-4">
                 {running ? (
-                  <div className="flex flex-col items-center justify-center py-12 gap-3">
-                    <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                  <div className="flex flex-col items-center justify-center gap-3 py-12">
+                    <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                     <p className="text-xs text-muted-foreground">Running test cases...</p>
                   </div>
                 ) : runResult === 'pass' ? (
                   <>
-                    <div className="flex items-center gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                       <div>
                         <p className="text-sm font-bold text-emerald-400">All Tests Passed!</p>
                         <p className="text-xs text-muted-foreground">3 / 3 test cases accepted</p>
@@ -381,25 +447,34 @@ export default function CodingPracticePage() {
                         { label: 'Runtime', value: '52 ms', beat: '87%' },
                         { label: 'Memory', value: '17.2 MB', beat: '72%' },
                       ].map(({ label, value, beat }) => (
-                        <div key={label} className="p-3 rounded-xl bg-background/50 border border-border">
-                          <div className="flex justify-between text-xs mb-1.5">
+                        <div
+                          key={label}
+                          className="rounded-xl border border-border bg-background/50 p-3"
+                        >
+                          <div className="mb-1.5 flex justify-between text-xs">
                             <span className="text-muted-foreground">{label}</span>
                             <span className="font-bold text-white">{value}</span>
                           </div>
                           <Progress value={parseInt(beat)} className="h-1 bg-muted/40" />
-                          <p className="text-[10px] text-muted-foreground mt-1">Beats {beat} of solutions</p>
+                          <p className="mt-1 text-[10px] text-muted-foreground">
+                            Beats {beat} of solutions
+                          </p>
                         </div>
                       ))}
                     </div>
-                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                    <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
                       <p className="text-xs font-bold text-amber-400">+50 XP Earned!</p>
-                      <p className="text-[10px] text-muted-foreground">Streak protected · Great work!</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        Streak protected · Great work!
+                      </p>
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
-                    <Terminal className="w-8 h-8 text-muted-foreground opacity-40" />
-                    <p className="text-xs text-muted-foreground">Run your code to see the output here.</p>
+                  <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                    <Terminal className="h-8 w-8 text-muted-foreground opacity-40" />
+                    <p className="text-xs text-muted-foreground">
+                      Run your code to see the output here.
+                    </p>
                   </div>
                 )}
               </div>

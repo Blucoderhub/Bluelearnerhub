@@ -20,6 +20,7 @@ import dailyQuizRoutes    from './dailyQuiz';
 import notebookRoutes     from './notebooks';
 import gamificationRoutes from './gamification';
 import exerciseRoutes     from './exercises';
+import codeRoutes         from './code';
 
 const router = Router();
 
@@ -44,6 +45,7 @@ router.use('/daily-quiz',    dailyQuizRoutes);    // AI Daily Quiz
 router.use('/notebooks',     notebookRoutes);     // Study Notebooks (NotebookLM)
 router.use('/gamification',  gamificationRoutes); // Achievements + Leaderboard
 router.use('/exercises',     exerciseRoutes);     // Practice Challenge Hub
+router.use('/code',          codeRoutes);         // Sandboxed Code Execution (Judge0)
 
 router.get('/health', (_req, res) => {
   res.json({

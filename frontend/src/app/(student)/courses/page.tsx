@@ -34,83 +34,190 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 
-const CATEGORIES = ['All', 'Computer Science', 'Electrical', 'Mechanical', 'Civil', 'Management', 'AI & ML']
+const CATEGORIES = [
+  'All',
+  'Computer Science',
+  'Electrical',
+  'Mechanical',
+  'Civil',
+  'Management',
+  'AI & ML',
+]
 const DIFFICULTIES = ['All Levels', 'Beginner', 'Intermediate', 'Advanced']
 const DURATIONS = ['Any Duration', 'Under 5 hours', '5–20 hours', '20+ hours']
 const SORT_OPTIONS = ['Most Popular', 'Latest', 'Highest Rated', 'Shortest First']
 
 const COURSES = [
   {
-    id: 1, slug: 'python-fundamentals',
-    title: 'Python for Beginners', category: 'Computer Science', icon: Cpu,
-    difficulty: 'Beginner', duration: '8 hrs', lessons: 48, enrolled: 32400,
-    rating: 4.9, reviews: 2840, progress: 0,
-    tags: ['Python', 'Programming'], color: 'from-blue-600/20 to-indigo-600/20', iconColor: 'text-blue-400',
-    instructor: 'Dr. Ravi Kumar', thumbnail: 'bg-gradient-to-br from-blue-900 to-indigo-900',
+    id: 1,
+    slug: 'python-fundamentals',
+    title: 'Python for Beginners',
+    category: 'Computer Science',
+    icon: Cpu,
+    difficulty: 'Beginner',
+    duration: '8 hrs',
+    lessons: 48,
+    enrolled: 32400,
+    rating: 4.9,
+    reviews: 2840,
+    progress: 0,
+    tags: ['Python', 'Programming'],
+    color: 'from-blue-600/20 to-indigo-600/20',
+    iconColor: 'text-blue-400',
+    instructor: 'Dr. Ravi Kumar',
+    thumbnail: 'bg-gradient-to-br from-blue-900 to-indigo-900',
   },
   {
-    id: 2, slug: 'dsa-mastery',
-    title: 'Data Structures & Algorithms', category: 'Computer Science', icon: BarChart3,
-    difficulty: 'Intermediate', duration: '24 hrs', lessons: 120, enrolled: 18700,
-    rating: 4.8, reviews: 1950, progress: 35,
-    tags: ['DSA', 'Algorithms'], color: 'from-violet-600/20 to-purple-600/20', iconColor: 'text-violet-400',
-    instructor: 'Prof. Ananya Sen', thumbnail: 'bg-gradient-to-br from-violet-900 to-purple-900',
+    id: 2,
+    slug: 'dsa-mastery',
+    title: 'Data Structures & Algorithms',
+    category: 'Computer Science',
+    icon: BarChart3,
+    difficulty: 'Intermediate',
+    duration: '24 hrs',
+    lessons: 120,
+    enrolled: 18700,
+    rating: 4.8,
+    reviews: 1950,
+    progress: 35,
+    tags: ['DSA', 'Algorithms'],
+    color: 'from-violet-600/20 to-purple-600/20',
+    iconColor: 'text-violet-400',
+    instructor: 'Prof. Ananya Sen',
+    thumbnail: 'bg-gradient-to-br from-violet-900 to-purple-900',
   },
   {
-    id: 3, slug: 'machine-learning',
-    title: 'Machine Learning Fundamentals', category: 'AI & ML', icon: Bot,
-    difficulty: 'Intermediate', duration: '20 hrs', lessons: 64, enrolled: 14500,
-    rating: 4.9, reviews: 1200, progress: 0,
-    tags: ['ML', 'Python', 'AI'], color: 'from-emerald-600/20 to-teal-600/20', iconColor: 'text-emerald-400',
-    instructor: 'Dr. Sanjana Rao', thumbnail: 'bg-gradient-to-br from-emerald-900 to-teal-900',
+    id: 3,
+    slug: 'machine-learning',
+    title: 'Machine Learning Fundamentals',
+    category: 'AI & ML',
+    icon: Bot,
+    difficulty: 'Intermediate',
+    duration: '20 hrs',
+    lessons: 64,
+    enrolled: 14500,
+    rating: 4.9,
+    reviews: 1200,
+    progress: 0,
+    tags: ['ML', 'Python', 'AI'],
+    color: 'from-emerald-600/20 to-teal-600/20',
+    iconColor: 'text-emerald-400',
+    instructor: 'Dr. Sanjana Rao',
+    thumbnail: 'bg-gradient-to-br from-emerald-900 to-teal-900',
   },
   {
-    id: 4, slug: 'circuit-design',
-    title: 'Circuit Design Essentials', category: 'Electrical', icon: Zap,
-    difficulty: 'Intermediate', duration: '14 hrs', lessons: 52, enrolled: 8200,
-    rating: 4.7, reviews: 670, progress: 72,
-    tags: ['Circuits', 'EE'], color: 'from-yellow-600/20 to-amber-600/20', iconColor: 'text-yellow-400',
-    instructor: 'Prof. Arjun Mehta', thumbnail: 'bg-gradient-to-br from-yellow-900 to-amber-900',
+    id: 4,
+    slug: 'circuit-design',
+    title: 'Circuit Design Essentials',
+    category: 'Electrical',
+    icon: Zap,
+    difficulty: 'Intermediate',
+    duration: '14 hrs',
+    lessons: 52,
+    enrolled: 8200,
+    rating: 4.7,
+    reviews: 670,
+    progress: 72,
+    tags: ['Circuits', 'EE'],
+    color: 'from-yellow-600/20 to-amber-600/20',
+    iconColor: 'text-yellow-400',
+    instructor: 'Prof. Arjun Mehta',
+    thumbnail: 'bg-gradient-to-br from-yellow-900 to-amber-900',
   },
   {
-    id: 5, slug: 'structural-engineering',
-    title: 'Structural Engineering Basics', category: 'Civil', icon: Building2,
-    difficulty: 'Beginner', duration: '12 hrs', lessons: 40, enrolled: 6400,
-    rating: 4.6, reviews: 480, progress: 0,
-    tags: ['Structures', 'Civil'], color: 'from-orange-600/20 to-red-600/20', iconColor: 'text-orange-400',
-    instructor: 'Dr. Priya Iyer', thumbnail: 'bg-gradient-to-br from-orange-900 to-red-900',
+    id: 5,
+    slug: 'structural-engineering',
+    title: 'Structural Engineering Basics',
+    category: 'Civil',
+    icon: Building2,
+    difficulty: 'Beginner',
+    duration: '12 hrs',
+    lessons: 40,
+    enrolled: 6400,
+    rating: 4.6,
+    reviews: 480,
+    progress: 0,
+    tags: ['Structures', 'Civil'],
+    color: 'from-orange-600/20 to-red-600/20',
+    iconColor: 'text-orange-400',
+    instructor: 'Dr. Priya Iyer',
+    thumbnail: 'bg-gradient-to-br from-orange-900 to-red-900',
   },
   {
-    id: 6, slug: 'mechanical-design',
-    title: 'CAD & Mechanical Design', category: 'Mechanical', icon: Settings,
-    difficulty: 'Intermediate', duration: '18 hrs', lessons: 58, enrolled: 9100,
-    rating: 4.7, reviews: 720, progress: 0,
-    tags: ['CAD', 'Mechanical'], color: 'from-slate-600/20 to-gray-600/20', iconColor: 'text-slate-400',
-    instructor: 'Prof. Rohan Gupta', thumbnail: 'bg-gradient-to-br from-slate-800 to-gray-900',
+    id: 6,
+    slug: 'mechanical-design',
+    title: 'CAD & Mechanical Design',
+    category: 'Mechanical',
+    icon: Settings,
+    difficulty: 'Intermediate',
+    duration: '18 hrs',
+    lessons: 58,
+    enrolled: 9100,
+    rating: 4.7,
+    reviews: 720,
+    progress: 0,
+    tags: ['CAD', 'Mechanical'],
+    color: 'from-slate-600/20 to-gray-600/20',
+    iconColor: 'text-slate-400',
+    instructor: 'Prof. Rohan Gupta',
+    thumbnail: 'bg-gradient-to-br from-slate-800 to-gray-900',
   },
   {
-    id: 7, slug: 'aerospace-intro',
-    title: 'Introduction to Aerospace', category: 'Mechanical', icon: Rocket,
-    difficulty: 'Advanced', duration: '28 hrs', lessons: 90, enrolled: 4200,
-    rating: 4.8, reviews: 340, progress: 10,
-    tags: ['Aerospace', 'Physics'], color: 'from-cyan-600/20 to-blue-600/20', iconColor: 'text-cyan-400',
-    instructor: 'Dr. Vikram Nair', thumbnail: 'bg-gradient-to-br from-cyan-900 to-blue-900',
+    id: 7,
+    slug: 'aerospace-intro',
+    title: 'Introduction to Aerospace',
+    category: 'Mechanical',
+    icon: Rocket,
+    difficulty: 'Advanced',
+    duration: '28 hrs',
+    lessons: 90,
+    enrolled: 4200,
+    rating: 4.8,
+    reviews: 340,
+    progress: 10,
+    tags: ['Aerospace', 'Physics'],
+    color: 'from-cyan-600/20 to-blue-600/20',
+    iconColor: 'text-cyan-400',
+    instructor: 'Dr. Vikram Nair',
+    thumbnail: 'bg-gradient-to-br from-cyan-900 to-blue-900',
   },
   {
-    id: 8, slug: 'product-management',
-    title: 'Product Management Crash Course', category: 'Management', icon: Target,
-    difficulty: 'Beginner', duration: '6 hrs', lessons: 28, enrolled: 12300,
-    rating: 4.9, reviews: 1540, progress: 55,
-    tags: ['PM', 'Strategy'], color: 'from-pink-600/20 to-rose-600/20', iconColor: 'text-pink-400',
-    instructor: 'Neha Verma', thumbnail: 'bg-gradient-to-br from-pink-900 to-rose-900',
+    id: 8,
+    slug: 'product-management',
+    title: 'Product Management Crash Course',
+    category: 'Management',
+    icon: Target,
+    difficulty: 'Beginner',
+    duration: '6 hrs',
+    lessons: 28,
+    enrolled: 12300,
+    rating: 4.9,
+    reviews: 1540,
+    progress: 55,
+    tags: ['PM', 'Strategy'],
+    color: 'from-pink-600/20 to-rose-600/20',
+    iconColor: 'text-pink-400',
+    instructor: 'Neha Verma',
+    thumbnail: 'bg-gradient-to-br from-pink-900 to-rose-900',
   },
   {
-    id: 9, slug: 'biomedical-fundamentals',
-    title: 'Biomedical Engineering Basics', category: 'Mechanical', icon: HeartPulse,
-    difficulty: 'Intermediate', duration: '16 hrs', lessons: 44, enrolled: 3800,
-    rating: 4.6, reviews: 290, progress: 0,
-    tags: ['Biomedical', 'Healthcare'], color: 'from-red-600/20 to-pink-600/20', iconColor: 'text-red-400',
-    instructor: 'Dr. Kavya Reddy', thumbnail: 'bg-gradient-to-br from-red-900 to-pink-900',
+    id: 9,
+    slug: 'biomedical-fundamentals',
+    title: 'Biomedical Engineering Basics',
+    category: 'Mechanical',
+    icon: HeartPulse,
+    difficulty: 'Intermediate',
+    duration: '16 hrs',
+    lessons: 44,
+    enrolled: 3800,
+    rating: 4.6,
+    reviews: 290,
+    progress: 0,
+    tags: ['Biomedical', 'Healthcare'],
+    color: 'from-red-600/20 to-pink-600/20',
+    iconColor: 'text-red-400',
+    instructor: 'Dr. Kavya Reddy',
+    thumbnail: 'bg-gradient-to-br from-red-900 to-pink-900',
   },
 ]
 
@@ -120,54 +227,67 @@ const difficultyColors: Record<string, string> = {
   Advanced: 'bg-red-500/10 text-red-400 border-red-500/20',
 }
 
-function CourseCard({ course, index }: { course: typeof COURSES[0]; index: number }) {
+function CourseCard({ course, index }: { course: (typeof COURSES)[0]; index: number }) {
   const Icon = course.icon
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4 }}
-      className="group relative bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/30 hover:-translate-y-1 transition-all duration-300"
+      className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30"
     >
       {/* Thumbnail */}
-      <div className={`relative h-36 ${course.thumbnail} flex items-center justify-center overflow-hidden`}>
+      <div
+        className={`relative h-36 ${course.thumbnail} flex items-center justify-center overflow-hidden`}
+      >
         <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-80`} />
-        <Icon className={`relative z-10 w-12 h-12 ${course.iconColor} opacity-80`} />
+        <Icon className={`relative z-10 h-12 w-12 ${course.iconColor} opacity-80`} />
         {course.progress > 0 && (
           <div className="absolute bottom-0 left-0 right-0">
             <Progress value={course.progress} className="h-1 rounded-none bg-white/10" />
           </div>
         )}
         {course.rating >= 4.8 && (
-          <Badge className="absolute top-3 left-3 bg-amber-500/20 text-amber-400 border-amber-500/30 text-[10px] font-bold">
+          <Badge className="absolute left-3 top-3 border-amber-500/30 bg-amber-500/20 text-[10px] font-bold text-amber-400">
             Top Rated
           </Badge>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-5 space-y-3">
+      <div className="space-y-3 p-5">
         <div className="flex items-start justify-between gap-2">
-          <Badge className={`text-[10px] border font-semibold ${difficultyColors[course.difficulty]}`}>
+          <Badge
+            className={`border text-[10px] font-semibold ${difficultyColors[course.difficulty]}`}
+          >
             {course.difficulty}
           </Badge>
           <div className="flex items-center gap-1 text-xs text-amber-400">
-            <Star className="w-3.5 h-3.5 fill-amber-400" />
+            <Star className="h-3.5 w-3.5 fill-amber-400" />
             <span className="font-bold">{course.rating}</span>
             <span className="text-muted-foreground">({course.reviews.toLocaleString()})</span>
           </div>
         </div>
 
-        <h3 className="text-sm font-bold text-white leading-snug group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="line-clamp-2 text-sm font-bold leading-snug text-white transition-colors group-hover:text-primary">
           {course.title}
         </h3>
 
         <p className="text-xs text-muted-foreground">by {course.instructor}</p>
 
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
-          <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" />{course.lessons} lessons</span>
-          <span className="flex items-center gap-1"><Users className="w-3 h-3" />{(course.enrolled / 1000).toFixed(1)}K</span>
+          <span className="flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            {course.duration}
+          </span>
+          <span className="flex items-center gap-1">
+            <BookOpen className="h-3 w-3" />
+            {course.lessons} lessons
+          </span>
+          <span className="flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            {(course.enrolled / 1000).toFixed(1)}K
+          </span>
         </div>
 
         {course.progress > 0 && (
@@ -184,14 +304,14 @@ function CourseCard({ course, index }: { course: typeof COURSES[0]; index: numbe
           <Link href={`/tutorials/${course.slug}`}>
             <Button
               size="sm"
-              className={`w-full rounded-xl font-bold text-xs h-9 gap-1.5 ${
+              className={`h-9 w-full gap-1.5 rounded-xl text-xs font-bold ${
                 course.progress > 0
-                  ? 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-white'
-                  : 'bg-primary hover:bg-primary/90 text-white'
+                  ? 'border border-primary/20 bg-primary/10 text-primary hover:bg-primary hover:text-white'
+                  : 'bg-primary text-white hover:bg-primary/90'
               } transition-all`}
             >
               {course.progress > 0 ? 'Continue' : 'Enroll Now'}
-              <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
         </div>
@@ -208,8 +328,10 @@ export default function CourseCatalogPage() {
   const [showFilters, setShowFilters] = useState(false)
 
   const filtered = COURSES.filter((c) => {
-    const matchSearch = !search || c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
+    const matchSearch =
+      !search ||
+      c.title.toLowerCase().includes(search.toLowerCase()) ||
+      c.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()))
     const matchCategory = activeCategory === 'All' || c.category === activeCategory
     const matchDifficulty = difficulty === 'All Levels' || c.difficulty === difficulty
     return matchSearch && matchCategory && matchDifficulty
@@ -224,25 +346,30 @@ export default function CourseCatalogPage() {
     <div className="space-y-8 pb-20">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-black font-heading tracking-tight text-white">Course Catalog</h1>
+        <h1 className="font-heading text-3xl font-black tracking-tight text-white">
+          Course Catalog
+        </h1>
         <p className="text-muted-foreground">
           {filtered.length} courses across engineering, management, and computer science.
         </p>
       </div>
 
       {/* Search + filter bar */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search courses, topics, or skills..."
-            className="pl-11 bg-card border-border h-11 rounded-xl text-sm focus-visible:ring-primary/30"
+            className="h-11 rounded-xl border-border bg-card pl-11 text-sm focus-visible:ring-primary/30"
           />
           {search && (
-            <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2">
-              <X className="w-4 h-4 text-muted-foreground hover:text-white transition-colors" />
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+            >
+              <X className="h-4 w-4 text-muted-foreground transition-colors hover:text-white" />
             </button>
           )}
         </div>
@@ -250,19 +377,23 @@ export default function CourseCatalogPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="bg-card border border-border text-sm text-foreground rounded-xl px-4 h-11 focus:outline-none focus:ring-1 focus:ring-primary/30 cursor-pointer"
+            className="h-11 cursor-pointer rounded-xl border border-border bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
           >
-            {SORT_OPTIONS.map(o => <option key={o}>{o}</option>)}
+            {SORT_OPTIONS.map((o) => (
+              <option key={o}>{o}</option>
+            ))}
           </select>
           <Button
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
-            className={`h-11 px-4 rounded-xl border-border gap-2 text-sm font-semibold ${showFilters ? 'bg-primary/10 border-primary/30 text-primary' : ''}`}
+            className={`h-11 gap-2 rounded-xl border-border px-4 text-sm font-semibold ${showFilters ? 'border-primary/30 bg-primary/10 text-primary' : ''}`}
           >
-            <SlidersHorizontal className="w-4 h-4" />
+            <SlidersHorizontal className="h-4 w-4" />
             Filters
-            {(difficulty !== 'All Levels') && (
-              <Badge className="bg-primary text-white text-[10px] px-1.5 py-0 min-w-[18px] h-[18px] flex items-center justify-center rounded-full">1</Badge>
+            {difficulty !== 'All Levels' && (
+              <Badge className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1.5 py-0 text-[10px] text-white">
+                1
+              </Badge>
             )}
           </Button>
         </div>
@@ -274,16 +405,18 @@ export default function CourseCatalogPage() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="flex flex-wrap gap-4 p-5 bg-card/50 border border-border rounded-2xl"
+          className="flex flex-wrap gap-4 rounded-2xl border border-border bg-card/50 p-5"
         >
           <div className="space-y-2">
-            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Difficulty</label>
-            <div className="flex gap-2 flex-wrap">
-              {DIFFICULTIES.map(d => (
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Difficulty
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {DIFFICULTIES.map((d) => (
                 <button
                   key={d}
                   onClick={() => setDifficulty(d)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${difficulty === d ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:text-white hover:border-border/80'}`}
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${difficulty === d ? 'border-primary bg-primary text-white' : 'border-border text-muted-foreground hover:border-border/80 hover:text-white'}`}
                 >
                   {d}
                 </button>
@@ -294,15 +427,15 @@ export default function CourseCatalogPage() {
       )}
 
       {/* Category tabs */}
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+      <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`shrink-0 px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
+            className={`shrink-0 rounded-xl border px-4 py-2 text-sm font-semibold transition-all ${
               activeCategory === cat
-                ? 'bg-primary text-white border-primary'
-                : 'border-border text-muted-foreground hover:text-white hover:border-border/80 bg-card/50'
+                ? 'border-primary bg-primary text-white'
+                : 'border-border bg-card/50 text-muted-foreground hover:border-border/80 hover:text-white'
             }`}
           >
             {cat}
@@ -314,31 +447,47 @@ export default function CourseCatalogPage() {
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Showing <strong className="text-foreground">{filtered.length}</strong> courses
-          {activeCategory !== 'All' && <> in <strong className="text-primary">{activeCategory}</strong></>}
+          {activeCategory !== 'All' && (
+            <>
+              {' '}
+              in <strong className="text-primary">{activeCategory}</strong>
+            </>
+          )}
         </p>
         {(search || activeCategory !== 'All' || difficulty !== 'All Levels') && (
           <button
-            onClick={() => { setSearch(''); setActiveCategory('All'); setDifficulty('All Levels') }}
-            className="text-xs text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
+            onClick={() => {
+              setSearch('')
+              setActiveCategory('All')
+              setDifficulty('All Levels')
+            }}
+            className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-white"
           >
-            <X className="w-3.5 h-3.5" /> Clear all
+            <X className="h-3.5 w-3.5" /> Clear all
           </button>
         )}
       </div>
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div className="text-center py-24 space-y-3">
-          <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border flex items-center justify-center mx-auto">
-            <Search className="w-7 h-7 text-muted-foreground" />
+        <div className="space-y-3 py-24 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-muted/30">
+            <Search className="h-7 w-7 text-muted-foreground" />
           </div>
           <p className="text-muted-foreground">No courses match your filters.</p>
-          <Button variant="ghost" onClick={() => { setSearch(''); setActiveCategory('All'); setDifficulty('All Levels') }}>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setSearch('')
+              setActiveCategory('All')
+              setDifficulty('All Levels')
+            }}
+          >
             Reset filters
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course, i) => (
             <CourseCard key={course.id} course={course} index={i} />
           ))}

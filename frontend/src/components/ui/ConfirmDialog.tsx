@@ -34,15 +34,13 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-gray-800 border-gray-700">
+      <AlertDialogContent className="border-gray-700 bg-gray-800">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-white">{title}</AlertDialogTitle>
-          <AlertDialogDescription className="text-gray-400">
-            {description}
-          </AlertDialogDescription>
+          <AlertDialogDescription className="text-gray-400">{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600">
+          <AlertDialogCancel className="border-gray-600 bg-gray-700 text-white hover:bg-gray-600">
             {cancelLabel}
           </AlertDialogCancel>
           <AlertDialogAction

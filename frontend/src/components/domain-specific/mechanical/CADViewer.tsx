@@ -5,16 +5,16 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
-import { 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCcw, 
-  Grid3x3, 
+import {
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Grid3x3,
   Eye,
   Download,
   Upload,
   Ruler,
-  Layers
+  Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -134,7 +134,7 @@ export default function CADViewer({
     // Handle Window Resize
     const handleResize = () => {
       if (!containerRef.current) return
-      
+
       camera.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight
       camera.updateProjectionMatrix()
       renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
@@ -166,12 +166,12 @@ export default function CADViewer({
   // Update wireframe
   useEffect(() => {
     if (!modelRef.current) return
-    
+
     modelRef.current.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
         if (mesh.material instanceof THREE.Material) {
-          (mesh.material as any).wireframe = wireframe
+          ;(mesh.material as any).wireframe = wireframe
         }
       }
     })
@@ -277,7 +277,7 @@ export default function CADViewer({
 
   const handleReset = () => {
     if (!cameraRef.current || !controlsRef.current) return
-    
+
     cameraRef.current.position.set(5, 5, 5)
     controlsRef.current.reset()
     setZoom(1)
@@ -285,16 +285,16 @@ export default function CADViewer({
   }
 
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.1, 3))
+    setZoom((prev) => Math.min(prev + 0.1, 3))
   }
 
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.1, 0.5))
+    setZoom((prev) => Math.max(prev - 0.1, 0.5))
   }
 
   const handleExport = () => {
     if (!rendererRef.current) return
-    
+
     const link = document.createElement('a')
     link.download = 'model-screenshot.png'
     link.href = rendererRef.current.domElement.toDataURL()
@@ -306,21 +306,21 @@ export default function CADViewer({
     if (!file) return
 
     const url = URL.createObjectURL(file)
-    
+
     if (sceneRef.current && modelRef.current) {
       sceneRef.current.remove(modelRef.current)
     }
-    
+
     loadModel(url, sceneRef.current!)
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
       {/* Toolbar */}
       {showControls && (
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
           <div className="flex items-center gap-2">
-            <span className="text-white font-semibold text-sm">3D CAD Viewer</span>
+            <span className="text-sm font-semibold text-white">3D CAD Viewer</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function CADViewer({
               />
               <Button variant="outline" size="sm" asChild>
                 <span className="cursor-pointer">
-                  <Upload className="w-4 h-4 mr-1" />
+                  <Upload className="mr-1 h-4 w-4" />
                   Load
                 </span>
               </Button>
@@ -342,15 +342,15 @@ export default function CADViewer({
 
             {/* Zoom Controls */}
             <Button onClick={handleZoomIn} variant="outline" size="sm">
-              <ZoomIn className="w-4 h-4" />
+              <ZoomIn className="h-4 w-4" />
             </Button>
             <Button onClick={handleZoomOut} variant="outline" size="sm">
-              <ZoomOut className="w-4 h-4" />
+              <ZoomOut className="h-4 w-4" />
             </Button>
 
             {/* Reset View */}
             <Button onClick={handleReset} variant="outline" size="sm">
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="h-4 w-4" />
             </Button>
 
             {/* Toggle Grid */}
@@ -359,7 +359,7 @@ export default function CADViewer({
               variant={showGrid ? 'default' : 'outline'}
               size="sm"
             >
-              <Grid3x3 className="w-4 h-4" />
+              <Grid3x3 className="h-4 w-4" />
             </Button>
 
             {/* Toggle Wireframe */}
@@ -368,43 +368,39 @@ export default function CADViewer({
               variant={wireframe ? 'default' : 'outline'}
               size="sm"
             >
-              <Layers className="w-4 h-4" />
+              <Layers className="h-4 w-4" />
             </Button>
 
             {/* Export */}
             <Button onClick={handleExport} variant="outline" size="sm">
-              <Download className="w-4 h-4" />
+              <Download className="h-4 w-4" />
             </Button>
           </div>
         </div>
       )}
 
       {/* 3D Canvas */}
-      <div
-        ref={containerRef}
-        style={{ height }}
-        className="flex-1 bg-black"
-      />
+      <div ref={containerRef} style={{ height }} className="flex-1 bg-black" />
 
       {/* Model Info Panel */}
       {modelInfo && (
-        <div className="px-4 py-3 bg-gray-800 border-t border-gray-700">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-            <Card className="p-2 bg-gray-700">
+        <div className="border-t border-gray-700 bg-gray-800 px-4 py-3">
+          <div className="grid grid-cols-2 gap-2 text-xs md:grid-cols-4">
+            <Card className="bg-gray-700 p-2">
               <div className="text-gray-400">Vertices</div>
-              <div className="text-white font-semibold">{modelInfo.vertices.toLocaleString()}</div>
+              <div className="font-semibold text-white">{modelInfo.vertices.toLocaleString()}</div>
             </Card>
-            <Card className="p-2 bg-gray-700">
+            <Card className="bg-gray-700 p-2">
               <div className="text-gray-400">Faces</div>
-              <div className="text-white font-semibold">{modelInfo.faces.toLocaleString()}</div>
+              <div className="font-semibold text-white">{modelInfo.faces.toLocaleString()}</div>
             </Card>
-            <Card className="p-2 bg-gray-700">
+            <Card className="bg-gray-700 p-2">
               <div className="text-gray-400">Width (X)</div>
-              <div className="text-white font-semibold">{modelInfo.dimensions.x}mm</div>
+              <div className="font-semibold text-white">{modelInfo.dimensions.x}mm</div>
             </Card>
-            <Card className="p-2 bg-gray-700">
+            <Card className="bg-gray-700 p-2">
               <div className="text-gray-400">Dimensions</div>
-              <div className="text-white font-semibold">
+              <div className="font-semibold text-white">
                 {modelInfo.dimensions.y} × {modelInfo.dimensions.z}
               </div>
             </Card>

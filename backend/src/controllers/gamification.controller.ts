@@ -53,11 +53,11 @@ export const getMyAchievements = async (req: Request, res: Response) => {
       .orderBy(desc(userAchievements.earnedAt));
 
     // Build set of earned titles for quick lookup
-    const earnedTitles = new Set(earned.map((e) => e.title));
+    const earnedTitles = new Set(earned.map((e: any) => e.title));
 
     // Merge catalogue with earned state
     const enriched = ALL_ACHIEVEMENTS.map((a) => {
-      const match = earned.find((e) => e.title === a.title);
+      const match = earned.find((e: any) => e.title === a.title);
       return {
         id:          a.code,
         title:       a.title,
@@ -97,7 +97,7 @@ export const getLeaderboard = async (req: Request, res: Response) => {
       .orderBy(desc(users.xp))
       .limit(limit);
 
-    const leaderboard = rows.map((u, i) => ({
+    const leaderboard = rows.map((u: any, i: number) => ({
       rank:     i + 1,
       id:       u.id,
       name:     u.fullName,

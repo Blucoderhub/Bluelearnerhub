@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { HackathonController } from '@/controllers/hackathon';
-import { hackathonValidators, commonValidators } from '@/utils/validators';
-import { validate } from '@/middleware/validate';
-import { authenticate, optionalAuth } from '@/middleware/auth';
-import { apiLimiter } from '@/middleware/rateLimiter';
+import { HackathonController } from '../controllers/hackathon';
+import { hackathonValidators, commonValidators } from '../utils/validators';
+import { validate } from '../middleware/validate';
+import { authenticate, optionalAuth } from '../middleware/auth';
+import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 const controller = new HackathonController();

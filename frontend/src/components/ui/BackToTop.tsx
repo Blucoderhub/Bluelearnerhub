@@ -41,9 +41,9 @@ export default function BackToTop() {
           <Button
             onClick={scrollToTop}
             size="icon"
-            className="w-12 h-12 rounded-full shadow-lg bg-primary hover:bg-primary/90"
+            className="h-12 w-12 rounded-full bg-primary shadow-lg hover:bg-primary/90"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp className="h-5 w-5" />
           </Button>
         </motion.div>
       )}

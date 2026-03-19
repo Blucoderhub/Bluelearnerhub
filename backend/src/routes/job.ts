@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { JobController } from '@/controllers/job';
-import { jobValidators, commonValidators } from '@/utils/validators';
-import { validate } from '@/middleware/validate';
-import { authenticate, optionalAuth, authorize } from '@/middleware/auth';
-import { apiLimiter } from '@/middleware/rateLimiter';
+import { JobController } from '../controllers/job';
+import { jobValidators, commonValidators } from '../utils/validators';
+import { validate } from '../middleware/validate';
+import { authenticate, optionalAuth, authorize } from '../middleware/auth';
+import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 const controller = new JobController();

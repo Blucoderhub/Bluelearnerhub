@@ -1,8 +1,8 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
-import { verifyAccessToken } from '@/utils/jwt';
-import logger from '@/utils/logger';
-import { config } from '@/config';
+import { verifyAccessToken } from '../utils/jwt';
+import logger from '../utils/logger';
+import { config } from '../config';
 
 export class SocketService {
   private io: SocketIOServer;

@@ -62,11 +62,11 @@ export default function CodePlayground({
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-900">
+    <div className="flex h-full flex-col bg-gray-900">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-        <span className="text-white text-sm font-semibold">Code Playground</span>
-        
+      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
+        <span className="text-sm font-semibold text-white">Code Playground</span>
+
         <div className="flex items-center gap-2">
           <Button
             onClick={handleRun}
@@ -74,28 +74,28 @@ export default function CodePlayground({
             size="sm"
             className="bg-primary hover:bg-primary/90"
           >
-            <Play className="w-4 h-4 mr-1" />
+            <Play className="mr-1 h-4 w-4" />
             {isRunning ? 'Running...' : 'Run'}
           </Button>
           <Button onClick={handleReset} variant="outline" size="sm">
-            <RotateCcw className="w-4 h-4 mr-1" />
+            <RotateCcw className="mr-1 h-4 w-4" />
             Reset
           </Button>
           <Button onClick={handleDownload} variant="outline" size="sm">
-            <Download className="w-4 h-4" />
+            <Download className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       {/* Editor & Output */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Tabs defaultValue="editor" className="flex-1 flex flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Tabs defaultValue="editor" className="flex flex-1 flex-col">
           <TabsList className="w-full justify-start rounded-none border-b border-gray-700">
             <TabsTrigger value="editor">Editor</TabsTrigger>
             <TabsTrigger value="output">Output</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="editor" className="flex-1 m-0">
+          <TabsContent value="editor" className="m-0 flex-1">
             <CodeEditor
               initialCode={code}
               language={initialLanguage}
@@ -105,7 +105,10 @@ export default function CodePlayground({
             />
           </TabsContent>
 
-          <TabsContent value="output" className="flex-1 m-0 p-4 bg-black text-blue-400 font-mono text-sm overflow-auto">
+          <TabsContent
+            value="output"
+            className="m-0 flex-1 overflow-auto bg-black p-4 font-mono text-sm text-blue-400"
+          >
             {output.length > 0 ? (
               <div className="space-y-2">
                 {output.map((line, i) => (
@@ -113,9 +116,7 @@ export default function CodePlayground({
                 ))}
               </div>
             ) : (
-              <div className="text-gray-600">
-                Click "Run" to see output...
-              </div>
+              <div className="text-gray-600">Click "Run" to see output...</div>
             )}
           </TabsContent>
         </Tabs>

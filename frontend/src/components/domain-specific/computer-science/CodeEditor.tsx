@@ -86,7 +86,7 @@ export default function CodeEditor({
 
   const handleRun = async () => {
     if (!onRun) return
-    
+
     setIsRunning(true)
     try {
       await onRun(code, language)
@@ -97,7 +97,7 @@ export default function CodeEditor({
 
   const handleSave = () => {
     if (!onSave) return
-    
+
     setIsSaving(true)
     onSave(code)
     setTimeout(() => setIsSaving(false), 1000)
@@ -160,14 +160,14 @@ export default function CodeEditor({
   ]
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
       {/* Toolbar */}
       {showToolbar && (
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
           <div className="flex items-center gap-2">
             {/* Language Selector */}
             <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger className="w-40 bg-gray-700 border-gray-600 text-white">
+              <SelectTrigger className="w-40 border-gray-600 bg-gray-700 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -181,7 +181,7 @@ export default function CodeEditor({
 
             {/* Theme Selector */}
             <Select value={theme} onValueChange={(v: any) => setTheme(v)}>
-              <SelectTrigger className="w-32 bg-gray-700 border-gray-600 text-white">
+              <SelectTrigger className="w-32 border-gray-600 bg-gray-700 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -194,8 +194,11 @@ export default function CodeEditor({
             </Select>
 
             {/* Font Size */}
-            <Select value={fontSize.toString()} onValueChange={(v: string) => setFontSize(parseInt(v))}>
-              <SelectTrigger className="w-20 bg-gray-700 border-gray-600 text-white">
+            <Select
+              value={fontSize.toString()}
+              onValueChange={(v: string) => setFontSize(parseInt(v))}
+            >
+              <SelectTrigger className="w-20 border-gray-600 bg-gray-700 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -217,7 +220,7 @@ export default function CodeEditor({
                 className="bg-primary hover:bg-primary/90"
                 size="sm"
               >
-                <Play className="w-4 h-4 mr-1" />
+                <Play className="mr-1 h-4 w-4" />
                 {isRunning ? 'Running...' : 'Run'}
               </Button>
             )}
@@ -230,7 +233,7 @@ export default function CodeEditor({
                 variant="outline"
                 size="sm"
               >
-                <Save className="w-4 h-4 mr-1" />
+                <Save className="mr-1 h-4 w-4" />
                 {isSaving ? 'Saved!' : 'Save'}
               </Button>
             )}
@@ -238,20 +241,20 @@ export default function CodeEditor({
             {/* Copy Button */}
             <Button onClick={handleCopy} variant="outline" size="sm">
               {copied ? (
-                <Check className="w-4 h-4 text-primary/80" />
+                <Check className="h-4 w-4 text-primary/80" />
               ) : (
-                <Copy className="w-4 h-4" />
+                <Copy className="h-4 w-4" />
               )}
             </Button>
 
             {/* Download Button */}
             <Button onClick={handleDownload} variant="outline" size="sm">
-              <Download className="w-4 h-4" />
+              <Download className="h-4 w-4" />
             </Button>
 
             {/* Fullscreen Button */}
             <Button onClick={handleFullscreen} variant="outline" size="sm">
-              <Maximize2 className="w-4 h-4" />
+              <Maximize2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -295,7 +298,7 @@ export default function CodeEditor({
       </div>
 
       {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 py-1 bg-gray-800 border-t border-gray-700 text-xs text-gray-400">
+      <div className="flex items-center justify-between border-t border-gray-700 bg-gray-800 px-4 py-1 text-xs text-gray-400">
         <div className="flex items-center gap-4">
           <span>Ln 1, Col 1</span>
           <span>UTF-8</span>
@@ -305,7 +308,7 @@ export default function CodeEditor({
           <span>Spaces: 2</span>
           <button
             onClick={() => setWordWrap(wordWrap === 'on' ? 'off' : 'on')}
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-white"
           >
             Word Wrap: {wordWrap}
           </button>

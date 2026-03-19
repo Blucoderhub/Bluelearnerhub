@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 /**
  * TutorialLayout — Three-Panel Interactive Tutorial Engine
@@ -11,55 +11,58 @@
  * On mobile: single column, tab-switched
  */
 
-import React, { useState, useCallback } from 'react';
-import { CheckCircle, ChevronRight, Code2, BookOpen, Terminal } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import ContentViewer from './ContentViewer';
-import CodePlayground from './CodePlayground';
-import ExercisePanel from './ExercisePanel';
-import TutorialProgress from './TutorialProgress';
+import React, { useState, useCallback } from 'react'
+import { CheckCircle, ChevronRight, Code2, BookOpen, Terminal } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import ContentViewer from './ContentViewer'
+import CodePlayground from './CodePlayground'
+import ExercisePanel from './ExercisePanel'
+import TutorialProgress from './TutorialProgress'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface TutorialSection {
-  id: number;
-  title: string;
-  content: string;
-  sectionOrder: number;
-  language?: string;
-  starterCode?: string;
-  hasExercise: boolean;
-  exercisePrompt?: string;
+  id: number
+  title: string
+  content: string
+  sectionOrder: number
+  language?: string
+  starterCode?: string
+  hasExercise: boolean
+  exercisePrompt?: string
   exerciseTestCases?: Array<{
-    input: string;
-    expectedOutput: string;
-    isHidden: boolean;
-  }>;
-  exerciseXpReward: number;
-  completed: boolean;
+    input: string
+    expectedOutput: string
+    isHidden: boolean
+  }>
+  exerciseXpReward: number
+  completed: boolean
 }
 
 export interface TutorialData {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  domain: string;
-  difficulty: string;
-  estimatedMinutes: number;
-  xpReward: number;
-  sections: TutorialSection[];
-  totalSections: number;
-  completedSections: number;
-  progressPercent: number;
+  id: number
+  slug: string
+  title: string
+  description: string
+  domain: string
+  difficulty: string
+  estimatedMinutes: number
+  xpReward: number
+  sections: TutorialSection[]
+  totalSections: number
+  completedSections: number
+  progressPercent: number
 }
 
 interface TutorialLayoutProps {
-  tutorial: TutorialData;
-  onSectionComplete: (sectionId: number) => Promise<void>;
-  onRunCode: (code: string, language: string) => Promise<{ stdout: string; stderr: string; success: boolean }>;
+  tutorial: TutorialData
+  onSectionComplete: (sectionId: number) => Promise<void>
+  onRunCode: (
+    code: string,
+    language: string
+  ) => Promise<{ stdout: string; stderr: string; success: boolean }>
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -71,9 +74,9 @@ function SectionNav({
   activeId,
   onSelect,
 }: {
-  sections: TutorialSection[];
-  activeId: number;
-  onSelect: (id: number) => void;
+  sections: TutorialSection[]
+  activeId: number
+  onSelect: (id: number) => void
 }) {
   return (
     <nav className="flex flex-col gap-1 p-4">
@@ -82,10 +85,10 @@ function SectionNav({
           key={s.id}
           onClick={() => onSelect(s.id)}
           className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-left transition-all duration-150',
+            'flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-150',
             s.id === activeId
-              ? 'bg-blue-50 text-blue-700 font-medium dark:bg-blue-950 dark:text-blue-300'
-              : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800',
+              ? 'bg-blue-50 font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+              : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
           )}
         >
           <span className="flex-shrink-0">
@@ -97,7 +100,7 @@ function SectionNav({
                   'flex h-4 w-4 items-center justify-center rounded-full border-2 text-[10px] font-bold',
                   s.id === activeId
                     ? 'border-blue-600 text-primary'
-                    : 'border-gray-300 text-gray-400',
+                    : 'border-gray-300 text-gray-400'
                 )}
               >
                 {s.sectionOrder}
@@ -109,7 +112,7 @@ function SectionNav({
         </button>
       ))}
     </nav>
-  );
+  )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -122,23 +125,23 @@ export default function TutorialLayout({
   onRunCode,
 }: TutorialLayoutProps) {
   const [activeSectionId, setActiveSectionId] = useState(
-    tutorial.sections.find((s) => !s.completed)?.id ?? tutorial.sections[0]?.id,
-  );
-  const [activeTab, setActiveTab] = useState<'content' | 'code' | 'exercise'>('content');
+    tutorial.sections.find((s) => !s.completed)?.id ?? tutorial.sections[0]?.id
+  )
+  const [activeTab, setActiveTab] = useState<'content' | 'code' | 'exercise'>('content')
 
-  const activeSection = tutorial.sections.find((s) => s.id === activeSectionId);
+  const activeSection = tutorial.sections.find((s) => s.id === activeSectionId)
 
   const handleSectionComplete = useCallback(async () => {
-    if (!activeSectionId) return;
-    await onSectionComplete(activeSectionId);
+    if (!activeSectionId) return
+    await onSectionComplete(activeSectionId)
 
     // Auto-advance to next section
-    const currentIndex = tutorial.sections.findIndex((s) => s.id === activeSectionId);
-    const next = tutorial.sections[currentIndex + 1];
-    if (next) setActiveSectionId(next.id);
-  }, [activeSectionId, tutorial.sections, onSectionComplete]);
+    const currentIndex = tutorial.sections.findIndex((s) => s.id === activeSectionId)
+    const next = tutorial.sections[currentIndex + 1]
+    if (next) setActiveSectionId(next.id)
+  }, [activeSectionId, tutorial.sections, onSectionComplete])
 
-  if (!activeSection) return null;
+  if (!activeSection) return null
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white dark:bg-gray-950">
@@ -176,11 +179,11 @@ export default function TutorialLayout({
         {/* CENTER: Content */}
         <main className="flex flex-1 flex-col overflow-hidden">
           {/* Mobile tab switcher */}
-          <div className="flex border-b border-gray-200 md:hidden dark:border-gray-800">
+          <div className="flex border-b border-gray-200 dark:border-gray-800 md:hidden">
             {[
-              { key: 'content',  icon: BookOpen,  label: 'Read'     },
-              { key: 'code',     icon: Code2,     label: 'Code'     },
-              { key: 'exercise', icon: Terminal,  label: 'Practice' },
+              { key: 'content', icon: BookOpen, label: 'Read' },
+              { key: 'code', icon: Code2, label: 'Code' },
+              { key: 'exercise', icon: Terminal, label: 'Practice' },
             ].map(({ key, icon: Icon, label }) => (
               <button
                 key={key}
@@ -189,7 +192,7 @@ export default function TutorialLayout({
                   'flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-medium transition-colors',
                   activeTab === key
                     ? 'border-b-2 border-blue-600 text-primary'
-                    : 'text-gray-500 hover:text-gray-700',
+                    : 'text-gray-500 hover:text-gray-700'
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -202,26 +205,25 @@ export default function TutorialLayout({
           <div className="flex flex-1 overflow-hidden">
             {/* Content panel */}
             <div
-              className={cn(
-                'flex-1 overflow-y-auto',
-                activeTab !== 'content' && 'hidden md:block',
-              )}
+              className={cn('flex-1 overflow-y-auto', activeTab !== 'content' && 'hidden md:block')}
             >
-              <ContentViewer
-                section={activeSection}
-                onComplete={handleSectionComplete}
-              />
+              <ContentViewer section={activeSection} onComplete={handleSectionComplete} />
             </div>
 
             {/* Code + Exercise panel (desktop right split) */}
             <div
               className={cn(
                 'flex w-[45%] flex-col border-l border-gray-200 dark:border-gray-800',
-                activeTab === 'content' && 'hidden md:flex',
+                activeTab === 'content' && 'hidden md:flex'
               )}
             >
               {/* Code playground */}
-              <div className={cn('flex-1 overflow-hidden', activeTab === 'exercise' && 'hidden md:flex md:flex-col')}>
+              <div
+                className={cn(
+                  'flex-1 overflow-hidden',
+                  activeTab === 'exercise' && 'hidden md:flex md:flex-col'
+                )}
+              >
                 <CodePlayground
                   starterCode={activeSection.starterCode ?? ''}
                   language={activeSection.language ?? 'python'}
@@ -234,7 +236,7 @@ export default function TutorialLayout({
                 <div
                   className={cn(
                     'border-t border-gray-200 dark:border-gray-800',
-                    activeTab === 'code' && 'hidden md:block',
+                    activeTab === 'code' && 'hidden md:block'
                   )}
                 >
                   <ExercisePanel
@@ -252,5 +254,5 @@ export default function TutorialLayout({
         </main>
       </div>
     </div>
-  );
+  )
 }

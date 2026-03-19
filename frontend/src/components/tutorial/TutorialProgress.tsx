@@ -1,17 +1,22 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from 'react'
+import { Zap } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface TutorialProgressProps {
-  completed: number;
-  total: number;
-  percent: number;
-  xpReward: number;
+  completed: number
+  total: number
+  percent: number
+  xpReward: number
 }
 
-export default function TutorialProgress({ completed, total, percent, xpReward }: TutorialProgressProps) {
+export default function TutorialProgress({
+  completed,
+  total,
+  percent,
+  xpReward,
+}: TutorialProgressProps) {
   return (
     <div className="flex items-center gap-4">
       {/* XP badge */}
@@ -26,15 +31,15 @@ export default function TutorialProgress({ completed, total, percent, xpReward }
           <div
             className={cn(
               'h-full rounded-full transition-all duration-500',
-              percent === 100 ? 'bg-primary' : 'bg-blue-500',
+              percent === 100 ? 'bg-primary' : 'bg-blue-500'
             )}
             style={{ width: `${percent}%` }}
           />
         </div>
-        <span className="text-xs text-gray-500 tabular-nums">
+        <span className="text-xs tabular-nums text-gray-500">
           {completed}/{total}
         </span>
       </div>
     </div>
-  );
+  )
 }

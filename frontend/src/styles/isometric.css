@@ -7,11 +7,25 @@
 }
 
 .isometric-grid {
-  background-image: 
-    linear-gradient(45deg, transparent 40%, rgba(59, 130, 246, 0.1) 40%, rgba(59, 130, 246, 0.1) 60%, transparent 60%),
-    linear-gradient(-45deg, transparent 40%, rgba(59, 130, 246, 0.1) 40%, rgba(59, 130, 246, 0.1) 60%, transparent 60%);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 40%,
+      rgba(59, 130, 246, 0.1) 40%,
+      rgba(59, 130, 246, 0.1) 60%,
+      transparent 60%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 40%,
+      rgba(59, 130, 246, 0.1) 40%,
+      rgba(59, 130, 246, 0.1) 60%,
+      transparent 60%
+    );
   background-size: 60px 60px;
-  background-position: 0 0, 30px 30px;
+  background-position:
+    0 0,
+    30px 30px;
   will-change: transform;
 }
 
@@ -41,14 +55,27 @@
   will-change: transform;
 }
 
-.isometric-building:nth-child(1) { animation-delay: 0s; }
-.isometric-building:nth-child(2) { animation-delay: 0.5s; }
-.isometric-building:nth-child(3) { animation-delay: 1s; }
-.isometric-building:nth-child(4) { animation-delay: 1.5s; }
+.isometric-building:nth-child(1) {
+  animation-delay: 0s;
+}
+.isometric-building:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.isometric-building:nth-child(3) {
+  animation-delay: 1s;
+}
+.isometric-building:nth-child(4) {
+  animation-delay: 1.5s;
+}
 
 @keyframes iso-building-float {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50% { transform: translateY(-8px) translateZ(0); }
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(-8px) translateZ(0);
+  }
 }
 
 @keyframes iso-building-entrance {
@@ -100,7 +127,8 @@
 }
 
 @keyframes iso-badge-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   25% {
@@ -115,9 +143,15 @@
 }
 
 @keyframes iso-grid-shimmer {
-  0% { opacity: 0.04; }
-  50% { opacity: 0.08; }
-  100% { opacity: 0.04; }
+  0% {
+    opacity: 0.04;
+  }
+  50% {
+    opacity: 0.08;
+  }
+  100% {
+    opacity: 0.04;
+  }
 }
 
 .iso-building-enter {

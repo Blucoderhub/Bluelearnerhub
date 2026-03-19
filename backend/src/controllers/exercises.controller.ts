@@ -66,14 +66,14 @@ export const listExercises = async (req: Request, res: Response) => {
 
     // Apply search filter in memory (small result sets expected)
     const filtered = search
-      ? rows.filter((r) =>
+      ? rows.filter((r: any) =>
           r.title.toLowerCase().includes(search.toLowerCase()) ||
           r.specializationName.toLowerCase().includes(search.toLowerCase()) ||
           r.domainName.toLowerCase().includes(search.toLowerCase())
         )
       : rows;
 
-    const exercises = filtered.map((r) => ({
+    const exercises = filtered.map((r: any) => ({
       id:          String(r.id),
       title:       r.title,
       domain:      r.domainName,

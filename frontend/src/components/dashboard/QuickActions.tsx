@@ -26,7 +26,7 @@ const colorClasses = {
 
 export default function QuickActions({ actions }: QuickActionsProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
       {actions.map((action, idx) => (
         <motion.div
           key={idx}
@@ -35,8 +35,12 @@ export default function QuickActions({ actions }: QuickActionsProps) {
           transition={{ delay: idx * 0.1 }}
         >
           <Link href={action.href}>
-            <button className={`w-full p-6 rounded-2xl border font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-black/5 ${colorClasses[action.color]}`}>
-              <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">{action.icon}</div>
+            <button
+              className={`w-full transform rounded-2xl border p-6 font-bold shadow-lg shadow-black/5 transition-all hover:scale-105 active:scale-95 ${colorClasses[action.color]}`}
+            >
+              <div className="mb-3 text-3xl transition-transform group-hover:scale-110">
+                {action.icon}
+              </div>
               <div className="text-sm tracking-tight">{action.label}</div>
             </button>
           </Link>

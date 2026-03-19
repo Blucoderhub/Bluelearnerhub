@@ -10,10 +10,10 @@ import { Calculator } from 'lucide-react'
 
 export default function EngineeringCalculator() {
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <Card className="p-6 bg-gray-800 border-gray-700">
-        <div className="flex items-center gap-2 mb-6">
-          <Calculator className="w-6 h-6 text-blue-400" />
+    <div className="mx-auto max-w-4xl p-4">
+      <Card className="border-gray-700 bg-gray-800 p-6">
+        <div className="mb-6 flex items-center gap-2">
+          <Calculator className="h-6 w-6 text-blue-400" />
           <h2 className="text-2xl font-bold text-white">Engineering Calculator</h2>
         </div>
 
@@ -84,7 +84,7 @@ function BeamCalculator() {
   }
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="mt-4 space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label className="text-white">Beam Length (m)</Label>
@@ -93,7 +93,7 @@ function BeamCalculator() {
             value={length}
             onChange={(e) => setLength(e.target.value)}
             placeholder="e.g., 5"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -103,7 +103,7 @@ function BeamCalculator() {
             value={load}
             onChange={(e) => setLoad(e.target.value)}
             placeholder="e.g., 1000"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -113,7 +113,7 @@ function BeamCalculator() {
             value={width}
             onChange={(e) => setWidth(e.target.value)}
             placeholder="e.g., 0.1"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -123,7 +123,7 @@ function BeamCalculator() {
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             placeholder="e.g., 0.2"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
       </div>
@@ -134,11 +134,14 @@ function BeamCalculator() {
 
       {result && (
         <div className="mt-6 space-y-2">
-          <h3 className="font-semibold text-white mb-3">Results:</h3>
+          <h3 className="mb-3 font-semibold text-white">Results:</h3>
           <ResultRow label="Maximum Moment" value={`${result.moment.toFixed(2)} N·m`} />
           <ResultRow label="Maximum Stress" value={`${(result.stress / 1e6).toFixed(2)} MPa`} />
           <ResultRow label="Maximum Deflection" value={`${result.deflection.toFixed(4)} mm`} />
-          <ResultRow label="Moment of Inertia" value={`${result.momentOfInertia.toExponential(3)} m⁴`} />
+          <ResultRow
+            label="Moment of Inertia"
+            value={`${result.momentOfInertia.toExponential(3)} m⁴`}
+          />
         </div>
       )}
     </div>
@@ -165,7 +168,7 @@ function StressCalculator() {
   }
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="mt-4 space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label className="text-white">Force (N)</Label>
@@ -174,7 +177,7 @@ function StressCalculator() {
             value={force}
             onChange={(e) => setForce(e.target.value)}
             placeholder="e.g., 50000"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -184,7 +187,7 @@ function StressCalculator() {
             value={area}
             onChange={(e) => setArea(e.target.value)}
             placeholder="e.g., 0.01"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
       </div>
@@ -195,7 +198,7 @@ function StressCalculator() {
 
       {result && (
         <div className="mt-6 space-y-2">
-          <h3 className="font-semibold text-white mb-3">Results:</h3>
+          <h3 className="mb-3 font-semibold text-white">Results:</h3>
           <ResultRow label="Stress" value={`${result.stress.toFixed(2)} Pa`} />
           <ResultRow label="Stress (MPa)" value={`${result.stressMPa.toFixed(2)} MPa`} />
         </div>
@@ -230,7 +233,7 @@ function ThermalCalculator() {
   }
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="mt-4 space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label className="text-white">Thermal Conductivity (W/m·K)</Label>
@@ -239,7 +242,7 @@ function ThermalCalculator() {
             value={k}
             onChange={(e) => setK(e.target.value)}
             placeholder="e.g., 401 (Copper)"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -249,7 +252,7 @@ function ThermalCalculator() {
             value={A}
             onChange={(e) => setA(e.target.value)}
             placeholder="e.g., 0.5"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -259,7 +262,7 @@ function ThermalCalculator() {
             value={deltaT}
             onChange={(e) => setDeltaT(e.target.value)}
             placeholder="e.g., 50"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -269,7 +272,7 @@ function ThermalCalculator() {
             value={L}
             onChange={(e) => setL(e.target.value)}
             placeholder="e.g., 0.05"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
       </div>
@@ -280,7 +283,7 @@ function ThermalCalculator() {
 
       {result && (
         <div className="mt-6 space-y-2">
-          <h3 className="font-semibold text-white mb-3">Results:</h3>
+          <h3 className="mb-3 font-semibold text-white">Results:</h3>
           <ResultRow label="Heat Transfer Rate" value={`${result.heatTransfer.toFixed(2)} W`} />
         </div>
       )}
@@ -316,7 +319,7 @@ function FluidCalculator() {
   }
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="mt-4 space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label className="text-white">Density (kg/m³)</Label>
@@ -325,7 +328,7 @@ function FluidCalculator() {
             value={rho}
             onChange={(e) => setRho(e.target.value)}
             placeholder="e.g., 1000 (Water)"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div>
@@ -335,7 +338,7 @@ function FluidCalculator() {
             value={v}
             onChange={(e) => setV(e.target.value)}
             placeholder="e.g., 5"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
         <div className="col-span-2">
@@ -345,7 +348,7 @@ function FluidCalculator() {
             value={h}
             onChange={(e) => setH(e.target.value)}
             placeholder="e.g., 10"
-            className="bg-gray-900 border-gray-600 text-white"
+            className="border-gray-600 bg-gray-900 text-white"
           />
         </div>
       </div>
@@ -356,7 +359,7 @@ function FluidCalculator() {
 
       {result && (
         <div className="mt-6 space-y-2">
-          <h3 className="font-semibold text-white mb-3">Results:</h3>
+          <h3 className="mb-3 font-semibold text-white">Results:</h3>
           <ResultRow label="Dynamic Pressure" value={`${result.dynamicPressure.toFixed(2)} Pa`} />
           <ResultRow label="Static Pressure" value={`${result.staticPressure.toFixed(2)} Pa`} />
           <ResultRow label="Total Pressure" value={`${result.totalPressure.toFixed(2)} Pa`} />
@@ -368,9 +371,9 @@ function FluidCalculator() {
 
 function ResultRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between items-center p-3 bg-gray-900 rounded">
+    <div className="flex items-center justify-between rounded bg-gray-900 p-3">
       <span className="text-gray-400">{label}</span>
-      <span className="font-mono text-white font-semibold">{value}</span>
+      <span className="font-mono font-semibold text-white">{value}</span>
     </div>
   )
 }

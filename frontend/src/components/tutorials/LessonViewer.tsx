@@ -43,28 +43,24 @@ export default function LessonViewer({
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       {/* Left Panel - Content */}
-      <div className={`${showCodeEditor ? 'w-1/2' : 'w-full'} overflow-y-auto bg-white dark:bg-gray-900 transition-all`}>
+      <div
+        className={`${showCodeEditor ? 'w-1/2' : 'w-full'} overflow-y-auto bg-white transition-all dark:bg-gray-900`}
+      >
         <div className="p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              {lesson.title}
-            </h1>
-            
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{lesson.title}</h1>
+
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onBookmark}
-              >
+              <Button variant="outline" size="sm" onClick={onBookmark}>
                 {isBookmarked ? (
                   <>
-                    <BookmarkCheck className="w-4 h-4 mr-1" />
+                    <BookmarkCheck className="mr-1 h-4 w-4" />
                     Bookmarked
                   </>
                 ) : (
                   <>
-                    <BookmarkPlus className="w-4 h-4 mr-1" />
+                    <BookmarkPlus className="mr-1 h-4 w-4" />
                     Bookmark
                   </>
                 )}
@@ -75,7 +71,7 @@ export default function LessonViewer({
                 size="sm"
                 onClick={() => setShowCodeEditor(!showCodeEditor)}
               >
-                <Code className="w-4 h-4 mr-1" />
+                <Code className="mr-1 h-4 w-4" />
                 {showCodeEditor ? 'Hide' : 'Show'} Editor
               </Button>
             </div>
@@ -83,30 +79,25 @@ export default function LessonViewer({
 
           {/* Video (if available) */}
           {lesson.videoUrl && (
-            <div className="mb-8 aspect-video bg-black rounded-lg overflow-hidden">
-              <iframe
-                src={lesson.videoUrl}
-                className="w-full h-full"
-                allowFullScreen
-              />
+            <div className="mb-8 aspect-video overflow-hidden rounded-lg bg-black">
+              <iframe src={lesson.videoUrl} className="h-full w-full" allowFullScreen />
             </div>
           )}
 
           {/* Content */}
           <article className="prose prose-lg dark:prose-invert max-w-none">
-            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-              {lesson.content}
-            </ReactMarkdown>
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{lesson.content}</ReactMarkdown>
           </article>
 
           {/* Code Examples with Try It Yourself */}
           {lesson.codeExamples && lesson.codeExamples.length > 0 && (
             <div className="mt-8 space-y-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Try It Yourself
-              </h2>
-              
-              <Tabs value={activeCodeExample.toString()} onValueChange={(v) => setActiveCodeExample(parseInt(v))}>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Try It Yourself</h2>
+
+              <Tabs
+                value={activeCodeExample.toString()}
+                onValueChange={(v) => setActiveCodeExample(parseInt(v))}
+              >
                 <TabsList>
                   {lesson.codeExamples.map((example, index) => (
                     <TabsTrigger key={index} value={index.toString()}>
@@ -117,19 +108,14 @@ export default function LessonViewer({
 
                 {lesson.codeExamples.map((example, index) => (
                   <TabsContent key={index} value={index.toString()}>
-                    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-                      <pre className="text-sm overflow-x-auto">
-                        <code className={`language-${example.language}`}>
-                          {example.code}
-                        </code>
+                    <div className="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+                      <pre className="overflow-x-auto text-sm">
+                        <code className={`language-${example.language}`}>{example.code}</code>
                       </pre>
-                      
+
                       {example.editable && (
-                        <Button
-                          className="mt-4"
-                          onClick={() => setShowCodeEditor(true)}
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
+                        <Button className="mt-4" onClick={() => setShowCodeEditor(true)}>
+                          <Eye className="mr-1 h-4 w-4" />
                           Open in Editor
                         </Button>
                       )}
@@ -141,11 +127,11 @@ export default function LessonViewer({
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+          <div className="mt-12 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-gray-800">
             {previousLesson ? (
               <Button variant="outline" asChild>
                 <a href={`/tutorials/lesson/${previousLesson.id}`}>
-                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  <ChevronLeft className="mr-1 h-4 w-4" />
                   Previous: {previousLesson.title}
                 </a>
               </Button>
@@ -153,15 +139,13 @@ export default function LessonViewer({
               <div />
             )}
 
-            <Button onClick={onComplete}>
-              Mark as Complete
-            </Button>
+            <Button onClick={onComplete}>Mark as Complete</Button>
 
             {nextLesson ? (
               <Button asChild>
                 <a href={`/tutorials/lesson/${nextLesson.id}`}>
                   Next: {nextLesson.title}
-                  <ChevronRight className="w-4 h-4 ml-1" />
+                  <ChevronRight className="ml-1 h-4 w-4" />
                 </a>
               </Button>
             ) : (

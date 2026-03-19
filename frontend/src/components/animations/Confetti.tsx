@@ -16,8 +16,14 @@ interface ConfettiPiece {
 }
 
 const CONFETTI_COLORS = [
-  '#fbbf24', '#60a5fa', '#f472b6', '#60a5fa',
-  '#a78bfa', '#fb923c', '#22d3ee', '#e879f9',
+  '#fbbf24',
+  '#60a5fa',
+  '#f472b6',
+  '#60a5fa',
+  '#a78bfa',
+  '#fb923c',
+  '#22d3ee',
+  '#e879f9',
 ]
 
 function generatePieces(count: number): ConfettiPiece[] {
@@ -56,7 +62,7 @@ export default function Confetti({ active, duration = 3000, count = 40 }: Confet
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-[100] overflow-hidden">
       <AnimatePresence>
         {pieces.map((piece) => (
           <motion.div

@@ -6,12 +6,12 @@ import { consumeCredit } from '../middleware/credits';
 export const chat = async (req: Request, res: Response) => {
     try {
         const { message, context, persona = 'tutor' } = req.body;
-        const user = req.user;
+        const user = req.user as any;
 
         // Enrich context with user data
         const enrichedContext = {
             ...context,
-            userName: user.full_name,
+            userName: user.fullName,
             domain: user.domain,
             level: user.level
         };
@@ -68,7 +68,7 @@ export const submitQuiz = async (req: Request, res: Response) => {
 export const reviewProject = async (req: Request, res: Response) => {
     try {
         const { projectContent, domain, persona = 'technical' } = req.body;
-        const user = req.user;
+        const user = req.user as any;
 
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
@@ -77,7 +77,7 @@ export const reviewProject = async (req: Request, res: Response) => {
         const prompt = `Review this project in the ${domain} domain. Focus on technical depth, design choices, and industry-readiness. Content: ${projectContent}`;
 
         const stream = await aiService.chatAssistantStream(prompt, {
-            userName: user.full_name,
+            userName: user.fullName,
             domain,
             level: user.level,
             path: '/project/review'
@@ -104,14 +104,14 @@ export const reviewProject = async (req: Request, res: Response) => {
 
 export const getRecommendations = async (req: Request, res: Response) => {
     try {
-        const user = req.user;
+        const user = req.user as any;
 
         // In a real app, this would query the DB for user's skills and performance
         // For now, we'll use the AI to generate tailored recommendations
         const recommendationPrompt = `Based on my current domain: ${user.domain} and level: ${user.level}, what are 3 specific projects or courses I should tackle next to maximize my industry-readiness? Respond with a JSON array of strings.`;
 
         const responseText = await aiService.chatAssistant(recommendationPrompt, {
-            userName: user.full_name,
+            userName: user.fullName,
             domain: user.domain,
             level: user.level
         });
@@ -139,7 +139,7 @@ export const getHackathonHelp = async (req: Request, res: Response) => {
         res.json({ help });
 
         // Consume credit
-        const user = req.user;
+        const user = req.user as any;
         await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
     } catch (error) {
         res.status(500).json({ error: 'Hackathon AI help failed' });

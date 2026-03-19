@@ -31,7 +31,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
           // Report to analytics/monitoring service
           if (typeof window !== 'undefined' && (window as any).gtag) {
-            (window as any).gtag('event', 'exception', {
+            ;(window as any).gtag('event', 'exception', {
               description: error.toString(),
               fatal: true,
             })
@@ -43,16 +43,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <ThemeProvider
               attribute="class"
               defaultTheme="dark"
-              enableSystem
+              enableSystem={false}
               disableTransitionOnChange
             >
               <ErrorBoundary name="Theme Provider" level="section">
                 {children}
-                <Toaster
-                  position="top-right"
-                  theme="dark"
-                  richColors
-                />
+                <Toaster position="top-right" theme="dark" richColors />
               </ErrorBoundary>
             </ThemeProvider>
           </ErrorBoundary>

@@ -3,7 +3,12 @@ export { default as UniversalSearch } from './UniversalSearch'
 export { default as LoadingSpinner } from './LoadingSpinner'
 export { LoadingSkeleton, CardSkeleton, TableSkeleton } from './LoadingSkeleton'
 export { default as EmptyState } from './EmptyState'
-export { default as ErrorBoundary, PageErrorBoundary, SectionErrorBoundary, ComponentErrorBoundary } from './ErrorBoundary'
+export {
+  default as ErrorBoundary,
+  PageErrorBoundary,
+  SectionErrorBoundary,
+  ComponentErrorBoundary,
+} from './ErrorBoundary'
 export { default as Pagination } from './Pagination'
 export { default as Breadcrumbs } from './Breadcrumbs'
 export { default as ConfirmDialog } from './ConfirmDialog'

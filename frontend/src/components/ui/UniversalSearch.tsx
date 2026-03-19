@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, X, TrendingUp, Clock, BookOpen, Code, Trophy, Briefcase, GraduationCap } from 'lucide-react'
+import {
+  Search,
+  X,
+  TrendingUp,
+  Clock,
+  BookOpen,
+  Code,
+  Trophy,
+  Briefcase,
+  GraduationCap,
+} from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -128,7 +138,7 @@ export default function UniversalSearch() {
 
   const handleSelect = (result: SearchResult) => {
     // Add to recent searches
-    const updated = [result.title, ...recentSearches.filter(s => s !== result.title)].slice(0, 5)
+    const updated = [result.title, ...recentSearches.filter((s) => s !== result.title)].slice(0, 5)
     setRecentSearches(updated)
     localStorage.setItem('recentSearches', JSON.stringify(updated))
 
@@ -154,7 +164,7 @@ export default function UniversalSearch() {
       question: Search,
     }
     const Icon = icons[type]
-    return <Icon className="w-4 h-4" />
+    return <Icon className="h-4 w-4" />
   }
 
   const getTypeColor = (type: SearchResult['type']) => {
@@ -174,7 +184,7 @@ export default function UniversalSearch() {
     <div ref={searchRef} className="relative w-full max-w-2xl">
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
         <Input
           type="search"
           placeholder="Search tutorials, courses, problems, hackathons..."
@@ -182,16 +192,16 @@ export default function UniversalSearch() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
           className={cn(
-            'w-full pl-10 pr-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500',
+            'w-full border-gray-700 bg-gray-800 pl-10 pr-10 text-white placeholder:text-gray-500',
             isOpen && 'ring-2 ring-blue-500'
           )}
         />
         {query && (
           <button
             onClick={() => setQuery('')}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+            className="absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400 hover:text-white"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
           </button>
         )}
       </div>
@@ -203,19 +213,19 @@ export default function UniversalSearch() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto"
+            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-96 overflow-y-auto rounded-lg border border-gray-700 bg-gray-800 shadow-xl"
           >
             {/* Loading */}
             {isLoading && (
               <div className="p-4 text-center text-gray-400">
-                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                <div className="inline-block h-6 w-6 animate-spin rounded-full border-b-2 border-blue-500"></div>
               </div>
             )}
 
             {/* No Results */}
             {!isLoading && query.length > 2 && results.length === 0 && (
               <div className="p-4 text-center text-gray-400">
-                <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <Search className="mx-auto mb-2 h-8 w-8 opacity-50" />
                 <p>No results found for &quot;{query}&quot;</p>
               </div>
             )}
@@ -227,31 +237,23 @@ export default function UniversalSearch() {
                   <button
                     key={result.id}
                     onClick={() => handleSelect(result)}
-                    className="w-full text-left p-3 rounded-lg hover:bg-gray-700 transition-colors"
+                    className="w-full rounded-lg p-3 text-left transition-colors hover:bg-gray-700"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={cn('p-2 rounded-lg', getTypeColor(result.type))}>
+                      <div className={cn('rounded-lg p-2', getTypeColor(result.type))}>
                         {getTypeIcon(result.type)}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-white truncate">
-                          {result.title}
-                        </h4>
-                        <p className="text-sm text-gray-400 line-clamp-2">
-                          {result.description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-2">
+                      <div className="min-w-0 flex-1">
+                        <h4 className="truncate font-medium text-white">{result.title}</h4>
+                        <p className="line-clamp-2 text-sm text-gray-400">{result.description}</p>
+                        <div className="mt-2 flex items-center gap-2">
                           {result.domain && (
                             <Badge variant="secondary" className="text-xs">
                               {result.domain}
                             </Badge>
                           )}
                           {result.tags?.slice(0, 2).map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="text-xs border-gray-600"
-                            >
+                            <Badge key={tag} variant="outline" className="border-gray-600 text-xs">
                               {tag}
                             </Badge>
                           ))}
@@ -265,10 +267,10 @@ export default function UniversalSearch() {
 
             {/* Recent Searches */}
             {!query && recentSearches.length > 0 && (
-              <div className="p-4 border-t border-gray-700">
-                <div className="flex items-center justify-between mb-3">
+              <div className="border-t border-gray-700 p-4">
+                <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-400" />
+                    <Clock className="h-4 w-4 text-gray-400" />
                     <span className="text-sm font-medium text-gray-300">Recent</span>
                   </div>
                   <button
@@ -283,7 +285,7 @@ export default function UniversalSearch() {
                     <button
                       key={index}
                       onClick={() => setQuery(search)}
-                      className="block w-full text-left text-sm text-gray-400 hover:text-white p-2 rounded hover:bg-gray-700"
+                      className="block w-full rounded p-2 text-left text-sm text-gray-400 hover:bg-gray-700 hover:text-white"
                     >
                       {search}
                     </button>
@@ -294,9 +296,9 @@ export default function UniversalSearch() {
 
             {/* Popular/Trending */}
             {!query && (
-              <div className="p-4 border-t border-gray-700">
-                <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-4 h-4 text-gray-400" />
+              <div className="border-t border-gray-700 p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-gray-400" />
                   <span className="text-sm font-medium text-gray-300">Trending</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -310,7 +312,7 @@ export default function UniversalSearch() {
                     <button
                       key={trend}
                       onClick={() => setQuery(trend)}
-                      className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded-full hover:bg-gray-600"
+                      className="rounded-full bg-gray-700 px-3 py-1 text-xs text-gray-300 hover:bg-gray-600"
                     >
                       {trend}
                     </button>

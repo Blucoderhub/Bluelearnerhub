@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { randomBytes, createHash } from 'crypto';
-import { AuthService } from '@/services/auth';
-import { UserModel } from '@/models/user';
-import { pool } from '@/utils/database';
-import logger from '@/utils/logger';
-import { config } from '@/config';
-import { sendEmail, buildPasswordResetEmail } from '@/utils/email';
+import { AuthService } from '../services/auth';
+import { UserModel } from '../models/user';
+import { pool } from '../utils/database';
+import logger from '../utils/logger';
+import { config } from '../config';
+import { sendEmail, buildPasswordResetEmail } from '../utils/email';
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 

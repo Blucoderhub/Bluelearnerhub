@@ -19,7 +19,7 @@ import { Request, Response } from 'express';
 import { readFile } from 'node:fs/promises';
 import axios from 'axios';
 import { eq, and, desc, sql } from 'drizzle-orm';
-import { db } from '@/db';
+import { db } from '../db';
 import {
   notebooks,
   notebookSources,
@@ -27,9 +27,9 @@ import {
   notebookGenerations,
   notebookSourceAnnotations,
   notebookBehaviorEvents,
-} from '@/db/schema-v2';
-import { config } from '@/config';
-import logger from '@/utils/logger';
+} from '../db/schema-v2';
+import { config } from '../config';
+import logger from '../utils/logger';
 
 const AI_SERVICE = () => process.env.AI_SERVICE_URL || config.aiServiceUrl || 'http://localhost:8000';
 const AI_REQUEST_TIMEOUT_MS = Number.parseInt(process.env.NOTEBOOK_AI_TIMEOUT_MS || '20000', 10);
@@ -315,8 +315,8 @@ export const getAdaptiveGuidance = async (req: Request, res: Response) => {
     ]);
 
     const totalMessages = Array.isArray(chatRows[0]?.messages) ? chatRows[0].messages.length : 0;
-    const readySources = sources.filter((s) => s.status === 'ready').length;
-    const unresolvedErrors = recentEvents.filter((e) => String(e.eventType).toLowerCase().includes('error')).length;
+    const readySources = sources.filter((s: any) => s.status === 'ready').length;
+    const unresolvedErrors = recentEvents.filter((e: any) => String(e.eventType).toLowerCase().includes('error')).length;
 
     const snapshot = {
       sourceCount: sources.length,
@@ -334,7 +334,7 @@ export const getAdaptiveGuidance = async (req: Request, res: Response) => {
         target_id: notebookId,
         target_title: notebook.title,
         metrics: snapshot,
-        events: recentEvents.map((event) => ({
+        events: recentEvents.map((event: any) => ({
           event_type: event.eventType,
           event_payload: event.eventPayload,
           created_at: event.createdAt,

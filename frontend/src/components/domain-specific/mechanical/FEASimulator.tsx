@@ -73,7 +73,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
       color: 0x2563eb,
       vertexColors: true,
     })
-    
+
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
     meshRef.current = mesh
@@ -104,18 +104,18 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     if (!isSimulating || !meshRef.current) return
 
     const interval = setInterval(() => {
-      setSimulationTime(prev => {
+      setSimulationTime((prev) => {
         const newTime = prev + 0.1
-        
+
         // Update stress visualization
         const geometry = meshRef.current!.geometry as THREE.BoxGeometry
         updateStressColors(geometry, newTime, loadValue[0])
-        
+
         // Calculate results
         const maxStress = calculateMaxStress(loadValue[0])
         const maxDisplacement = calculateMaxDisplacement(loadValue[0])
         const safetyFactor = calculateSafetyFactor(maxStress)
-        
+
         setResults({
           maxStress,
           maxDisplacement,
@@ -132,23 +132,19 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     return () => clearInterval(interval)
   }, [isSimulating, loadValue])
 
-  const updateStressColors = (
-    geometry: THREE.BoxGeometry,
-    time: number,
-    load: number = 0
-  ) => {
+  const updateStressColors = (geometry: THREE.BoxGeometry, time: number, load: number = 0) => {
     const positions = geometry.attributes.position
     const colors = new Float32Array(positions.count * 3)
 
     for (let i = 0; i < positions.count; i++) {
       const x = positions.getX(i)
-      
+
       // Stress increases from left (fixed) to right (loaded)
-      const stressLevel = (x + 2) / 4 * (load / 100)
-      
+      const stressLevel = ((x + 2) / 4) * (load / 100)
+
       // Color gradient: blue (low stress) -> yellow -> red (high stress)
       let r, g, b
-      
+
       if (stressLevel < 0.5) {
         // Blue to yellow
         r = stressLevel * 2
@@ -176,10 +172,10 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     for (let i = 0; i < positions.count; i++) {
       const x = originalPositions.getX(i)
       const y = originalPositions.getY(i)
-      
+
       // Displacement increases from left to right
       const displacement = ((x + 2) / 4) ** 2 * (load / 100) * 0.5 * Math.sin(time)
-      
+
       positions.setY(i, y - displacement)
     }
 
@@ -191,10 +187,10 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     // σ = M*c/I where M = moment, c = distance to neutral axis, I = moment of inertia
     const length = 4 // beam length
     const force = load * 10 // applied force in N
-    const moment = force * length / 4
+    const moment = (force * length) / 4
     const c = 0.15 // half height
     const I = (0.3 * 0.3 ** 3) / 12 // moment of inertia
-    
+
     return (moment * c) / I
   }
 
@@ -205,8 +201,8 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     const force = load * 10
     const E = 200e9 // Young's modulus (steel)
     const I = (0.3 * 0.3 ** 3) / 12
-    
-    return (force * length ** 3) / (3 * E * I) * 1000 // in mm
+
+    return ((force * length ** 3) / (3 * E * I)) * 1000 // in mm
   }
 
   const calculateSafetyFactor = (maxStress: number): number => {
@@ -227,15 +223,15 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     setIsSimulating(false)
     setSimulationTime(0)
     setLoadValue([50])
-    
+
     if (meshRef.current) {
       const geometry = meshRef.current.geometry as THREE.BoxGeometry
       updateStressColors(geometry, 0, 0)
-      
+
       // Reset deformation
       const positions = geometry.attributes.position
       const count = positions.count
-      
+
       for (let i = 0; i < count; i++) {
         positions.setY(i, 0)
       }
@@ -244,15 +240,15 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 h-full">
+    <div className="flex h-full flex-col gap-4 lg:flex-row">
       {/* Viewer */}
-      <div className="flex-1 flex flex-col bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-          <span className="text-white font-semibold text-sm">FEA Simulator</span>
-          
+      <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
+          <span className="text-sm font-semibold text-white">FEA Simulator</span>
+
           <div className="flex items-center gap-2">
             <Select value={analysisType} onValueChange={setAnalysisType}>
-              <SelectTrigger className="w-32 bg-gray-700 border-gray-600 text-white">
+              <SelectTrigger className="w-32 border-gray-600 bg-gray-700 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -267,27 +263,30 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
         <div ref={containerRef} className="flex-1" style={{ height }} />
 
         {/* Legend */}
-        <div className="px-4 py-2 bg-gray-800 border-t border-gray-700">
+        <div className="border-t border-gray-700 bg-gray-800 px-4 py-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-blue-400">Low Stress</span>
-            <div className="flex-1 mx-4 h-4 rounded" style={{
-              background: 'linear-gradient(to right, #3b82f6, #eab308, #ef4444)'
-            }} />
+            <div
+              className="mx-4 h-4 flex-1 rounded"
+              style={{
+                background: 'linear-gradient(to right, #3b82f6, #eab308, #ef4444)',
+              }}
+            />
             <span className="text-red-400">High Stress</span>
           </div>
         </div>
       </div>
 
       {/* Control Panel */}
-      <Card className="w-full lg:w-80 p-4 space-y-4 bg-gray-800 border-gray-700">
+      <Card className="w-full space-y-4 border-gray-700 bg-gray-800 p-4 lg:w-80">
         <div>
-          <h3 className="font-semibold text-white mb-4">Simulation Controls</h3>
-          
+          <h3 className="mb-4 font-semibold text-white">Simulation Controls</h3>
+
           {/* Load Control */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-400">Applied Load</span>
-              <span className="text-white font-mono">{loadValue[0]} N</span>
+              <span className="font-mono text-white">{loadValue[0]} N</span>
             </div>
             <Slider
               value={loadValue}
@@ -300,73 +299,77 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
           </div>
 
           {/* Simulation Controls */}
-          <div className="flex gap-2 mt-4">
+          <div className="mt-4 flex gap-2">
             {!isSimulating ? (
               <Button onClick={handleStartSimulation} className="flex-1">
-                <Play className="w-4 h-4 mr-1" />
+                <Play className="mr-1 h-4 w-4" />
                 Start
               </Button>
             ) : (
               <Button onClick={handleStopSimulation} variant="destructive" className="flex-1">
-                <Pause className="w-4 h-4 mr-1" />
+                <Pause className="mr-1 h-4 w-4" />
                 Stop
               </Button>
             )}
-            
+
             <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="h-4 w-4" />
             </Button>
           </div>
 
           {/* Simulation Time */}
           <div className="mt-4 text-center">
             <div className="text-xs text-gray-400">Simulation Time</div>
-            <div className="text-2xl font-mono text-white">
-              {simulationTime.toFixed(1)}s
-            </div>
+            <div className="font-mono text-2xl text-white">{simulationTime.toFixed(1)}s</div>
           </div>
         </div>
 
         {/* Results */}
-        <div className="space-y-3 pt-4 border-t border-gray-700">
+        <div className="space-y-3 border-t border-gray-700 pt-4">
           <h3 className="font-semibold text-white">Analysis Results</h3>
-          
+
           <div className="space-y-2">
-            <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+            <div className="flex items-center justify-between rounded bg-gray-900 p-2">
               <span className="text-sm text-gray-400">Max Stress</span>
-              <span className="font-mono text-white">
-                {results.maxStress.toExponential(2)} Pa
-              </span>
+              <span className="font-mono text-white">{results.maxStress.toExponential(2)} Pa</span>
             </div>
-            
-            <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+
+            <div className="flex items-center justify-between rounded bg-gray-900 p-2">
               <span className="text-sm text-gray-400">Max Displacement</span>
-              <span className="font-mono text-white">
-                {results.maxDisplacement.toFixed(4)} mm
-              </span>
+              <span className="font-mono text-white">{results.maxDisplacement.toFixed(4)} mm</span>
             </div>
-            
-            <div className="flex justify-between items-center p-2 bg-gray-900 rounded">
+
+            <div className="flex items-center justify-between rounded bg-gray-900 p-2">
               <span className="text-sm text-gray-400">Safety Factor</span>
-              <span className={`font-mono ${
-                results.safetyFactor > 2 ? 'text-blue-400' : 
-                results.safetyFactor > 1 ? 'text-yellow-400' : 
-                'text-red-400'
-              }`}>
+              <span
+                className={`font-mono ${
+                  results.safetyFactor > 2
+                    ? 'text-blue-400'
+                    : results.safetyFactor > 1
+                      ? 'text-yellow-400'
+                      : 'text-red-400'
+                }`}
+              >
                 {results.safetyFactor === Infinity ? '∞' : results.safetyFactor.toFixed(2)}
               </span>
             </div>
           </div>
 
           {/* Safety Status */}
-          <div className={`p-3 rounded text-sm text-center font-semibold ${
-            results.safetyFactor > 2 ? 'bg-blue-900/30 text-blue-400' :
-            results.safetyFactor > 1 ? 'bg-yellow-900/30 text-yellow-400' :
-            'bg-red-900/30 text-red-400'
-          }`}>
-            {results.safetyFactor > 2 ? '✓ Safe Design' :
-             results.safetyFactor > 1 ? '⚠ Marginal Safety' :
-             '✗ Unsafe - Redesign Required'}
+          <div
+            className={`rounded p-3 text-center text-sm font-semibold ${
+              results.safetyFactor > 2
+                ? 'bg-blue-900/30 text-blue-400'
+                : results.safetyFactor > 1
+                  ? 'bg-yellow-900/30 text-yellow-400'
+                  : 'bg-red-900/30 text-red-400'
+            }`}
+          >
+            {results.safetyFactor > 2
+              ? '✓ Safe Design'
+              : results.safetyFactor > 1
+                ? '⚠ Marginal Safety'
+                : '✗ Unsafe - Redesign Required'}
           </div>
         </div>
       </Card>

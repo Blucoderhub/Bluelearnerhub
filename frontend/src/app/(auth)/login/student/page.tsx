@@ -1,36 +1,36 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { StudentLoginLayout } from '@/components/auth/StudentLoginLayout';
-import { StudentLoginForm } from '@/components/auth/StudentLoginForm';
+import React from 'react'
+import { StudentLoginLayout } from '@/components/auth/StudentLoginLayout'
+import { StudentLoginForm } from '@/components/auth/StudentLoginForm'
 
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
 
 export default function StudentLogin() {
-    const { login, isAuthenticated } = useAuth();
-    const router = useRouter();
-    const [error, setError] = React.useState<string | null>(null);
+  const { login, isAuthenticated } = useAuth()
+  const router = useRouter()
+  const [error, setError] = React.useState<string | null>(null)
 
-    React.useEffect(() => {
-        if (isAuthenticated) {
-            router.push("/dashboard");
-        }
-    }, [isAuthenticated, router]);
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [isAuthenticated, router])
 
-    const handleSubmit = async (data: any) => {
-        setError(null);
-        try {
-            await login(data.email, data.password);
-            router.push("/dashboard");
-        } catch (err: any) {
-            setError(err.response?.data?.message || err.message || "Failed to initialize secure session.");
-        }
-    };
+  const handleSubmit = async (data: any) => {
+    setError(null)
+    try {
+      await login(data.email, data.password)
+      router.push('/dashboard')
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
+    }
+  }
 
-    return (
-        <StudentLoginLayout>
-            <StudentLoginForm onSubmit={handleSubmit} error={error} />
-        </StudentLoginLayout>
-    );
+  return (
+    <StudentLoginLayout>
+      <StudentLoginForm onSubmit={handleSubmit} error={error} />
+    </StudentLoginLayout>
+  )
 }

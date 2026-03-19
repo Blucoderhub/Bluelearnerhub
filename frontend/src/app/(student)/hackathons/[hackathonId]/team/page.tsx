@@ -1,188 +1,265 @@
-'use client';
+'use client'
 
-import { use, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { use, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
-    Users,
-    Plus,
-    UserPlus,
-    Search,
-    Sparkles,
-    ShieldCheck,
-    ArrowRight,
-    Send,
-    Code2,
-    Briefcase,
-    Zap,
-    Info
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+  Users,
+  Plus,
+  UserPlus,
+  Search,
+  Sparkles,
+  ShieldCheck,
+  ArrowRight,
+  Send,
+  Code2,
+  Briefcase,
+  Zap,
+  Info,
+} from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
 
-export default function HackathonTeamPage({ params }: { params: Promise<{ hackathonId: string }> }) {
-    const { hackathonId } = use(params);
-    const [view, setView] = useState<'selection' | 'create' | 'match'>('selection');
-    const [teamName, setTeamName] = useState('');
+export default function HackathonTeamPage({
+  params,
+}: {
+  params: Promise<{ hackathonId: string }>
+}) {
+  const { hackathonId } = use(params)
+  const [view, setView] = useState<'selection' | 'create' | 'match'>('selection')
+  const [teamName, setTeamName] = useState('')
 
-    const potentialMatches = [
-        {
-            name: 'Elena Rodriguez',
-            domain: 'Mechanical Engineering',
-            skills: ['CAD', 'Robotics', 'FEA'],
-            matchScore: 94,
-            role: 'Hardware Lead'
-        },
-        {
-            name: 'Karan Singh',
-            domain: 'Finance / MBA',
-            skills: ['Market Analysis', 'Pitching', 'Valuation'],
-            matchScore: 88,
-            role: 'Business Strategist'
-        }
-    ];
+  const potentialMatches = [
+    {
+      name: 'Elena Rodriguez',
+      domain: 'Mechanical Engineering',
+      skills: ['CAD', 'Robotics', 'FEA'],
+      matchScore: 94,
+      role: 'Hardware Lead',
+    },
+    {
+      name: 'Karan Singh',
+      domain: 'Finance / MBA',
+      skills: ['Market Analysis', 'Pitching', 'Valuation'],
+      matchScore: 88,
+      role: 'Business Strategist',
+    },
+  ]
 
-    return (
-        <div className="max-w-4xl mx-auto space-y-8 pb-20 animate-in fade-in duration-700">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-4xl font-black italic text-white tracking-tighter">TEAM <span className="text-primary ai-glow">FORMATION</span></h1>
-                <p className="text-muted-foreground font-medium">Hackathon ID: #{hackathonId} • Build your dream squad.</p>
+  return (
+    <div className="animate-in fade-in mx-auto max-w-4xl space-y-8 pb-20 duration-700">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-4xl font-black italic tracking-tighter text-white">
+          TEAM <span className="ai-glow text-primary">FORMATION</span>
+        </h1>
+        <p className="font-medium text-muted-foreground">
+          Hackathon ID: #{hackathonId} • Build your dream squad.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <Card
+          onClick={() => setView('create')}
+          className={`cursor-pointer border-border transition-all ${view === 'create' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+        >
+          <CardHeader>
+            <Plus
+              className={`mb-2 h-8 w-8 ${view === 'create' ? 'text-primary' : 'text-muted-foreground'}`}
+            />
+            <CardTitle className="text-lg font-bold text-white">CREATE_TEAM</CardTitle>
+            <CardDescription className="text-xs">Start a new squad from scratch.</CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          onClick={() => setView('selection')}
+          className={`cursor-pointer border-border transition-all ${view === 'selection' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+        >
+          <CardHeader>
+            <UserPlus
+              className={`mb-2 h-8 w-8 ${view === 'selection' ? 'text-primary' : 'text-muted-foreground'}`}
+            />
+            <CardTitle className="text-lg font-bold text-white">JOIN_TEAM</CardTitle>
+            <CardDescription className="text-xs">Enter a secret invite code.</CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          onClick={() => setView('match')}
+          className={`cursor-pointer border-border transition-all ${view === 'match' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+        >
+          <CardHeader className="relative">
+            <Sparkles
+              className={`mb-2 h-8 w-8 ${view === 'match' ? 'text-primary' : 'text-muted-foreground'} animate-pulse`}
+            />
+            <CardTitle className="text-lg font-bold text-white">AI_MATCHMAKER</CardTitle>
+            <CardDescription className="text-xs font-bold text-primary">
+              Recommended for you.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {view === 'create' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <Card className="border-border bg-background">
+              <CardHeader>
+                <CardTitle className="text-xl font-black uppercase italic italic">
+                  Launch Squad
+                </CardTitle>
+                <CardDescription>
+                  Once created, you'll get a unique invite code for your teammates.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                    SQUAD_NAME
+                  </label>
+                  <Input
+                    value={teamName}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    placeholder="Enter a legendary team name..."
+                    className="h-12 border-border bg-card text-white"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button className="h-12 bg-primary px-10 font-black italic text-primary-foreground">
+                  INITIALIZE_TEAM
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        )}
+
+        {view === 'selection' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <Card className="border-border bg-background">
+              <CardHeader>
+                <CardTitle className="text-xl font-black uppercase italic italic">
+                  Enter Invite Code
+                </CardTitle>
+                <CardDescription>Join an existing team organized by your peers.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="E.g. BLUE-X92-2026"
+                    className="h-12 border-border bg-card font-mono uppercase text-white"
+                  />
+                  <Button className="h-12 bg-white px-8 font-black text-black hover:bg-white/90">
+                    JOIN
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {view === 'match' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="space-y-6"
+          >
+            <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-4">
+              <Sparkles className="h-6 w-6 shrink-0 text-primary" />
+              <div>
+                <h4 className="text-sm font-bold uppercase italic text-white">
+                  AI Matchmaker Active
+                </h4>
+                <p className="text-xs text-muted-foreground">
+                  Scanning for cross-disciplinary partners based on your{' '}
+                  <span className="font-bold text-primary">Computer Science</span> profile.
+                </p>
+              </div>
+              <div className="absolute bottom-0 right-0 p-2 opacity-5">
+                <ShieldCheck className="h-20 w-20 text-primary" />
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {potentialMatches.map((match, i) => (
                 <Card
-                    onClick={() => setView('create')}
-                    className={`cursor-pointer transition-all border-border ${view === 'create' ? 'bg-primary/5 border-primary ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+                  key={i}
+                  className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60"
                 >
-                    <CardHeader>
-                        <Plus className={`w-8 h-8 mb-2 ${view === 'create' ? 'text-primary' : 'text-muted-foreground'}`} />
-                        <CardTitle className="text-lg font-bold text-white">CREATE_TEAM</CardTitle>
-                        <CardDescription className="text-xs">Start a new squad from scratch.</CardDescription>
-                    </CardHeader>
+                  <div className="absolute right-0 top-0 p-4">
+                    <Badge className="border-none bg-primary/20 text-[10px] font-black italic text-primary">
+                      {match.matchScore}% MATCH
+                    </Badge>
+                  </div>
+                  <CardHeader>
+                    <div className="mb-2 h-12 w-12 rounded-full border border-border bg-secondary" />
+                    <CardTitle className="text-lg font-bold text-white">{match.name}</CardTitle>
+                    <CardDescription className="text-xs font-black uppercase text-muted-foreground">
+                      {match.domain}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {match.skills.map((s) => (
+                        <Badge
+                          key={s}
+                          variant="secondary"
+                          className="border-none bg-background text-[9px] font-black uppercase text-muted-foreground"
+                        >
+                          {s}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="rounded-lg border border-slate-800/50 bg-background/50 p-3">
+                      <p className="mb-1 text-[10px] font-black uppercase text-muted-foreground">
+                        Proposed Role
+                      </p>
+                      <p className="text-sm font-bold italic text-primary text-white">
+                        {match.role}
+                      </p>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="border-t border-border bg-background/20 p-4">
+                    <Button
+                      variant="ghost"
+                      className="w-full text-xs font-black uppercase italic tracking-widest text-muted-foreground hover:text-primary group-hover:bg-primary/5"
+                    >
+                      SEND_INVITATION <Send className="ml-2 h-3.5 w-3.5" />
+                    </Button>
+                  </CardFooter>
                 </Card>
-
-                <Card
-                    onClick={() => setView('selection')}
-                    className={`cursor-pointer transition-all border-border ${view === 'selection' ? 'bg-primary/5 border-primary ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
-                >
-                    <CardHeader>
-                        <UserPlus className={`w-8 h-8 mb-2 ${view === 'selection' ? 'text-primary' : 'text-muted-foreground'}`} />
-                        <CardTitle className="text-lg font-bold text-white">JOIN_TEAM</CardTitle>
-                        <CardDescription className="text-xs">Enter a secret invite code.</CardDescription>
-                    </CardHeader>
-                </Card>
-
-                <Card
-                    onClick={() => setView('match')}
-                    className={`cursor-pointer transition-all border-border ${view === 'match' ? 'bg-primary/5 border-primary ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
-                >
-                    <CardHeader className="relative">
-                        <Sparkles className={`w-8 h-8 mb-2 ${view === 'match' ? 'text-primary' : 'text-muted-foreground'} animate-pulse`} />
-                        <CardTitle className="text-lg font-bold text-white">AI_MATCHMAKER</CardTitle>
-                        <CardDescription className="text-xs text-primary font-bold">Recommended for you.</CardDescription>
-                    </CardHeader>
-                </Card>
+              ))}
             </div>
 
-            <AnimatePresence mode="wait">
-                {view === 'create' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                        <Card className="bg-background border-border">
-                            <CardHeader>
-                                <CardTitle className="text-xl font-black italic uppercase italic">Launch Squad</CardTitle>
-                                <CardDescription>Once created, you'll get a unique invite code for your teammates.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">SQUAD_NAME</label>
-                                    <Input
-                                        value={teamName}
-                                        onChange={(e) => setTeamName(e.target.value)}
-                                        placeholder="Enter a legendary team name..."
-                                        className="bg-card border-border text-white h-12"
-                                    />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button className="bg-primary text-primary-foreground font-black italic h-12 px-10">INITIALIZE_TEAM</Button>
-                            </CardFooter>
-                        </Card>
-                    </motion.div>
-                )}
-
-                {view === 'selection' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                        <Card className="bg-background border-border">
-                            <CardHeader>
-                                <CardTitle className="text-xl font-black italic uppercase italic">Enter Invite Code</CardTitle>
-                                <CardDescription>Join an existing team organized by your peers.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex gap-2">
-                                    <Input placeholder="E.g. BLUE-X92-2026" className="bg-card border-border text-white h-12 font-mono uppercase" />
-                                    <Button className="bg-white text-black hover:bg-white/90 h-12 px-8 font-black">JOIN</Button>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                )}
-
-                {view === 'match' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                        <div className="flex items-center gap-3 p-4 bg-primary/5 border border-primary/20 rounded-2xl relative overflow-hidden group">
-                            <Sparkles className="w-6 h-6 text-primary shrink-0" />
-                            <div>
-                                <h4 className="text-sm font-bold text-white uppercase italic">AI Matchmaker Active</h4>
-                                <p className="text-xs text-muted-foreground">Scanning for cross-disciplinary partners based on your <span className="text-primary font-bold">Computer Science</span> profile.</p>
-                            </div>
-                            <div className="absolute right-0 bottom-0 p-2 opacity-5">
-                                <ShieldCheck className="w-20 h-20 text-primary" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {potentialMatches.map((match, i) => (
-                                <Card key={i} className="bg-slate-900/40 border-border hover:bg-card/60 transition-all group overflow-hidden relative">
-                                    <div className="absolute top-0 right-0 p-4">
-                                        <Badge className="bg-primary/20 text-primary border-none text-[10px] font-black italic">
-                                            {match.matchScore}% MATCH
-                                        </Badge>
-                                    </div>
-                                    <CardHeader>
-                                        <div className="w-12 h-12 rounded-full bg-secondary mb-2 border border-border" />
-                                        <CardTitle className="text-lg font-bold text-white">{match.name}</CardTitle>
-                                        <CardDescription className="text-xs text-muted-foreground uppercase font-black">{match.domain}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {match.skills.map(s => (
-                                                <Badge key={s} variant="secondary" className="bg-background text-muted-foreground border-none text-[9px] uppercase font-black">{s}</Badge>
-                                            ))}
-                                        </div>
-                                        <div className="p-3 bg-background/50 rounded-lg border border-slate-800/50">
-                                            <p className="text-[10px] text-muted-foreground uppercase font-black mb-1">Proposed Role</p>
-                                            <p className="text-sm font-bold text-white italic text-primary">{match.role}</p>
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter className="bg-background/20 p-4 border-t border-border">
-                                        <Button variant="ghost" className="w-full text-xs font-black italic text-muted-foreground hover:text-primary group-hover:bg-primary/5 uppercase tracking-widest">
-                                            SEND_INVITATION <Send className="w-3.5 h-3.5 ml-2" />
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-
-                        <div className="flex justify-center pt-6">
-                            <Button variant="link" className="text-muted-foreground text-xs font-bold uppercase tracking-widest hover:text-white">
-                                <Info className="w-4 h-4 mr-2" /> How are match scores calculated?
-                            </Button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
+            <div className="flex justify-center pt-6">
+              <Button
+                variant="link"
+                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+              >
+                <Info className="mr-2 h-4 w-4" /> How are match scores calculated?
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
 }

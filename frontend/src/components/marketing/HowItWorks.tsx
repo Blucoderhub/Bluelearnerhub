@@ -4,10 +4,22 @@ import { motion } from 'framer-motion'
 import { Compass, Code2, Rocket, BadgeCheck } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
-const LearningCharacter = dynamic(() => import('@/components/animations/characters/LearningCharacter'), { ssr: false })
-const CodingCharacter = dynamic(() => import('@/components/animations/characters/CodingCharacter'), { ssr: false })
-const CelebrationCharacter = dynamic(() => import('@/components/animations/characters/CelebrationCharacter'), { ssr: false })
-const CollaboratingCharacters = dynamic(() => import('@/components/animations/characters/CollaboratingCharacters'), { ssr: false })
+const LearningCharacter = dynamic(
+  () => import('@/components/animations/characters/LearningCharacter'),
+  { ssr: false }
+)
+const CodingCharacter = dynamic(
+  () => import('@/components/animations/characters/CodingCharacter'),
+  { ssr: false }
+)
+const CelebrationCharacter = dynamic(
+  () => import('@/components/animations/characters/CelebrationCharacter'),
+  { ssr: false }
+)
+const CollaboratingCharacters = dynamic(
+  () => import('@/components/animations/characters/CollaboratingCharacters'),
+  { ssr: false }
+)
 
 const steps = [
   {
@@ -30,39 +42,39 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 px-4 bg-black">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-black px-4 py-24">
+      <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="mb-20 text-center"
         >
-          <span className="text-[10px] font-mono text-white/30 uppercase tracking-[0.4em] mb-4 block">
+          <span className="mb-4 block font-mono text-[10px] uppercase tracking-[0.4em] text-white/30">
             / Protocol_Workflow
           </span>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
+          <h2 className="text-4xl font-black uppercase tracking-tighter text-white md:text-6xl">
             System_Deployment
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           {steps.map((step, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: idx * 0.15 }}
-              className="relative p-10 border border-white/5 bg-black"
+              className="relative border border-white/5 bg-black p-10"
             >
-              <div className="text-[10px] font-mono text-white/20 mb-6 tracking-widest">
+              <div className="mb-6 font-mono text-[10px] tracking-widest text-white/20">
                 STEP_0{idx + 1}
               </div>
-              <h3 className="text-xl font-black text-white uppercase mb-4 tracking-tighter">
+              <h3 className="mb-4 text-xl font-black uppercase tracking-tighter text-white">
                 {step.title}
               </h3>
-              <p className="text-xs font-mono text-white/40 leading-relaxed uppercase">
+              <p className="font-mono text-xs uppercase leading-relaxed text-white/40">
                 {step.description}
               </p>
             </motion.div>

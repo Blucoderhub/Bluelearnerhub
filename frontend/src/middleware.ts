@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 /**
  * Protected route prefixes. Any path starting with these requires authentication.
@@ -16,28 +16,41 @@ const PROTECTED_PREFIXES = [
   '/hr',
   '/institution',
   '/candidate',
-];
+  // Student feature routes (not under /student/ prefix but require auth)
+  '/daily-quiz',
+  '/exercises',
+  '/hackathons',
+  '/qna',
+  '/certificates',
+  '/notebooks',
+  '/dev',
+  '/tutorials',
+  '/learning-tracks',
+  '/organizations',
+  '/premium',
+  '/ide',
+  '/labs',
+  '/ai-companion',
+]
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname } = request.nextUrl
 
-  const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-    pathname.startsWith(prefix)
-  );
+  const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
 
-  if (!isProtected) return NextResponse.next();
+  if (!isProtected) return NextResponse.next()
 
   // accessToken is an HttpOnly signed cookie set by the Express auth controller.
   // We check for its presence; actual JWT validation happens server-side in Express.
-  const accessToken = request.cookies.get('accessToken')?.value;
+  const accessToken = request.cookies.get('accessToken')?.value
 
   if (!accessToken) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('from', pathname);
-    return NextResponse.redirect(loginUrl);
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('from', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
@@ -50,5 +63,19 @@ export const config = {
     '/hr/:path*',
     '/institution/:path*',
     '/candidate/:path*',
+    '/daily-quiz/:path*',
+    '/exercises/:path*',
+    '/hackathons/:path*',
+    '/qna/:path*',
+    '/certificates/:path*',
+    '/notebooks/:path*',
+    '/dev/:path*',
+    '/tutorials/:path*',
+    '/learning-tracks/:path*',
+    '/organizations/:path*',
+    '/premium/:path*',
+    '/ide/:path*',
+    '/labs/:path*',
+    '/ai-companion/:path*',
   ],
-};
+}

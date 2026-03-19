@@ -37,41 +37,27 @@ import {
   GitFork,
   Eye,
   FolderOpen,
+  ShieldCheck,
 } from 'lucide-react'
 import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
+import { motion, AnimatePresence } from 'framer-motion'
 import { generateAvatarURL } from '@/utils/generateAvatar'
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 
 const hackathonLinks = [
-  { name: 'Browse Hackathons', description: 'Explore all active and upcoming hackathons', href: '/hackathons', icon: 'Trophy' },
-  { name: 'My Registrations', description: 'View hackathons you have joined', href: '/hackathons/my', icon: 'Bookmark' },
-  { name: 'My Team', description: 'Manage your team and collaborators', href: '/hackathons/team', icon: 'Users' },
-  { name: 'Leaderboard', description: 'See top performers and rankings', href: '/hackathons/leaderboard', icon: 'BarChart3' },
-  { name: 'Past Hackathons', description: 'Results and winner showcases', href: '/hackathons/past', icon: 'Archive' },
-  { name: 'Host a Hackathon', description: 'Corporates — create and manage a hackathon', href: '/contact?type=corporate', icon: 'PlusCircle' },
-]
-
-const spacesLinks = [
-  { name: 'Create a Space', description: 'Start a new HTML/CSS/JS or React project', href: '/spaces/new', icon: FolderOpen },
-  { name: 'My Spaces', description: 'Manage your published and private projects', href: '/spaces/my', icon: Globe },
-  { name: 'Explore Community', description: 'Browse thousands of learner-built projects', href: '/spaces/explore', icon: Eye },
-  { name: 'Fork a Project', description: 'Clone any public Space and remix it', href: '/spaces/explore', icon: GitFork },
-]
-
-const mentorFeatures = [
-  { name: 'Become an Instructor', description: 'Share your expertise, teach thousands', href: '/mentor/apply', icon: GraduationCap },
-  { name: 'Create a Course', description: 'Build interactive courses and tutorials', href: '/mentor/create-course', icon: PlusCircle },
-  { name: 'Manage Students', description: 'Track progress, grade and mentor learners', href: '/mentor/students', icon: Users },
-  { name: 'Instructor Dashboard', description: 'Analytics, earnings, and course insights', href: '/mentor/dashboard', icon: BarChart3 },
-  { name: 'Teaching Resources', description: 'Templates, guides, and best practices', href: '/mentor/resources', icon: BookMarked },
-  { name: 'Certification Issuing', description: 'Award certificates to your learners', href: '/mentor/certificates', icon: Award },
+  { name: 'Browse Hackathons', description: 'Explore all active and upcoming hackathons', href: '/hackathons', icon: Trophy },
+  { name: 'My Registrations', description: 'View hackathons you have joined', href: '/hackathons/my', icon: BookMarked },
+  { name: 'My Team', description: 'Manage your team and collaborators', href: '/hackathons/team', icon: Users },
+  { name: 'Leaderboard', description: 'See top performers and rankings', href: '/hackathons/leaderboard', icon: BarChart3 },
 ]
 
 type MenuKey = 'tutorials' | 'hackathon' | 'spaces' | 'mentor' | 'getin' | null
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [tutorialsExpanded, setTutorialsExpanded] = useState(false)
+  const [libraryExpanded, setLibraryExpanded] = useState(false)
   const [expandedDomain, setExpandedDomain] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [openMenu, setOpenMenu] = useState<MenuKey>(null)
@@ -89,7 +75,7 @@ export default function Header() {
   }
 
   const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 10)
+    setScrolled(window.scrollY > 20)
   }, [])
 
   useEffect(() => {
@@ -97,341 +83,180 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [handleScroll])
 
-  useEffect(() => { setMobileMenuOpen(false) }, [pathname])
-
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [mobileMenuOpen])
+    setMobileMenuOpen(false)
+  }, [pathname])
 
   const navLinkCls = (active: boolean) =>
-    `relative flex items-center gap-1 px-4 h-full text-[13.5px] font-semibold transition-colors duration-200 border-b-2 ${
-      active
-        ? 'text-primary border-primary'
-        : 'text-foreground/60 border-transparent hover:text-foreground hover:border-border'
-    }`
+    cn(
+      "relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold uppercase tracking-widest transition-all duration-300",
+      active 
+        ? "text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:bg-primary" 
+        : "text-muted-foreground hover:text-white"
+    )
 
   return (
     <>
       <header
-        className={`sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-border transition-shadow duration-300 ${
-          scrolled ? 'shadow-card-md' : 'shadow-none'
-        }`}
+        className={cn(
+          "sticky top-0 z-[60] w-full border-b border-border/50 transition-all duration-500",
+          scrolled ? "bg-background/80 backdrop-blur-2xl py-0 shadow-2xl shadow-black/50" : "bg-transparent py-2"
+        )}
       >
-        <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1400px]">
-
+        <div className="bg-noise pointer-events-none opacity-20" />
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-8 lg:px-12">
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-6 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-light shadow-brand">
-              <span className="text-xs font-extrabold text-white tracking-tight">BL</span>
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-110">
+              <ShieldCheck className="h-6 w-6 text-white" />
             </div>
-            <span className="hidden sm:block font-bold text-[15px] tracking-tight text-foreground group-hover:text-primary transition-colors duration-200">
-              Bluelearnerhub
-            </span>
+            <div className="flex flex-col">
+              <span className="font-heading text-xl font-medium tracking-tight text-white leading-none">
+                Bluelearnerhub
+              </span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground transition-colors group-hover:text-primary">
+                Powered by Bluecoder
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center h-14 flex-1 gap-0">
-
-            {/* Tutorials */}
-            <div
-              className="relative h-full"
-              onMouseEnter={() => openHover('tutorials')}
-              onMouseLeave={closeHover}
-            >
-              <button className={navLinkCls(!!pathname?.startsWith('/tutorials'))}>
-                Tutorials
-                <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
+          <nav className="hidden h-full flex-1 items-center justify-center gap-2 lg:flex">
+            <div className="relative h-full" onMouseEnter={() => openHover('tutorials')} onMouseLeave={closeHover}>
+              <button className={navLinkCls(pathname?.startsWith('/tutorials'))}>
+                Library <ChevronDown className={cn("h-3 w-3 transition-transform", openMenu === 'tutorials' && "rotate-180")} />
               </button>
-              {openMenu === 'tutorials' && (
-                <div
-                  className="absolute top-full left-0 w-[580px] bg-background rounded-2xl border border-border p-6 z-50 shadow-card-lg animate-slide-up"
-                  onMouseEnter={() => openHover('tutorials')}
-                  onMouseLeave={closeHover}
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-5">Browse Domains</p>
-                  <div className="grid grid-cols-2 gap-x-10 gap-y-5">
-                    {allDomains.map((domain) => (
-                      <div key={domain.id} className="space-y-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[12px] font-bold text-foreground">{domain.name}</span>
-                        </div>
-                        <div className="flex flex-col gap-0.5">
-                          {domain.categories.slice(0, 4).map((cat) => (
-                            <Link
-                              key={cat}
-                              href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                              className="text-[12px] text-muted-foreground hover:text-primary transition-colors duration-150 py-0.5"
-                              onClick={() => setOpenMenu(null)}
-                            >
-                              {cat}
-                            </Link>
-                          ))}
-                        </div>
+              <AnimatePresence>
+                {openMenu === 'tutorials' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute left-0 top-full w-[280px] pt-2"
+                  >
+                    <div className="overflow-hidden rounded-3xl border border-border bg-card/60 p-4 shadow-3xl backdrop-blur-3xl">
+                      <div className="space-y-6">
+                        {allDomains.map((domain) => (
+                          <div key={domain.id} className="space-y-3">
+                            <Badge variant="outline" className="rounded-full border-primary/20 px-3 text-[9px] font-black uppercase tracking-widest text-primary/70">
+                              {domain.name}
+                            </Badge>
+                            <div className="grid gap-1">
+                              {domain.categories.map((cat) => (
+                                <Link
+                                  key={cat}
+                                  href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+                                  className="rounded-xl px-4 py-2 text-[13px] font-medium text-muted-foreground transition-all hover:bg-primary/10 hover:text-white"
+                                  onClick={() => setOpenMenu(null)}
+                                >
+                                  {cat}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Hackathon */}
-            <div
-              className="relative h-full"
-              onMouseEnter={() => openHover('hackathon')}
-              onMouseLeave={closeHover}
-            >
-              <button className={navLinkCls(!!pathname?.startsWith('/hackathon'))}>
-                Hackathon
-                <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
-              </button>
-              {openMenu === 'hackathon' && (
-                <div
-                  className="absolute top-full left-0 w-[240px] bg-background rounded-2xl border border-border p-2 z-50 shadow-card-lg animate-slide-up"
-                  onMouseEnter={() => openHover('hackathon')}
-                  onMouseLeave={closeHover}
-                >
-                  {hackathonLinks.slice(0, 4).map((h) => (
-                    <Link
-                      key={h.name}
-                      href={h.href}
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium text-foreground/70 hover:text-primary hover:bg-accent transition-all duration-150"
-                      onClick={() => setOpenMenu(null)}
-                    >
-                      {h.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Spaces */}
-            <Link href="/spaces" className={navLinkCls(!!pathname?.startsWith('/spaces'))}>
-              Spaces
-            </Link>
-
-            {/* Mentor */}
-            <Link href="/mentor" className={navLinkCls(!!pathname?.startsWith('/mentor'))}>
-              Mentor
-            </Link>
+            <Link href="/hackathons" className={navLinkCls(pathname?.startsWith('/hackathons'))}>Hackathons</Link>
+            <Link href="/spaces" className={navLinkCls(pathname?.startsWith('/spaces'))}>Spaces</Link>
+            <Link href="/mentor" className={navLinkCls(pathname?.startsWith('/mentor'))}>Mentor</Link>
           </nav>
 
           {/* Right side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {user ? (
-              <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-background hover:bg-muted/50 transition-all duration-200 text-[13px] font-semibold text-foreground shadow-card hover:shadow-card-md">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-brand to-brand-light flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white">{user.fullName?.charAt(0) || 'U'}</span>
-                </div>
-                Account
-              </button>
+               <DropdownMenu>
+               <DropdownMenuTrigger asChild>
+                 <button className="flex items-center gap-3 rounded-full border border-border bg-card/40 pl-2 pr-5 py-2 transition-all hover:bg-card hover:shadow-xl">
+                    <Avatar className="h-8 w-8 border border-primary/20">
+                      <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
+                      <AvatarFallback className="bg-primary text-[10px] font-bold text-white">
+                        {user.fullName?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-[13px] font-bold text-white uppercase tracking-widest">Portal</span>
+                 </button>
+               </DropdownMenuTrigger>
+               <DropdownMenuContent align="end" className="w-64 rounded-3xl border-border bg-card/80 p-2 backdrop-blur-3xl">
+                 <DropdownMenuLabel className="p-4 font-heading text-lg text-white">Identity Hub</DropdownMenuLabel>
+                 <DropdownMenuSeparator className="bg-border/50" />
+                 <DropdownMenuItem asChild className="rounded-2xl p-3 focus:bg-primary focus:text-white">
+                   <Link href="/student/dashboard" className="flex items-center gap-3">
+                     <LayoutDashboard size={18} /> Dashboard
+                   </Link>
+                 </DropdownMenuItem>
+                 <DropdownMenuItem onClick={logout} className="rounded-2xl p-3 text-red-500 focus:bg-red-500 focus:text-white">
+                   <LogOut size={18} /> Terminate Session
+                 </DropdownMenuItem>
+               </DropdownMenuContent>
+             </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="text-[13.5px] font-semibold text-foreground/60 hover:text-foreground transition-colors duration-200 px-3 py-1.5"
+                  className="rounded-full px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all hover:text-primary"
                 >
-                  Sign In
+                  Access
                 </Link>
                 <Link
                   href="/get-started"
-                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-brand to-brand-light text-white px-4 py-2 rounded-xl text-[13.5px] font-semibold shadow-brand hover:shadow-brand-lg hover:-translate-y-0.5 transition-all duration-200 active:scale-[0.97]"
+                  className="rounded-full bg-primary px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95"
                 >
-                  Get Started
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  Join Matrix
                 </Link>
               </div>
             )}
 
-            {/* Mobile hamburger */}
             <button
-              className="lg:hidden flex items-center justify-center h-9 w-9 rounded-xl hover:bg-muted/50 transition-colors duration-200 border border-border"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card/40 transition-all hover:bg-secondary lg:hidden"
               onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
             >
-              <Menu className="h-5 w-5 text-foreground" />
+              <Menu className="h-5 w-5 text-white" />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile backdrop */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-foreground/20 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Mobile drawer */}
-      <div
-        className={`fixed top-0 left-0 z-50 h-full w-[300px] max-w-[85vw] bg-background shadow-card-lg transform transition-transform duration-300 ease-out lg:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 border-b border-border">
-            <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileMenuOpen(false)}>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-brand-light shadow-brand">
-                <span className="text-sm font-extrabold text-white">BL</span>
-              </div>
-              <span className="font-bold text-[15px] tracking-tight text-foreground">Bluelearnerhub</span>
-            </Link>
-            <button onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center h-9 w-9 rounded-xl hover:bg-muted/50 transition-colors" aria-label="Close">
-              <X className="h-5 w-5 text-foreground" />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
-            {/* Tutorials accordion */}
-            <button
-              onClick={() => setTutorialsExpanded(!tutorialsExpanded)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold text-foreground/80 hover:bg-muted/60 hover:text-foreground transition-all duration-200"
-            >
-              <BookOpen className="h-5 w-5 shrink-0" />
-              Tutorials
-              <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${tutorialsExpanded ? 'rotate-180' : ''}`} />
-            </button>
-            {tutorialsExpanded && (
-              <div className="pl-3 space-y-0.5">
-                {allDomains.map((domain) => (
-                  <div key={domain.id}>
-                    <button
-                      onClick={() => setExpandedDomain(expandedDomain === domain.id ? null : domain.id)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-foreground/70 hover:bg-muted/40 transition-all font-medium"
-                    >
-                      <span className="text-base">{domain.icon}</span>
-                      {domain.name}
-                      <ChevronDown className={`ml-auto h-3 w-3 transition-transform ${expandedDomain === domain.id ? 'rotate-180' : ''}`} />
-                    </button>
-                    {expandedDomain === domain.id && (
-                      <div className="pl-9 flex flex-col gap-0.5 pb-1">
-                        {domain.categories.map((cat) => (
-                          <Link
-                            key={cat}
-                            href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="text-xs text-muted-foreground hover:text-primary py-1.5 transition-colors duration-150"
-                          >
-                            {cat}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Courses */}
-            <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold text-foreground/30 cursor-not-allowed">
-              Courses
-              <span className="ml-1 px-1.5 py-0.5 text-[9px] font-semibold uppercase bg-muted text-muted-foreground rounded-full">Soon</span>
-            </div>
-
-            {/* Hackathon */}
-            <button
-              onClick={() => setExpandedDomain(expandedDomain === 'hackathon' ? null : 'hackathon')}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold text-foreground/80 hover:bg-muted/60 hover:text-foreground transition-all duration-200"
-            >
-              Hackathon
-              <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${expandedDomain === 'hackathon' ? 'rotate-180' : ''}`} />
-            </button>
-            {expandedDomain === 'hackathon' && (
-              <div className="pl-3 space-y-0.5">
-                {hackathonLinks.map((h) => (
-                  <Link key={h.name} href={h.href} onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-all duration-150 font-medium">
-                    <Trophy className="h-4 w-4 shrink-0" /> {h.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* Spaces */}
-            <button
-              onClick={() => setExpandedDomain(expandedDomain === 'spaces' ? null : 'spaces')}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold text-foreground/80 hover:bg-muted/60 hover:text-foreground transition-all duration-200"
-            >
-              <Globe className="h-5 w-5 shrink-0" />
-              Spaces
-              <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${expandedDomain === 'spaces' ? 'rotate-180' : ''}`} />
-            </button>
-            {expandedDomain === 'spaces' && (
-              <div className="pl-3 space-y-0.5">
-                {spacesLinks.map((s) => {
-                  const Icon = s.icon
-                  return (
-                    <Link key={s.name} href={s.href} onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-all duration-150 font-medium">
-                      <Icon className="h-4 w-4 shrink-0" /> {s.name}
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-
-            {/* Mentor */}
-            <button
-              onClick={() => setExpandedDomain(expandedDomain === 'mentor' ? null : 'mentor')}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold text-foreground/80 hover:bg-muted/60 hover:text-foreground transition-all duration-200"
-            >
-              <GraduationCap className="h-5 w-5 shrink-0" />
-              Mentor
-              <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${expandedDomain === 'mentor' ? 'rotate-180' : ''}`} />
-            </button>
-            {expandedDomain === 'mentor' && (
-              <div className="pl-3 space-y-0.5">
-                {mentorFeatures.map((f) => {
-                  const Icon = f.icon
-                  return (
-                    <Link key={f.name} href={f.href} onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-all duration-150 font-medium">
-                      <Icon className="h-4 w-4 shrink-0" /> {f.name}
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Bottom auth */}
-          <div className="p-4 border-t border-border space-y-2">
-            {user ? (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
-                <Avatar className="h-9 w-9 border-2 border-primary/20">
-                  <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
-                  <AvatarFallback className="bg-accent text-primary font-bold text-sm">
-                    {user.fullName?.charAt(0) || 'U'}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate text-foreground">{user.fullName}</p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+      {/* Mobile drawer handled in StudentLayout but also here for public pages */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-[70] bg-background/80 backdrop-blur-xl md:hidden" />
+            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 z-[80] w-[300px] border-l border-border bg-card p-8 md:hidden">
+               <div className="mb-12 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                   <ShieldCheck className="h-6 w-6 text-primary" />
+                   <span className="font-heading text-lg font-medium text-white text-wrap">Bluelearnerhub</span>
                 </div>
+                <button onClick={() => setMobileMenuOpen(false)} className="rounded-full border border-border p-2">
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full h-11 rounded-xl border border-border text-sm font-semibold text-foreground/80 hover:bg-muted/50 transition-all duration-200"
-                >
-                  <LogIn className="h-4 w-4" /> Sign In
-                </Link>
-                <Link
-                  href="/get-started"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-gradient-to-r from-brand to-brand-light text-white text-sm font-semibold shadow-brand hover:shadow-brand-lg transition-all duration-200 active:scale-[0.98]"
-                >
-                  <UserPlus className="h-4 w-4" /> Get Started
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+              <nav className="space-y-4">
+                 <Link href="/tutorials" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
+                   <BookOpen size={18} /> Library
+                 </Link>
+                 <Link href="/hackathons" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
+                   <Trophy size={18} /> Hackathons
+                 </Link>
+                 <Link href="/spaces" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
+                   <Globe size={18} /> Spaces
+                 </Link>
+                 <Link href="/login" className="mt-12 flex h-14 items-center justify-center rounded-2xl bg-primary text-xs font-black uppercase tracking-widest text-white">
+                    Get Started
+                 </Link>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   )
 }
+
+const LayoutDashboard = ({ size }: { size: number }) => <BarChart3 size={size} />

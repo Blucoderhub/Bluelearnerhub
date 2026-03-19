@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { JobService } from '@/services/job';
+import { JobService } from '../services/job';
 
 const jobService = new JobService();
 

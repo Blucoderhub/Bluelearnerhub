@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { AnalyticsController } from '@/controllers/analytics';
-import { authenticate } from '@/middleware/auth';
-import { apiLimiter } from '@/middleware/rateLimiter';
+import { AnalyticsController } from '../controllers/analytics';
+import { authenticate } from '../middleware/auth';
+import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 const controller = new AnalyticsController();

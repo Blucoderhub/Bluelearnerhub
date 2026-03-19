@@ -25,7 +25,13 @@ interface Source {
 interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
-  sources?: { source_id: number; title: string; snippet?: string; chunk_index?: number; similarity?: number }[]
+  sources?: {
+    source_id: number
+    title: string
+    snippet?: string
+    chunk_index?: number
+    similarity?: number
+  }[]
 }
 
 interface SourceDetail {
@@ -92,13 +98,13 @@ interface AdaptiveGuidanceItem {
 }
 
 export default function NotebookWorkspace({ notebookId }: Props) {
-  const router  = useRouter()
-  const [notebook,    setNotebook]    = useState<Notebook | null>(null)
-  const [sources,     setSources]     = useState<Source[]>([])
-  const [messages,    setMessages]    = useState<ChatMessage[]>([])
+  const router = useRouter()
+  const [notebook, setNotebook] = useState<Notebook | null>(null)
+  const [sources, setSources] = useState<Source[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [generations, setGenerations] = useState<Generation[]>([])
-  const [loading,     setLoading]     = useState(true)
-  const [activeTab,   setActiveTab]   = useState<'chat' | 'generate'>('chat')
+  const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'chat' | 'generate'>('chat')
   const [leftTab, setLeftTab] = useState<'sources' | 'highlights'>('sources')
   const [inspectorOpen, setInspectorOpen] = useState(false)
   const [inspectorLoading, setInspectorLoading] = useState(false)
@@ -210,7 +216,9 @@ export default function NotebookWorkspace({ notebookId }: Props) {
 
       const active = document.activeElement as HTMLElement | null
       const tag = active?.tagName?.toLowerCase()
-      const isTypingContext = !!active && (active.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select')
+      const isTypingContext =
+        !!active &&
+        (active.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select')
       if (isTypingContext) return
 
       event.preventDefault()
@@ -223,7 +231,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
 
   // Poll source status until all ready (for processing state feedback)
   useEffect(() => {
-    const pending = sources.filter(s => s.status === 'processing' || s.status === 'pending')
+    const pending = sources.filter((s) => s.status === 'processing' || s.status === 'pending')
     if (pending.length === 0) return
     const timer = setTimeout(() => loadNotebook(), 3000)
     return () => clearTimeout(timer)
@@ -246,10 +254,12 @@ export default function NotebookWorkspace({ notebookId }: Props) {
       setInspectorLoading(false)
     }
 
-    api.post(`/notebooks/${notebookId}/behavior-events`, {
-      eventType: 'citation_opened',
-      eventPayload: { sourceId, chunkIndex: chunkIndex ?? null, hasSnippet: !!snippet },
-    }).catch(() => {})
+    api
+      .post(`/notebooks/${notebookId}/behavior-events`, {
+        eventType: 'citation_opened',
+        eventPayload: { sourceId, chunkIndex: chunkIndex ?? null, hasSnippet: !!snippet },
+      })
+      .catch(() => {})
   }
 
   const handleSearchCitationSource = async (query: string) => {
@@ -257,7 +267,11 @@ export default function NotebookWorkspace({ notebookId }: Props) {
     setInspectorLoading(true)
     try {
       const { data } = await api.get(`/notebooks/${notebookId}/sources/${selectedSource.id}`, {
-        params: query ? { search: query } : (focusChunkIndex !== undefined ? { focusChunkIndex } : undefined),
+        params: query
+          ? { search: query }
+          : focusChunkIndex !== undefined
+            ? { focusChunkIndex }
+            : undefined,
       })
       setSelectedSource(data.source)
     } catch (err) {
@@ -268,30 +282,34 @@ export default function NotebookWorkspace({ notebookId }: Props) {
   }
 
   useEffect(() => {
-    api.post(`/notebooks/${notebookId}/behavior-events`, {
-      eventType: 'workspace_opened',
-      eventPayload: { notebookId },
-    }).catch(() => {})
+    api
+      .post(`/notebooks/${notebookId}/behavior-events`, {
+        eventType: 'workspace_opened',
+        eventPayload: { notebookId },
+      })
+      .catch(() => {})
   }, [notebookId])
 
   useEffect(() => {
-    api.post(`/notebooks/${notebookId}/behavior-events`, {
-      eventType: 'workspace_tab_changed',
-      eventPayload: { activeTab, leftTab },
-    }).catch(() => {})
+    api
+      .post(`/notebooks/${notebookId}/behavior-events`, {
+        eventType: 'workspace_tab_changed',
+        eventPayload: { activeTab, leftTab },
+      })
+      .catch(() => {})
   }, [activeTab, leftTab, notebookId])
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary/80" />
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary/80" />
       </div>
     )
   }
 
   if (!notebook) {
     return (
-      <div className="text-center py-24">
+      <div className="py-24 text-center">
         <p className="text-gray-500">Notebook not found.</p>
         <Button variant="link" onClick={() => router.push('/notebooks')}>
           Back to notebooks
@@ -364,72 +382,91 @@ export default function NotebookWorkspace({ notebookId }: Props) {
   }
 
   return (
-    <div className="relative flex flex-col h-[calc(100vh-4rem)] max-w-[1600px] mx-auto overflow-hidden rounded-2xl border border-white/10 bg-background/35 shadow-[0_30px_90px_rgba(2,6,23,0.45)] backdrop-blur-xl">
+    <div className="relative mx-auto flex h-[calc(100vh-4rem)] max-w-[1600px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-background/35 shadow-[0_30px_90px_rgba(2,6,23,0.45)] backdrop-blur-xl">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 top-0 h-72 w-72 rounded-full bg-blue-500/12 blur-3xl" />
-        <div className="absolute -right-20 top-16 h-64 w-64 rounded-full bg-primary/12 blur-3xl" />
+        <div className="bg-blue-500/12 absolute -left-24 top-0 h-72 w-72 rounded-full blur-3xl" />
+        <div className="bg-primary/12 absolute -right-20 top-16 h-64 w-64 rounded-full blur-3xl" />
       </div>
       {/* Top bar */}
-      <div className="relative px-4 py-3 border-b border-white/10 bg-white/85 dark:bg-gray-900/75 backdrop-blur-xl shrink-0">
+      <div className="relative shrink-0 border-b border-white/10 bg-white/85 px-4 py-3 backdrop-blur-xl dark:bg-gray-900/75">
         <div className="flex items-center gap-3">
-        <button
-          onClick={() => router.push('/notebooks')}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </button>
-        <span className="text-xl">{notebook.emoji}</span>
-        <h1 className="font-semibold text-gray-900 dark:text-white truncate">{notebook.title}</h1>
-        {notebook.description && (
-          <span className="text-sm text-gray-400 dark:text-gray-500 truncate hidden md:block">
-            — {notebook.description}
-          </span>
-        )}
-        <div className="ml-auto flex items-center gap-2 rounded-lg border border-blue-100/80 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 px-2.5 py-1.5 text-xs shadow-sm">
-          <span className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-primary' : 'bg-blue-500'}`} />
-          <span className="text-gray-600 dark:text-gray-300">
-            AI Health:{' '}
-            {healthError
-              ? 'Unavailable'
-              : health
-              ? `${Math.round((1 - health.failure_rate) * 100)}%`
-              : 'Loading'}
-          </span>
-          {health && (
-            <span className="hidden md:inline text-gray-500 dark:text-gray-400">
-              Avg {Object.values(health.metrics).length > 0
-                ? Math.round(Object.values(health.metrics).reduce((acc, metric) => acc + metric.avg_latency_ms, 0) / Object.values(health.metrics).length)
-                : 0}ms
+          <button
+            onClick={() => router.push('/notebooks')}
+            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <span className="text-xl">{notebook.emoji}</span>
+          <h1 className="truncate font-semibold text-gray-900 dark:text-white">{notebook.title}</h1>
+          {notebook.description && (
+            <span className="hidden truncate text-sm text-gray-400 dark:text-gray-500 md:block">
+              — {notebook.description}
             </span>
           )}
-          <button
-            type="button"
-            onClick={loadHealth}
-            className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-            aria-label="Refresh notebooks health"
-          >
-            <RefreshCw className={`h-3.5 w-3.5 ${healthLoading ? 'animate-spin' : ''}`} />
-          </button>
-          <button
-            type="button"
-            onClick={() => setHealthDetailsOpen((value) => !value)}
-            className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-            aria-label="Toggle notebooks health details"
-          >
-            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${healthDetailsOpen ? 'rotate-180' : ''}`} />
-          </button>
-        </div>
+          <div className="ml-auto flex items-center gap-2 rounded-lg border border-blue-100/80 bg-white/80 px-2.5 py-1.5 text-xs shadow-sm dark:border-gray-700 dark:bg-gray-800/80">
+            <span
+              className={`inline-block h-2.5 w-2.5 rounded-full ${healthError ? 'bg-red-500' : (health?.failure_rate || 0) > 0.15 ? 'bg-primary' : 'bg-blue-500'}`}
+            />
+            <span className="text-gray-600 dark:text-gray-300">
+              AI Health:{' '}
+              {healthError
+                ? 'Unavailable'
+                : health
+                  ? `${Math.round((1 - health.failure_rate) * 100)}%`
+                  : 'Loading'}
+            </span>
+            {health && (
+              <span className="hidden text-gray-500 dark:text-gray-400 md:inline">
+                Avg{' '}
+                {Object.values(health.metrics).length > 0
+                  ? Math.round(
+                      Object.values(health.metrics).reduce(
+                        (acc, metric) => acc + metric.avg_latency_ms,
+                        0
+                      ) / Object.values(health.metrics).length
+                    )
+                  : 0}
+                ms
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={loadHealth}
+              className="text-gray-400 transition-colors hover:text-gray-700 dark:hover:text-gray-200"
+              aria-label="Refresh notebooks health"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${healthLoading ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setHealthDetailsOpen((value) => !value)}
+              className="text-gray-400 transition-colors hover:text-gray-700 dark:hover:text-gray-200"
+              aria-label="Toggle notebooks health details"
+            >
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform ${healthDetailsOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
         </div>
 
         <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
           <span>{lastRefreshText}</span>
           <div className="flex items-center gap-3">
-            <span className="hidden md:inline">Press <kbd className="rounded border border-gray-300 dark:border-gray-600 px-1 py-0.5 text-[10px]">R</kbd> to refresh</span>
-            {consecutiveHealthFailures > 0 && <span>Retry failures: {consecutiveHealthFailures}</span>}
+            <span className="hidden md:inline">
+              Press{' '}
+              <kbd className="rounded border border-gray-300 px-1 py-0.5 text-[10px] dark:border-gray-600">
+                R
+              </kbd>{' '}
+              to refresh
+            </span>
+            {consecutiveHealthFailures > 0 && (
+              <span>Retry failures: {consecutiveHealthFailures}</span>
+            )}
             <button
               type="button"
               onClick={() => setHealthAutoRefreshPaused((value) => !value)}
-              className="rounded border border-gray-200 dark:border-gray-700 px-2 py-0.5 text-[10px] font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded border border-gray-200 px-2 py-0.5 text-[10px] font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               {healthAutoRefreshPaused ? 'Resume Auto-Refresh' : 'Pause Auto-Refresh'}
             </button>
@@ -455,7 +492,9 @@ export default function NotebookWorkspace({ notebookId }: Props) {
 
         {adaptiveGuidance.length > 0 && (
           <div className="mt-2 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-2 dark:border-blue-900/50 dark:bg-blue-950/25">
-            <p className="text-[11px] font-semibold text-blue-700 dark:text-blue-300 mb-1">Adaptive Guidance</p>
+            <p className="mb-1 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+              Adaptive Guidance
+            </p>
             <div className="space-y-1.5">
               {adaptiveGuidance.slice(0, 2).map((item, idx) => (
                 <div key={idx} className="text-[11px] text-blue-800 dark:text-blue-200">
@@ -467,7 +506,7 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         )}
 
         {healthDetailsOpen && (
-          <div className="mt-3 rounded-lg border border-blue-100/70 dark:border-gray-700 bg-white/80 dark:bg-gray-800/75 p-3 shadow-sm backdrop-blur">
+          <div className="mt-3 rounded-lg border border-blue-100/70 bg-white/80 p-3 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-800/75">
             {healthError || !health ? (
               <p className="text-xs text-red-500">Detailed health data is currently unavailable.</p>
             ) : (
@@ -476,19 +515,31 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                   <span>Total API calls: {totalCalls}</span>
                   <span>Failure rate: {(health.failure_rate * 100).toFixed(2)}%</span>
                 </div>
-                <div className="mb-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-2">
-                  <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mb-1">
+                <div className="mb-3 rounded-md border border-gray-200 bg-white px-2 py-2 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="mb-1 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
                     <span>Failure trend</span>
                     <span>{healthHistory.length} samples</span>
                   </div>
                   <svg viewBox="0 0 180 34" className="h-9 w-full">
-                    <path d="M0,33 L180,33" stroke="currentColor" className="text-gray-200 dark:text-gray-700" strokeWidth="1" fill="none" />
+                    <path
+                      d="M0,33 L180,33"
+                      stroke="currentColor"
+                      className="text-gray-200 dark:text-gray-700"
+                      strokeWidth="1"
+                      fill="none"
+                    />
                     {sparklinePath && (
-                      <path d={sparklinePath} stroke="currentColor" className="text-primary/80" strokeWidth="2" fill="none" />
+                      <path
+                        d={sparklinePath}
+                        stroke="currentColor"
+                        className="text-primary/80"
+                        strokeWidth="2"
+                        fill="none"
+                      />
                     )}
                   </svg>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
                   {metricEntries.map(([key, metric]) => (
                     <div
                       key={key}
@@ -496,13 +547,25 @@ export default function NotebookWorkspace({ notebookId }: Props) {
                     >
                       <div className="flex items-center gap-1.5">
                         <span className={`h-2 w-2 rounded-full ${metricTone(metric).dot}`} />
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">{endpointLabel[key] || key}</p>
+                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                          {endpointLabel[key] || key}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Calls: {metric.total_calls}</p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">Success: {metric.success}</p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">Failures: {metric.failure}</p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">Avg latency: {metric.avg_latency_ms}ms</p>
-                      <p className="text-[11px] text-gray-500 dark:text-gray-400">Last status: {metric.last_status_code || '-'}</p>
+                      <p className="mt-1 text-[11px] text-gray-500 dark:text-gray-400">
+                        Calls: {metric.total_calls}
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Success: {metric.success}
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Failures: {metric.failure}
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Avg latency: {metric.avg_latency_ms}ms
+                      </p>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        Last status: {metric.last_status_code || '-'}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -515,16 +578,16 @@ export default function NotebookWorkspace({ notebookId }: Props) {
       {/* Three-pane layout */}
       <div className="relative flex flex-1 overflow-hidden">
         {/* LEFT: Sources panel */}
-        <aside className="w-72 shrink-0 border-r border-white/10 bg-white/60 dark:bg-gray-900/45 overflow-y-auto backdrop-blur-xl">
-          <div className="flex border-b border-white/10 px-3 pt-3 bg-white/70 dark:bg-gray-900/55 backdrop-blur sticky top-0 z-10">
+        <aside className="w-72 shrink-0 overflow-y-auto border-r border-white/10 bg-white/60 backdrop-blur-xl dark:bg-gray-900/45">
+          <div className="sticky top-0 z-10 flex border-b border-white/10 bg-white/70 px-3 pt-3 backdrop-blur dark:bg-gray-900/55">
             {(['sources', 'highlights'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setLeftTab(tab)}
-                className={`flex-1 px-3 py-2 text-xs font-medium capitalize border-b-2 transition-colors ${
+                className={`flex-1 border-b-2 px-3 py-2 text-xs font-medium capitalize transition-colors ${
                   leftTab === tab
                     ? 'border-blue-500 text-primary dark:text-blue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                 }`}
               >
                 {tab}
@@ -567,17 +630,17 @@ export default function NotebookWorkspace({ notebookId }: Props) {
         </aside>
 
         {/* CENTER: Chat / Generate (tabbed) */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-background/10">
+        <main className="flex flex-1 flex-col overflow-hidden bg-background/10">
           {/* Tab bar */}
-          <div className="flex border-b border-white/10 px-4 bg-white/75 dark:bg-gray-900/65 backdrop-blur shrink-0">
-            {(['chat', 'generate'] as const).map(tab => (
+          <div className="flex shrink-0 border-b border-white/10 bg-white/75 px-4 backdrop-blur dark:bg-gray-900/65">
+            {(['chat', 'generate'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-3 text-sm font-medium capitalize border-b-2 transition-colors ${
+                className={`border-b-2 px-4 py-3 text-sm font-medium capitalize transition-colors ${
                   activeTab === tab
                     ? 'border-blue-500 text-primary dark:text-blue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                 }`}
               >
                 {tab === 'chat' ? '💬 Chat' : '✨ Generate'}

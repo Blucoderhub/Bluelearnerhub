@@ -1,8 +1,8 @@
-import { pool } from '@/utils/database';
-import { AppError } from '@/middleware/error';
+import { pool } from '../utils/database';
+import { AppError } from '../middleware/error';
 import axios from 'axios';
-import { config } from '@/config';
-import logger from '@/utils/logger';
+import { config } from '../config';
+import logger from '../utils/logger';
 
 export class JobService {
   async getJobs(filters: any, page: number, limit: number) {

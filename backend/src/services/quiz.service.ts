@@ -51,7 +51,7 @@ export class QuizService {
         const quizQuestions = await db.select().from(questions).where(eq(questions.quizId, quizId));
 
         let score = 0;
-        quizQuestions.forEach((q, i) => {
+        quizQuestions.forEach((q: any, i: number) => {
             if (q.correctAnswer === answers[i]) {
                 score += 1;
             }

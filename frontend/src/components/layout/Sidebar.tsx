@@ -50,10 +50,8 @@ export default function Sidebar() {
   const [expandedSections, setExpandedSections] = useState<string[]>(['learn'])
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev =>
-      prev.includes(section)
-        ? prev.filter(s => s !== section)
-        : [...prev, section]
+    setExpandedSections((prev) =>
+      prev.includes(section) ? prev.filter((s) => s !== section) : [...prev, section]
     )
   }
 
@@ -117,17 +115,17 @@ export default function Sidebar() {
   const corporateNavigation: SidebarItem[] = [
     {
       name: 'Dashboard',
-      href: '/dashboard',
+      href: '/corporate/dashboard',
       icon: LayoutDashboard,
     },
     {
       name: 'Post Job',
-      href: '/jobs/create',
+      href: '/post-job',
       icon: Briefcase,
     },
     {
       name: 'Host Hackathon',
-      href: '/hackathons/create',
+      href: '/host-hackathon',
       icon: Trophy,
     },
     {
@@ -148,9 +146,9 @@ export default function Sidebar() {
   const userStreak = user?.currentStreak ?? 0
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-border lg:bg-background lg:pt-16 shadow-card">
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
+    <aside className="hidden shadow-card lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-border lg:bg-background lg:pt-16">
+      <div className="flex flex-1 flex-col overflow-y-auto">
+        <nav className="flex-1 space-y-0.5 px-3 py-4">
           {navigation.map((item) => (
             <div key={item.name}>
               {'items' in item ? (
@@ -158,19 +156,19 @@ export default function Sidebar() {
                 <>
                   <button
                     onClick={() => toggleSection(item.section)}
-                    className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-foreground/70 rounded-xl hover:bg-muted/60 hover:text-foreground transition-all duration-200"
+                    className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-foreground/70 transition-all duration-200 hover:bg-muted/60 hover:text-foreground"
                   >
                     <div className="flex items-center gap-3">
                       <item.icon className="w-4.5 h-4.5" />
                       {item.name}
                     </div>
                     {expandedSections.includes(item.section) ? (
-                      <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+                      <ChevronDown className="h-3.5 w-3.5 opacity-60" />
                     ) : (
-                      <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                      <ChevronRight className="h-3.5 w-3.5 opacity-60" />
                     )}
                   </button>
-                  
+
                   {expandedSections.includes(item.section) && (
                     <div className="ml-3 mt-0.5 space-y-0.5 pb-1">
                       {item.items.map((subItem) => {
@@ -180,13 +178,13 @@ export default function Sidebar() {
                             key={subItem.href}
                             href={subItem.href}
                             className={cn(
-                              'flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200',
-                                pathname === subItem.href
-                                  ? 'bg-accent text-primary font-semibold'
-                                  : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+                              'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200',
+                              pathname === subItem.href
+                                ? 'bg-accent font-semibold text-primary'
+                                : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
                             )}
                           >
-                            <SubIcon className="w-4 h-4 shrink-0" />
+                            <SubIcon className="h-4 w-4 shrink-0" />
                             {subItem.name}
                           </Link>
                         )
@@ -199,9 +197,9 @@ export default function Sidebar() {
                 <Link
                   href={item.href!}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200',
+                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                     pathname === item.href
-                      ? 'bg-accent text-primary font-semibold shadow-sm'
+                      ? 'bg-accent font-semibold text-primary shadow-sm'
                       : 'text-foreground/70 hover:bg-muted/60 hover:text-foreground'
                   )}
                 >
@@ -215,25 +213,25 @@ export default function Sidebar() {
 
         {/* User Stats in Sidebar */}
         {user && (
-          <div className="p-4 border-t border-border">
-            <div className="p-3 rounded-xl bg-muted/50 space-y-3">
+          <div className="border-t border-border p-4">
+            <div className="space-y-3 rounded-xl bg-muted/50 p-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Streak</span>
-                <span className="font-bold text-foreground flex items-center gap-1">
+                <span className="font-medium text-muted-foreground">Streak</span>
+                <span className="flex items-center gap-1 font-bold text-foreground">
                   🔥 {userStreak} days
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Total XP</span>
+                <span className="font-medium text-muted-foreground">Total XP</span>
                 <span className="font-bold text-primary">{userTotalPoints.toLocaleString()}</span>
               </div>
-              <div className="w-full bg-border rounded-full h-1.5">
+              <div className="h-1.5 w-full rounded-full bg-border">
                 <div
                   className="h-1.5 rounded-full bg-gradient-to-r from-brand to-brand-light transition-all duration-700"
                   style={{ width: `${Math.min((userTotalPoints % 1000) / 10, 100)}%` }}
                 />
               </div>
-              <div className="text-xs text-muted-foreground text-center">
+              <div className="text-center text-xs text-muted-foreground">
                 {1000 - (userTotalPoints % 1000)} XP to Level {userLevel + 1}
               </div>
             </div>

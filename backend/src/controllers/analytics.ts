@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { pool } from '@/utils/database';
+import { pool } from '../utils/database';
 
 export class AnalyticsController {
   async getUserStats(req: Request, res: Response, next: NextFunction) {

@@ -79,13 +79,13 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
+      className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
     >
       {/* Table Header */}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+            <tr className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-700/50">
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
                 Rank
               </th>
@@ -110,7 +110,7 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                className="border-b border-gray-200 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700/30"
               >
                 <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
                   <div className="flex items-center gap-2">
@@ -121,13 +121,11 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
                 <td className="px-6 py-4 text-sm">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{entry.avatar}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {entry.name}
-                    </span>
+                    <span className="font-medium text-gray-900 dark:text-white">{entry.name}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-semibold text-sm">
+                  <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                     {entry.points}
                   </span>
                 </td>

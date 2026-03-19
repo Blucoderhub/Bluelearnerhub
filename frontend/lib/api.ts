@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 class ApiClient {
-  private client: AxiosInstance;
+  private client: AxiosInstance
 
   constructor() {
     this.client = axios.create({
@@ -10,7 +10,7 @@ class ApiClient {
         'Content-Type': 'application/json',
       },
       withCredentials: true, // Enable sending cookies with requests
-    });
+    })
 
     // Cookie-based auth: browser sends HttpOnly cookies automatically
 
@@ -20,17 +20,17 @@ class ApiClient {
       async (error) => {
         if (error.response?.status === 401) {
           // Handle unauthorized - redirect to login
-          window.location.href = '/login';
+          window.location.href = '/login'
         }
-        return Promise.reject(error);
+        return Promise.reject(error)
       }
-    );
+    )
   }
 
   // Generic request method
   async request<T>(config: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.request<T>(config);
-    return response.data;
+    const response = await this.client.request<T>(config)
+    return response.data
   }
 
   // Auth APIs
@@ -67,7 +67,7 @@ class ApiClient {
         url: '/auth/profile',
         data,
       }),
-  };
+  }
 
   // Learning APIs
   learning = {
@@ -121,7 +121,7 @@ class ApiClient {
         method: 'GET',
         url: '/learning/bookmarks',
       }),
-  };
+  }
 
   // Quiz APIs
   quiz = {
@@ -184,7 +184,7 @@ class ApiClient {
         url: '/quiz/generate',
         data: { topic, difficulty, numQuestions },
       }),
-  };
+  }
 
   // Hackathon APIs
   hackathon = {
@@ -249,8 +249,8 @@ class ApiClient {
       }),
 
     uploadCAD: (hackathonId: number, file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
+      const formData = new FormData()
+      formData.append('file', file)
       return this.request({
         method: 'POST',
         url: `/hackathons/${hackathonId}/cad/upload`,
@@ -258,9 +258,9 @@ class ApiClient {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
+      })
     },
-  };
+  }
 
   // Job APIs
   jobs = {
@@ -278,10 +278,10 @@ class ApiClient {
       }),
 
     apply: (jobId: number, data: any) => {
-      const formData = new FormData();
-      Object.keys(data).forEach(key => {
-        formData.append(key, data[key]);
-      });
+      const formData = new FormData()
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key])
+      })
       return this.request({
         method: 'POST',
         url: `/jobs/${jobId}/apply`,
@@ -289,7 +289,7 @@ class ApiClient {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
+      })
     },
 
     getApplications: (params?: any) =>
@@ -304,7 +304,7 @@ class ApiClient {
         method: 'GET',
         url: `/jobs/applications/${applicationId}`,
       }),
-  };
+  }
 
   // Interview APIs
   interview = {
@@ -333,7 +333,7 @@ class ApiClient {
         method: 'POST',
         url: `/interview/sessions/${sessionId}/complete`,
       }),
-  };
+  }
 
   // Corporate APIs (for companies)
   corporate = {
@@ -377,7 +377,7 @@ class ApiClient {
         url: '/corporate/analytics',
         params,
       }),
-  };
+  }
 
   // Analytics APIs
   analytics = {
@@ -398,8 +398,8 @@ class ApiClient {
         method: 'GET',
         url: '/analytics/user/strengths',
       }),
-  };
+  }
 }
 
-export const api = new ApiClient();
-export default api;
+export const api = new ApiClient()
+export default api

@@ -19,7 +19,7 @@ type WaveformType = 'sine' | 'square' | 'triangle' | 'sawtooth'
 export default function Oscilloscope() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | null>(null)
-  
+
   const [isRunning, setIsRunning] = useState(false)
   const [waveform, setWaveform] = useState<WaveformType>('sine')
   const [frequency, setFrequency] = useState([1])
@@ -53,7 +53,7 @@ export default function Oscilloscope() {
 
   const animate = () => {
     drawWaveform()
-    setPhase(prev => (prev + frequency[0] * 0.05) % (2 * Math.PI))
+    setPhase((prev) => (prev + frequency[0] * 0.05) % (2 * Math.PI))
     animationRef.current = requestAnimationFrame(animate)
   }
 
@@ -81,7 +81,7 @@ export default function Oscilloscope() {
     ctx.beginPath()
 
     const points = width
-    const timeSpan = 4 * Math.PI / timeScale[0]
+    const timeSpan = (4 * Math.PI) / timeScale[0]
     const amp = amplitude[0] * voltageScale[0]
     const offsetY = offset[0]
 
@@ -100,10 +100,10 @@ export default function Oscilloscope() {
           y = Math.sign(Math.sin(frequency[0] * t + phase)) * amp
           break
         case 'triangle':
-          y = (2 * amp / Math.PI) * Math.asin(Math.sin(frequency[0] * t + phase))
+          y = ((2 * amp) / Math.PI) * Math.asin(Math.sin(frequency[0] * t + phase))
           break
         case 'sawtooth':
-          y = (2 * amp / Math.PI) * Math.atan(Math.tan((frequency[0] * t + phase) / 2))
+          y = ((2 * amp) / Math.PI) * Math.atan(Math.tan((frequency[0] * t + phase) / 2))
           break
       }
 
@@ -181,49 +181,44 @@ export default function Oscilloscope() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 h-full">
+    <div className="flex h-full flex-col gap-4 lg:flex-row">
       {/* Oscilloscope Display */}
-      <div className="flex-1 flex flex-col bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-          <span className="text-white font-semibold text-sm">Virtual Oscilloscope</span>
-          
+      <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
+        <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-2">
+          <span className="text-sm font-semibold text-white">Virtual Oscilloscope</span>
+
           <div className="flex items-center gap-2">
-            <Button 
+            <Button
               onClick={handleStartStop}
               variant={isRunning ? 'destructive' : 'default'}
               size="sm"
             >
               {isRunning ? (
                 <>
-                  <Pause className="w-4 h-4 mr-1" />
+                  <Pause className="mr-1 h-4 w-4" />
                   Pause
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 mr-1" />
+                  <Play className="mr-1 h-4 w-4" />
                   Run
                 </>
               )}
             </Button>
             <Button onClick={handleReset} variant="outline" size="sm">
-              <Square className="w-4 h-4 mr-1" />
+              <Square className="mr-1 h-4 w-4" />
               Reset
             </Button>
           </div>
         </div>
 
-        <div className="flex-1 p-4 bg-black">
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={400}
-            className="w-full h-full"
-          />
+        <div className="flex-1 bg-black p-4">
+          <canvas ref={canvasRef} width={800} height={400} className="h-full w-full" />
         </div>
 
         {/* Measurements Display */}
-        <div className="px-4 py-2 bg-gray-800 border-t border-gray-700">
-          <div className="grid grid-cols-4 gap-4 text-xs font-mono">
+        <div className="border-t border-gray-700 bg-gray-800 px-4 py-2">
+          <div className="grid grid-cols-4 gap-4 font-mono text-xs">
             <div>
               <span className="text-gray-400">Vpp:</span>{' '}
               <span className="text-blue-400">{measurements.vpp.toFixed(2)} V</span>
@@ -245,16 +240,16 @@ export default function Oscilloscope() {
       </div>
 
       {/* Controls Panel */}
-      <Card className="w-full lg:w-80 p-4 space-y-6 bg-gray-800 border-gray-700">
+      <Card className="w-full space-y-6 border-gray-700 bg-gray-800 p-4 lg:w-80">
         <div>
-          <h3 className="font-semibold text-white mb-3">Signal Generator</h3>
-          
+          <h3 className="mb-3 font-semibold text-white">Signal Generator</h3>
+
           <div className="space-y-4">
             {/* Waveform Type */}
             <div>
-              <Label className="text-white text-sm">Waveform</Label>
+              <Label className="text-sm text-white">Waveform</Label>
               <Select value={waveform} onValueChange={(v: WaveformType) => setWaveform(v)}>
-                <SelectTrigger className="bg-gray-900 border-gray-600 text-white mt-1">
+                <SelectTrigger className="mt-1 border-gray-600 bg-gray-900 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -268,8 +263,8 @@ export default function Oscilloscope() {
 
             {/* Frequency */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label className="text-white text-sm">Frequency</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="text-sm text-white">Frequency</Label>
                 <span className="text-xs text-gray-400">{frequency[0].toFixed(2)} Hz</span>
               </div>
               <Slider
@@ -284,8 +279,8 @@ export default function Oscilloscope() {
 
             {/* Amplitude */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label className="text-white text-sm">Amplitude</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="text-sm text-white">Amplitude</Label>
                 <span className="text-xs text-gray-400">{amplitude[0]} V</span>
               </div>
               <Slider
@@ -300,8 +295,8 @@ export default function Oscilloscope() {
 
             {/* Offset */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label className="text-white text-sm">DC Offset</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="text-sm text-white">DC Offset</Label>
                 <span className="text-xs text-gray-400">{offset[0]} V</span>
               </div>
               <Slider
@@ -316,14 +311,14 @@ export default function Oscilloscope() {
           </div>
         </div>
 
-        <div className="pt-4 border-t border-gray-700">
-          <h3 className="font-semibold text-white mb-3">Oscilloscope Settings</h3>
-          
+        <div className="border-t border-gray-700 pt-4">
+          <h3 className="mb-3 font-semibold text-white">Oscilloscope Settings</h3>
+
           <div className="space-y-4">
             {/* Time Scale */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label className="text-white text-sm">Time/Div</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="text-sm text-white">Time/Div</Label>
                 <span className="text-xs text-gray-400">{timeScale[0]}x</span>
               </div>
               <Slider
@@ -338,8 +333,8 @@ export default function Oscilloscope() {
 
             {/* Voltage Scale */}
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label className="text-white text-sm">Volts/Div</Label>
+              <div className="mb-1 flex items-center justify-between">
+                <Label className="text-sm text-white">Volts/Div</Label>
                 <span className="text-xs text-gray-400">{voltageScale[0]}x</span>
               </div>
               <Slider

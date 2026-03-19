@@ -33,7 +33,7 @@ export default function IsometricBuilding({
       initial={{ opacity: 0, y: 40, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="relative group cursor-pointer"
+      className="group relative cursor-pointer"
       style={{ width: dims.width + 30, height: dims.height + dims.roofHeight + 40 }}
     >
       <motion.div
@@ -48,7 +48,7 @@ export default function IsometricBuilding({
         style={{ willChange: 'transform' }}
       >
         <div
-          className="absolute inset-0 rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"
+          className="absolute inset-0 rounded-lg opacity-30 blur-xl transition-opacity duration-500 group-hover:opacity-50"
           style={{ background: glowColor }}
         />
 
@@ -140,7 +140,7 @@ export default function IsometricBuilding({
           className="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap"
         >
           <span
-            className="text-[10px] font-medium tracking-wide uppercase"
+            className="text-[10px] font-medium uppercase tracking-wide"
             style={{ color: `${color}cc` }}
           >
             {label}

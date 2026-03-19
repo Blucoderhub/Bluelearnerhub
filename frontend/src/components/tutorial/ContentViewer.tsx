@@ -1,35 +1,35 @@
-'use client';
+'use client'
 
 /**
  * ContentViewer — Renders tutorial markdown with code highlighting
  * and a "Mark Complete" action.
  */
 
-import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { CheckCircle, Sparkles } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { TutorialSection } from './TutorialLayout';
+import React, { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { CheckCircle, Sparkles } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import type { TutorialSection } from './TutorialLayout'
 
 interface ContentViewerProps {
-  section: TutorialSection;
-  onComplete: () => Promise<void>;
+  section: TutorialSection
+  onComplete: () => Promise<void>
 }
 
 export default function ContentViewer({ section, onComplete }: ContentViewerProps) {
-  const [completing, setCompleting] = useState(false);
+  const [completing, setCompleting] = useState(false)
 
   const handleComplete = async () => {
-    if (completing || section.completed) return;
-    setCompleting(true);
+    if (completing || section.completed) return
+    setCompleting(true)
     try {
-      await onComplete();
+      await onComplete()
     } finally {
-      setCompleting(false);
+      setCompleting(false)
     }
-  };
+  }
 
   return (
     <article className="mx-auto max-w-2xl px-8 py-10">
@@ -39,12 +39,12 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
       </h2>
 
       {/* Markdown content */}
-      <div className="prose prose-gray max-w-none dark:prose-invert prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-sm dark:prose-code:bg-gray-800">
+      <div className="prose prose-gray dark:prose-invert prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-sm dark:prose-code:bg-gray-800 max-w-none">
         <ReactMarkdown
           components={{
             code({ node, inline, className, children, ...props }: any) {
-              const match = /language-(\w+)/.exec(className || '');
-              const lang   = match ? match[1] : '';
+              const match = /language-(\w+)/.exec(className || '')
+              const lang = match ? match[1] : ''
 
               return !inline && lang ? (
                 <SyntaxHighlighter
@@ -60,7 +60,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
                 <code className={className} {...props}>
                   {children}
                 </code>
-              );
+              )
             },
           }}
         >
@@ -82,8 +82,8 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
             className={cn(
               'flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all',
               completing
-                ? 'bg-blue-400 text-white cursor-wait'
-                : 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]',
+                ? 'cursor-wait bg-blue-400 text-white'
+                : 'bg-primary text-white hover:bg-primary/90 active:scale-[0.98]'
             )}
           >
             <Sparkles className="h-4 w-4" />
@@ -97,5 +97,5 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
         )}
       </div>
     </article>
-  );
+  )
 }

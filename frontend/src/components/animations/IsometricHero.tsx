@@ -19,28 +19,32 @@ export default function IsometricHero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen overflow-hidden flex flex-col bg-black"
+      className="relative flex min-h-screen flex-col overflow-hidden bg-black"
     >
       <motion.div
         style={{ y, opacity }}
-        className="relative z-20 flex-1 flex flex-col justify-center px-5 sm:px-8 py-20 md:py-24"
+        className="relative z-20 flex flex-1 flex-col justify-center px-5 py-20 sm:px-8 md:py-24"
       >
-        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left max-w-2xl lg:max-w-none">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-12 lg:flex-row lg:gap-16">
+          <div className="flex max-w-2xl flex-1 flex-col items-center text-center lg:max-w-none lg:items-start lg:text-left">
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter uppercase"
+              className="text-4xl font-black uppercase leading-[0.9] tracking-tighter sm:text-5xl md:text-6xl lg:text-8xl"
             >
-              Learn.<br />Build.<br />Master.
+              Learn.
+              <br />
+              Build.
+              <br />
+              Master.
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="mt-6 text-sm font-mono tracking-widest text-white/40 uppercase"
+              className="mt-6 font-mono text-sm uppercase tracking-widest text-white/40"
             >
               Elite Engineering Protocols Only
             </motion.p>
@@ -49,11 +53,11 @@ export default function IsometricHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="mt-12 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+              className="mt-12 flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row"
             >
               <Link
                 href="/login"
-                className="w-full sm:w-auto border-2 border-white bg-white text-black px-12 py-4 font-black uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all duration-200 text-center"
+                className="w-full border-2 border-white bg-white px-12 py-4 text-center text-xs font-black uppercase tracking-widest text-black transition-all duration-200 hover:bg-black hover:text-white sm:w-auto"
               >
                 <span>Initialize_Access</span>
               </Link>
@@ -64,7 +68,7 @@ export default function IsometricHero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex-1 w-full max-w-xl lg:max-w-none"
+            className="w-full max-w-xl flex-1 lg:max-w-none"
           >
             <IsometricScene />
           </motion.div>
@@ -75,9 +79,9 @@ export default function IsometricHero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.0 }}
-        className="relative z-10 pb-8 flex flex-col items-center gap-2"
+        className="relative z-10 flex flex-col items-center gap-2 pb-8"
       >
-        <span className="text-[10px] text-white/20 font-mono uppercase tracking-[0.3em]">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/20">
           System_v2.0 // Bluelearnerhub
         </span>
       </motion.div>

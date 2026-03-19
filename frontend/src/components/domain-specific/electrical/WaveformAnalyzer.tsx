@@ -4,7 +4,17 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from 'recharts'
 import { Upload, Download, Zap } from 'lucide-react'
 
 export default function WaveformAnalyzer() {
@@ -21,10 +31,11 @@ export default function WaveformAnalyzer() {
 
     for (let i = 0; i < samples; i++) {
       const t = i / sampleRate
-      const value = amplitude * Math.sin(2 * Math.PI * frequency * t) + 
-                    (amplitude * 0.3) * Math.sin(2 * Math.PI * frequency * 3 * t) +
-                    (amplitude * 0.1) * Math.random()
-      
+      const value =
+        amplitude * Math.sin(2 * Math.PI * frequency * t) +
+        amplitude * 0.3 * Math.sin(2 * Math.PI * frequency * 3 * t) +
+        amplitude * 0.1 * Math.random()
+
       data.push({
         time: t,
         voltage: parseFloat(value.toFixed(3)),
@@ -62,8 +73,8 @@ export default function WaveformAnalyzer() {
   }
 
   function analyzeSignal(data: any[]) {
-    const voltages = data.map(d => d.voltage)
-    
+    const voltages = data.map((d) => d.voltage)
+
     const max = Math.max(...voltages)
     const min = Math.min(...voltages)
     const vpp = max - min
@@ -73,8 +84,10 @@ export default function WaveformAnalyzer() {
     // Find zero crossings for frequency
     let zeroCrossings = 0
     for (let i = 1; i < voltages.length; i++) {
-      if ((voltages[i - 1] < mean && voltages[i] >= mean) ||
-          (voltages[i - 1] >= mean && voltages[i] < mean)) {
+      if (
+        (voltages[i - 1] < mean && voltages[i] >= mean) ||
+        (voltages[i - 1] >= mean && voltages[i] < mean)
+      ) {
         zeroCrossings++
       }
     }
@@ -104,10 +117,10 @@ export default function WaveformAnalyzer() {
 
   return (
     <div className="space-y-4 p-4">
-      <Card className="p-6 bg-gray-800 border-gray-700">
-        <div className="flex items-center justify-between mb-6">
+      <Card className="border-gray-700 bg-gray-800 p-6">
+        <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Zap className="w-6 h-6 text-blue-400" />
+            <Zap className="h-6 w-6 text-blue-400" />
             <h2 className="text-2xl font-bold text-white">Waveform Analyzer</h2>
           </div>
 
@@ -116,11 +129,11 @@ export default function WaveformAnalyzer() {
               Analyze Signal
             </Button>
             <Button variant="outline" size="sm">
-              <Upload className="w-4 h-4 mr-1" />
+              <Upload className="mr-1 h-4 w-4" />
               Load
             </Button>
             <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-1" />
+              <Download className="mr-1 h-4 w-4" />
               Export
             </Button>
           </div>
@@ -138,22 +151,22 @@ export default function WaveformAnalyzer() {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={timeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                  <XAxis 
-                    dataKey="time" 
+                  <XAxis
+                    dataKey="time"
                     stroke="#888"
                     label={{ value: 'Time (s)', position: 'insideBottom', offset: -5 }}
                   />
-                  <YAxis 
+                  <YAxis
                     stroke="#888"
                     label={{ value: 'Voltage (V)', angle: -90, position: 'insideLeft' }}
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="voltage" 
-                    stroke="#3b82f6" 
+                  <Line
+                    type="monotone"
+                    dataKey="voltage"
+                    stroke="#3b82f6"
                     strokeWidth={2}
                     dot={false}
                   />
@@ -167,16 +180,16 @@ export default function WaveformAnalyzer() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={fftData.slice(0, 50)}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                  <XAxis 
-                    dataKey="frequency" 
+                  <XAxis
+                    dataKey="frequency"
                     stroke="#888"
                     label={{ value: 'Frequency (Hz)', position: 'insideBottom', offset: -5 }}
                   />
-                  <YAxis 
+                  <YAxis
                     stroke="#888"
                     label={{ value: 'Magnitude', angle: -90, position: 'insideLeft' }}
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
                   />
                   <Bar dataKey="magnitude" fill="#0ea5e9" />
@@ -186,7 +199,7 @@ export default function WaveformAnalyzer() {
           </TabsContent>
 
           <TabsContent value="analysis" className="mt-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <AnalysisCard label="Max Voltage" value={`${analysis.vMax} V`} />
               <AnalysisCard label="Min Voltage" value={`${analysis.vMin} V`} />
               <AnalysisCard label="Peak-to-Peak" value={`${analysis.vpp} V`} />
@@ -198,24 +211,12 @@ export default function WaveformAnalyzer() {
               <AnalysisCard label="THD" value={`${analysis.thd}%`} />
             </div>
 
-            <div className="mt-6 p-4 bg-gray-900 rounded-lg">
-              <h3 className="text-white font-semibold mb-3">Signal Quality Assessment</h3>
+            <div className="mt-6 rounded-lg bg-gray-900 p-4">
+              <h3 className="mb-3 font-semibold text-white">Signal Quality Assessment</h3>
               <div className="space-y-2 text-sm">
-                <QualityIndicator 
-                  label="Signal-to-Noise Ratio" 
-                  value="28.5 dB"
-                  status="good"
-                />
-                <QualityIndicator 
-                  label="Distortion" 
-                  value="Low"
-                  status="good"
-                />
-                <QualityIndicator 
-                  label="Stability" 
-                  value="Stable"
-                  status="good"
-                />
+                <QualityIndicator label="Signal-to-Noise Ratio" value="28.5 dB" status="good" />
+                <QualityIndicator label="Distortion" value="Low" status="good" />
+                <QualityIndicator label="Stability" value="Stable" status="good" />
               </div>
             </div>
           </TabsContent>
@@ -227,18 +228,18 @@ export default function WaveformAnalyzer() {
 
 function AnalysisCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-4 bg-gray-900 rounded-lg">
-      <div className="text-xs text-gray-400 mb-1">{label}</div>
-      <div className="text-xl font-mono text-white">{value}</div>
+    <div className="rounded-lg bg-gray-900 p-4">
+      <div className="mb-1 text-xs text-gray-400">{label}</div>
+      <div className="font-mono text-xl text-white">{value}</div>
     </div>
   )
 }
 
-function QualityIndicator({ 
-  label, 
-  value, 
-  status 
-}: { 
+function QualityIndicator({
+  label,
+  value,
+  status,
+}: {
   label: string
   value: string
   status: 'good' | 'warning' | 'bad'
@@ -250,7 +251,7 @@ function QualityIndicator({
   }
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex items-center justify-between">
       <span className="text-gray-400">{label}</span>
       <span className={`font-semibold ${colors[status]}`}>{value}</span>
     </div>

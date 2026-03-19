@@ -1,7 +1,11 @@
 // @ts-nocheck
 import { render, screen } from '@testing-library/react'
 import { ThemeProvider } from 'next-themes'
-import ErrorBoundary, { PageErrorBoundary, SectionErrorBoundary, ComponentErrorBoundary } from '@/components/ui/ErrorBoundary'
+import ErrorBoundary, {
+  PageErrorBoundary,
+  SectionErrorBoundary,
+  ComponentErrorBoundary,
+} from '@/components/ui/ErrorBoundary'
 
 // Mock component that throws an error
 const ThrowError = ({ shouldThrow = true }: { shouldThrow?: boolean }) => {
@@ -41,7 +45,7 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(screen.getByText('No error')).toBeInTheDocument()
     })
 
@@ -53,9 +57,11 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument()
-      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Reload this section, or report this error using the Error ID.')
+      ).toBeInTheDocument()
     })
 
     it('displays error details when expanded', () => {
@@ -67,7 +73,7 @@ describe('ErrorBoundary', () => {
           </PageErrorBoundary>
         </TestWrapper>
       )
-      
+
       // open the technical details section
       const summary = screen.getByText(/Technical Details/)
       summary.click()
@@ -79,7 +85,7 @@ describe('ErrorBoundary', () => {
 
     it('calls onError callback when error occurs', () => {
       const onErrorMock = jest.fn()
-      
+
       render(
         <TestWrapper>
           <ErrorBoundary onError={onErrorMock}>
@@ -87,12 +93,9 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(onErrorMock).toHaveBeenCalledTimes(1)
-      expect(onErrorMock).toHaveBeenCalledWith(
-        expect.any(Error),
-        expect.any(Object)
-      )
+      expect(onErrorMock).toHaveBeenCalledWith(expect.any(Error), expect.any(Object))
     })
   })
 
@@ -105,7 +108,7 @@ describe('ErrorBoundary', () => {
           </PageErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument()
       expect(screen.getByText(/The page encountered an unexpected error/)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /Try Again/ })).toBeInTheDocument()
@@ -123,7 +126,7 @@ describe('ErrorBoundary', () => {
           </SectionErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(screen.getByText('Oops! Something went wrong')).toBeInTheDocument()
     })
   })
@@ -137,15 +140,17 @@ describe('ErrorBoundary', () => {
           </ComponentErrorBoundary>
         </TestWrapper>
       )
-      
-      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
+
+      expect(
+        screen.getByText('Reload this section, or report this error using the Error ID.')
+      ).toBeInTheDocument()
     })
   })
 
   describe('Custom fallback', () => {
     it('renders custom fallback UI when provided', () => {
       const CustomFallback = <div>Custom error fallback</div>
-      
+
       render(
         <TestWrapper>
           <ErrorBoundary fallback={CustomFallback}>
@@ -153,7 +158,7 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       expect(screen.getByText('Custom error fallback')).toBeInTheDocument()
       expect(screen.queryByText('Oops! Something went wrong')).not.toBeInTheDocument()
     })
@@ -163,7 +168,7 @@ describe('ErrorBoundary', () => {
     it('allows retry functionality', () => {
       let shouldThrow = true
       const TestComponent = () => <ThrowError shouldThrow={shouldThrow} />
-      
+
       const { rerender } = render(
         <TestWrapper>
           <ErrorBoundary>
@@ -171,17 +176,19 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       // Error should be displayed
-      expect(screen.getByText('Reload this section, or report this error using the Error ID.')).toBeInTheDocument()
-      
+      expect(
+        screen.getByText('Reload this section, or report this error using the Error ID.')
+      ).toBeInTheDocument()
+
       // Simulate fixing the error
       shouldThrow = false
-      
+
       // Click retry button
       const retryButton = screen.getByRole('button')
       retryButton.click()
-      
+
       // Component should recover (this is a simplified test)
       // In reality, the retry mechanism resets the error boundary state
     })
@@ -196,7 +203,7 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       // Should display error ID for tracking
       expect(screen.getByText(/Error ID:/)).toBeInTheDocument()
     })
@@ -211,9 +218,11 @@ describe('ErrorBoundary', () => {
           </ErrorBoundary>
         </TestWrapper>
       )
-      
+
       // Check for alert role or aria-live region
-      const errorMessage = screen.getByText('Reload this section, or report this error using the Error ID.')
+      const errorMessage = screen.getByText(
+        'Reload this section, or report this error using the Error ID.'
+      )
       expect(errorMessage.closest('div')).toBeInTheDocument()
     })
 
@@ -225,9 +234,9 @@ describe('ErrorBoundary', () => {
           </PageErrorBoundary>
         </TestWrapper>
       )
-      
+
       const buttons = screen.getAllByRole('button')
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button).toHaveAttribute('type', 'button')
       })
     })

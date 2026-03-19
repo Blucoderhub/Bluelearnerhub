@@ -88,10 +88,12 @@ src/
 **Powered by**: Bluecoderhub
 
 **Primary Colors**:
+
 - Main Brand: `#3b82f6` (Blue 500)
 - Interactive: `#2563eb` (Blue 600)
 
 **Fonts**:
+
 - Sans: Inter
 - Mono: JetBrains Mono
 
@@ -122,11 +124,13 @@ NEXTAUTH_URL=http://localhost:3000
 ## 🎯 Key Components
 
 ### Layout Components
+
 - `Header` - Main navigation
 - `Sidebar` - Dashboard sidebar
 - `Footer` - Site footer
 
 ### Feature Components
+
 - `TutorialViewer` - W3Schools-style lesson viewer
 - `CodePlayground` - Interactive code editor
 - `HackathonCard` - Hackathon preview
@@ -136,6 +140,7 @@ NEXTAUTH_URL=http://localhost:3000
 ## 🔗 API Integration
 
 API client is configured in `src/lib/api.ts` with:
+
 - Automatic JWT token injection
 - Request/response interceptors
 - Error handling
@@ -151,6 +156,7 @@ const tutorials = await api.get('/tutorials')
 ## 🎭 Animations
 
 The platform features custom animations:
+
 - Isometric hero sections
 - Floating elements
 - Liquid flow backgrounds
@@ -162,6 +168,7 @@ Animation components are in `src/components/animations/`.
 ## 📱 Responsive Design
 
 Breakpoints:
+
 - `sm`: 640px
 - `md`: 768px
 - `lg`: 1024px
@@ -187,6 +194,7 @@ npm run format
 ## 🚢 Deployment
 
 Build optimized for:
+
 - Static export for CDN
 - Docker containerization
 - Vercel deployment

@@ -38,11 +38,11 @@ export function DailyChallenge({
     setMinutes(m)
 
     const interval = setInterval(() => {
-      setHours(prev => {
+      setHours((prev) => {
         const newTime = timeRemaining - Math.floor((Date.now() / 1000) % 86400)
         return Math.floor(Math.max(0, newTime) / 3600)
       })
-      setMinutes(prev => {
+      setMinutes((prev) => {
         const newTime = timeRemaining - Math.floor((Date.now() / 1000) % 86400)
         return Math.floor((Math.max(0, newTime) % 3600) / 60)
       })
@@ -59,80 +59,89 @@ export function DailyChallenge({
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-[2.5rem] border border-border bg-primary/5 p-8 md:p-10 shadow-2xl shadow-primary/10 group"
+      className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-primary/5 p-8 shadow-2xl shadow-primary/10 md:p-10"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, borderColor: 'rgba(16, 185, 129, 0.4)' }}
       transition={{ duration: 0.3 }}
     >
       {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 blur-[60px] rounded-full translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-primary/10 blur-[100px]" />
+      <div className="absolute bottom-0 left-0 h-32 w-32 -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/5 blur-[60px]" />
 
-      <div className="relative flex flex-col md:flex-row gap-8 items-center">
+      <div className="relative flex flex-col items-center gap-8 md:flex-row">
         {/* Character/Visual Side */}
-        <div className="hidden md:flex flex-col items-center justify-center p-6 rounded-[2rem] bg-white/5 border border-white/10 relative overflow-hidden group-hover:bg-primary/10 transition-colors">
-           <CodingCharacter size={120} />
-           <div className="mt-4 text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/80">CHALLENGE_STATUS</p>
-              <p className="text-xs font-bold text-white/40">{completed ? 'VERIFIED' : 'PENDING...'}</p>
-           </div>
+        <div className="relative hidden flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-6 transition-colors group-hover:bg-primary/10 md:flex">
+          <CodingCharacter size={120} />
+          <div className="mt-4 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/80">
+              CHALLENGE_STATUS
+            </p>
+            <p className="text-xs font-bold text-white/40">
+              {completed ? 'VERIFIED' : 'PENDING...'}
+            </p>
+          </div>
         </div>
 
         {/* Content Side */}
         <div className="flex-1 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/15 border border-border">
-              <Sparkles className="w-4 h-4 text-foreground/70" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/70">DAILY_REVENUE_CHALLENGE</span>
+            <div className="flex items-center gap-2 rounded-full border border-border bg-primary/15 px-4 py-1.5">
+              <Sparkles className="h-4 w-4 text-foreground/70" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/70">
+                DAILY_REVENUE_CHALLENGE
+              </span>
             </div>
-            
+
             {!completed && timeRemaining > 0 && (
-              <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400">
-                <Clock className="w-4 h-4 animate-pulse" />
-                <span className="text-xs font-black tracking-widest">{hours}H {minutes}M REMAINING</span>
+              <div className="flex items-center gap-3 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-1.5 text-red-400">
+                <Clock className="h-4 w-4 animate-pulse" />
+                <span className="text-xs font-black tracking-widest">
+                  {hours}H {minutes}M REMAINING
+                </span>
               </div>
             )}
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-3xl md:text-4xl font-black italic tracking-tighter text-white group-hover:text-foreground/70 transition-colors">
+            <h4 className="text-3xl font-black italic tracking-tighter text-white transition-colors group-hover:text-foreground/70 md:text-4xl">
               {title}
             </h4>
-            <p className="text-lg text-muted-foreground font-medium leading-relaxed max-w-2xl">
+            <p className="max-w-2xl text-lg font-medium leading-relaxed text-muted-foreground">
               {description}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <div className={`px-5 py-2 rounded-xl border-2 font-black italic text-xs tracking-widest ${difficultyColors[difficulty]}`}>
+            <div
+              className={`rounded-xl border-2 px-5 py-2 text-xs font-black italic tracking-widest ${difficultyColors[difficulty]}`}
+            >
               {difficulty.toUpperCase()}
             </div>
-            <div className="px-5 py-2 rounded-xl bg-secondary/50 border border-border text-white/60 font-black text-[10px] tracking-[0.1em] uppercase">
+            <div className="rounded-xl border border-border bg-secondary/50 px-5 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-white/60">
               {category}
             </div>
-            <div className="flex items-center gap-2 text-xl font-black text-[var(--xp-gold)] ai-glow ml-auto md:ml-0">
-              <Zap className="w-6 h-6 fill-current" />
-              +{xpReward} XP
+            <div className="ai-glow ml-auto flex items-center gap-2 text-xl font-black text-[var(--xp-gold)] md:ml-0">
+              <Zap className="h-6 w-6 fill-current" />+{xpReward} XP
             </div>
           </div>
 
-          <div className="pt-4 flex items-center gap-6">
+          <div className="flex items-center gap-6 pt-4">
             {completed ? (
-              <div className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-primary/15 border border-primary/40 text-foreground/70 font-black italic tracking-tight text-lg">
-                <CheckCircle2 className="w-6 h-6" />
+              <div className="flex items-center gap-3 rounded-2xl border border-primary/40 bg-primary/15 px-8 py-4 text-lg font-black italic tracking-tight text-foreground/70">
+                <CheckCircle2 className="h-6 w-6" />
                 CHALLENGE_SOLVED
               </div>
             ) : (
               <Button
                 onClick={onStart}
-                className="h-16 px-10 bg-primary hover:bg-primary/90 text-white font-black text-xl italic tracking-tighter rounded-2xl shadow-2xl shadow-primary/20 group/btn transition-all active:scale-95"
+                className="group/btn h-16 rounded-2xl bg-primary px-10 text-xl font-black italic tracking-tighter text-white shadow-2xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95"
               >
                 SOLVE_NOW
-                <ArrowRight className="w-6 h-6 ml-3 group-hover/btn:translate-x-2 transition-transform" />
+                <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover/btn:translate-x-2" />
               </Button>
             )}
-            <p className="hidden lg:block text-xs font-bold text-white/20 italic max-w-[200px]">
+            <p className="hidden max-w-[200px] text-xs font-bold italic text-white/20 lg:block">
               Complete this to maintain your 12-day streak and earn exclusive domain badges.
             </p>
           </div>

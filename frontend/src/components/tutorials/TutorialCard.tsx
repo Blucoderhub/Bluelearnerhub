@@ -45,11 +45,11 @@ export default function TutorialCard({
 
   const domainColors: Record<string, string> = {
     'computer-science': 'bg-primary',
-    'mechanical': 'bg-primary',
-    'electrical': 'bg-yellow-500',
-    'civil': 'bg-blue-500',
-    'chemical': 'bg-purple-500',
-    'management': 'bg-violet-500',
+    mechanical: 'bg-primary',
+    electrical: 'bg-yellow-500',
+    civil: 'bg-blue-500',
+    chemical: 'bg-purple-500',
+    management: 'bg-violet-500',
   }
 
   return (
@@ -60,54 +60,55 @@ export default function TutorialCard({
       whileHover={{ y: -4 }}
     >
       <Link href={`/tutorials/${id}`}>
-        <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-blue-500 transition-all cursor-pointer h-full">
+        <Card className="group h-full cursor-pointer overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-blue-500">
           {/* Thumbnail */}
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
             {thumbnail ? (
               <img
                 src={thumbnail}
                 alt={title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <BookOpen className="w-16 h-16 text-gray-600" />
+              <div className="flex h-full w-full items-center justify-center">
+                <BookOpen className="h-16 w-16 text-gray-600" />
               </div>
             )}
-            
+
             {/* Domain Badge */}
-            <div className="absolute top-3 left-3">
-              <Badge className={`${domainColors[domain] || 'bg-gray-600'} text-white border-0`}>
-                {domain.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            <div className="absolute left-3 top-3">
+              <Badge className={`${domainColors[domain] || 'bg-gray-600'} border-0 text-white`}>
+                {domain
+                  .split('-')
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
               </Badge>
             </div>
 
             {/* Difficulty Badge */}
-            <div className="absolute top-3 right-3">
+            <div className="absolute right-3 top-3">
               <Badge className={`${difficultyColors[difficulty]} border`}>
                 {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
               </Badge>
             </div>
 
             {/* Play Button Overlay */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
-                <Play className="w-8 h-8 text-white ml-1" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary">
+                <Play className="ml-1 h-8 w-8 text-white" />
               </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="p-5 space-y-3">
+          <div className="space-y-3 p-5">
             {/* Title */}
-            <h3 className="text-lg font-semibold text-white line-clamp-2 group-hover:text-blue-400 transition-colors">
+            <h3 className="line-clamp-2 text-lg font-semibold text-white transition-colors group-hover:text-blue-400">
               {title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-400 line-clamp-2">
-              {description}
-            </p>
+            <p className="line-clamp-2 text-sm text-gray-400">{description}</p>
 
             {/* Tags */}
             {tags.length > 0 && (
@@ -116,13 +117,16 @@ export default function TutorialCard({
                   <Badge
                     key={index}
                     variant="outline"
-                    className="text-xs bg-gray-900 border-gray-600 text-gray-400"
+                    className="border-gray-600 bg-gray-900 text-xs text-gray-400"
                   >
                     {tag}
                   </Badge>
                 ))}
                 {tags.length > 3 && (
-                  <Badge variant="outline" className="text-xs bg-gray-900 border-gray-600 text-gray-400">
+                  <Badge
+                    variant="outline"
+                    className="border-gray-600 bg-gray-900 text-xs text-gray-400"
+                  >
                     +{tags.length - 3}
                   </Badge>
                 )}
@@ -132,15 +136,15 @@ export default function TutorialCard({
             {/* Stats */}
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <div className="flex items-center gap-1">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen className="h-4 w-4" />
                 <span>{lessonsCount} lessons</span>
               </div>
               <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
+                <Clock className="h-4 w-4" />
                 <span>{duration}m</span>
               </div>
               <div className="flex items-center gap-1">
-                <Award className="w-4 h-4" />
+                <Award className="h-4 w-4" />
                 <span>{enrolledCount.toLocaleString()}</span>
               </div>
             </div>

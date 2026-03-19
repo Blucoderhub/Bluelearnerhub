@@ -28,7 +28,7 @@ import { users } from '../db/schema';
 import { GamificationService } from '../services/gamification.service';
 import { config } from '../config';
 import logger from '../utils/logger';
-import { fetchAdaptiveGuidanceFromAI, fallbackTutorialGuidance } from '@/services/adaptiveGuidance';
+import { fetchAdaptiveGuidanceFromAI, fallbackTutorialGuidance } from '../services/adaptiveGuidance';
 
 // ────────────────────────────────────────────────────────────────────────────
 // BROWSE & SEARCH
@@ -36,11 +36,12 @@ import { fetchAdaptiveGuidanceFromAI, fallbackTutorialGuidance } from '@/service
 
 export const listTutorials = async (req: Request, res: Response) => {
   try {
-    const { domain, difficulty, page = '1', limit = '20' } = req.query as Record<string, string>;
+    const { domain, subDomain, difficulty, page = '1', limit = '20' } = req.query as Record<string, string>;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const conditions: any[] = [eq(tutorials.isPublished, true)];
     if (domain)     conditions.push(ilike(tutorials.domain, `%${domain}%`));
+    if (subDomain)  conditions.push(ilike(tutorials.subDomain, `%${subDomain}%`));
     if (difficulty) conditions.push(eq(tutorials.difficulty as any, difficulty));
 
     const rows = await db
@@ -133,7 +134,7 @@ export const getTutorial = async (req: Request, res: Response) => {
             eq(tutorialProgress.tutorialId, tutorial.id),
           ),
         );
-      completedSections = progress.map((p) => p.sectionId);
+      completedSections = progress.map((p: any) => p.sectionId);
     }
 
     // Increment view count (fire-and-forget)
@@ -146,7 +147,7 @@ export const getTutorial = async (req: Request, res: Response) => {
       success: true,
       data: {
         ...tutorial,
-        sections: sections.map((s) => ({
+        sections: sections.map((s: any) => ({
           ...s,
           // Hide solution from response; served only after exercise submission
           solutionCode: undefined,
@@ -364,8 +365,8 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
         .limit(80),
     ]);
 
-    const runCodeEvents = recentEvents.filter((event) => String(event.eventType || '').toLowerCase().includes('run_code')).length;
-    const errorEvents = recentEvents.filter((event) => event.eventType.toLowerCase().includes('error')).length;
+    const runCodeEvents = recentEvents.filter((event: any) => String(event.eventType || '').toLowerCase().includes('run_code')).length;
+    const errorEvents = recentEvents.filter((event: any) => event.eventType.toLowerCase().includes('error')).length;
 
     const snapshot = {
       completionPercent: sections.length ? Math.round((completedRows.length / sections.length) * 100) : 0,
@@ -382,7 +383,7 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
         target_id: tutorialId,
         target_title: tutorial.title,
         metrics: snapshot,
-        events: recentEvents.map((event) => ({
+        events: recentEvents.map((event: any) => ({
           event_type: event.eventType,
           event_payload: event.eventPayload,
           created_at: event.createdAt,

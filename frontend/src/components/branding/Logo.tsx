@@ -19,19 +19,14 @@ export function Logo({ variant = 'default', className = '', showText = true }: L
         className="shrink-0"
       >
         <rect width="32" height="32" rx="8" fill={variant === 'white' ? '#fff' : '#3b82f6'} />
-        <path
-          d="M8 12h8v8H8z"
-          fill={variant === 'white' ? '#3b82f6' : '#fff'}
-          opacity="0.8"
-        />
-        <path
-          d="M12 8h8v8h-8z"
-          fill={variant === 'white' ? '#3b82f6' : '#fff'}
-        />
+        <path d="M8 12h8v8H8z" fill={variant === 'white' ? '#3b82f6' : '#fff'} opacity="0.8" />
+        <path d="M12 8h8v8h-8z" fill={variant === 'white' ? '#3b82f6' : '#fff'} />
       </svg>
 
       {showText && (
-        <span className={`text-xl font-bold ${variant === 'white' ? 'text-white' : 'text-foreground'}`}>
+        <span
+          className={`text-xl font-bold ${variant === 'white' ? 'text-white' : 'text-foreground'}`}
+        >
           {brandConfig.name}
         </span>
       )}
@@ -41,9 +36,13 @@ export function Logo({ variant = 'default', className = '', showText = true }: L
 
 export function PoweredByBadge({ className = '' }: { className?: string }) {
   return (
-    <div className={`flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground/60 ${className}`}>
-      <span className="font-medium whitespace-nowrap">Powered by</span>
-      <span className="font-bold text-primary/80 tracking-normal normal-case text-xs">{brandConfig.poweredBy}</span>
+    <div
+      className={`flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground/60 ${className}`}
+    >
+      <span className="whitespace-nowrap font-medium">Powered by</span>
+      <span className="text-xs font-bold normal-case tracking-normal text-primary/80">
+        {brandConfig.poweredBy}
+      </span>
     </div>
   )
 }

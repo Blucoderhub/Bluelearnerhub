@@ -9,7 +9,8 @@ const testimonials = [
     name: 'Sarah Chen',
     role: 'Software Engineer',
     company: 'Google',
-    content: 'Bluelearnerhub helped me transition from bootcamp graduate to working at Google. The hackathons gave me real-world experience!',
+    content:
+      'Bluelearnerhub helped me transition from bootcamp graduate to working at Google. The hackathons gave me real-world experience!',
     rating: 5,
     initials: 'SC',
     color: 'from-blue-500 to-primary',
@@ -18,7 +19,8 @@ const testimonials = [
     name: 'Raj Patel',
     role: 'Backend Developer',
     company: 'Meta',
-    content: 'The system design and algorithm modules are top-notch. I went through the entire CS track and it significantly improved my technical interview performance.',
+    content:
+      'The system design and algorithm modules are top-notch. I went through the entire CS track and it significantly improved my technical interview performance.',
     rating: 5,
     initials: 'RP',
     color: 'from-purple-500 to-pink-500',
@@ -27,7 +29,8 @@ const testimonials = [
     name: 'Emma Wilson',
     role: 'Full Stack Developer',
     company: 'Stripe',
-    content: 'I loved the interactive tutorials. Learning by doing actually stuck with me, unlike traditional courses.',
+    content:
+      'I loved the interactive tutorials. Learning by doing actually stuck with me, unlike traditional courses.',
     rating: 5,
     initials: 'EW',
     color: 'from-primary to-blue-500',
@@ -36,7 +39,8 @@ const testimonials = [
     name: 'Alex Kumar',
     role: 'Frontend Architect',
     company: 'Microsoft',
-    content: 'The Deep Dive tutorials on React and Next.js are the best I have found. The community feedback on my code reviews helped me master clean code principles.',
+    content:
+      'The Deep Dive tutorials on React and Next.js are the best I have found. The community feedback on my code reviews helped me master clean code principles.',
     rating: 5,
     initials: 'AK',
     color: 'from-primary to-primary',
@@ -49,7 +53,7 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/40'}`}
+          className={`h-4 w-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/40'}`}
         />
       ))}
     </div>
@@ -76,34 +80,34 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <section className="py-16 md:py-24 px-4 bg-card/30 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-level-purple/5 via-transparent to-transparent" />
-      <div className="max-w-6xl mx-auto relative z-10">
+    <section className="relative overflow-hidden bg-card/30 px-4 py-16 md:py-24">
+      <div className="from-level-purple/5 absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] via-transparent to-transparent" />
+      <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-12 md:mb-16"
+          className="mb-12 text-center md:mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-4">
+          <span className="mb-4 inline-block rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-sm font-medium text-purple-400">
             Success Stories
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
             Loved by{' '}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               50,000+
             </span>{' '}
             Learners
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
+          <p className="mx-auto max-w-xl text-base text-muted-foreground md:text-lg">
             Join thousands of students who have transformed their careers
           </p>
         </motion.div>
 
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 md:hidden"
+          className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:hidden"
         >
           {testimonials.map((testimonial, idx) => (
             <motion.div
@@ -119,17 +123,18 @@ export default function Testimonials() {
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 mt-4 md:hidden">
+        <div className="mt-4 flex justify-center gap-2 md:hidden">
           {testimonials.map((_, idx) => (
             <div
               key={idx}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeIndex ? 'bg-purple-500 w-6' : 'bg-muted'
-                }`}
+              className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                idx === activeIndex ? 'w-6 bg-purple-500' : 'bg-muted'
+              }`}
             />
           ))}
         </div>
 
-        <div className="hidden md:grid md:grid-cols-2 gap-6">
+        <div className="hidden gap-6 md:grid md:grid-cols-2">
           {testimonials.map((testimonial, idx) => (
             <motion.div
               key={idx}
@@ -147,11 +152,17 @@ export default function Testimonials() {
   )
 }
 
-function TestimonialCard({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) {
+function TestimonialCard({
+  testimonial,
+  index,
+}: {
+  testimonial: (typeof testimonials)[0]
+  index: number
+}) {
   return (
-    <div className="h-full p-6 md:p-8 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card hover:border-purple-500/30 transition-all duration-300 group">
-      <Quote className="w-8 h-8 text-purple-500/30 mb-4 group-hover:text-purple-500/50 transition-colors" />
-      <p className="text-foreground/80 text-sm md:text-base leading-relaxed mb-6">
+    <div className="group h-full rounded-xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/30 hover:bg-card md:p-8">
+      <Quote className="mb-4 h-8 w-8 text-purple-500/30 transition-colors group-hover:text-purple-500/50" />
+      <p className="mb-6 text-sm leading-relaxed text-foreground/80 md:text-base">
         &ldquo;{testimonial.content}&rdquo;
       </p>
       <div className="flex items-center justify-between">
@@ -164,7 +175,9 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof testimoni
             viewport={{ once: true }}
             className="relative"
           >
-            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center flex-shrink-0`}>
+            <div
+              className={`h-10 w-10 rounded-full bg-gradient-to-br ${testimonial.color} flex flex-shrink-0 items-center justify-center`}
+            >
               <span className="text-sm font-bold text-white">{testimonial.initials}</span>
             </div>
             <motion.div
@@ -174,10 +187,10 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof testimoni
             />
           </motion.div>
           <div>
-            <p className="font-semibold text-foreground text-sm">{testimonial.name}</p>
+            <p className="text-sm font-semibold text-foreground">{testimonial.name}</p>
             <p className="text-xs text-muted-foreground">
               {testimonial.role} at{' '}
-              <span className="text-foreground/70 font-medium">{testimonial.company}</span>
+              <span className="font-medium text-foreground/70">{testimonial.company}</span>
             </p>
           </div>
         </div>

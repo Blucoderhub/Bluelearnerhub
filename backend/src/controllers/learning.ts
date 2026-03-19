@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { pool } from '@/utils/database';
-import { AppError } from '@/middleware/error';
+import { pool } from '../utils/database';
+import { AppError } from '../middleware/error';
 
 export class LearningController {
   async getLearningPaths(req: Request, res: Response, next: NextFunction) {

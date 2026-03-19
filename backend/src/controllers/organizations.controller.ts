@@ -35,7 +35,7 @@ export const listOrganizations = async (req: Request, res: Response) => {
     const rows = await query.orderBy(desc(organizations.createdAt));
 
     const filtered = search
-      ? rows.filter((o) => o.name.toLowerCase().includes(search.toLowerCase()))
+      ? rows.filter((o: any) => o.name.toLowerCase().includes(search.toLowerCase()))
       : rows;
 
     res.json({ success: true, data: filtered });

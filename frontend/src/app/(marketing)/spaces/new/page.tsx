@@ -3,9 +3,24 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Globe, Eye, Save, Play, Plus, Trash2, Settings,
-  Code2, ChevronDown, X, Share2, ExternalLink, Lock, Unlock,
-  RefreshCw, Download, Copy, Check
+  Globe,
+  Eye,
+  Save,
+  Play,
+  Plus,
+  Trash2,
+  Settings,
+  Code2,
+  ChevronDown,
+  X,
+  Share2,
+  ExternalLink,
+  Lock,
+  Unlock,
+  RefreshCw,
+  Download,
+  Copy,
+  Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -136,7 +151,9 @@ export default function SpacesEditorPage() {
     if (autoPreview) {
       if (previewTimer.current) clearTimeout(previewTimer.current)
       previewTimer.current = setTimeout(() => {
-        setPreview(buildPreviewSrc(files.map((f) => (f.id === activeFile ? { ...f, content: val } : f))))
+        setPreview(
+          buildPreviewSrc(files.map((f) => (f.id === activeFile ? { ...f, content: val } : f)))
+        )
       }, 600)
     }
   }
@@ -150,28 +167,29 @@ export default function SpacesEditorPage() {
   }
 
   const copyLink = () => {
-    navigator.clipboard.writeText(`spaces.bluelearnerhub.com/u/you/${projectName.toLowerCase().replace(/\s+/g, '-')}`)
+    navigator.clipboard.writeText(
+      `spaces.bluelearnerhub.com/u/you/${projectName.toLowerCase().replace(/\s+/g, '-')}`
+    )
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
-
+    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
       {/* ── Top bar ── */}
-      <div className="flex items-center gap-3 px-4 h-12 border-b border-border/50 bg-background shrink-0">
+      <div className="flex h-12 shrink-0 items-center gap-3 border-b border-border/50 bg-background px-4">
         {/* Project name */}
         <Input
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
-          className="h-7 w-44 text-[13px] font-bold border-border/40 bg-muted/30 rounded-lg px-2"
+          className="h-7 w-44 rounded-lg border-border/40 bg-muted/30 px-2 text-[13px] font-bold"
         />
 
-        <div className="flex items-center gap-1 ml-1">
+        <div className="ml-1 flex items-center gap-1">
           {/* Privacy toggle */}
           <button
             onClick={() => setIsPrivate(!isPrivate)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold text-muted-foreground transition-all hover:bg-muted/50 hover:text-foreground"
           >
             {isPrivate ? <Lock className="h-3.5 w-3.5" /> : <Unlock className="h-3.5 w-3.5" />}
             {isPrivate ? 'Private' : 'Public'}
@@ -183,11 +201,14 @@ export default function SpacesEditorPage() {
             <motion.div
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2 px-3 py-1 rounded-lg bg-muted/40 border border-border/40"
+              className="flex items-center gap-2 rounded-lg border border-border/40 bg-muted/40 px-3 py-1"
             >
-              <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
               <span className="text-[11px] font-bold text-muted-foreground">Live</span>
-              <button onClick={copyLink} className="flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors">
+              <button
+                onClick={copyLink}
+                className="flex items-center gap-1 text-[11px] font-bold text-primary transition-colors hover:text-primary/80"
+              >
                 {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                 {copied ? 'Copied!' : 'Copy link'}
               </button>
@@ -196,14 +217,14 @@ export default function SpacesEditorPage() {
           <Button
             size="sm"
             variant="outline"
-            className="h-7 gap-1.5 text-[12px] font-bold rounded-lg border-border/50"
+            className="h-7 gap-1.5 rounded-lg border-border/50 text-[12px] font-bold"
             onClick={runPreview}
           >
             <RefreshCw className="h-3.5 w-3.5" /> Run
           </Button>
           <Button
             size="sm"
-            className="h-7 gap-1.5 text-[12px] font-black rounded-lg"
+            className="h-7 gap-1.5 rounded-lg text-[12px] font-black"
             onClick={publish}
           >
             <Globe className="h-3.5 w-3.5" />
@@ -213,20 +234,19 @@ export default function SpacesEditorPage() {
       </div>
 
       {/* ── Main area ── */}
-      <div className="flex flex-1 min-h-0">
-
+      <div className="flex min-h-0 flex-1">
         {/* ── Editor panel ── */}
-        <div className="flex flex-col w-1/2 min-w-0 border-r border-border/40">
+        <div className="flex w-1/2 min-w-0 flex-col border-r border-border/40">
           {/* File tabs */}
-          <div className="flex items-center gap-0 border-b border-border/40 bg-muted/20 shrink-0">
+          <div className="flex shrink-0 items-center gap-0 border-b border-border/40 bg-muted/20">
             {files.map((f) => (
               <button
                 key={f.id}
                 onClick={() => setActiveFile(f.id)}
-                className={`flex items-center gap-1.5 px-4 py-2.5 text-[12px] font-semibold border-r border-border/30 transition-all ${
+                className={`flex items-center gap-1.5 border-r border-border/30 px-4 py-2.5 text-[12px] font-semibold transition-all ${
                   activeFile === f.id
-                    ? 'bg-background text-foreground border-b-2 border-b-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                    ? 'border-b-2 border-b-primary bg-background text-foreground'
+                    : 'text-muted-foreground hover:bg-muted/30 hover:text-foreground'
                 }`}
               >
                 <Code2 className={`h-3 w-3 ${LANG_COLORS[f.lang]}`} />
@@ -236,27 +256,32 @@ export default function SpacesEditorPage() {
           </div>
 
           {/* Code textarea */}
-          <div className="flex flex-1 min-h-0 overflow-hidden">
+          <div className="flex min-h-0 flex-1 overflow-hidden">
             {/* Line numbers */}
-            <div className="select-none shrink-0 w-10 bg-muted/10 border-r border-border/30 pt-4 pb-4 text-right pr-2">
+            <div className="w-10 shrink-0 select-none border-r border-border/30 bg-muted/10 pb-4 pr-2 pt-4 text-right">
               {current.content.split('\n').map((_, i) => (
-                <div key={i} className="text-[11px] font-mono leading-[1.6rem] text-muted-foreground/40">{i + 1}</div>
+                <div
+                  key={i}
+                  className="font-mono text-[11px] leading-[1.6rem] text-muted-foreground/40"
+                >
+                  {i + 1}
+                </div>
               ))}
             </div>
             <textarea
               value={current.content}
               onChange={(e) => updateContent(e.target.value)}
               spellCheck={false}
-              className="flex-1 resize-none bg-transparent font-mono text-[12px] leading-[1.6rem] p-4 outline-none text-foreground placeholder-muted-foreground overflow-auto"
+              className="flex-1 resize-none overflow-auto bg-transparent p-4 font-mono text-[12px] leading-[1.6rem] text-foreground placeholder-muted-foreground outline-none"
               style={{ tabSize: 2 }}
             />
           </div>
 
           {/* Status bar */}
-          <div className="flex items-center justify-between px-4 py-1.5 border-t border-border/30 bg-muted/10 text-[10px] text-muted-foreground/60 font-mono shrink-0">
+          <div className="flex shrink-0 items-center justify-between border-t border-border/30 bg-muted/10 px-4 py-1.5 font-mono text-[10px] text-muted-foreground/60">
             <span>{current.lang.toUpperCase()}</span>
             <span>{current.content.split('\n').length} lines</span>
-            <label className="flex items-center gap-1.5 cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-1.5">
               <input
                 type="checkbox"
                 className="h-3 w-3"
@@ -269,17 +294,17 @@ export default function SpacesEditorPage() {
         </div>
 
         {/* ── Preview panel ── */}
-        <div className="flex flex-col w-1/2 min-w-0">
+        <div className="flex w-1/2 min-w-0 flex-col">
           {/* Preview header */}
-          <div className="flex items-center gap-2 px-4 h-10 border-b border-border/40 bg-muted/10 shrink-0">
+          <div className="flex h-10 shrink-0 items-center gap-2 border-b border-border/40 bg-muted/10 px-4">
             <Eye className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="text-[12px] font-bold text-muted-foreground">Preview</span>
-            <div className="ml-3 flex-1 bg-background border border-border/40 rounded-md px-3 py-0.5 text-[10px] font-mono text-muted-foreground truncate">
+            <div className="ml-3 flex-1 truncate rounded-md border border-border/40 bg-background px-3 py-0.5 font-mono text-[10px] text-muted-foreground">
               spaces.bluelearnerhub.com/preview/{projectName.toLowerCase().replace(/\s+/g, '-')}
             </div>
             <button
               onClick={runPreview}
-              className="flex items-center gap-1 text-[11px] font-bold text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1 text-[11px] font-bold text-muted-foreground transition-colors hover:text-foreground"
             >
               <Play className="h-3 w-3" />
             </button>
@@ -288,7 +313,7 @@ export default function SpacesEditorPage() {
           {/* iframe preview */}
           <iframe
             src={preview}
-            className="flex-1 w-full border-0 bg-white"
+            className="w-full flex-1 border-0 bg-white"
             title="Space Preview"
             sandbox="allow-scripts allow-modals"
           />

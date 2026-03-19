@@ -6,10 +6,10 @@ interface LoadingSkeletonProps {
   count?: number
 }
 
-export function LoadingSkeleton({ 
-  className, 
+export function LoadingSkeleton({
+  className,
   variant = 'rectangle',
-  count = 1 
+  count = 1,
 }: LoadingSkeletonProps) {
   const variants = {
     card: 'h-64 rounded-lg',
@@ -21,14 +21,7 @@ export function LoadingSkeleton({
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <div
-          key={i}
-          className={cn(
-            'animate-pulse bg-gray-700',
-            variants[variant],
-            className
-          )}
-        />
+        <div key={i} className={cn('animate-pulse bg-gray-700', variants[variant], className)} />
       ))}
     </>
   )
@@ -37,11 +30,11 @@ export function LoadingSkeleton({
 // Specialized skeleton components
 export function CardSkeleton({ count = 1 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+        <div key={i} className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800">
           <LoadingSkeleton variant="rectangle" className="h-48" />
-          <div className="p-6 space-y-3">
+          <div className="space-y-3 p-6">
             <LoadingSkeleton variant="text" className="w-3/4" />
             <LoadingSkeleton variant="text" className="w-full" />
             <LoadingSkeleton variant="text" className="w-2/3" />

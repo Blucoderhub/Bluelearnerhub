@@ -50,39 +50,37 @@ export default function LearningPathCard({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group overflow-hidden bg-gray-800 border-gray-700 hover:border-blue-500 transition-all h-full flex flex-col">
+      <Card className="group flex h-full flex-col overflow-hidden border-gray-700 bg-gray-800 transition-all hover:border-blue-500">
         {/* Thumbnail */}
         <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-600 to-primary">
           {thumbnail ? (
             <img
               src={thumbnail}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <BookOpen className="w-20 h-20 text-white/30" />
+            <div className="flex h-full w-full items-center justify-center">
+              <BookOpen className="h-20 w-20 text-white/30" />
             </div>
           )}
 
           {/* Overlay Badges */}
-          <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-            <Badge className="bg-white/90 text-gray-900 border-0">
-              {domain}
-            </Badge>
-            <div className="flex items-center gap-1 bg-black/60 px-2 py-1 rounded">
-              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-              <span className="text-white text-sm font-semibold">{rating}</span>
-              <span className="text-gray-300 text-xs">({reviewsCount})</span>
+          <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
+            <Badge className="border-0 bg-white/90 text-gray-900">{domain}</Badge>
+            <div className="flex items-center gap-1 rounded bg-black/60 px-2 py-1">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-semibold text-white">{rating}</span>
+              <span className="text-xs text-gray-300">({reviewsCount})</span>
             </div>
           </div>
 
           {/* Progress Indicator (if enrolled) */}
           {isEnrolled && (
             <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-white text-xs font-medium">{progress}% Complete</span>
-                <TrendingUp className="w-4 h-4 text-blue-400" />
+              <div className="mb-1 flex items-center justify-between">
+                <span className="text-xs font-medium text-white">{progress}% Complete</span>
+                <TrendingUp className="h-4 w-4 text-blue-400" />
               </div>
               <Progress value={progress} className="h-1" />
             </div>
@@ -90,29 +88,27 @@ export default function LearningPathCard({
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col p-6 space-y-4">
+        <div className="flex flex-1 flex-col space-y-4 p-6">
           {/* Title & Description */}
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h3 className="mb-2 line-clamp-2 text-xl font-bold text-white transition-colors group-hover:text-blue-400">
               {title}
             </h3>
-            <p className="text-sm text-gray-400 line-clamp-3">
-              {description}
-            </p>
+            <p className="line-clamp-3 text-sm text-gray-400">{description}</p>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3 text-sm text-gray-400">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-blue-400" />
+              <BookOpen className="h-4 w-4 text-blue-400" />
               <span>{coursesCount} courses</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-400" />
+              <Users className="h-4 w-4 text-blue-400" />
               <span>{enrolledCount.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-yellow-400" />
+              <Clock className="h-4 w-4 text-yellow-400" />
               <span>{duration}h total</span>
             </div>
             <div>
@@ -125,7 +121,7 @@ export default function LearningPathCard({
           {/* Prerequisites */}
           {prerequisites.length > 0 && (
             <div>
-              <div className="text-xs text-gray-500 mb-2">Prerequisites:</div>
+              <div className="mb-2 text-xs text-gray-500">Prerequisites:</div>
               <div className="flex flex-wrap gap-1">
                 {prerequisites.slice(0, 2).map((prereq, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">

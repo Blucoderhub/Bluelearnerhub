@@ -14,7 +14,7 @@ export const brandColors = {
     800: '#1e40af',
     900: '#1e3a8a',
   },
-  
+
   // Accent Colors
   accent: {
     purple: '#8b5cf6',
@@ -23,7 +23,7 @@ export const brandColors = {
     yellow: '#f59e0b',
     red: '#ef4444',
   },
-  
+
   // Semantic Colors
   success: '#3b82f6',
   warning: '#f59e0b',
@@ -40,5 +40,5 @@ export const brandConfig = {
     twitter: '@Bluelearnerhub',
     linkedin: 'Bluelearnerhub',
     github: 'bluecoderhub',
-  }
+  },
 }

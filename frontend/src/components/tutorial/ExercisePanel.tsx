@@ -1,35 +1,38 @@
-'use client';
+'use client'
 
 /**
  * ExercisePanel — Practice challenge with test case runner
  */
 
-import React, { useState } from 'react';
-import { Terminal, CheckCircle2, XCircle, ChevronDown, ChevronUp, Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import CodePlayground from './CodePlayground';
+import React, { useState } from 'react'
+import { Terminal, CheckCircle2, XCircle, ChevronDown, ChevronUp, Zap } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import CodePlayground from './CodePlayground'
 
 interface TestCase {
-  input: string;
-  expectedOutput: string;
-  isHidden: boolean;
+  input: string
+  expectedOutput: string
+  isHidden: boolean
 }
 
 interface TestResult {
-  input: string;
-  expected: string;
-  actual: string;
-  passed: boolean;
-  hidden: boolean;
+  input: string
+  expected: string
+  actual: string
+  passed: boolean
+  hidden: boolean
 }
 
 interface ExercisePanelProps {
-  prompt: string;
-  testCases: TestCase[];
-  xpReward: number;
-  language: string;
-  onRun: (code: string, language: string) => Promise<{ stdout: string; stderr: string; success: boolean }>;
-  onComplete: () => Promise<void>;
+  prompt: string
+  testCases: TestCase[]
+  xpReward: number
+  language: string
+  onRun: (
+    code: string,
+    language: string
+  ) => Promise<{ stdout: string; stderr: string; success: boolean }>
+  onComplete: () => Promise<void>
 }
 
 export default function ExercisePanel({
@@ -40,51 +43,51 @@ export default function ExercisePanel({
   onRun,
   onComplete,
 }: ExercisePanelProps) {
-  const [isExpanded, setIsExpanded]     = useState(false);
-  const [testResults, setTestResults]   = useState<TestResult[]>([]);
-  const [allPassed, setAllPassed]       = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentCode, setCurrentCode]   = useState('');
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [testResults, setTestResults] = useState<TestResult[]>([])
+  const [allPassed, setAllPassed] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [currentCode, setCurrentCode] = useState('')
 
-  const visibleTests = testCases.filter((t) => !t.isHidden);
+  const visibleTests = testCases.filter((t) => !t.isHidden)
 
   const handleRunTests = async (code: string) => {
-    setIsSubmitting(true);
-    const results: TestResult[] = [];
+    setIsSubmitting(true)
+    const results: TestResult[] = []
 
     for (const tc of testCases) {
       try {
-        const result = await onRun(code, language);
-        const actual = result.stdout.trim();
+        const result = await onRun(code, language)
+        const actual = result.stdout.trim()
         results.push({
-          input:    tc.input,
+          input: tc.input,
           expected: tc.expectedOutput,
           actual,
-          passed:   actual === tc.expectedOutput.trim(),
-          hidden:   tc.isHidden,
-        });
+          passed: actual === tc.expectedOutput.trim(),
+          hidden: tc.isHidden,
+        })
       } catch {
         results.push({
-          input:    tc.input,
+          input: tc.input,
           expected: tc.expectedOutput,
-          actual:   'Execution error',
-          passed:   false,
-          hidden:   tc.isHidden,
-        });
+          actual: 'Execution error',
+          passed: false,
+          hidden: tc.isHidden,
+        })
       }
     }
 
-    setTestResults(results);
-    const passed = results.every((r) => r.passed);
-    setAllPassed(passed);
+    setTestResults(results)
+    const passed = results.every((r) => r.passed)
+    setAllPassed(passed)
 
     if (passed) {
-      await onComplete();
+      await onComplete()
     }
 
-    setIsSubmitting(false);
-    return { stdout: '', stderr: '', success: passed };
-  };
+    setIsSubmitting(false)
+    return { stdout: '', stderr: '', success: passed }
+  }
 
   return (
     <div className="flex flex-col">
@@ -119,12 +122,17 @@ export default function ExercisePanel({
             </p>
             <div className="flex flex-col gap-2">
               {visibleTests.map((tc, i) => (
-                <div key={i} className="rounded-lg bg-gray-100 px-3 py-2 font-mono text-xs dark:bg-gray-800">
+                <div
+                  key={i}
+                  className="rounded-lg bg-gray-100 px-3 py-2 font-mono text-xs dark:bg-gray-800"
+                >
                   <span className="text-gray-500">Input: </span>
                   <span className="text-gray-800 dark:text-gray-200">{tc.input}</span>
                   <br />
                   <span className="text-gray-500">Expected: </span>
-                  <span className="text-foreground dark:text-foreground/70">{tc.expectedOutput}</span>
+                  <span className="text-foreground dark:text-foreground/70">
+                    {tc.expectedOutput}
+                  </span>
                 </div>
               ))}
             </div>
@@ -159,37 +167,39 @@ export default function ExercisePanel({
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                {testResults.filter((r) => !r.hidden).map((r, i) => (
-                  <div
-                    key={i}
-                    className={cn(
-                      'flex items-start gap-2 rounded-lg px-3 py-2 text-xs font-mono',
-                      r.passed
-                        ? 'bg-secondary text-foreground dark:bg-background dark:text-foreground/60'
-                        : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300',
-                    )}
-                  >
-                    {r.passed ? (
-                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
-                    ) : (
-                      <XCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
-                    )}
-                    <div>
-                      <div>Input: {r.input}</div>
-                      {!r.passed && (
-                        <>
-                          <div>Expected: {r.expected}</div>
-                          <div>Got: {r.actual}</div>
-                        </>
+                {testResults
+                  .filter((r) => !r.hidden)
+                  .map((r, i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        'flex items-start gap-2 rounded-lg px-3 py-2 font-mono text-xs',
+                        r.passed
+                          ? 'bg-secondary text-foreground dark:bg-background dark:text-foreground/60'
+                          : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
                       )}
+                    >
+                      {r.passed ? (
+                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                      ) : (
+                        <XCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                      )}
+                      <div>
+                        <div>Input: {r.input}</div>
+                        {!r.passed && (
+                          <>
+                            <div>Expected: {r.expected}</div>
+                            <div>Got: {r.actual}</div>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }

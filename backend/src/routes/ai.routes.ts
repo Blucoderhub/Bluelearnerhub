@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as aiController from '@/controllers/ai.controller';
+import * as aiController from '../controllers/ai.controller';
 import { authenticate } from '../middleware/auth';
 import { checkCredits } from '../middleware/credits';
 

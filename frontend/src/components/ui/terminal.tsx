@@ -1,28 +1,39 @@
-'use client';
+'use client'
 
-import React from 'react';
+import React from 'react'
 
 interface TerminalProps {
-  commands?: string[];
-  output?: string[];
-  height?: string;
-  className?: string;
+  commands?: string[]
+  output?: string[]
+  height?: string
+  className?: string
 }
 
-const Terminal: React.FC<TerminalProps> = ({ commands = [], output = [], height, className = '' }) => {
-  const lines = output.length > 0 ? output : commands;
+const Terminal: React.FC<TerminalProps> = ({
+  commands = [],
+  output = [],
+  height,
+  className = '',
+}) => {
+  const lines = output.length > 0 ? output : commands
 
   return (
-    <div className={`bg-gray-900 rounded-lg shadow-lg overflow-hidden font-mono text-sm ${className}`} style={{ height }}>
-      <div className="bg-gray-800 px-4 py-2 flex items-center gap-2">
+    <div
+      className={`overflow-hidden rounded-lg bg-gray-900 font-mono text-sm shadow-lg ${className}`}
+      style={{ height }}
+    >
+      <div className="flex items-center gap-2 bg-gray-800 px-4 py-2">
         <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-red-500" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-blue-500" />
+          <div className="h-3 w-3 rounded-full bg-red-500" />
+          <div className="h-3 w-3 rounded-full bg-yellow-500" />
+          <div className="h-3 w-3 rounded-full bg-blue-500" />
         </div>
-        <span className="text-gray-400 text-xs ml-2">terminal</span>
+        <span className="ml-2 text-xs text-gray-400">terminal</span>
       </div>
-      <div className="p-4 text-blue-400 space-y-2 overflow-auto" style={{ maxHeight: height ? `calc(${height} - 40px)` : undefined }}>
+      <div
+        className="space-y-2 overflow-auto p-4 text-blue-400"
+        style={{ maxHeight: height ? `calc(${height} - 40px)` : undefined }}
+      >
         {lines.map((cmd, idx) => (
           <div key={idx}>
             <span className="text-blue-400">$</span> {cmd}
@@ -35,7 +46,7 @@ const Terminal: React.FC<TerminalProps> = ({ commands = [], output = [], height,
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Terminal;
+export default Terminal

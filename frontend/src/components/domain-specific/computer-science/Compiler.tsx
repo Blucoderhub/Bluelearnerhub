@@ -50,7 +50,6 @@ export default function Compiler({
 
       setExecutionTime(executionTime)
       setMemoryUsed(memoryUsed)
-
     } catch (error: any) {
       setOutput([`Execution failed: ${error.message}`])
     } finally {
@@ -72,11 +71,7 @@ export default function Compiler({
       })
 
       setTestResults(response.data.testResults)
-      setOutput([
-        `Submission completed!`,
-        `Passed: ${response.data.passed}/${response.data.total}`,
-      ])
-
+      setOutput([`Submission completed!`, `Passed: ${response.data.passed}/${response.data.total}`])
     } catch (error: any) {
       setOutput([`Submission failed: ${error.message}`])
     } finally {
@@ -85,7 +80,7 @@ export default function Compiler({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-screen p-4">
+    <div className="grid h-screen grid-cols-1 gap-4 p-4 lg:grid-cols-2">
       {/* Left Panel - Editor */}
       <div className="flex flex-col">
         <CodeEditor
@@ -106,12 +101,8 @@ export default function Compiler({
           </TabsList>
 
           <TabsContent value="output" className="flex-1">
-            <Terminal 
-              output={output} 
-              height="calc(100vh - 12rem)"
-              showHeader={false}
-            />
-            
+            <Terminal output={output} height="calc(100vh - 12rem)" showHeader={false} />
+
             {/* Execution Stats */}
             {executionTime !== null && (
               <div className="mt-4 flex gap-4">
@@ -129,19 +120,19 @@ export default function Compiler({
 
           <TabsContent value="results" className="space-y-2">
             {testResults.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
+              <div className="py-8 text-center text-gray-500">
                 No test results yet. Click Submit to run test cases.
               </div>
             ) : (
               testResults.map((result, i) => (
                 <Card key={i} className="p-4">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <span className="font-semibold">Test Case {i + 1}</span>
                     <Badge variant={result.passed ? 'default' : 'destructive'}>
                       {result.passed ? 'Passed' : 'Failed'}
                     </Badge>
                   </div>
-                  
+
                   {!result.passed && (
                     <div className="mt-2 text-sm">
                       <div className="text-gray-600">Expected: {result.expected}</div>
@@ -166,21 +157,21 @@ function getDefaultCode(language: string): string {
 
 if __name__ == "__main__":
     main()`,
-    
+
     javascript: `function main() {
     // Your code here
     console.log("Hello, World!");
 }
 
 main();`,
-    
+
     java: `public class Main {
     public static void main(String[] args) {
         // Your code here
         System.out.println("Hello, World!");
     }
 }`,
-    
+
     cpp: `#include <iostream>
 using namespace std;
 

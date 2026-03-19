@@ -48,7 +48,7 @@ export const authenticate = async (
 
     // Get user from database
     const result = await pool.query(
-      'SELECT id, email, role, full_name, is_active, is_banned FROM users WHERE id = $1',
+      'SELECT id, email, role, full_name FROM users WHERE id = $1',
       [decoded.userId]
     );
 
@@ -62,24 +62,6 @@ export const authenticate = async (
 
     const user = result.rows[0];
 
-    // Check if user is active
-    if (!user.is_active) {
-      res.status(403).json({
-        success: false,
-        message: 'Account is inactive',
-      });
-      return;
-    }
-
-    // Check if user is banned
-    if (user.is_banned) {
-      res.status(403).json({
-        success: false,
-        message: 'Account is banned',
-      });
-      return;
-    }
-
     // Attach user to request
     req.user = {
       id: user.id,
@@ -88,11 +70,11 @@ export const authenticate = async (
       fullName: user.full_name,
     };
 
-    // Update last login
-    await pool.query(
-      'UPDATE users SET last_login_at = NOW() WHERE id = $1',
+    // Update last active (fire-and-forget — never block auth on this)
+    pool.query(
+      'UPDATE users SET last_active = NOW() WHERE id = $1',
       [user.id]
-    );
+    ).catch(() => { /* non-fatal */ });
 
     next();
   } catch (error) {

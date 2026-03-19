@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { QuizService } from '@/services/quiz';
-import { db } from '@/db';
-import { learningBehaviorEvents } from '@/db/schema-v2';
+import { QuizService } from '../services/quiz';
+import { db } from '../db';
+import { learningBehaviorEvents } from '../db/schema-v2';
 import { and, desc, eq } from 'drizzle-orm';
-import logger from '@/utils/logger';
-import { fetchAdaptiveGuidanceFromAI, fallbackQuizGuidance } from '@/services/adaptiveGuidance';
+import logger from '../utils/logger';
+import { fetchAdaptiveGuidanceFromAI, fallbackQuizGuidance } from '../services/adaptiveGuidance';
 
 const quizService = new QuizService();
 
@@ -204,7 +204,7 @@ export class QuizController {
         ? relevantAttempts.reduce((acc: number, item: any) => acc + Number(item.percentage || 0), 0) / attemptCount
         : 0;
       const latestScore = attemptCount ? Number(relevantAttempts[0]?.percentage || 0) : 0;
-      const errorEvents = recentEvents.filter((event) => event.eventType.toLowerCase().includes('error')).length;
+      const errorEvents = recentEvents.filter((event: any) => event.eventType.toLowerCase().includes('error')).length;
 
       const snapshot = {
         attemptCount,
@@ -220,7 +220,7 @@ export class QuizController {
           target_id: quizId,
           target_title: quiz?.title || `Quiz ${quizId}`,
           metrics: snapshot,
-          events: recentEvents.map((event) => ({
+          events: recentEvents.map((event: any) => ({
             event_type: event.eventType,
             event_payload: event.eventPayload,
             created_at: event.createdAt,

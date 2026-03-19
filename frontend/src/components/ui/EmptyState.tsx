@@ -19,26 +19,24 @@ export default function EmptyState({
   imageUrl,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+    <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
       {/* Icon or Image */}
       {imageUrl ? (
-        <img src={imageUrl} alt={title} className="w-64 h-64 mb-6 opacity-50" />
+        <img src={imageUrl} alt={title} className="mb-6 h-64 w-64 opacity-50" />
       ) : Icon ? (
-        <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center mb-6">
-          <Icon className="w-12 h-12 text-gray-600" />
+        <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gray-800">
+          <Icon className="h-12 w-12 text-gray-600" />
         </div>
       ) : null}
 
       {/* Title */}
-      <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+      <h3 className="mb-2 text-2xl font-bold text-white">{title}</h3>
 
       {/* Description */}
-      <p className="text-gray-400 max-w-md mb-6">{description}</p>
+      <p className="mb-6 max-w-md text-gray-400">{description}</p>
 
       {/* Action Button */}
-      {actionLabel && onAction && (
-        <Button onClick={onAction}>{actionLabel}</Button>
-      )}
+      {actionLabel && onAction && <Button onClick={onAction}>{actionLabel}</Button>}
     </div>
   )
 }

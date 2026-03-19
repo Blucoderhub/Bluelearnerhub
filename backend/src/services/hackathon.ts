@@ -1,10 +1,10 @@
-import { HackathonModel, SubmissionModel } from '@/models/hackathon';
-import { UserModel } from '@/models/user';
-import { AppError } from '@/middleware/error';
+import { HackathonModel, SubmissionModel } from '../models/hackathon';
+import { UserModel } from '../models/user';
+import { AppError } from '../middleware/error';
 import axios from 'axios';
-import { config } from '@/config';
-import logger from '@/utils/logger';
-import { pool } from '@/utils/database';
+import { config } from '../config';
+import logger from '../utils/logger';
+import { pool } from '../utils/database';
 
 export class HackathonService {
   async getHackathons(filters: any, page: number, limit: number, userId?: number) {

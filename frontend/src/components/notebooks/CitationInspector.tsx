@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/lib/api'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { ScrollText, ExternalLink, Layers3, Search, BookmarkPlus, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -47,7 +53,17 @@ interface Annotation {
   createdAt: string
 }
 
-export default function CitationInspector({ notebookId, open, onOpenChange, source, loading, focusSnippet, focusChunkIndex, onSearch, onAnnotationsChanged }: Props) {
+export default function CitationInspector({
+  notebookId,
+  open,
+  onOpenChange,
+  source,
+  loading,
+  focusSnippet,
+  focusChunkIndex,
+  onSearch,
+  onAnnotationsChanged,
+}: Props) {
   const chunkRefs = useRef<Record<number, HTMLDivElement | null>>({})
   const [query, setQuery] = useState('')
   const [annotations, setAnnotations] = useState<Annotation[]>([])
@@ -79,7 +95,8 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
   useEffect(() => {
     if (!open || !source) return
     setAnnotationLoading(true)
-    api.get(`/notebooks/${notebookId}/sources/${source.id}/annotations`)
+    api
+      .get(`/notebooks/${notebookId}/sources/${source.id}/annotations`)
       .then(({ data }) => setAnnotations(data.annotations || []))
       .catch((err) => console.error('Failed to load annotations', err))
       .finally(() => setAnnotationLoading(false))
@@ -94,7 +111,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
         note: noteDraft.trim(),
         chunkIndex: selectedChunkIndex,
       })
-      setAnnotations(prev => [data.annotation, ...prev])
+      setAnnotations((prev) => [data.annotation, ...prev])
       setNoteDraft('')
       onAnnotationsChanged?.()
     } catch (err) {
@@ -108,7 +125,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
     if (!source) return
     try {
       await api.delete(`/notebooks/${notebookId}/sources/${source.id}/annotations/${annotationId}`)
-      setAnnotations(prev => prev.filter(item => item.id !== annotationId))
+      setAnnotations((prev) => prev.filter((item) => item.id !== annotationId))
       onAnnotationsChanged?.()
     } catch (err) {
       console.error('Failed to delete annotation', err)
@@ -119,7 +136,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
     if (!source?.url) return null
     try {
       const parsed = new URL(source.url)
-      return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.toString() : null
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.toString() : null
     } catch {
       return null
     }
@@ -127,11 +144,11 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] h-[85vh] p-0 overflow-hidden border border-white/10 bg-background/70 backdrop-blur-2xl">
-        <div className="flex flex-col h-full">
-          <DialogHeader className="px-6 py-4 border-b border-white/10 bg-white/70 dark:bg-gray-900/60 backdrop-blur">
+      <DialogContent className="h-[85vh] w-[95vw] max-w-4xl overflow-hidden border border-white/10 bg-background/70 p-0 backdrop-blur-2xl">
+        <div className="flex h-full flex-col">
+          <DialogHeader className="border-b border-white/10 bg-white/70 px-6 py-4 backdrop-blur dark:bg-gray-900/60">
             <DialogTitle className="flex items-center gap-2 text-left">
-              <ScrollText className="w-5 h-5 text-primary/80" />
+              <ScrollText className="h-5 w-5 text-primary/80" />
               {source?.title || 'Citation Inspector'}
             </DialogTitle>
             <DialogDescription className="text-left">
@@ -139,7 +156,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
             </DialogDescription>
           </DialogHeader>
 
-          <div className="relative flex-1 overflow-y-auto px-6 py-4 space-y-5 bg-white/45 dark:bg-transparent">
+          <div className="relative flex-1 space-y-5 overflow-y-auto bg-white/45 px-6 py-4 dark:bg-transparent">
             {loading ? (
               <div className="text-sm text-gray-500">Loading source…</div>
             ) : !source ? (
@@ -147,13 +164,13 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
             ) : (
               <>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 capitalize">
+                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 capitalize text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
                     {source.sourceType}
                   </span>
-                  <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {source.wordCount.toLocaleString()} words
                   </span>
-                  <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                  <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {source.chunkCount} chunks
                   </span>
                   {safeSourceUrl ? (
@@ -161,19 +178,19 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                       href={safeSourceUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                      className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
                     >
                       Open original
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="h-3 w-3" />
                     </a>
                   ) : source.url ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-100 px-2 py-1 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                       Invalid source URL
                     </span>
                   ) : null}
                 </div>
 
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <Input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -187,21 +204,25 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                     }}
                   />
                   <Button type="button" variant="outline" onClick={() => onSearch?.(query.trim())}>
-                    <Search className="w-4 h-4 mr-1" />
+                    <Search className="mr-1 h-4 w-4" />
                     Search
                   </Button>
                 </div>
 
                 {focusSnippet ? (
-                  <div className="rounded-xl border border-border dark:border-border bg-secondary dark:bg-muted/20 p-3">
-                    <div className="text-xs font-medium text-foreground dark:text-foreground/60 mb-1">Referenced snippet</div>
-                    <div className="text-sm text-foreground dark:text-foreground/90 whitespace-pre-wrap">{focusSnippet}</div>
+                  <div className="rounded-xl border border-border bg-secondary p-3 dark:border-border dark:bg-muted/20">
+                    <div className="mb-1 text-xs font-medium text-foreground dark:text-foreground/60">
+                      Referenced snippet
+                    </div>
+                    <div className="whitespace-pre-wrap text-sm text-foreground dark:text-foreground/90">
+                      {focusSnippet}
+                    </div>
                   </div>
                 ) : null}
 
-                <div className="rounded-xl border border-blue-200/80 dark:border-blue-800 bg-blue-50/85 dark:bg-blue-900/20 p-4 space-y-3 shadow-sm">
+                <div className="space-y-3 rounded-xl border border-blue-200/80 bg-blue-50/85 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/20">
                   <div className="flex items-center gap-2 text-sm font-medium text-blue-900 dark:text-blue-100">
-                    <BookmarkPlus className="w-4 h-4" />
+                    <BookmarkPlus className="h-4 w-4" />
                     Save highlight
                   </div>
                   <Textarea
@@ -217,31 +238,54 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                     rows={3}
                   />
                   <div className="flex justify-end">
-                    <Button type="button" onClick={saveAnnotation} disabled={saving || !selectedQuote.trim()}>
-                      <BookmarkPlus className="w-4 h-4 mr-1" />
+                    <Button
+                      type="button"
+                      onClick={saveAnnotation}
+                      disabled={saving || !selectedQuote.trim()}
+                    >
+                      <BookmarkPlus className="mr-1 h-4 w-4" />
                       Save highlight
                     </Button>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">Saved highlights</div>
+                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                    Saved highlights
+                  </div>
                   {annotationLoading ? (
                     <div className="text-sm text-gray-500">Loading highlights…</div>
                   ) : annotations.length === 0 ? (
-                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm text-gray-500">
+                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-gray-700">
                       No saved highlights yet.
                     </div>
                   ) : (
                     <div className="space-y-2">
                       {annotations.map((item) => (
-                        <div key={item.id} className="rounded-xl border border-blue-100/80 dark:border-gray-700 bg-white/90 dark:bg-gray-900/80 p-3 shadow-sm backdrop-blur">
-                          <div className="text-sm whitespace-pre-wrap text-gray-800 dark:text-gray-100">{item.quote}</div>
-                          {item.note ? <div className="text-sm mt-2 text-gray-600 dark:text-gray-300">{item.note}</div> : null}
-                          <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
-                            <span>{item.chunkIndex !== null ? `Chunk ${item.chunkIndex}` : 'Custom excerpt'}</span>
-                            <button type="button" onClick={() => deleteAnnotation(item.id)} className="inline-flex items-center gap-1 hover:text-red-500 transition-colors">
-                              <Trash2 className="w-3.5 h-3.5" />
+                        <div
+                          key={item.id}
+                          className="rounded-xl border border-blue-100/80 bg-white/90 p-3 shadow-sm backdrop-blur dark:border-gray-700 dark:bg-gray-900/80"
+                        >
+                          <div className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-100">
+                            {item.quote}
+                          </div>
+                          {item.note ? (
+                            <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                              {item.note}
+                            </div>
+                          ) : null}
+                          <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
+                            <span>
+                              {item.chunkIndex !== null
+                                ? `Chunk ${item.chunkIndex}`
+                                : 'Custom excerpt'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => deleteAnnotation(item.id)}
+                              className="inline-flex items-center gap-1 transition-colors hover:text-red-500"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
                               Delete
                             </button>
                           </div>
@@ -253,14 +297,15 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-100">
-                    <Layers3 className="w-4 h-4 text-primary/80" />
+                    <Layers3 className="h-4 w-4 text-primary/80" />
                     Extracted chunks
                   </div>
                   {source.chunks.length > 0 ? (
                     <div className="space-y-2">
-                      {source.chunks.map(chunk => {
-                        const matchesFocus = (focusChunkIndex !== undefined && chunk.chunkIndex === focusChunkIndex)
-                          || (focusSnippet && chunk.content.includes(focusSnippet.slice(0, 40)))
+                      {source.chunks.map((chunk) => {
+                        const matchesFocus =
+                          (focusChunkIndex !== undefined && chunk.chunkIndex === focusChunkIndex) ||
+                          (focusSnippet && chunk.content.includes(focusSnippet.slice(0, 40)))
                         return (
                           <div
                             key={chunk.chunkIndex}
@@ -269,11 +314,11 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                             }}
                             className={`rounded-xl border p-3 ${
                               matchesFocus
-                                ? 'border-border dark:border-border bg-secondary dark:bg-muted/20'
-                                : 'border-blue-100/70 dark:border-gray-700 bg-white/90 dark:bg-gray-900/80 backdrop-blur'
+                                ? 'border-border bg-secondary dark:border-border dark:bg-muted/20'
+                                : 'border-blue-100/70 bg-white/90 backdrop-blur dark:border-gray-700 dark:bg-gray-900/80'
                             }`}
                           >
-                            <div className="flex items-center justify-between gap-3 mb-2">
+                            <div className="mb-2 flex items-center justify-between gap-3">
                               <div className="text-[11px] uppercase tracking-wide text-gray-400">
                                 Chunk {chunk.chunkIndex}
                               </div>
@@ -283,12 +328,12 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                                   setSelectedQuote(chunk.content)
                                   setSelectedChunkIndex(chunk.chunkIndex)
                                 }}
-                                className="text-xs text-primary dark:text-blue-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 rounded"
+                                className="rounded text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 dark:text-blue-400"
                               >
                                 Use as highlight
                               </button>
                             </div>
-                            <div className="text-sm whitespace-pre-wrap leading-relaxed text-gray-700 dark:text-gray-200">
+                            <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-200">
                               {chunk.content}
                             </div>
                           </div>
@@ -296,7 +341,7 @@ export default function CitationInspector({ notebookId, open, onOpenChange, sour
                       })}
                     </div>
                   ) : (
-                    <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm text-gray-500">
+                    <div className="rounded-xl border border-gray-200 p-3 text-sm text-gray-500 dark:border-gray-700">
                       {source.previewText}
                     </div>
                   )}

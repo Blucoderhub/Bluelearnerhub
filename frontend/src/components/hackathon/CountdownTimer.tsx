@@ -64,7 +64,7 @@ export default function CountdownTimer({ endTime }: CountdownTimerProps) {
           key={idx}
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 1, repeat: Infinity }}
-          className="text-center bg-white/10 rounded-lg px-3 py-2 backdrop-blur-sm"
+          className="rounded-lg bg-white/10 px-3 py-2 text-center backdrop-blur-sm"
         >
           <div className="text-2xl font-bold">{String(item.value).padStart(2, '0')}</div>
           <div className="text-xs text-white/70">{item.label}</div>

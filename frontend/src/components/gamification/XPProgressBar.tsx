@@ -7,7 +7,9 @@ import { Zap } from 'lucide-react'
 const PARTICLE_COLORS = ['#fbbf24', '#60a5fa', '#60a5fa', '#a78bfa', '#f472b6', '#22d3ee']
 
 function XPParticles({ burst }: { burst: boolean }) {
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; color: string }>>([])
+  const [particles, setParticles] = useState<
+    Array<{ id: number; x: number; y: number; color: string }>
+  >([])
 
   useEffect(() => {
     if (burst) {
@@ -29,17 +31,14 @@ function XPParticles({ burst }: { burst: boolean }) {
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute pointer-events-none"
+          className="pointer-events-none absolute"
           style={{ left: '100%', top: '50%' }}
           initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
           animate={{ x: p.x, y: p.y, scale: 0, opacity: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 + Math.random() * 0.4, ease: 'easeOut' }}
         >
-          <div
-            className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: p.color }}
-          />
+          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
         </motion.div>
       ))}
     </AnimatePresence>
@@ -53,7 +52,12 @@ interface XPProgressBarProps {
   compact?: boolean
 }
 
-export function XPProgressBar({ currentXP, nextLevelXP, level, compact = false }: XPProgressBarProps) {
+export function XPProgressBar({
+  currentXP,
+  nextLevelXP,
+  level,
+  compact = false,
+}: XPProgressBarProps) {
   const percentage = Math.min((currentXP / nextLevelXP) * 100, 100)
   const [showBurst, setShowBurst] = useState(false)
   const isNearLevelUp = percentage >= 95
@@ -70,7 +74,7 @@ export function XPProgressBar({ currentXP, nextLevelXP, level, compact = false }
     return (
       <div className="flex items-center gap-2">
         <span className="level-badge text-xs">LV {level}</span>
-        <div className="relative flex-1 xp-bar">
+        <div className="xp-bar relative flex-1">
           <motion.div
             className="xp-bar-fill"
             initial={{ width: 0 }}
@@ -79,7 +83,9 @@ export function XPProgressBar({ currentXP, nextLevelXP, level, compact = false }
           />
           <XPParticles burst={showBurst} />
         </div>
-        <span className="text-xs font-mono text-muted-foreground">{currentXP}/{nextLevelXP}</span>
+        <span className="font-mono text-xs text-muted-foreground">
+          {currentXP}/{nextLevelXP}
+        </span>
       </div>
     )
   }
@@ -96,15 +102,15 @@ export function XPProgressBar({ currentXP, nextLevelXP, level, compact = false }
             Level {level}
           </motion.span>
           <div className="flex items-center gap-1 text-sm font-semibold">
-            <Zap className="w-4 h-4 text-[var(--xp-gold)]" />
+            <Zap className="h-4 w-4 text-[var(--xp-gold)]" />
             <span className="text-foreground">{currentXP.toLocaleString()} XP</span>
           </div>
         </div>
-        <span className="text-xs text-muted-foreground font-mono">
+        <span className="font-mono text-xs text-muted-foreground">
           {(nextLevelXP - currentXP).toLocaleString()} XP to Level {level + 1}
         </span>
       </div>
-      <div className="relative xp-bar h-3">
+      <div className="xp-bar relative h-3">
         <motion.div
           className={`xp-bar-fill ${isNearLevelUp ? 'xp-bar-fill-pulse' : ''}`}
           initial={{ width: 0 }}

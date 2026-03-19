@@ -63,7 +63,7 @@ export default function Pagination({
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}
       >
-        <ChevronsLeft className="w-4 h-4" />
+        <ChevronsLeft className="h-4 w-4" />
       </Button>
 
       {/* Previous Page */}
@@ -73,7 +73,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="h-4 w-4" />
       </Button>
 
       {/* Page Numbers */}
@@ -102,7 +102,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="h-4 w-4" />
       </Button>
 
       {/* Last Page */}
@@ -112,7 +112,7 @@ export default function Pagination({
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage === totalPages}
       >
-        <ChevronsRight className="w-4 h-4" />
+        <ChevronsRight className="h-4 w-4" />
       </Button>
     </div>
   )

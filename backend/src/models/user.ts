@@ -1,5 +1,5 @@
-import { pool } from '@/utils/database';
-import { hashPassword } from '@/utils/encryption';
+import { pool } from '../utils/database';
+import { hashPassword } from '../utils/encryption';
 
 export interface User {
   id: number;

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticate } from '../middleware/auth';
 import * as nb from '../controllers/notebooks.controller';
 import { uploadSingle } from '../middleware/upload';
-import { apiLimiter, notebookAiLimiter, notebookIngestLimiter } from '@/middleware/rateLimiter';
+import { apiLimiter, notebookAiLimiter, notebookIngestLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 

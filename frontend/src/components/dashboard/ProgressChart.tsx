@@ -15,41 +15,41 @@ export default function ProgressChart() {
     { day: 'Sun', xp: 490 },
   ]
 
-  const maxXP = Math.max(...weekData.map(d => d.xp))
+  const maxXP = Math.max(...weekData.map((d) => d.xp))
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+      className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
     >
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+      <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
         This Week's Progress
       </h3>
 
-      <div className="flex items-end gap-2 h-64">
+      <div className="flex h-64 items-end gap-2">
         {weekData.map((data, idx) => (
           <motion.div
             key={idx}
             initial={{ height: 0 }}
             animate={{ height: `${(data.xp / maxXP) * 100}%` }}
             transition={{ delay: idx * 0.1 }}
-            className="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg hover:opacity-80 transition-opacity group relative"
+            className="group relative flex-1 rounded-t-lg bg-gradient-to-t from-blue-600 to-blue-400 transition-opacity hover:opacity-80"
           >
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 dark:bg-gray-700 text-white px-2 py-1 rounded text-xs whitespace-nowrap">
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-700">
               {data.xp} XP
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="flex justify-between mt-6 text-xs text-gray-600 dark:text-gray-400">
+      <div className="mt-6 flex justify-between text-xs text-gray-600 dark:text-gray-400">
         {weekData.map((data, idx) => (
           <span key={idx}>{data.day}</span>
         ))}
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           <span className="font-semibold text-gray-900 dark:text-white">3,700 XP</span> this week
         </p>

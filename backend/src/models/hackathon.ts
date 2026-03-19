@@ -1,4 +1,4 @@
-import { pool } from '@/utils/database';
+import { pool } from '../utils/database';
 
 export interface Hackathon {
   id: number;

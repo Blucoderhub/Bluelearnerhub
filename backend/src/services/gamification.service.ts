@@ -53,19 +53,16 @@ export class GamificationService {
     }
 
     static async checkAchievements(userId: number, xp: number, level: number) {
-        // Example: Welcome achievement
         if (xp > 0) {
-            await this.awardAchievement(userId, 'WAKING_UP', 'First steps in BLUELEARNERHUB');
+            await this.awardAchievement(userId, 'WAKING_UP', 'Waking Up', 'First steps on the platform', 25);
         }
-
-        // Example: Level 5 achievement
         if (level >= 5) {
-            await this.awardAchievement(userId, 'LEVEL_5', 'Reached Level 5 Specialist');
+            await this.awardAchievement(userId, 'LEVEL_5', 'Specialist', 'Reached level 5', 200);
         }
     }
 
-    static async awardAchievement(userId: number, code: string, title: string) {
-        // Check if user already has this achievement
+    static async awardAchievement(userId: number, code: string, title: string, description?: string, xpReward?: number) {
+        // Check by title to avoid duplicates
         const existing = await db.select()
             .from(userAchievements)
             .innerJoin(achievements, eq(userAchievements.achievementId, achievements.id))
@@ -73,13 +70,13 @@ export class GamificationService {
 
         if (existing.length) return;
 
-        // Find or create achievement
+        // Find or create achievement by title
         let achievement = await db.select().from(achievements).where(eq(achievements.title, title));
         if (!achievement.length) {
             achievement = await db.insert(achievements).values({
                 title,
-                description: `Awarded for ${title.toLowerCase()}`,
-                xpReward: 50,
+                description: description ?? `Awarded for ${title.toLowerCase()}`,
+                xpReward: xpReward ?? 50,
             }).returning();
         }
 

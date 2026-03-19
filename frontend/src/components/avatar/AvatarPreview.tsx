@@ -1,20 +1,20 @@
-import React from 'react';
-import { generateAvatarURL, AvatarConfig } from '@/utils/generateAvatar';
-import { cn } from '@/lib/utils';
+import React from 'react'
+import { generateAvatarURL, AvatarConfig } from '@/utils/generateAvatar'
+import { cn } from '@/lib/utils'
 
 interface AvatarPreviewProps {
-  config: AvatarConfig;
-  className?: string;
-  size?: number;
+  config: AvatarConfig
+  className?: string
+  size?: number
 }
 
 export const AvatarPreview: React.FC<AvatarPreviewProps> = ({ config, className, size = 120 }) => {
-  const url = generateAvatarURL(config);
+  const url = generateAvatarURL(config)
 
   return (
-    <div 
+    <div
       className={cn(
-        "relative rounded-full overflow-hidden bg-muted/20 border border-white/10 flex items-center justify-center",
+        'relative flex items-center justify-center overflow-hidden rounded-full border border-white/10 bg-muted/20',
         className
       )}
       style={{ width: size, height: size }}
@@ -22,12 +22,12 @@ export const AvatarPreview: React.FC<AvatarPreviewProps> = ({ config, className,
       <img
         src={url}
         alt="User Avatar"
-        className="w-full h-full object-cover"
+        className="h-full w-full object-cover"
         onError={(e) => {
           // Fallback if API fails
-          e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${config.seed}`;
+          e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${config.seed}`
         }}
       />
     </div>
-  );
-};
+  )
+}

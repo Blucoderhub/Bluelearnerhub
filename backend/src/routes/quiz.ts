@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { QuizController } from '@/controllers/quiz';
-import { commonValidators } from '@/utils/validators';
-import { validate } from '@/middleware/validate';
-import { authenticate, optionalAuth } from '@/middleware/auth';
-import { apiLimiter } from '@/middleware/rateLimiter';
+import { QuizController } from '../controllers/quiz';
+import { commonValidators } from '../utils/validators';
+import { validate } from '../middleware/validate';
+import { authenticate, optionalAuth } from '../middleware/auth';
+import { apiLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 const controller = new QuizController();

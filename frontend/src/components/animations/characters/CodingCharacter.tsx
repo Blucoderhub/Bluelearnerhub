@@ -26,7 +26,16 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
           animate={{ y: [0, -1, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <rect x="60" y="90" width="80" height="50" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="2" />
+          <rect
+            x="60"
+            y="90"
+            width="80"
+            height="50"
+            rx="4"
+            fill="#0f172a"
+            stroke="#334155"
+            strokeWidth="2"
+          />
           <rect x="65" y="95" width="70" height="40" rx="2" fill="hsl(var(--background))" />
           <rect x="95" y="140" width="10" height="5" fill="#334155" />
 
@@ -74,7 +83,10 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
             <circle cx="100" cy="108" r="14" fill="#fbbf24" opacity="0.9" />
             <circle cx="100" cy="108" r="14" fill="#d4a574" />
             {/* Hair */}
-            <path d="M86 102 Q88 90 100 88 Q112 90 114 102 Q112 96 100 95 Q88 96 86 102Z" fill="hsl(var(--secondary))" />
+            <path
+              d="M86 102 Q88 90 100 88 Q112 90 114 102 Q112 96 100 95 Q88 96 86 102Z"
+              fill="hsl(var(--secondary))"
+            />
             {/* Eyes */}
             <motion.g
               animate={{ scaleY: [1, 0.1, 1] }}
@@ -85,7 +97,13 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
               <circle cx="105" cy="107" r="1.5" fill="hsl(var(--secondary))" />
             </motion.g>
             {/* Smile */}
-            <path d="M96 113 Q100 116 104 113" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path
+              d="M96 113 Q100 116 104 113"
+              stroke="hsl(var(--secondary))"
+              strokeWidth="1.2"
+              fill="none"
+              strokeLinecap="round"
+            />
             {/* Glasses */}
             <circle cx="95" cy="107" r="5" stroke="#64748b" strokeWidth="1" fill="none" />
             <circle cx="105" cy="107" r="5" stroke="#64748b" strokeWidth="1" fill="none" />
@@ -98,14 +116,26 @@ export default function CodingCharacter({ className = '', size = 200 }: CodingCh
             transition={{ duration: 0.4, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '88px 135px' }}
           >
-            <path d="M88 133 L70 138 L72 142" stroke="#d4a574" strokeWidth="5" strokeLinecap="round" fill="none" />
+            <path
+              d="M88 133 L70 138 L72 142"
+              stroke="#d4a574"
+              strokeWidth="5"
+              strokeLinecap="round"
+              fill="none"
+            />
           </motion.g>
           <motion.g
             animate={{ rotate: [3, -3, 3] }}
             transition={{ duration: 0.4, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '112px 135px' }}
           >
-            <path d="M112 133 L130 138 L128 142" stroke="#d4a574" strokeWidth="5" strokeLinecap="round" fill="none" />
+            <path
+              d="M112 133 L130 138 L128 142"
+              stroke="#d4a574"
+              strokeWidth="5"
+              strokeLinecap="round"
+              fill="none"
+            />
           </motion.g>
         </motion.g>
 

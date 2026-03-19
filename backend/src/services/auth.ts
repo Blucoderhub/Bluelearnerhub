@@ -1,9 +1,9 @@
-import { UserModel, CreateUserDTO } from '@/models/user';
-import { comparePassword } from '@/utils/encryption';
-import { signAccessToken, signRefreshToken } from '@/utils/jwt';
-import { AppError } from '@/middleware/error';
-import { pool } from '@/utils/database';
-import logger from '@/utils/logger';
+import { UserModel, CreateUserDTO } from '../models/user';
+import { comparePassword } from '../utils/encryption';
+import { signAccessToken, signRefreshToken } from '../utils/jwt';
+import { AppError } from '../middleware/error';
+import { pool } from '../utils/database';
+import logger from '../utils/logger';
 
 export class AuthService {
   async register(data: CreateUserDTO) {

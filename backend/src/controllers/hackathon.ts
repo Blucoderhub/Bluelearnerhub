@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { HackathonService } from '@/services/hackathon';
-import { db } from '@/db';
-import { learningBehaviorEvents } from '@/db/schema-v2';
+import { HackathonService } from '../services/hackathon';
+import { db } from '../db';
+import { learningBehaviorEvents } from '../db/schema-v2';
 import { and, desc, eq } from 'drizzle-orm';
-import logger from '@/utils/logger';
-import { fetchAdaptiveGuidanceFromAI, fallbackHackathonGuidance } from '@/services/adaptiveGuidance';
+import logger from '../utils/logger';
+import { fetchAdaptiveGuidanceFromAI, fallbackHackathonGuidance } from '../services/adaptiveGuidance';
 
 const hackathonService = new HackathonService();
 const isPlainObject = (value: unknown): value is Record<string, unknown> => (
@@ -251,12 +251,12 @@ export class HackathonController {
       ]);
 
       const submissionCount = Array.isArray(userSubmissions) ? userSubmissions.length : 0;
-      const runEvents = recentEvents.filter((event) => {
+      const runEvents = recentEvents.filter((event: any) => {
         if (!event || typeof event.eventType !== 'string' || !event.eventType.trim()) return false;
         const type = event.eventType.toLowerCase();
         return type.includes('run');
       }).length;
-      const errorEvents = recentEvents.filter((event) => {
+      const errorEvents = recentEvents.filter((event: any) => {
         if (!event || typeof event.eventType !== 'string' || !event.eventType.trim()) return false;
         const type = event.eventType.toLowerCase();
         return type.includes('error');
@@ -276,7 +276,7 @@ export class HackathonController {
           target_id: hackathonId,
           target_title: hackathon?.title || `Hackathon ${hackathonId}`,
           metrics: snapshot,
-          events: recentEvents.map((event) => ({
+          events: recentEvents.map((event: any) => ({
             event_type: event.eventType,
             event_payload: event.eventPayload,
             created_at: event.createdAt,

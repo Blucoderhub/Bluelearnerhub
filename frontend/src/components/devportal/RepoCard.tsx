@@ -1,48 +1,57 @@
-'use client';
+'use client'
 
 /**
  * RepoCard — Repository summary card for the developer portal
  * Design: GitHub-inspired, Linear-clean
  */
 
-import React from 'react';
-import Link from 'next/link';
-import { Star, GitFork, Lock, Globe, Clock } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { cn } from '@/lib/utils';
+import React from 'react'
+import Link from 'next/link'
+import { Star, GitFork, Lock, Globe, Clock } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { cn } from '@/lib/utils'
 
 const LANG_COLORS: Record<string, string> = {
-  python:     '#3572A5',
+  python: '#3572A5',
   javascript: '#f1e05a',
   typescript: '#3178c6',
-  java:       '#b07219',
-  cpp:        '#f34b7d',
-  rust:       '#dea584',
-  go:         '#00ADD8',
-  html:       '#e34c26',
-  css:        '#563d7c',
-  sql:        '#e38c00',
-};
+  java: '#b07219',
+  cpp: '#f34b7d',
+  rust: '#dea584',
+  go: '#00ADD8',
+  html: '#e34c26',
+  css: '#563d7c',
+  sql: '#e38c00',
+}
 
 interface RepoCardProps {
-  id:          number;
-  ownerSlug:   string;
-  slug:        string;
-  name:        string;
-  description?: string;
-  language?:   string;
-  visibility:  'public' | 'private';
-  starCount:   number;
-  forkCount:   number;
-  topics?:     string[];
-  updatedAt:   string;
+  id: number
+  ownerSlug: string
+  slug: string
+  name: string
+  description?: string
+  language?: string
+  visibility: 'public' | 'private'
+  starCount: number
+  forkCount: number
+  topics?: string[]
+  updatedAt: string
 }
 
 export default function RepoCard({
-  id, ownerSlug, slug, name, description, language,
-  visibility, starCount, forkCount, topics = [], updatedAt,
+  id,
+  ownerSlug,
+  slug,
+  name,
+  description,
+  language,
+  visibility,
+  starCount,
+  forkCount,
+  topics = [],
+  updatedAt,
 }: RepoCardProps) {
-  const langColor = language ? LANG_COLORS[language.toLowerCase()] : undefined;
+  const langColor = language ? LANG_COLORS[language.toLowerCase()] : undefined
 
   return (
     <div className="group rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-900">
@@ -64,7 +73,7 @@ export default function RepoCard({
           </div>
 
           {description && (
-            <p className="mt-1 text-sm text-gray-600 line-clamp-2 dark:text-gray-400">
+            <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
               {description}
             </p>
           )}
@@ -117,5 +126,5 @@ export default function RepoCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

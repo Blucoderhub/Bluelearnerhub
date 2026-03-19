@@ -10,8 +10,22 @@ interface StreakDisplayProps {
   compact?: boolean
 }
 
-export function StreakDisplay({ currentStreak, longestStreak, hasStreakProtection = false, compact = false }: StreakDisplayProps) {
-  const streakLevel = currentStreak >= 30 ? 'legendary' : currentStreak >= 14 ? 'epic' : currentStreak >= 7 ? 'great' : currentStreak >= 3 ? 'good' : 'start'
+export function StreakDisplay({
+  currentStreak,
+  longestStreak,
+  hasStreakProtection = false,
+  compact = false,
+}: StreakDisplayProps) {
+  const streakLevel =
+    currentStreak >= 30
+      ? 'legendary'
+      : currentStreak >= 14
+        ? 'epic'
+        : currentStreak >= 7
+          ? 'great'
+          : currentStreak >= 3
+            ? 'good'
+            : 'start'
 
   const streakColors = {
     start: 'text-muted-foreground',
@@ -25,39 +39,41 @@ export function StreakDisplay({ currentStreak, longestStreak, hasStreakProtectio
     return (
       <div className="flex items-center gap-1.5">
         <div className="streak-flame">
-          <Flame className={`w-5 h-5 ${streakColors[streakLevel]}`} />
+          <Flame className={`h-5 w-5 ${streakColors[streakLevel]}`} />
         </div>
         <span className={`text-sm font-bold ${streakColors[streakLevel]}`}>{currentStreak}</span>
-        {hasStreakProtection && <Shield className="w-3.5 h-3.5 text-[var(--achievement-cyan)]" />}
+        {hasStreakProtection && <Shield className="h-3.5 w-3.5 text-[var(--achievement-cyan)]" />}
       </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--streak-orange)]/5 border border-[var(--streak-orange)]/15">
+    <div className="bg-[var(--streak-orange)]/5 border-[var(--streak-orange)]/15 flex items-center gap-4 rounded-2xl border p-4">
       <div className="streak-flame">
         <motion.div
-          animate={currentStreak > 0 ? {
-            scale: [1, 1.2, 1],
-          } : {}}
+          animate={
+            currentStreak > 0
+              ? {
+                  scale: [1, 1.2, 1],
+                }
+              : {}
+          }
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <Flame className={`w-8 h-8 ${streakColors[streakLevel]}`} />
+          <Flame className={`h-8 w-8 ${streakColors[streakLevel]}`} />
         </motion.div>
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-black font-heading">{currentStreak}</span>
+          <span className="font-heading text-2xl font-black">{currentStreak}</span>
           <span className="text-sm text-muted-foreground">day streak</span>
           {hasStreakProtection && (
-            <span className="flex items-center gap-1 text-xs text-[var(--achievement-cyan)] bg-[var(--achievement-cyan)]/10 px-2 py-0.5 rounded-full">
-              <Shield className="w-3 h-3" /> Protected
+            <span className="bg-[var(--achievement-cyan)]/10 flex items-center gap-1 rounded-full px-2 py-0.5 text-xs text-[var(--achievement-cyan)]">
+              <Shield className="h-3 w-3" /> Protected
             </span>
           )}
         </div>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          Best: {longestStreak} days
-        </p>
+        <p className="mt-0.5 text-xs text-muted-foreground">Best: {longestStreak} days</p>
       </div>
     </div>
   )

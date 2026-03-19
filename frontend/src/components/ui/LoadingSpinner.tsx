@@ -6,10 +6,10 @@ interface LoadingSpinnerProps {
   fullScreen?: boolean
 }
 
-export default function LoadingSpinner({ 
-  size = 'md', 
+export default function LoadingSpinner({
+  size = 'md',
   className,
-  fullScreen = false 
+  fullScreen = false,
 }: LoadingSpinnerProps) {
   const sizes = {
     sm: 'w-4 h-4 border-2',
@@ -32,7 +32,7 @@ export default function LoadingSpinner({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm">
         {spinner}
       </div>
     )

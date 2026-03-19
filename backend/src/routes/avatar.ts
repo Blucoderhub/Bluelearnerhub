@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticate } from '@/middleware/auth';
-import { UserModel } from '@/models/user';
-import { AppError } from '@/middleware/error';
+import { authenticate } from '../middleware/auth';
+import { UserModel } from '../models/user';
+import { AppError } from '../middleware/error';
 
 const router = Router();
 

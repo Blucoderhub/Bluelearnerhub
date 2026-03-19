@@ -1,76 +1,85 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { StudentLoginForm } from "@/components/auth/StudentLoginForm";
-import { GraduationCap } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { StudentLoginForm } from '@/components/auth/StudentLoginForm'
+import { useAuth } from '@/hooks/useAuth'
+import { ArrowLeft, ShieldCheck } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Badge } from '@/components/ui/badge'
 
 export default function LoginPortal() {
-    const { login, isAuthenticated } = useAuth();
-    const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
+  const { login, isAuthenticated } = useAuth()
+  const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            router.push("/student/dashboard");
-        }
-    }, [isAuthenticated, router]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/student/dashboard')
+    }
+  }, [isAuthenticated, router])
 
-    const handleSubmit = async (data: any) => {
-        setError(null);
-        try {
-            await login(data.email, data.password);
-            router.push("/student/dashboard");
-        } catch (err: any) {
-            setError(err.response?.data?.message || err.message || "Failed to initialize secure session.");
-        }
-    };
+  const handleSubmit = async (data: any) => {
+    setError(null)
+    try {
+      await login(data.email, data.password)
+      router.push('/student/dashboard')
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
+    }
+  }
 
-    return (
-        <div className="relative min-h-[90vh] w-full flex flex-col items-center justify-center py-12 px-4 overflow-hidden bg-background">
-            {/* Premium Background Effects */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+  return (
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-20 text-foreground overflow-hidden">
+      <div className="bg-noise pointer-events-none" />
+      
+      {/* Background Decor */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-violet-600/10 blur-[100px]" />
+      </div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md space-y-12"
+      >
+        <div className="space-y-8 text-center">
+          <Link
+            href="/"
+            className="group inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-muted-foreground transition-all hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Matrix
+          </Link>
+          
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-primary shadow-2xl shadow-primary/40">
+              <ShieldCheck className="h-10 w-10 text-white" />
             </div>
-
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 w-full max-w-[400px] sm:max-w-[380px] bg-card/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden"
-            >
-                {/* Refined Card Inner Glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-                
-                <div className="flex justify-center mb-8">
-                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 relative group">
-                        <div className="absolute inset-0 rounded-2xl bg-primary animate-ping opacity-20 group-hover:opacity-40 transition-opacity" />
-                        <GraduationCap className="w-8 h-8 text-primary-foreground relative z-10" />
-                    </div>
-                </div>
-
-                <StudentLoginForm onSubmit={handleSubmit} error={error} />
-
-                <p className="mt-8 text-center text-[10px] font-medium text-muted-foreground uppercase tracking-[0.2em]">
-                    Don&apos;t have an account?{" "}
-                    <Link href="/get-started" className="text-primary hover:text-primary/80 transition-colors font-bold">Sign up</Link>
-                </p>
-            </motion.div>
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="relative z-10 mt-12"
-            >
-                <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors">
-                    Back to Home
-                </Link>
-            </motion.div>
+            <div className="space-y-3">
+              <Badge variant="outline" className="rounded-full border-primary/30 bg-primary/10 px-4 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-primary">
+                Secure Authentication
+              </Badge>
+              <h1 className="font-heading text-5xl font-medium tracking-tight text-white">
+                Welcome back.
+              </h1>
+              <p className="font-heading text-lg text-muted-foreground">
+                Continue your research and mastery journey.
+              </p>
+            </div>
+          </div>
         </div>
-    );
+
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border/50 bg-card/40 p-10 shadow-3xl backdrop-blur-2xl">
+          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          <StudentLoginForm onSubmit={handleSubmit} error={error} />
+        </div>
+
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          Platform protected by <span className="text-primary">Bluelearner Core Secure</span>
+        </p>
+      </motion.div>
+    </div>
+  )
 }

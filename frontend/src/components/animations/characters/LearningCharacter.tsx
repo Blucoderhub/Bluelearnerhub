@@ -23,20 +23,80 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
         >
           <circle cx="140" cy="45" r="12" fill="#fbbf24" opacity="0.2" />
           <circle cx="140" cy="45" r="8" fill="#fbbf24" opacity="0.4" />
-          <path d="M135 40 L140 32 L145 40" stroke="#fbbf24" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d="M136 50 Q140 54 144 50" stroke="#fbbf24" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <line x1="140" y1="50" x2="140" y2="53" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" />
+          <path
+            d="M135 40 L140 32 L145 40"
+            stroke="#fbbf24"
+            strokeWidth="1.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <path
+            d="M136 50 Q140 54 144 50"
+            stroke="#fbbf24"
+            strokeWidth="1.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <line
+            x1="140"
+            y1="50"
+            x2="140"
+            y2="53"
+            stroke="#fbbf24"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
           {/* Rays */}
           <motion.g
             animate={{ opacity: [0.3, 0.8, 0.3], scale: [0.9, 1.1, 0.9] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '140px 45px' }}
           >
-            <line x1="140" y1="30" x2="140" y2="26" stroke="#fbbf24" strokeWidth="1" opacity="0.6" />
-            <line x1="152" y1="37" x2="155" y2="34" stroke="#fbbf24" strokeWidth="1" opacity="0.6" />
-            <line x1="128" y1="37" x2="125" y2="34" stroke="#fbbf24" strokeWidth="1" opacity="0.6" />
-            <line x1="154" y1="45" x2="158" y2="45" stroke="#fbbf24" strokeWidth="1" opacity="0.6" />
-            <line x1="126" y1="45" x2="122" y2="45" stroke="#fbbf24" strokeWidth="1" opacity="0.6" />
+            <line
+              x1="140"
+              y1="30"
+              x2="140"
+              y2="26"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              opacity="0.6"
+            />
+            <line
+              x1="152"
+              y1="37"
+              x2="155"
+              y2="34"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              opacity="0.6"
+            />
+            <line
+              x1="128"
+              y1="37"
+              x2="125"
+              y2="34"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              opacity="0.6"
+            />
+            <line
+              x1="154"
+              y1="45"
+              x2="158"
+              y2="45"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              opacity="0.6"
+            />
+            <line
+              x1="126"
+              y1="45"
+              x2="122"
+              y2="45"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              opacity="0.6"
+            />
           </motion.g>
         </motion.g>
 
@@ -73,8 +133,20 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* Legs crossed */}
-          <path d="M78 165 Q70 175 65 175 Q60 175 62 170" stroke="hsl(var(--secondary))" strokeWidth="6" strokeLinecap="round" fill="none" />
-          <path d="M102 165 Q110 175 115 175 Q120 175 118 170" stroke="hsl(var(--secondary))" strokeWidth="6" strokeLinecap="round" fill="none" />
+          <path
+            d="M78 165 Q70 175 65 175 Q60 175 62 170"
+            stroke="hsl(var(--secondary))"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M102 165 Q110 175 115 175 Q120 175 118 170"
+            stroke="hsl(var(--secondary))"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
 
           {/* Torso */}
           <path d="M82 135 Q90 128 100 135 L98 165 Q90 168 82 165 Z" fill="#8b5cf6" />
@@ -85,14 +157,26 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '82px 140px' }}
           >
-            <path d="M82 140 L65 145 L62 140" stroke="#d4a574" strokeWidth="4.5" strokeLinecap="round" fill="none" />
+            <path
+              d="M82 140 L65 145 L62 140"
+              stroke="#d4a574"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+              fill="none"
+            />
           </motion.g>
           <motion.g
             animate={{ rotate: [1, -1, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: '100px 140px' }}
           >
-            <path d="M100 140 L115 145 L112 140" stroke="#d4a574" strokeWidth="4.5" strokeLinecap="round" fill="none" />
+            <path
+              d="M100 140 L115 145 L112 140"
+              stroke="#d4a574"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+              fill="none"
+            />
           </motion.g>
 
           {/* Head */}
@@ -103,18 +187,32 @@ export default function LearningCharacter({ className = '', size = 200 }: Learni
           >
             <circle cx="90" cy="113" r="15" fill="#d4a574" />
             {/* Hair */}
-            <path d="M75 107 Q78 94 90 92 Q102 94 105 107 Q102 100 90 99 Q78 100 75 107Z" fill="#92400e" />
+            <path
+              d="M75 107 Q78 94 90 92 Q102 94 105 107 Q102 100 90 99 Q78 100 75 107Z"
+              fill="#92400e"
+            />
             {/* Eyes - looking down at book */}
             <motion.g
               animate={{ scaleY: [1, 0.1, 1] }}
-              transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 3, times: [0, 0.05, 0.1] }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                repeatDelay: 3,
+                times: [0, 0.05, 0.1],
+              }}
               style={{ transformOrigin: '90px 113px' }}
             >
               <ellipse cx="85" cy="113" rx="1.5" ry="2" fill="hsl(var(--secondary))" />
               <ellipse cx="95" cy="113" rx="1.5" ry="2" fill="hsl(var(--secondary))" />
             </motion.g>
             {/* Content smile */}
-            <path d="M86 119 Q90 122 94 119" stroke="hsl(var(--secondary))" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path
+              d="M86 119 Q90 122 94 119"
+              stroke="hsl(var(--secondary))"
+              strokeWidth="1.2"
+              fill="none"
+              strokeLinecap="round"
+            />
           </motion.g>
         </motion.g>
 
