@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { exercisesAPI, codeAPI } from '@/lib/api-civilization'
+import { exercisesAPI, codeAPI, gamificationAPI } from '@/lib/api-civilization'
 import { toast } from 'sonner'
 import dynamic from 'next/dynamic'
 
