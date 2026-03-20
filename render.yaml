@@ -19,7 +19,7 @@ services:
       - key: AI_PROVIDER
         value: gemini
       - key: GEMINI_API_KEY
-        value: REDACTED_ROTATE_THIS_KEY
+        sync: false   # Set this in the Render dashboard — never commit API keys
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
