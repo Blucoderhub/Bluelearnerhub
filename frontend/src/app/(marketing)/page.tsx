@@ -16,13 +16,6 @@ import { toast } from 'sonner'
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-const stats = [
-  { value: '50,000+', label: 'Active Learners', icon: Users },
-  { value: '500+',    label: 'Free Courses',    icon: BookOpen },
-  { value: '1,200+',  label: 'Challenges',      icon: Code2 },
-  { value: '98%',     label: 'Job Success Rate', icon: Zap },
-]
-
 const features = [
   { icon: BookOpen, color: 'text-blue-400',    bg: 'bg-blue-500/10',    border: 'border-blue-500/20',    title: 'Interactive Tutorials',    desc: 'Learn by doing with interactive lessons and a live code playground side-by-side.' },
   { icon: Code2,    color: 'text-violet-400',  bg: 'bg-violet-500/10',  border: 'border-violet-500/20',  title: 'Coding Challenges',        desc: 'Solve algorithmic challenges with instant feedback, hints, and AI explanations.' },
@@ -205,31 +198,6 @@ export default function LandingPage() {
             No credit card required. Instant access. Join 50,000+ learners.
           </p>
         </motion.header>
-      </section>
-
-      {/* ── SOCIAL PROOF STATS ────────────────────────────────────────────── */}
-      <section className="border-y border-border/20 bg-secondary/10 py-12">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {stats.map((s, i) => {
-              const Icon = s.icon
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-center"
-                >
-                  <Icon className="mx-auto mb-2 h-6 w-6 text-primary/60" />
-                  <div className="font-heading text-3xl font-bold text-white">{s.value}</div>
-                  <div className="mt-1 text-xs font-medium uppercase tracking-widest text-muted-foreground">{s.label}</div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
       </section>
 
       {/* ── POPULAR TRACKS ────────────────────────────────────────────────── */}
