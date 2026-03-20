@@ -79,6 +79,12 @@ export function errorHandler(err: any, req: Request, res: Response, _next: NextF
     error = new ValidationError(message);
   }
 
+  // Database connection errors (pg-pool AggregateError / ECONNREFUSED)
+  if (err.code === 'ECONNREFUSED' || err.name === 'AggregateError' ||
+      (err.errors && err.errors[0]?.code === 'ECONNREFUSED')) {
+    error = new AppError('Service temporarily unavailable. Please try again shortly.', 503);
+  }
+
   // PostgreSQL errors
   if (err.code) {
     switch (err.code) {
@@ -92,7 +98,7 @@ export function errorHandler(err: any, req: Request, res: Response, _next: NextF
         error = new ValidationError('Referenced resource does not exist');
         break;
       case '42P01': // Undefined table
-        error = new AppError('Database table not found', 500);
+        error = new AppError('Database table not found — run migrations first', 500);
         break;
     }
   }

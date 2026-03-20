@@ -14,7 +14,7 @@ interface AuthContextValue {
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<User>
   logout: () => void
-  register: (data: { email: string; password: string; name: string; role: string }) => Promise<User>
+  register: (data: { email: string; password: string; name: string; role: string; fullName?: string }) => Promise<User>
   refreshUser: () => Promise<void>
 }
 
@@ -75,7 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     name: string
     role: string
   }): Promise<User> => {
-    const response = await api.post('/auth/register', data)
+    // Backend expects `fullName` — map from the frontend `name` field
+    const { name, ...rest } = data
+    const response = await api.post('/auth/register', { ...rest, fullName: name })
     // Backend: { success, data: { user } }
     const registeredUser = response.data?.data?.user ?? response.data?.user
     if (!registeredUser) throw new Error('Invalid registration response from server')

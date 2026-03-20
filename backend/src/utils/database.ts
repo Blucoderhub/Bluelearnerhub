@@ -3,18 +3,29 @@ import Redis from 'ioredis';
 import { config } from '../config';
 import logger from './logger';
 
-// PostgreSQL Connection Pool with improved configuration
-export const pool = new Pool({
-  host: config.database.host,
-  port: config.database.port,
-  database: config.database.name,
-  user: config.database.user,
-  password: config.database.password,
-  max: config.database.maxConnections,
-  idleTimeoutMillis: config.database.idleTimeoutMillis,
-  connectionTimeoutMillis: config.database.connectionTimeoutMillis,
-  ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
-});
+// PostgreSQL Connection Pool
+// Prefer DATABASE_URL (single source of truth) over individual host/user/password vars
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      max: config.database.maxConnections,
+      idleTimeoutMillis: config.database.idleTimeoutMillis,
+      connectionTimeoutMillis: config.database.connectionTimeoutMillis,
+      ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+    }
+  : {
+      host: config.database.host,
+      port: config.database.port,
+      database: config.database.name,
+      user: config.database.user,
+      password: config.database.password,
+      max: config.database.maxConnections,
+      idleTimeoutMillis: config.database.idleTimeoutMillis,
+      connectionTimeoutMillis: config.database.connectionTimeoutMillis,
+      ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+    };
+
+export const pool = new Pool(poolConfig);
 
 // Enhanced error handling for pool
 pool.on('error', (err: unknown) => {
