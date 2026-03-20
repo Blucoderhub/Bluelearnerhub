@@ -38,7 +38,8 @@ export class AuthService {
     // Store refresh token
     await pool.query(
       `INSERT INTO refresh_tokens (user_id, token, expires_at)
-       VALUES ($1, $2, NOW() + INTERVAL '30 days')`,
+       VALUES ($1, $2, NOW() + INTERVAL '30 days')
+       ON CONFLICT (token) DO UPDATE SET expires_at = NOW() + INTERVAL '30 days'`,
       [user.id, refreshToken]
     );
 
@@ -124,10 +125,11 @@ export class AuthService {
       role: user.role,
     });
 
-    // Store refresh token
+    // Store refresh token — upsert to avoid duplicate token collisions
     await pool.query(
       `INSERT INTO refresh_tokens (user_id, token, expires_at)
-       VALUES ($1, $2, NOW() + INTERVAL '30 days')`,
+       VALUES ($1, $2, NOW() + INTERVAL '30 days')
+       ON CONFLICT (token) DO UPDATE SET expires_at = NOW() + INTERVAL '30 days'`,
       [user.id, refreshToken]
     );
 
