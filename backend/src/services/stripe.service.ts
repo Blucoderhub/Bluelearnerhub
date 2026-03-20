@@ -6,9 +6,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2023-10-16' as any, // pinned version for stability
-});
+const stripeKey = process.env.STRIPE_SECRET_KEY || '';
+const stripe = stripeKey
+  ? new Stripe(stripeKey, { apiVersion: '2023-10-16' as any })
+  : null as unknown as Stripe;
 
 const PRICE_IDS = {
     EXPLORER: process.env.STRIPE_PRICE_EXPLORER!,

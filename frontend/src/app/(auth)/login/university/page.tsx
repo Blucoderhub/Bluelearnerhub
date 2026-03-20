@@ -15,7 +15,7 @@ export default function UniversityLogin() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/institution/dashboard')
     }
   }, [isAuthenticated, router])
 
@@ -23,7 +23,7 @@ export default function UniversityLogin() {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/dashboard')
+      router.push('/institution/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }

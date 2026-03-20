@@ -15,7 +15,7 @@ export default function CandidateLogin() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/candidate/dashboard')
     }
   }, [isAuthenticated, router])
 
@@ -23,7 +23,7 @@ export default function CandidateLogin() {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/dashboard')
+      router.push('/candidate/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }

@@ -14,7 +14,7 @@ export default function StudentLogin() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/student/dashboard')
     }
   }, [isAuthenticated, router])
 
@@ -22,7 +22,7 @@ export default function StudentLogin() {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/dashboard')
+      router.push('/student/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }

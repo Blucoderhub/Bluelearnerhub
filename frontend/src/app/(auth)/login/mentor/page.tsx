@@ -15,7 +15,7 @@ export default function MentorLogin() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/teacher/dashboard')
     }
   }, [isAuthenticated, router])
 
@@ -23,7 +23,7 @@ export default function MentorLogin() {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/dashboard')
+      router.push('/teacher/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }

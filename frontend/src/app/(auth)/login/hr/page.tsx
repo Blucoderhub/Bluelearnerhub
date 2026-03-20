@@ -15,7 +15,7 @@ export default function HRLogin() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/hr/dashboard')
     }
   }, [isAuthenticated, router])
 
@@ -23,7 +23,7 @@ export default function HRLogin() {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/dashboard')
+      router.push('/hr/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }
