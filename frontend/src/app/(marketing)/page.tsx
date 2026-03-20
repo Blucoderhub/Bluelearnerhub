@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import {
   ArrowRight, Code2, Trophy, BookOpen, Terminal, Brain, Award, BarChart3,
-  ChevronRight, CheckCircle2, Star, Users, Zap, Globe, Mail, ChevronDown,
+  ChevronRight, CheckCircle2, Users, Zap, Mail, ChevronDown,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -32,13 +32,6 @@ const tracks = [
   { name: 'System Design', icon: '🏗️', students: '7.2K', level: 'Advanced', href: '/learning-tracks/system-design' },
   { name: 'Data Structures', icon: '🧮', students: '11.5K', level: 'Intermediate', href: '/learning-tracks/data-structures' },
   { name: 'Machine Learning', icon: '🤖', students: '6.3K', level: 'Advanced', href: '/learning-tracks/machine-learning' },
-]
-
-const testimonials = [
-  { name: 'Priya Sharma', role: 'Software Engineer @ Google', avatar: 'PS', stars: 5, text: 'BlueLearnerHub\'s system design track and AI-generated hackathons are what got me through Google\'s L5 interview. The daily quizzes kept me sharp every single day.' },
-  { name: 'Rahul Verma',  role: 'Full Stack Dev @ Startup',  avatar: 'RV', stars: 5, text: 'I landed my first tech job 3 months after joining. The JavaScript + React tracks are the best free resource I\'ve found — better than paid bootcamps.' },
-  { name: 'Ananya Iyer',  role: 'CS Student, IIT Bombay',   avatar: 'AI', stars: 5, text: 'The competitive hackathons and verified certificates gave my resume the edge it needed. Three companies reached out to me after I shared my certificate.' },
-  { name: 'Kevin Liu',    role: 'Backend Engineer @ Amazon', avatar: 'KL', stars: 5, text: 'Free, comprehensive, and actually up-to-date. The Python + ML track is production-grade content. I use it to prep for interviews and recommend it to my whole team.' },
 ]
 
 const faqs = [
@@ -164,14 +157,14 @@ export default function LandingPage() {
           </div>
 
           <h1 className="mb-8 font-serif text-6xl font-medium leading-[1.0] tracking-tight text-white sm:text-8xl">
-            Learn Coding.
+            Master Your Skills.
             <br />
-            <span className="gradient-primary-text">Get Hired.</span>
+            <span className="gradient-primary-text">Showcase Your Portfolio.</span>
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl font-serif text-xl leading-relaxed text-foreground/80 sm:text-2xl">
-            Free online courses in Python, JavaScript, React, System Design & more.
-            AI-powered quizzes, live hackathons, verified certificates. Join <strong className="text-white">50,000+</strong> learners.
+            Learn, build, and showcase your skills across any domain. Create real-world projects,
+            participate in challenges, and build a portfolio that gets you noticed. Join thousands of learners growing every day.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-5 font-sans sm:flex-row mb-10">
@@ -312,90 +305,6 @@ export default function LandingPage() {
                   </div>
                   <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ──────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">Student Success Stories</h2>
-          <h3 className="font-serif text-5xl font-medium text-white">
-            Real results from real learners.
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="rounded-3xl border border-border/50 bg-card/40 p-8"
-            >
-              <div className="mb-4 flex gap-1">
-                {Array.from({ length: t.stars }).map((_, j) => (
-                  <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="mb-6 text-base leading-relaxed text-muted-foreground">"{t.text}"</p>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
-                  {t.avatar}
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-white">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FOR COMPANIES ─────────────────────────────────────────────────── */}
-      <section className="border-y border-border/20 bg-secondary/10 py-24">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-            <div>
-              <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">For Companies & Universities</h2>
-              <h3 className="mb-6 font-serif text-4xl font-medium text-white">
-                Hire job-ready talent. Host company hackathons.
-              </h3>
-              <p className="mb-8 text-lg text-muted-foreground">
-                Access 50,000+ verified students who have proven skills. Post challenges,
-                run branded hackathons, and hire directly from our talent pool.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/contact?type=corporate">
-                  <Button className="h-12 rounded-full bg-primary px-6 text-sm font-bold text-white">
-                    <Globe className="mr-2 h-4 w-4" /> Hire Talent
-                  </Button>
-                </Link>
-                <Link href="/contact?type=college">
-                  <Button variant="outline" className="h-12 rounded-full px-6 text-sm font-bold">
-                    Partner University
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {[
-                { icon: '🎯', title: 'Verified Skill Profiles', desc: 'Every candidate has proven their skills through assessments and certificates.' },
-                { icon: '🏆', title: 'Run Branded Hackathons', desc: 'Host your company challenge and attract the top 1% of tech talent.' },
-                { icon: '📊', title: 'Analytics Dashboard', desc: 'Track applicant performance, challenge completion rates, and hiring funnel.' },
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4 rounded-2xl border border-border/50 bg-card/40 p-5">
-                  <span className="text-2xl">{item.icon}</span>
-                  <div>
-                    <div className="font-bold text-white">{item.title}</div>
-                    <div className="mt-1 text-sm text-muted-foreground">{item.desc}</div>
-                  </div>
-                </div>
               ))}
             </div>
           </div>

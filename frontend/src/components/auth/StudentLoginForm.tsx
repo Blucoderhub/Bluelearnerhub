@@ -27,102 +27,89 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       {error && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4 text-[11px] font-bold leading-relaxed text-red-500"
+          className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-xs text-red-400"
         >
-          <span className="uppercase tracking-widest">[AUTH_ERROR]:</span> {error}
+          {error}
         </motion.div>
       )}
 
       {/* Social Logins */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         <Button
           variant="outline"
-          className="flex h-14 items-center justify-center gap-3 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-white transition-all hover:bg-white hover:text-black"
         >
-          <Github size={16} /> GitHub
+          <Github size={14} /> GitHub
         </Button>
         <Button
           variant="outline"
-          className="flex h-14 items-center justify-center gap-3 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-white transition-all hover:bg-white hover:text-black"
         >
-          <Linkedin size={16} /> LinkedIn
+          <Linkedin size={14} /> LinkedIn
         </Button>
       </div>
 
-      <div className="relative py-4">
+      <div className="relative py-2">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/50" />
         </div>
-        <div className="relative flex justify-center text-[10px] font-black uppercase tracking-[0.4em]">
-          <span className="bg-card px-4 text-muted-foreground/40 text-[9px]">Secure Access Bridge</span>
+        <div className="relative flex justify-center">
+          <span className="bg-card px-3 text-[10px] text-muted-foreground/40">or continue with email</span>
         </div>
       </div>
 
       {/* Standard Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-3">
-          <div className="group relative">
-            <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
-            <Input
-              type="email"
-              placeholder="Primary Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-14 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="space-y-3">
-          <div className="group relative">
-            <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
-            <Input
-              type="password"
-              placeholder="Encryption Passphrase"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="h-14 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
-              required
-            />
-          </div>
-          <div className="flex justify-end pr-2">
-            <Link
-              href="/forgot-password"
-              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 transition-colors hover:text-primary"
-            >
-              Recover Access?
-            </Link>
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="group relative">
+          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
+          <Input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            required
+          />
         </div>
 
-        <div className="pt-4">
-          <Button
-            type="submit"
-            disabled={loading}
-            className="h-14 w-full rounded-2xl bg-primary font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-          >
-            {loading ? 'Authenticating...' : 'Establish Session'}
-          </Button>
+        <div className="group relative">
+          <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            required
+          />
         </div>
+
+        <div className="flex justify-end">
+          <Link href="/forgot-password" className="text-xs text-muted-foreground/60 transition-colors hover:text-primary">
+            Forgot password?
+          </Link>
+        </div>
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="h-11 w-full rounded-xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+        >
+          {loading ? 'Signing in…' : 'Sign In'}
+        </Button>
       </form>
 
-      <div className="pt-4 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/40">
-          Unregistered Researcher?{' '}
-          <Link
-            href="/get-started"
-            className="ml-2 text-white transition-colors hover:text-primary"
-          >
-            Initialise Identity
-          </Link>
-        </p>
-      </div>
+      <p className="text-center text-xs text-muted-foreground/50">
+        No account?{' '}
+        <Link href="/get-started" className="font-bold text-white transition-colors hover:text-primary">
+          Sign up free
+        </Link>
+      </p>
     </div>
   )
 }

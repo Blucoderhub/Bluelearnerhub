@@ -37,7 +37,6 @@ import {
   GitFork,
   Eye,
   FolderOpen,
-  ShieldCheck,
 } from 'lucide-react'
 import { getAllDomains } from '@/lib/domain-config'
 import { useAuth } from '@/hooks/useAuth'
@@ -106,18 +105,10 @@ export default function Header() {
         <div className="bg-noise pointer-events-none opacity-20" />
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-8 lg:px-12">
           {/* Brand */}
-          <Link href="/" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-110">
-              <ShieldCheck className="h-6 w-6 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-xl font-medium tracking-tight text-white leading-none">
-                Bluelearnerhub
-              </span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground transition-colors group-hover:text-primary">
-                Powered by Bluecoder
-              </span>
-            </div>
+          <Link href="/" className="group flex items-center">
+            <span className="font-heading text-xl font-bold tracking-tight text-white transition-colors group-hover:text-primary">
+              BlueLearnerHub
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -229,10 +220,7 @@ export default function Header() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-[70] bg-background/80 backdrop-blur-xl md:hidden" />
             <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 z-[80] w-[300px] border-l border-border bg-card p-8 md:hidden">
                <div className="mb-12 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                   <ShieldCheck className="h-6 w-6 text-primary" />
-                   <span className="font-heading text-lg font-medium text-white text-wrap">Bluelearnerhub</span>
-                </div>
+                <span className="font-heading text-lg font-bold text-white">BlueLearnerHub</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="rounded-full border border-border p-2">
                   <X className="h-4 w-4" />
                 </button>
