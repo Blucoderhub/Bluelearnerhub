@@ -234,7 +234,7 @@ export default function OrganizationsPage() {
 
                     {/* Tags */}
                     <div className="mb-3 flex flex-wrap gap-1">
-                      {org.tags.map((t) => (
+                      {org.tags.map((t: string) => (
                         <span
                           key={t}
                           className="rounded-md bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground"
