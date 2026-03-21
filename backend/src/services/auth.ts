@@ -58,8 +58,8 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    // Find user
-    const user = await UserModel.findByEmail(email);
+    // Find user (normalize email to lowercase to avoid case-mismatch login failures)
+    const user = await UserModel.findByEmail(email.toLowerCase().trim());
     if (!user) {
       throw new AppError('Invalid credentials', 401);
     }

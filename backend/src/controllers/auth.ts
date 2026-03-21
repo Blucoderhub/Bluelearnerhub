@@ -32,7 +32,7 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
   res.cookie('accessToken', accessToken, {
     httpOnly: true,           // Prevents JavaScript access (XSS protection)
     secure: isProduction,     // HTTPS only in production
-    sameSite: 'strict',       // CSRF protection
+    sameSite: 'lax',          // CSRF protection (lax allows cross-site navigation, strict blocks it)
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     signed: true,             // Uses session secret
   });
@@ -41,7 +41,7 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'strict',
+    sameSite: 'lax',
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     path: '/api/auth/refresh',
     signed: true,
