@@ -37,6 +37,8 @@ services:
           type: redis
           name: bluelearnerhub-redis
           property: connectionString
+      - key: TRUST_PROXY
+        value: "true"
 
   # ─── PostgreSQL Database ─────────────────────────────────────────────────────
 databases:
