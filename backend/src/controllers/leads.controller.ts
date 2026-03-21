@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pool } from '../db';
+import { pool } from '../utils/database';
 
 // Ensure leads table exists (runs once; harmless if already created)
 const ensureTable = pool.query(`
