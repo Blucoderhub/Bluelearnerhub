@@ -112,6 +112,20 @@ export const config = {
     resendApiKey: process.env.RESEND_API_KEY,
   },
 
+  // OAuth
+  oauth: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID || '',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+      callbackUrl: `${process.env.BACKEND_URL || 'http://localhost:5000'}/api/auth/oauth/github/callback`,
+    },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      callbackUrl: `${process.env.GOOGLE_CALLBACK_URL || `${process.env.BACKEND_URL || 'http://localhost:5000'}/api/auth/oauth/google/callback`}`,
+    },
+  },
+
   // AI Service
   aiServiceUrl: process.env.AI_SERVICE_URL || 'http://localhost:8000',
 

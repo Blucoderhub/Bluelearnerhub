@@ -22,10 +22,12 @@ import gamificationRoutes from './gamification';
 import exerciseRoutes     from './exercises';
 import codeRoutes         from './code';
 import leadsRoutes        from './leads';
+import oauthRoutes        from './oauth';
 
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/auth/oauth', oauthRoutes);
 router.use('/avatar', avatarRoutes);
 router.use('/quiz', quizRoutes);
 router.use('/hackathons', hackathonRoutes);

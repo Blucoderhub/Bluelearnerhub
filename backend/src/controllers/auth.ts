@@ -30,18 +30,20 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
   
   // Access Token Cookie
   res.cookie('accessToken', accessToken, {
-    httpOnly: true,           // Prevents JavaScript access (XSS protection)
-    secure: isProduction,     // HTTPS only in production
-    sameSite: 'lax',          // CSRF protection (lax allows cross-site navigation, strict blocks it)
+    httpOnly: true,
+    secure: isProduction,
+    // 'none' required for cross-domain XHR (Vercel frontend + Render backend)
+    // 'lax' is fine for same-domain local dev
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    signed: true,             // Uses session secret
+    signed: true,
   });
 
   // Refresh Token Cookie
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'lax',
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     path: '/api/auth/refresh',
     signed: true,

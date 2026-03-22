@@ -38,6 +38,9 @@ export function middleware(request: NextRequest) {
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
 
+  // OAuth callback must be reachable before cookies are set
+  if (pathname.startsWith('/oauth/callback')) return NextResponse.next()
+
   if (!isProtected) return NextResponse.next()
 
   // accessToken is an HttpOnly signed cookie set by the Express auth controller.
