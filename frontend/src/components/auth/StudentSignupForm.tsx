@@ -30,7 +30,7 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-2">
       {error && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -45,13 +45,13 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
       <div className="grid grid-cols-1">
         <Button
           variant="outline"
-          className="flex h-14 items-center justify-center gap-3 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
+          className="flex h-10 items-center justify-center gap-3 rounded-2xl border-border bg-background/50 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black"
         >
           <Github size={16} /> Register via GitHub Identity
         </Button>
       </div>
 
-      <div className="relative py-4">
+      <div className="relative py-1">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/50" />
         </div>
@@ -61,8 +61,8 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
       </div>
 
       {/* Standard Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <div className="space-y-1.5">
           <div className="group relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
@@ -70,13 +70,13 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
               placeholder="Biological Name / Alias"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-14 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
               required
             />
           </div>
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-1.5">
           <div className="group relative">
             <MailIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
@@ -84,13 +84,13 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
               placeholder="Communication Uplink (Email)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-14 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
               required
             />
           </div>
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-1.5">
           <div className="group relative">
             <KeyRound className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
             <Input
@@ -98,7 +98,7 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
               placeholder="Master Encryption Key"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-14 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
+              className="h-10 rounded-2xl border-border bg-background/40 pl-12 text-sm font-medium transition-all placeholder:text-muted-foreground/30 focus:border-primary/50 focus:ring-primary/20"
               required
             />
           </div>
@@ -110,11 +110,11 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
             </p>
         </div>
 
-        <div className="pt-4">
+        <div className="pt-1">
           <Button
             type="submit"
             disabled={loading}
-            className="h-14 w-full rounded-2xl bg-primary font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+            className="h-11 w-full rounded-2xl bg-primary font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? 'Synchronizing Node...' : 'Initialize Identity'}
           </Button>

@@ -27,7 +27,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-2">
       {error && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -64,7 +64,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
         </Button>
       </div>
 
-      <div className="relative py-2">
+      <div className="relative py-1">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/50" />
         </div>
@@ -74,7 +74,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
       </div>
 
       {/* Standard Form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-2">
         <div className="group relative">
           <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50 transition-colors group-focus-within:text-primary" />
           <Input
@@ -82,7 +82,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-11 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            className="h-10 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
             required
           />
         </div>
@@ -94,13 +94,13 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-11 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
+            className="h-10 rounded-xl border-border bg-background/40 pl-10 text-sm transition-all placeholder:text-muted-foreground/40 focus:border-primary/50 focus:ring-primary/20"
             required
           />
         </div>
 
         <div className="flex justify-end">
-          <Link href="/forgot-password" className="text-xs text-muted-foreground/60 transition-colors hover:text-primary">
+          <Link href="/forgot-password" className="text-[10px] text-muted-foreground/60 transition-colors hover:text-primary">
             Forgot password?
           </Link>
         </div>
@@ -108,7 +108,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
         <Button
           type="submit"
           disabled={loading}
-          className="h-11 w-full rounded-xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+          className="h-10 w-full rounded-xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
         >
           {loading ? 'Signing in…' : 'Sign In'}
         </Button>
