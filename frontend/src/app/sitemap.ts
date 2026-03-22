@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = 'https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app'
+const BASE_URL = 'https://bluecoderhub.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

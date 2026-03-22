@@ -1,4 +1,4 @@
-const BASE_URL = 'https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app'
+const BASE_URL = 'https://bluecoderhub.com'
 
 // Organization schema — tells Google this is a real education company
 const organizationSchema = {

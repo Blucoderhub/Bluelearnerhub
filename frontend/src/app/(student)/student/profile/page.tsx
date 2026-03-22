@@ -158,14 +158,14 @@ export default function ProfilePage() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl border border-border bg-card/50 p-6 sm:p-8"
+        className="relative overflow-hidden rounded-2xl bg-card p-6 sm:p-8"
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-violet-500/5" />
 
         <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end">
           {/* Avatar */}
           <div className="relative shrink-0">
-            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary to-blue-600 text-3xl font-black text-white sm:h-24 sm:w-24">
+            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border-2 border-primary/30 bg-primary text-3xl font-black text-primary-foreground sm:h-24 sm:w-24">
               {avatarSrc ? (
                 <img src={avatarSrc} alt={user.fullName} className="h-full w-full object-cover" />
               ) : (
@@ -178,7 +178,7 @@ export default function ProfilePage() {
           {/* Info */}
           <div className="min-w-0 flex-1 space-y-2">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="font-heading text-2xl font-black tracking-tight text-white sm:text-3xl">
+              <h1 className="font-heading text-2xl font-black tracking-tight text-foreground sm:text-3xl">
                 {user.fullName || user.email.split('@')[0]}
               </h1>
               <Badge className="border-primary/25 bg-primary/15 text-xs font-bold text-primary">
@@ -227,7 +227,7 @@ export default function ProfilePage() {
                 className="rounded-xl border border-border bg-background/50 p-3 text-center"
               >
                 <Icon className={`h-4 w-4 ${color} mx-auto mb-1`} />
-                <div className="text-lg font-black text-white">{value}</div>
+                <div className="text-lg font-black text-foreground">{value}</div>
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   {label}
                 </div>
@@ -281,7 +281,7 @@ export default function ProfilePage() {
             onClick={() => setActiveTab(id)}
             className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
               activeTab === id
-                ? 'border border-border bg-card text-white shadow-sm'
+                ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -305,7 +305,7 @@ export default function ProfilePage() {
               {/* Completed Courses */}
               <div className="space-y-4 rounded-2xl border border-border bg-card/50 p-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                     <BookOpen className="h-4 w-4 text-primary" />
                     Completed Courses
                   </h3>
@@ -321,7 +321,7 @@ export default function ProfilePage() {
                     >
                       <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold text-white">{c.title}</p>
+                        <p className="truncate text-sm font-semibold text-foreground">{c.title}</p>
                         <p className="text-xs text-muted-foreground">
                           {c.category} · {c.date}
                         </p>
@@ -334,7 +334,7 @@ export default function ProfilePage() {
 
               {/* Recent Activity */}
               <div className="space-y-4 rounded-2xl border border-border bg-card/50 p-6">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                   <Clock className="h-4 w-4 text-primary" />
                   Recent Activity
                 </h3>
@@ -370,7 +370,7 @@ export default function ProfilePage() {
               {/* Leaderboard */}
               <div className="space-y-4 rounded-2xl border border-border bg-card/50 p-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                     <Trophy className="h-4 w-4 text-amber-400" />
                     Leaderboard
                   </h3>
@@ -417,7 +417,7 @@ export default function ProfilePage() {
 
               {/* Quick stats */}
               <div className="space-y-4 rounded-2xl border border-border bg-card/50 p-6">
-                <h3 className="text-sm font-bold text-white">Quick Stats</h3>
+                <h3 className="text-sm font-bold text-foreground">Quick Stats</h3>
                 <div className="space-y-3">
                   {[
                     {
@@ -448,7 +448,7 @@ export default function ProfilePage() {
                     <div key={label} className="flex items-center gap-3">
                       <Icon className={`h-4 w-4 ${color} shrink-0`} />
                       <span className="flex-1 text-xs text-muted-foreground">{label}</span>
-                      <span className="text-xs font-bold text-white">{value}</span>
+                      <span className="text-xs font-bold text-foreground">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -460,7 +460,7 @@ export default function ProfilePage() {
         {activeTab === 'skills' && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-6 rounded-2xl border border-border bg-card/50 p-6">
-              <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                 <Target className="h-4 w-4 text-primary" />
                 Skill Proficiency
               </h3>
@@ -485,7 +485,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-4 rounded-2xl border border-border bg-card/50 p-6">
-              <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                 <GitBranch className="h-4 w-4 text-primary" />
                 Coding Activity
               </h3>
@@ -501,7 +501,7 @@ export default function ProfilePage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                <strong className="text-white">
+                <strong className="text-foreground">
                   {ACHIEVEMENTS.filter((a) => a.unlocked).length}
                 </strong>{' '}
                 of {ACHIEVEMENTS.length} badges earned
@@ -525,7 +525,7 @@ export default function ProfilePage() {
                   }`}
                 >
                   <div className="text-3xl">{a.icon}</div>
-                  <div className="text-xs font-bold text-white">{a.title}</div>
+                  <div className="text-xs font-bold text-foreground">{a.title}</div>
                   <div className="text-[10px] leading-tight text-muted-foreground">{a.desc}</div>
                   {a.unlocked && (
                     <Badge className="border-emerald-500/20 bg-emerald-500/10 text-[10px] text-emerald-400">
@@ -570,7 +570,7 @@ export default function ProfilePage() {
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">{title}</h4>
+                  <h4 className="text-sm font-bold text-foreground">{title}</h4>
                   <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
                 </div>
               </div>

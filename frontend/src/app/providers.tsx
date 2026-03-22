@@ -42,13 +42,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <ErrorBoundary name="Query Client Provider" level="section">
             <ThemeProvider
               attribute="class"
-              defaultTheme="dark"
+              defaultTheme="light"
               enableSystem={false}
               disableTransitionOnChange
             >
               <ErrorBoundary name="Theme Provider" level="section">
                 {children}
-                <Toaster position="top-right" theme="dark" richColors />
+                <Toaster position="top-right" theme="light" richColors />
               </ErrorBoundary>
             </ThemeProvider>
           </ErrorBoundary>

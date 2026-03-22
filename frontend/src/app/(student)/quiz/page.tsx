@@ -171,7 +171,7 @@ export default function QuizPage() {
           </div>
 
           <div className="space-y-3">
-            <h1 className="font-heading text-4xl font-black tracking-tight text-white">
+            <h1 className="font-heading text-4xl font-black tracking-tight text-foreground">
               Practice Quiz
             </h1>
             <p className="text-muted-foreground">
@@ -191,7 +191,7 @@ export default function QuizPage() {
                 <Icon className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-[10px] font-bold uppercase text-muted-foreground">{label}</p>
-                  <p className="text-sm font-bold text-white">{value}</p>
+                  <p className="text-sm font-bold text-foreground">{value}</p>
                 </div>
               </div>
             ))}
@@ -199,7 +199,7 @@ export default function QuizPage() {
 
           <Button
             onClick={() => setStep('quiz')}
-            className="h-13 w-full gap-2 rounded-2xl bg-primary text-base font-bold text-white hover:bg-primary/90"
+            className="h-13 w-full gap-2 rounded-2xl bg-primary text-base font-bold text-primary-foreground hover:bg-primary/90"
           >
             <Sparkles className="h-5 w-5" />
             Start Quiz
@@ -254,7 +254,7 @@ export default function QuizPage() {
             className="space-y-6"
           >
             {/* Topic + question */}
-            <div className="relative space-y-4 overflow-hidden rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
+            <div className="relative space-y-4 overflow-hidden rounded-2xl bg-card p-6 sm:p-8">
               <div className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-primary" />
               <div className="from-primary/8 pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent" />
               <div className="flex items-center gap-2">
@@ -268,7 +268,7 @@ export default function QuizPage() {
                   {q.type}
                 </Badge>
               </div>
-              <h2 className="text-xl font-semibold leading-snug text-white sm:text-2xl">
+              <h2 className="text-xl font-semibold leading-snug text-foreground sm:text-2xl">
                 {q.content}
               </h2>
             </div>
@@ -311,7 +311,7 @@ export default function QuizPage() {
                           : variant === 'wrong'
                             ? 'bg-red-500 text-white'
                             : isSelected
-                              ? 'bg-primary text-white'
+                              ? 'bg-primary text-primary-foreground'
                               : 'border border-border bg-muted/50 text-muted-foreground'
                       }`}
                     >
@@ -331,7 +331,7 @@ export default function QuizPage() {
                           : variant === 'wrong'
                             ? 'text-red-300'
                             : isSelected
-                              ? 'text-white'
+                              ? 'text-primary'
                               : 'text-foreground/80'
                       }`}
                     >
@@ -443,12 +443,12 @@ export default function QuizPage() {
               />
             </div>
 
-            <h1 className="mb-1 font-heading text-4xl font-black tracking-tight text-white">
+            <h1 className="mb-1 font-heading text-4xl font-black tracking-tight text-foreground">
               {isGreat ? 'Outstanding!' : percentage >= 60 ? 'Good Job!' : 'Keep Practicing!'}
             </h1>
             <p className="mb-6 text-sm text-muted-foreground">Quiz complete</p>
 
-            <div className="mb-2 text-6xl font-black text-white">{percentage}%</div>
+            <div className="mb-2 text-6xl font-black text-foreground">{percentage}%</div>
             <p className="mb-6 text-sm text-muted-foreground">
               {score} of {MOCK_QUESTIONS.length} correct
             </p>
@@ -464,7 +464,7 @@ export default function QuizPage() {
                 <p className="mb-1 text-[10px] font-bold uppercase text-muted-foreground">
                   Accuracy
                 </p>
-                <p className="text-2xl font-black text-white">{percentage}%</p>
+                <p className="text-2xl font-black text-foreground">{percentage}%</p>
               </div>
             </div>
 

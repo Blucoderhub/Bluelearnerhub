@@ -142,7 +142,7 @@ export default function StudentDashboard() {
             <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', stiffness: 200, damping: 15 }} className="pointer-events-auto flex flex-col items-center gap-6 rounded-[3rem] border border-primary/30 bg-card/90 p-12 shadow-2xl backdrop-blur-2xl">
               <CelebrationCharacter size={140} />
               <div className="text-center space-y-2">
-                <h2 className="font-heading text-3xl font-medium text-white">Ascension Confirmed.</h2>
+                <h2 className="font-heading text-3xl font-medium text-foreground">Ascension Confirmed.</h2>
                 <p className="font-heading text-lg text-muted-foreground">You've unlocked a new milestone.</p>
               </div>
             </motion.div>
@@ -164,7 +164,7 @@ export default function StudentDashboard() {
                 </Badge>
               )}
             </div>
-            <h1 className="font-heading text-5xl font-medium tracking-tight text-white md:text-6xl">
+            <h1 className="font-heading text-5xl font-medium tracking-tight text-foreground md:text-6xl">
               Greetings{firstName ? `, ${firstName}` : ''}.
             </h1>
             <p className="max-w-xl font-heading text-xl leading-relaxed text-muted-foreground">
@@ -178,7 +178,7 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card/40 p-8 shadow-2xl backdrop-blur-xl">
+        <div className="relative overflow-hidden rounded-[2rem] bg-card p-8">
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <Brain size={120} className="text-primary" />
           </div>
@@ -207,7 +207,7 @@ export default function StudentDashboard() {
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
         <div className="space-y-8 xl:col-span-2">
           {/* Daily Challenge Card */}
-          <div className="relative overflow-hidden rounded-[2.5rem] border border-border/50 bg-card/40 p-1">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-card p-1">
              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-violet-600/10" />
              <div className="relative rounded-[2.4rem] bg-card/80 p-8 backdrop-blur-xl">
                <DailyChallenge
@@ -226,7 +226,7 @@ export default function StudentDashboard() {
           <section className="rounded-[2.5rem] border border-border/50 bg-card/30 p-10">
             <div className="mb-10 flex items-center justify-between">
               <div className="space-y-1">
-                <h3 className="font-heading text-2xl font-medium text-white tracking-tight">Growth Analytics</h3>
+                <h3 className="font-heading text-2xl font-medium text-foreground tracking-tight">Growth Analytics</h3>
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Mastery progression over time</p>
               </div>
               <Link href="/analytics" className="flex items-center gap-2 rounded-full border border-border px-5 py-2 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-secondary">
@@ -256,7 +256,7 @@ export default function StudentDashboard() {
           {/* Activity Feed */}
           <div className="overflow-hidden rounded-[2.5rem] border border-border bg-background shadow-2xl">
             <div className="border-b border-border/50 p-6 bg-secondary/30">
-              <h3 className="flex items-center gap-3 font-heading text-lg font-medium text-white">
+              <h3 className="flex items-center gap-3 font-heading text-lg font-medium text-foreground">
                 <Sparkles className="h-5 w-5 text-primary" />
                 Recent Logs
               </h3>
@@ -273,7 +273,7 @@ export default function StudentDashboard() {
           return (
             <motion.div key={i} whileHover={{ scale: 1.02 }} className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/40 p-8 backdrop-blur-xl">
               <div className="flex items-start justify-between">
-                <div className={cn("rounded-2xl bg-secondary/50 p-3 transition-colors group-hover:bg-primary group-hover:text-white", stat.color)}>
+                <div className={cn("rounded-2xl bg-secondary p-3 transition-colors group-hover:bg-primary group-hover:text-primary-foreground", stat.color)}>
                   <Icon size={20} />
                 </div>
                 <Badge variant="outline" className="border-primary/20 text-[9px] font-black uppercase tracking-widest text-primary">
@@ -282,7 +282,7 @@ export default function StudentDashboard() {
               </div>
               <div className="mt-8 space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</p>
-                <h4 className="font-heading text-3xl font-medium text-white">{stat.value}</h4>
+                <h4 className="font-heading text-3xl font-medium text-foreground">{stat.value}</h4>
               </div>
             </motion.div>
           )

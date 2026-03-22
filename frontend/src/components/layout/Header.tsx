@@ -91,7 +91,7 @@ export default function Header() {
       "relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold uppercase tracking-widest transition-all duration-300",
       active 
         ? "text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:bg-primary" 
-        : "text-muted-foreground hover:text-white"
+        : "text-muted-foreground hover:text-foreground"
     )
 
   return (
@@ -106,7 +106,7 @@ export default function Header() {
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-8 lg:px-12">
           {/* Brand */}
           <Link href="/" className="group flex items-center">
-            <span className="font-heading text-xl font-bold tracking-tight text-white transition-colors group-hover:text-primary">
+            <span className="font-heading text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
               BlueLearnerHub
             </span>
           </Link>
@@ -137,7 +137,7 @@ export default function Header() {
                                 <Link
                                   key={cat}
                                   href={`/tutorials/${domain.id}/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                                  className="rounded-xl px-4 py-2 text-[13px] font-medium text-muted-foreground transition-all hover:bg-primary/10 hover:text-white"
+                                  className="rounded-xl px-4 py-2 text-[13px] font-medium text-muted-foreground transition-all hover:bg-primary/10 hover:text-foreground"
                                   onClick={() => setOpenMenu(null)}
                                 >
                                   {cat}
@@ -170,7 +170,7 @@ export default function Header() {
                         {user.fullName?.charAt(0) || 'U'}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-[13px] font-bold text-white uppercase tracking-widest">Portal</span>
+                    <span className="text-[13px] font-bold text-foreground uppercase tracking-widest">Portal</span>
                  </button>
                </DropdownMenuTrigger>
                <DropdownMenuContent align="end" className="w-64 rounded-3xl border-border bg-card/80 p-2 backdrop-blur-3xl">
@@ -190,7 +190,7 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="rounded-full px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all hover:text-primary"
+                  className="rounded-full px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-foreground transition-all hover:text-primary"
                 >
                   Access
                 </Link>
@@ -207,7 +207,7 @@ export default function Header() {
               className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card/40 transition-all hover:bg-secondary lg:hidden"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <Menu className="h-5 w-5 text-white" />
+              <Menu className="h-5 w-5 text-foreground" />
             </button>
           </div>
         </div>

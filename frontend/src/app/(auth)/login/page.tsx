@@ -48,7 +48,7 @@ export default function LoginPortal() {
         <div className="space-y-8 text-center">
           <Link
             href="/"
-            className="group inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-muted-foreground transition-all hover:text-white"
+            className="group inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-muted-foreground transition-all hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Matrix
           </Link>
@@ -61,7 +61,7 @@ export default function LoginPortal() {
               <Badge variant="outline" className="rounded-full border-primary/30 bg-primary/10 px-4 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-primary">
                 Secure Authentication
               </Badge>
-              <h1 className="font-heading text-5xl font-medium tracking-tight text-white">
+              <h1 className="font-heading text-5xl font-medium tracking-tight text-foreground">
                 Welcome back.
               </h1>
               <p className="font-heading text-lg text-muted-foreground">
@@ -71,7 +71,7 @@ export default function LoginPortal() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-border/50 bg-card/40 p-10 shadow-3xl backdrop-blur-2xl">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-card p-10 shadow-3xl">
           <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           <StudentLoginForm onSubmit={handleSubmit} error={error} />
         </div>

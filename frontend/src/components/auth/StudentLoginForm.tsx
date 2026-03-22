@@ -44,7 +44,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
           type="button"
           variant="outline"
           onClick={() => { window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/github` }}
-          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-white transition-all hover:bg-white hover:text-black"
+          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-foreground transition-all hover:bg-white hover:text-black"
         >
           <Github size={14} /> GitHub
         </Button>
@@ -52,7 +52,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
           type="button"
           variant="outline"
           onClick={() => { window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth/google` }}
-          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-white transition-all hover:bg-white hover:text-black"
+          className="flex h-10 items-center justify-center gap-2 rounded-xl border-border bg-background/50 text-xs font-bold text-foreground transition-all hover:bg-white hover:text-black"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -116,7 +116,7 @@ export const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit, er
 
       <p className="text-center text-xs text-muted-foreground/50">
         No account?{' '}
-        <Link href="/get-started" className="font-bold text-white transition-colors hover:text-primary">
+        <Link href="/get-started" className="font-bold text-primary transition-colors">
           Sign up free
         </Link>
       </p>

@@ -134,7 +134,7 @@ export default function TutorialsLibrary() {
           </motion.div>
           
           <div className="space-y-6">
-            <h1 className="font-serif text-6xl font-medium tracking-tight text-white sm:text-7xl">
+            <h1 className="font-serif text-6xl font-medium tracking-tight text-foreground sm:text-7xl">
               Knowledge <span className="gradient-primary-text">Manifesto.</span>
             </h1>
             <p className="mx-auto max-w-2xl font-serif text-xl leading-relaxed text-muted-foreground">
@@ -149,7 +149,7 @@ export default function TutorialsLibrary() {
               <Search className="absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
                 placeholder="What do you want to master today?"
-                className="h-16 rounded-full border-border bg-card/60 pl-16 pr-8 text-lg font-medium backdrop-blur-xl transition-all focus-visible:border-primary/50 focus-visible:ring-primary/20"
+                className="h-16 rounded-full border-border bg-card pl-16 pr-8 text-lg font-medium transition-all focus-visible:border-primary/50 focus-visible:ring-primary/20"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -178,7 +178,7 @@ export default function TutorialsLibrary() {
                         <track.icon size={32} />
                       </div>
                       <div className="space-y-1">
-                        <h2 className="font-serif text-4xl font-medium text-white tracking-tight">
+                        <h2 className="font-serif text-4xl font-medium text-foreground tracking-tight">
                           {track.category}
                         </h2>
                         <p className="text-sm font-medium text-muted-foreground">
@@ -196,7 +196,7 @@ export default function TutorialsLibrary() {
                       <Link key={tutorial.id} href={`/tutorials/view/${tutorial.id}/lesson-1`}>
                         <motion.div
                           whileHover={{ y: -10 }}
-                          className="group relative h-full overflow-hidden rounded-[2.5rem] border border-border bg-card/40 p-10 transition-all hover:bg-card hover:shadow-2xl hover:shadow-primary/10"
+                          className="group relative h-full overflow-hidden rounded-[2.5rem] bg-card p-10 transition-all hover:bg-card hover:shadow-2xl hover:shadow-primary/10"
                         >
                           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                           
@@ -209,7 +209,7 @@ export default function TutorialsLibrary() {
                             </Badge>
                           </div>
 
-                          <h3 className="mb-6 font-serif text-2xl font-medium leading-[1.3] text-white transition-colors group-hover:text-primary">
+                          <h3 className="mb-6 font-serif text-2xl font-medium leading-[1.3] text-foreground transition-colors group-hover:text-primary">
                             {tutorial.title}
                           </h3>
 
@@ -227,7 +227,7 @@ export default function TutorialsLibrary() {
                             </div>
                           </div>
 
-                          <div className="mt-10 flex items-center justify-center gap-2 rounded-full border border-border bg-background py-3 text-[11px] font-black uppercase tracking-widest text-white opacity-0 transition-all duration-300 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-primary">
+                          <div className="mt-10 flex items-center justify-center gap-2 rounded-full bg-secondary py-3 text-[11px] font-black uppercase tracking-widest text-foreground opacity-0 transition-all duration-300 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-primary group-hover:text-primary-foreground">
                             <Play size={14} className="fill-current" /> Continue Learning
                           </div>
                         </motion.div>
@@ -245,13 +245,13 @@ export default function TutorialsLibrary() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-[3rem] border border-border bg-card/40 p-20 text-center backdrop-blur-xl"
+          className="relative overflow-hidden rounded-[3rem] bg-card p-20 text-center"
         >
           <div className="absolute -left-[10%] -top-[20%] -z-10 h-[300px] w-[300px] rounded-full bg-primary/20 blur-[100px]" />
           <div className="absolute -right-[10%] -bottom-[20%] -z-10 h-[300px] w-[300px] rounded-full bg-violet-600/20 blur-[100px]" />
           
           <div className="mx-auto max-w-2xl space-y-8">
-            <h2 className="font-serif text-5xl font-medium tracking-tight text-white">
+            <h2 className="font-serif text-5xl font-medium tracking-tight text-foreground">
               Ready for Certification?
             </h2>
             <p className="font-serif text-xl leading-relaxed text-muted-foreground">

@@ -1,0 +1,122 @@
+﻿Γû▓ Next.js 16.1.6 (Turbopack)
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+node.exe : ΓÜá The 
+"middleware" file 
+convention is 
+deprecated. Please 
+use "proxy" instead. 
+Learn more: https://n
+extjs.org/docs/messag
+es/middleware-to-prox
+y
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Users\Shankar 
+R\AppData\Roam ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (ΓÜá The   
+  "middle...lewar    
+e-to-proxy:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 41s
+  Running TypeScript ...
+  Collecting page data using 17 workers ...
+  Generating static pages using 17 workers (0/60) ...
+  Generating static pages using 17 workers (15/60) 
+  Generating static pages using 17 workers (30/60) 
+  Generating static pages using 17 workers (45/60) 
+Γ£ô Generating static pages using 17 workers (60/60) in 817.2ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /admin/dashboard
+Γö£ Γùï /ai-companion
+Γö£ Γùï /candidate/dashboard
+Γö£ Γùï /candidates
+Γö£ Γùï /certificates
+Γö£ ╞Æ /certificates/verify/[id]
+Γö£ Γùï /community
+Γö£ Γùï /content-management
+Γö£ Γùï /corporate/dashboard
+Γö£ Γùï /courses
+Γö£ Γùï /daily-quiz
+Γö£ Γùï /dashboard
+Γö£ Γùï /dev
+Γö£ ╞Æ /dev/[username]
+Γö£ ╞Æ /dev/[username]/[repo]
+Γö£ Γùï /dev/new
+Γö£ Γùï /exercises
+Γö£ Γùï /forgot-password
+Γö£ Γùï /get-started
+Γö£ Γùï /hackathons
+Γö£ ╞Æ /hackathons/[hackathonId]
+Γö£ ╞Æ /hackathons/[hackathonId]/team
+Γö£ Γùï /host-hackathon
+Γö£ Γùï /hr/dashboard
+Γö£ Γùï /ide
+Γö£ Γùï /institution/dashboard
+Γö£ Γùï /labs
+Γö£ Γùï /labs/civil
+Γö£ Γùï /labs/electrical
+Γö£ Γùï /labs/mechanical
+Γö£ Γùï /labs/software
+Γö£ Γùï /learning-tracks
+Γö£ ╞Æ /learning-tracks/[slug]
+Γö£ Γùï /login
+Γö£ Γùï /login/admin
+Γö£ Γùï /login/candidate
+Γö£ Γùï /login/corporate
+Γö£ Γùï /login/hr
+Γö£ Γùï /login/mentor
+Γö£ Γùï /login/student
+Γö£ Γùï /login/university
+Γö£ Γùï /mentors
+Γö£ Γùï /notebooks
+Γö£ ╞Æ /notebooks/[id]
+Γö£ Γùï /organizations
+Γö£ ╞Æ /organizations/[slug]
+Γö£ Γùï /payment/cancel
+Γö£ Γùï /payment/success
+Γö£ Γùï /post-job
+Γö£ Γùï /premium
+Γö£ Γùï /qna
+Γö£ Γùï /qna/ask
+Γö£ ╞Æ /qna/questions/[id]
+Γö£ Γùï /quiz
+Γö£ Γùï /reset-password
+Γö£ Γùï /select-role
+Γö£ Γùï /spaces
+Γö£ Γùï /spaces/explore
+Γö£ Γùï /spaces/new
+Γö£ Γùï /student/dashboard
+Γö£ Γùï /student/profile
+Γö£ Γùï /teacher/dashboard
+Γö£ Γùï /teacher/studio
+Γö£ Γùï /tools
+Γö£ Γùï /tutorials
+Γö£ ╞Æ /tutorials/[pathId]
+Γö£ ╞Æ /tutorials/[pathId]/[courseId]
+Γöö ╞Æ /tutorials/[pathId]/[courseId]/[lessonId]
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

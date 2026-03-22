@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
+import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import '../styles/animations.css'
 import { Providers } from './providers'
@@ -8,6 +8,13 @@ import { AIAssistant } from '@/components/ai/AIAssistant'
 const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-heading',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
 })
@@ -25,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-const BASE_URL = 'https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app'
+const BASE_URL = 'https://bluelearnerhub.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -113,7 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} bg-background font-sans text-foreground antialiased`}
+        className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} bg-background font-sans text-foreground antialiased`}
       >
         <Providers>
           {children}

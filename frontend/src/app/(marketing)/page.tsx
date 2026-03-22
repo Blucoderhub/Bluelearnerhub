@@ -112,7 +112,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
       onClick={() => setOpen(!open)}
     >
       <div className="flex items-center justify-between gap-4">
-        <h3 className="font-bold text-white">{q}</h3>
+        <h3 className="font-bold text-foreground">{q}</h3>
         <ChevronDown className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')} />
       </div>
       <AnimatePresence>
@@ -141,7 +141,7 @@ export default function LandingPage() {
       <div className="bg-noise" />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative mx-auto max-w-[980px] px-6 py-24 sm:py-32">
+      <section className="relative mx-auto max-w-[980px] px-6 py-32 sm:py-48">
         <div className="absolute left-1/2 top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
 
         <motion.header
@@ -156,7 +156,7 @@ export default function LandingPage() {
             </Badge>
           </div>
 
-          <h1 className="mb-8 font-serif text-6xl font-medium leading-[1.0] tracking-tight text-white sm:text-8xl">
+          <h1 className="mb-8 font-serif text-6xl font-medium leading-[1.0] tracking-tight text-foreground sm:text-8xl">
             Master Your Skills.
             <br />
             <span className="gradient-primary-text">Showcase Your Portfolio.</span>
@@ -167,79 +167,15 @@ export default function LandingPage() {
             participate in challenges, and build a portfolio that gets you noticed. Join thousands of learners growing every day.
           </p>
 
-          <div className="flex flex-col items-center justify-center gap-5 font-sans sm:flex-row mb-10">
-            <Link
-              href="/get-started"
-              className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-primary px-10 text-sm font-bold text-white transition-all hover:scale-105 hover:shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              Start Learning Free
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/tutorials"
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-card/40 px-10 text-sm font-bold text-foreground transition-all hover:bg-card hover:text-primary backdrop-blur-sm"
-            >
-              Browse 500+ Free Courses
-            </Link>
-          </div>
-
-          {/* Email lead capture in hero */}
-          <NewsletterCapture className="mx-auto max-w-xl" />
-
-          <p className="mt-4 text-xs text-muted-foreground">
-            No credit card required. Instant access. Join 50,000+ learners.
-          </p>
         </motion.header>
       </section>
 
-      {/* ── POPULAR TRACKS ────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">Free Learning Tracks</h2>
-          <h3 className="font-serif text-5xl font-medium text-white">
-            Start with what matters most.
-          </h3>
-          <p className="mt-6 mx-auto max-w-xl text-lg text-muted-foreground">
-            Structured learning paths from beginner to job-ready. Free forever.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {tracks.map((t, i) => (
-            <Link key={i} href={t.href}>
-              <motion.div
-                whileHover={{ y: -4 }}
-                className="group flex items-center justify-between rounded-2xl border border-border/50 bg-card/40 p-6 transition-all hover:border-primary/40 hover:bg-card"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl">{t.icon}</span>
-                  <div>
-                    <h4 className="font-bold text-white group-hover:text-primary transition-colors">{t.name}</h4>
-                    <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                      <Users className="h-3 w-3" /> {t.students} learners
-                      <span className="rounded-full bg-secondary px-2 py-0.5">{t.level}</span>
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center">
-          <Link href="/learning-tracks" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
-            View all 50+ learning tracks <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
 
       {/* ── FEATURES GRID ─────────────────────────────────────────────────── */}
       <section className="relative mx-auto max-w-7xl px-6 py-24 text-center">
         <div className="mb-16">
           <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">Platform Capabilities</h2>
-          <h3 className="font-serif text-5xl font-medium text-white sm:text-6xl">
+          <h3 className="font-serif text-5xl font-medium text-foreground sm:text-6xl">
             Everything you need to get hired.
           </h3>
         </div>
@@ -254,12 +190,12 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 p-10 text-left transition-all hover:bg-card hover:shadow-2xl hover:shadow-primary/5"
+                className="group relative overflow-hidden rounded-[2.5rem] bg-card p-10 text-left transition-all hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/5"
               >
                 <div className={cn('mb-8 flex h-16 w-16 items-center justify-center rounded-2xl transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-white', f.bg, f.color)}>
                   <Icon size={32} />
                 </div>
-                <h4 className="mb-4 font-serif text-2xl font-medium text-white">{f.title}</h4>
+                <h4 className="mb-4 font-serif text-2xl font-medium text-foreground">{f.title}</h4>
                 <p className="font-serif text-base leading-relaxed text-muted-foreground">{f.desc}</p>
               </motion.div>
             )
@@ -267,55 +203,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── CODING CHALLENGES ─────────────────────────────────────────────── */}
-      <section className="border-t border-border/10 bg-secondary/20 py-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
-            <div>
-              <h2 className="mb-6 text-xs font-black uppercase tracking-[0.3em] text-primary/80">1,200+ Coding Challenges</h2>
-              <h3 className="mb-8 font-serif text-5xl font-medium text-white">Sharpen your skills daily.</h3>
-              <p className="mb-10 font-serif text-xl leading-relaxed text-muted-foreground">
-                Apply your knowledge to complex, real-world problems. Get instant AI feedback and
-                scale your capabilities with our adaptive performance engine.
-              </p>
-              <Link href="/ide">
-                <Button className="h-14 rounded-full bg-primary px-8 text-sm font-bold text-white hover:scale-105 transition-transform hover:shadow-[0_0_20px_hsl(var(--primary)/0.2)]">
-                  <Terminal className="mr-2 h-5 w-5" /> Start a Challenge — Free
-                </Button>
-              </Link>
-            </div>
-            <div className="space-y-4">
-              {challenges.map((c, i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{ x: 10 }}
-                  className="group flex cursor-pointer items-center justify-between rounded-3xl border border-border/50 bg-card/60 p-6 transition-all hover:border-primary/50 hover:bg-card"
-                >
-                  <div className="flex items-center gap-5">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
-                      <Code2 size={24} />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-white transition-colors group-hover:text-primary">{c.title}</h4>
-                      <div className="mt-1 flex gap-3 text-xs text-muted-foreground">
-                        <span className="font-bold uppercase tracking-wider text-primary/80">{c.difficulty}</span>
-                        <span>•</span><span>{c.solved} Solved</span>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 py-24">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">FAQ</h2>
-          <h3 className="font-serif text-4xl font-medium text-white">Frequently asked questions</h3>
+          <h3 className="font-serif text-4xl font-medium text-foreground">Frequently asked questions</h3>
         </div>
         <div className="space-y-3">
           {faqs.map((f, i) => <FAQItem key={i} q={f.q} a={f.a} />)}
@@ -331,9 +224,9 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="rounded-[3rem] border border-border bg-card/40 p-16 backdrop-blur-xl"
+            className="rounded-[3rem] bg-card p-16"
           >
-            <h2 className="mb-6 font-serif text-5xl font-medium tracking-tight text-white sm:text-6xl">
+            <h2 className="mb-6 font-serif text-5xl font-medium tracking-tight text-foreground sm:text-6xl">
               Start learning today.<br />It's free.
             </h2>
             <p className="mx-auto mb-10 max-w-xl font-serif text-xl text-muted-foreground">

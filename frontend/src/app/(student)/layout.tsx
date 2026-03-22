@@ -61,13 +61,13 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       <div className="bg-noise pointer-events-none opacity-50" />
       
       {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
-      <aside className="sticky top-0 z-40 hidden h-screen w-72 flex-col border-r border-border bg-card/40 backdrop-blur-3xl transition-all duration-500 md:flex">
+      <aside className="sticky top-0 z-40 hidden h-screen w-72 flex-col border-r border-border bg-card transition-all duration-500 md:flex">
         <div className="flex h-20 items-center justify-between px-8">
           <Link href="/student/dashboard" className="group flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
               <ShieldCheck className="h-6 w-6 text-white" />
             </div>
-            <span className="font-serif text-xl font-medium tracking-tight text-white">
+            <span className="font-serif text-xl font-medium tracking-tight text-foreground">
               Bluelearner
             </span>
           </Link>
@@ -94,7 +94,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                       : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                   )}
                 >
-                  <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-primary/70")} />
+                  <Icon className={cn("h-5 w-5", isActive ? "text-primary-foreground" : "text-primary/70")} />
                   <span className="truncate">{item.title}</span>
                   {item.badge && (
                     <span className="ml-auto rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-primary">
@@ -124,7 +124,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-bold text-white">{displayName}</p>
+              <p className="truncate text-sm font-bold text-foreground">{displayName}</p>
               <div className="flex items-center gap-1.5">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                 <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Active Learner</p>
@@ -157,7 +157,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                     <ShieldCheck className="h-6 w-6 text-white" />
                   </div>
-                  <span className="font-serif text-lg font-medium text-white">Bluelearner</span>
+                  <span className="font-serif text-lg font-medium text-foreground">Bluelearner</span>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}

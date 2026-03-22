@@ -16,7 +16,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1400px] px-6 py-8">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div className="space-y-1">
-            <span className="text-sm font-bold tracking-tight text-white">
+            <span className="text-sm font-bold tracking-tight text-foreground">
               BlueLearnerHub
             </span>
             <p className="text-xs text-muted-foreground">
@@ -25,9 +25,9 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
-            <Link href="/terms" className="transition-colors hover:text-white">Terms</Link>
-            <Link href="/privacy" className="transition-colors hover:text-white">Privacy</Link>
-            <Link href="/contact" className="transition-colors hover:text-white">Contact</Link>
+            <Link href="/terms" className="transition-colors hover:text-primary">Terms</Link>
+            <Link href="/privacy" className="transition-colors hover:text-primary">Privacy</Link>
+            <Link href="/contact" className="transition-colors hover:text-primary">Contact</Link>
             <div className="flex gap-2">
               {socialLinks.map((s) => {
                 const Icon = s.icon
