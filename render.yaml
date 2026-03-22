@@ -4,7 +4,7 @@ services:
     name: bluelearnerhub-backend
     runtime: node
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npm run db:push && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
