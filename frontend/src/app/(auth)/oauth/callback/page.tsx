@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { motion } from 'framer-motion'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
-export default function OAuthCallbackPage() {
+function OAuthCallbackInner() {
   const router = useRouter()
   const params = useSearchParams()
   const { refreshUser } = useAuth()
@@ -70,5 +70,19 @@ export default function OAuthCallbackPage() {
         )}
       </motion.div>
     </div>
+  )
+}
+
+export default function OAuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <OAuthCallbackInner />
+    </Suspense>
   )
 }
