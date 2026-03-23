@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display, Press_Start_2P } from 'next/font/google'
 import './globals.css'
 import '../styles/animations.css'
 import { Providers } from './providers'
@@ -17,6 +17,13 @@ const playfair = Playfair_Display({
   variable: '--font-serif',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
+})
+
+const retro = Press_Start_2P({
+  subsets: ['latin'],
+  variable: '--font-retro',
+  display: 'swap',
+  weight: ['400'],
 })
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -120,7 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} bg-background font-sans text-foreground antialiased`}
+        className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} ${retro.variable} bg-background font-sans text-foreground antialiased`}
       >
         <Providers>
           {children}

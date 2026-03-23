@@ -110,7 +110,7 @@
   }
 
   :root {
-    --font-heading: var(--font-serif);
+    --font-heading: var(--font-retro);
   }
 
   h1,
@@ -118,8 +118,16 @@
   h3,
   h4,
   h5,
-  h6 {
-    @apply font-serif font-medium tracking-tight text-foreground;
+  h6,
+  button,
+  input,
+  select,
+  textarea,
+  .badge {
+    font-family: var(--font-retro), system-ui, sans-serif !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    @apply font-medium text-foreground;
   }
 
   h1 {
@@ -141,6 +149,12 @@
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.01em;
+  }
+
+  .font-pixel {
+    font-family: var(--font-retro), system-ui, sans-serif !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 }
 

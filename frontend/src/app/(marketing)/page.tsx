@@ -85,13 +85,13 @@ export default function LandingPage() {
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
           className="text-center"
         >
-          <h1 className="mb-8 font-serif text-6xl font-medium leading-[1.0] tracking-tight text-foreground sm:text-8xl">
+          <h1 className="mb-8 font-pixel text-4xl font-black leading-[1.2] tracking-tighter text-foreground sm:text-6xl">
             Master Your Skills.
             <br />
             <span className="gradient-primary-text">Showcase Your Portfolio.</span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl font-serif text-xl leading-relaxed text-foreground/80 sm:text-2xl">
+          <p className="mx-auto mb-10 max-w-3xl font-pixel text-[10px] leading-loose text-foreground/80 sm:text-xs">
             Learn, build, and showcase your skills across any domain. Create real-world projects,
             participate in challenges, and build a portfolio that gets you noticed. Join thousands
             of learners growing every day.
@@ -105,7 +105,7 @@ export default function LandingPage() {
           <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">
             FAQ
           </h2>
-          <h3 className="font-serif text-4xl font-medium text-foreground">
+          <h3 className="font-pixel text-4xl text-foreground">
             Frequently asked questions
           </h3>
         </div>

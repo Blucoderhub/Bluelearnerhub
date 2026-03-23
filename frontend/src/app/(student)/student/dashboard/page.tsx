@@ -254,10 +254,10 @@ export default function StudentDashboard() {
             >
               <CelebrationCharacter size={140} />
               <div className="space-y-2 text-center">
-                <h2 className="font-heading text-3xl font-medium text-foreground">
+                <h2 className="font-pixel text-3xl text-foreground">
                   Ascension Confirmed.
                 </h2>
-                <p className="font-heading text-lg text-muted-foreground">
+                <p className="font-pixel text-lg text-muted-foreground">
                   You've unlocked a new milestone.
                 </p>
               </div>
@@ -280,10 +280,10 @@ export default function StudentDashboard() {
                 </Badge>
               )}
             </div>
-            <h1 className="font-heading text-5xl font-medium tracking-tight text-foreground md:text-6xl">
+            <h1 className="font-pixel text-5xl text-foreground md:text-6xl">
               Greetings{firstName ? `, ${firstName}` : ''}.
             </h1>
-            <p className="max-w-xl font-heading text-xl leading-relaxed text-muted-foreground">
+            <p className="max-w-xl font-pixel text-xl leading-relaxed text-muted-foreground">
               Your cognitive growth is up <span className="text-primary">+14.2%</span> this month.
               Ready to deepen your specialization?
             </p>
@@ -322,7 +322,7 @@ export default function StudentDashboard() {
                 <div className="bg-current/10 rounded-2xl p-4 transition-transform group-hover:scale-110">
                   <Icon size={28} />
                 </div>
-                <span className="font-heading text-sm font-medium tracking-wide">
+                <span className="font-pixel text-sm tracking-wide">
                   {action.label}
                 </span>
               </Link>
@@ -354,7 +354,7 @@ export default function StudentDashboard() {
           <section className="rounded-[2.5rem] border border-border/50 bg-card/30 p-10">
             <div className="mb-10 flex items-center justify-between">
               <div className="space-y-1">
-                <h3 className="font-heading text-2xl font-medium tracking-tight text-foreground">
+                <h3 className="font-pixel text-2xl text-foreground">
                   Growth Analytics
                 </h3>
                 <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
@@ -391,7 +391,7 @@ export default function StudentDashboard() {
           {/* Activity Feed */}
           <div className="overflow-hidden rounded-[2.5rem] border border-border bg-background shadow-2xl">
             <div className="border-b border-border/50 bg-secondary/30 p-6">
-              <h3 className="flex items-center gap-3 font-heading text-lg font-medium text-foreground">
+              <h3 className="flex items-center gap-3 font-pixel text-lg text-foreground">
                 <Sparkles className="h-5 w-5 text-primary" />
                 Recent Logs
               </h3>
@@ -431,7 +431,7 @@ export default function StudentDashboard() {
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
                   {stat.label}
                 </p>
-                <h4 className="font-heading text-3xl font-medium text-foreground">{stat.value}</h4>
+                <h4 className="font-pixel text-3xl text-foreground">{stat.value}</h4>
               </div>
             </motion.div>
           )

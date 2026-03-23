@@ -1,6 +1,20 @@
 import winston from 'winston';
 import { config } from '../config';
 
+/** Safely serialize any value, replacing circular refs and non-serializable types. */
+function safeStringify(obj: unknown, indent = 2): string {
+  const seen = new WeakSet();
+  return JSON.stringify(obj, (_key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) return '[Circular]';
+      seen.add(value);
+    }
+    if (typeof value === 'function') return '[Function]';
+    if (value instanceof Error) return { message: value.message, stack: value.stack, name: value.name };
+    return value;
+  }, indent);
+}
+
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
@@ -20,7 +34,7 @@ const logger = winston.createLogger({
         winston.format.printf((info: any) => {
           const { timestamp, level, message, ...meta } = info;
           return `${timestamp} [${level}]: ${message} ${
-            Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
+            Object.keys(meta).length ? safeStringify(meta) : ''
           }`;
         })
       ),

@@ -157,18 +157,13 @@ async function startServer() {
 }
 
 // Enhanced error handlers with better logging
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
   logger.error('🚨 Unhandled Promise Rejection:', {
-    reason,
-    promise,
-    stack: reason instanceof Error ? reason.stack : 'No stack trace available'
+    message: reason instanceof Error ? reason.message : String(reason),
+    stack: reason instanceof Error ? reason.stack : undefined,
   });
-  
-  // Don't exit immediately - log and continue
-  // In production, you might want to exit after cleanup
-  if (config.nodeEnv === 'production') {
-    process.exit(1);
-  }
+  // Do NOT exit — an unhandled rejection in a background task (e.g. cron, warmup)
+  // should not take down the whole server.
 });
 
 process.on('uncaughtException', (error) => {

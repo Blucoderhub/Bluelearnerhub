@@ -65,10 +65,10 @@ export default function LoginPortal() {
               >
                 Secure Authentication
               </Badge>
-              <h1 className="font-heading text-5xl font-medium tracking-tight text-foreground">
+              <h1 className="font-pixel text-5xl text-foreground">
                 Welcome back.
               </h1>
-              <p className="font-heading text-lg text-muted-foreground">
+              <p className="font-pixel text-lg text-muted-foreground">
                 Continue your research and mastery journey.
               </p>
             </div>

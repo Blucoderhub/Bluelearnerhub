@@ -65,10 +65,10 @@ export default function GetStartedPage() {
               <ShieldCheck className="h-6 w-6 text-primary" />
             </div>
             <div className="space-y-1">
-              <h1 className="font-serif text-2xl font-medium tracking-tight text-black">
+              <h1 className="font-pixel text-2xl text-black">
                 Initialize Identity.
               </h1>
-              <p className="mx-auto max-w-md font-serif text-sm text-muted-foreground">
+              <p className="mx-auto max-w-md font-pixel text-sm text-muted-foreground">
                 Join the hub
               </p>
             </div>
@@ -83,13 +83,13 @@ export default function GetStartedPage() {
               <TabsList className="grid h-10 w-full grid-cols-2 gap-2 rounded-xl bg-secondary/50 p-1 ring-1 ring-white/5">
                 <TabsTrigger
                   value="signup"
-                  className="rounded-xl font-serif text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
+                  className="rounded-xl font-pixel text-sm transition-all data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
                 >
                   New Identity
                 </TabsTrigger>
                 <TabsTrigger
                   value="login"
-                  className="rounded-xl font-serif text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
+                  className="rounded-xl font-pixel text-sm transition-all data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
                 >
                   Existing User
                 </TabsTrigger>
