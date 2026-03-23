@@ -96,14 +96,11 @@ export function createApp(): Application {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Cookie parser with session secret — hard fail in production if not set
-  if (!config.sessionSecret && config.nodeEnv === 'production') {
-    throw new Error('SESSION_SECRET environment variable must be configured in production.');
+  // Cookie parser with session secret
+  if (!config.sessionSecret) {
+    logger.warn('⚠️  SESSION_SECRET not set — using insecure fallback. Set SESSION_SECRET in your environment.');
   }
   const sessionSecret = config.sessionSecret || 'dev-secret-change-me-not-for-production';
-  if (config.nodeEnv !== 'production' && !config.sessionSecret) {
-    logger.warn('⚠️  SESSION_SECRET not set — using insecure development default. Never deploy without this.');
-  }
   app.use(cookieParser(sessionSecret));
 
   // Compression

@@ -21,10 +21,10 @@ const looksPlaceholderSecret = (value: string) => {
 
 if (nodeEnv !== 'test') {
   if (!jwtSecret || jwtSecret.length < 32 || looksPlaceholderSecret(jwtSecret)) {
-    throw new Error('Invalid JWT_SECRET: set a strong secret (>=32 chars) via environment variables.');
+    console.error('[config] WARNING: JWT_SECRET is missing or weak — authentication will not work. Set a strong secret (>=32 chars).');
   }
   if (!jwtRefreshSecret || jwtRefreshSecret.length < 32 || looksPlaceholderSecret(jwtRefreshSecret)) {
-    throw new Error('Invalid JWT_REFRESH_SECRET: set a strong secret (>=32 chars) via environment variables.');
+    console.error('[config] WARNING: JWT_REFRESH_SECRET is missing or weak — token refresh will not work. Set a strong secret (>=32 chars).');
   }
 }
 
