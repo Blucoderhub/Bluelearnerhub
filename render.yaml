@@ -28,6 +28,8 @@ services:
         generateValue: true
       - key: COOKIE_SECRET
         generateValue: true
+      - key: TRUST_PROXY
+        value: "true"
       - key: DATABASE_URL
         fromDatabase:
           name: bluelearnerhub-db
@@ -37,18 +39,16 @@ services:
           type: redis
           name: bluelearnerhub-redis
           property: connectionString
-      - key: TRUST_PROXY
-        value: "true"
 
-  # ─── PostgreSQL Database ─────────────────────────────────────────────────────
+  # ─── Redis ───────────────────────────────────────────────────────────────────
+  - type: redis
+    name: bluelearnerhub-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+# ─── PostgreSQL Database ─────────────────────────────────────────────────────
 databases:
   - name: bluelearnerhub-db
     databaseName: edtech_platform
     user: edtech_user
     plan: free
-
-  # ─── Redis ───────────────────────────────────────────────────────────────────
-  - name: bluelearnerhub-redis
-    type: redis
-    plan: free
-    maxmemoryPolicy: allkeys-lru

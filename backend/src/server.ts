@@ -14,25 +14,6 @@ import { initDailyQuizCron } from './services/dailyQuiz.service';
 
 async function startServer() {
   try {
-    // Test database connections with enhanced error handling
-    logger.info('🔌 Testing database connections...');
-    
-    try {
-      await testPostgresConnection();
-      logger.info('✅ PostgreSQL connection successful');
-    } catch (error) {
-      logger.error('❌ PostgreSQL connection failed:', error);
-      logger.warn('⚠️  Server will continue without PostgreSQL connection for auditing purposes.');
-    }
-
-    try {
-      await testRedisConnection();
-      logger.info('✅ Redis connection successful');
-    } catch (error) {
-      logger.warn('⚠️  Redis connection failed - caching will be disabled:', error);
-      // Don't throw error for Redis - app can run without caching
-    }
-
     // Create Express app
     const app = createApp();
 
@@ -50,10 +31,12 @@ async function startServer() {
     initDailyQuizCron();
     logger.info('✓ Daily Quiz cron initialized');
 
-    // Start server
+    // Bind port FIRST so Render (and other platforms) can detect it immediately.
+    // Database/Redis connections are tested after binding.
     const PORT = config.port;
-    httpServer.listen(PORT, '0.0.0.0', () => {
-      logger.info(`
+    await new Promise<void>((resolve, reject) => {
+      httpServer.listen(PORT, '0.0.0.0', () => {
+        logger.info(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║   🚀 EdTech Platform Backend Server                      ║
@@ -61,14 +44,34 @@ async function startServer() {
 ║   Environment: ${config.nodeEnv.padEnd(42)} ║
 ║   Port:        ${PORT.toString().padEnd(42)} ║
 ║   URL:         http://localhost:${PORT.toString().padEnd(31)} ║
-║   Database:    PostgreSQL ${pool.totalCount}/${config.database.maxConnections} connections     ║
-║   Cache:       Redis ${redisClient.status.padEnd(34)} ║
 ║                                                           ║
-║   Status:      ✓ All systems operational                 ║
+║   Status:      ✓ Server listening — checking DB...       ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
-      `);
+        `);
+        resolve();
+      });
+      httpServer.on('error', reject);
     });
+
+    // Test database connections after port is bound
+    logger.info('🔌 Testing database connections...');
+
+    try {
+      await testPostgresConnection();
+      logger.info('✅ PostgreSQL connection successful');
+    } catch (error) {
+      logger.error('❌ PostgreSQL connection failed:', error);
+      logger.warn('⚠️  Server will continue without PostgreSQL connection for auditing purposes.');
+    }
+
+    try {
+      await testRedisConnection();
+      logger.info('✅ Redis connection successful');
+    } catch (error) {
+      logger.warn('⚠️  Redis connection failed - caching will be disabled:', error);
+      // Don't throw error for Redis - app can run without caching
+    }
 
     // Enhanced graceful shutdown with cleanup
     const shutdown = async (signal: string) => {

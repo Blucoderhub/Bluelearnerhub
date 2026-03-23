@@ -67,12 +67,9 @@ export const testPostgresConnection = async (): Promise<void> => {
   }
 };
 
-// Redis Client with enhanced configuration
-export const redisClient = new Redis({
-  host: config.redis.host,
-  port: config.redis.port,
-  password: config.redis.password || undefined,
-  db: config.redis.db,
+// Redis Client — prefer REDIS_URL (provided by Render, Railway, etc.)
+// over individual host/port/password config vars.
+const redisBaseOptions = {
   retryStrategy: (times: number) => {
     const delay = Math.min(times * 50, 2000);
     logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
@@ -81,7 +78,17 @@ export const redisClient = new Redis({
   maxRetriesPerRequest: 3,
   lazyConnect: true,
   keepAlive: 30000,
-});
+};
+
+export const redisClient = process.env.REDIS_URL
+  ? new Redis(process.env.REDIS_URL, redisBaseOptions)
+  : new Redis({
+      host: config.redis.host,
+      port: config.redis.port,
+      password: config.redis.password || undefined,
+      db: config.redis.db,
+      ...redisBaseOptions,
+    });
 
 // Redis event handlers
 redisClient.on('connect', () => {
