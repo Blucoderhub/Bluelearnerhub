@@ -1,18 +1,19 @@
 import { Router } from 'express';
 import { getDailyQuiz, getAvailableDomains } from '../services/dailyQuiz.service';
 import { authenticate } from '../middleware/auth';
+import { apiLimiter, strictLimiter } from '../middleware/rateLimiter';
 import { GamificationService } from '../services/gamification.service';
 import logger from '../utils/logger';
 
 const router = Router();
 
-// GET /api/daily-quiz/domains — list available domains
-router.get('/domains', (_req, res) => {
+// GET /api/daily-quiz/domains — list available domains (public)
+router.get('/domains', apiLimiter, (_req, res) => {
   res.json({ success: true, data: getAvailableDomains() });
 });
 
 // POST /api/daily-quiz/submit — persist XP earned from quiz completion
-router.post('/submit', authenticate, async (req, res) => {
+router.post('/submit', strictLimiter, authenticate, async (req, res) => {
   try {
     const { xpEarned } = req.body as { domain: string; score: number; xpEarned: number };
     const userId = req.user!.id;
@@ -28,8 +29,8 @@ router.post('/submit', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/daily-quiz/:domain — today's quiz for a domain
-router.get('/:domain', async (req, res) => {
+// GET /api/daily-quiz/:domain — today's quiz for a domain (public)
+router.get('/:domain', apiLimiter, async (req, res) => {
   try {
     const domain = decodeURIComponent(req.params.domain);
     const quiz   = await getDailyQuiz(domain);

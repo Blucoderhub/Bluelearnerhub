@@ -1,12 +1,17 @@
-export class AppError extends Error {
-  public statusCode: number;
-  public isOperational: boolean;
-
-  constructor(message: string, statusCode: number = 500, isOperational: boolean = true) {
-    super(message);
-    Object.setPrototypeOf(this, new.target.prototype);
-    this.statusCode = statusCode;
-    this.isOperational = isOperational;
-    Error.captureStackTrace(this);
-  }
-}
+/**
+ * Re-export shim — AppError and all error classes live in error.middleware.ts.
+ * This file exists so legacy imports (`from '../middleware/error'`) keep working.
+ * Import directly from './error.middleware' in new code.
+ */
+export {
+  AppError,
+  ValidationError,
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  ConflictError,
+  RateLimitError,
+  errorHandler,
+  notFound,
+  asyncHandler,
+} from './error.middleware';

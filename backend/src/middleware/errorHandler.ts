@@ -1,17 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { AppError } from './error';
-
-export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-  if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-    });
-  } else {
-    console.error(err);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-    });
-  }
-}
+/**
+ * Re-export shim — canonical error handling lives in error.middleware.ts.
+ * This file exists for backwards compatibility only.
+ */
+export { errorHandler, notFound, asyncHandler, AppError } from './error.middleware';

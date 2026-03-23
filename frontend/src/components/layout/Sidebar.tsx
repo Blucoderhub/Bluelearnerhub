@@ -21,6 +21,8 @@ import {
   ChevronRight,
   GraduationCap,
   BookMarked,
+  Bot,
+  Star,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
@@ -87,7 +89,7 @@ export default function Sidebar() {
       section: 'hackathons',
       items: [
         { name: 'Browse', href: '/hackathons', icon: Trophy },
-        { name: 'Leaderboard', href: '/hackathons/leaderboard', icon: TrendingUp },
+        { name: 'Leaderboard', href: '/hackathons', icon: TrendingUp },
       ],
     },
     {
@@ -101,9 +103,19 @@ export default function Sidebar() {
       ],
     },
     {
+      name: 'AI Companion',
+      href: '/ai-companion',
+      icon: Bot,
+    },
+    {
       name: 'Certificates',
       href: '/certificates',
       icon: Award,
+    },
+    {
+      name: 'Premium',
+      href: '/premium',
+      icon: Star,
     },
     {
       name: 'Settings',
@@ -120,22 +132,22 @@ export default function Sidebar() {
     },
     {
       name: 'Post Job',
-      href: '/post-job',
+      href: '/corporate/post-job',
       icon: Briefcase,
     },
     {
       name: 'Host Hackathon',
-      href: '/host-hackathon',
+      href: '/corporate/host-hackathon',
       icon: Trophy,
     },
     {
       name: 'Candidates',
-      href: '/candidates',
+      href: '/corporate/candidates',
       icon: Users,
     },
     {
       name: 'Analytics',
-      href: '/analytics',
+      href: '/corporate/dashboard',
       icon: TrendingUp,
     },
   ]

@@ -8,10 +8,15 @@ module.exports = {
   },
   collectCoverage: true,
   coverageDirectory: 'coverage',
-  // TODO(issue): Re-expand coverage scope after broader backend TypeScript issues are resolved.
   collectCoverageFrom: [
-    'src/controllers/errors.ts',
     'src/utils/jwt.ts',
+    'src/utils/logger.ts',
+    'src/utils/validators.ts',
+    'src/middleware/auth.ts',
+    'src/middleware/error.middleware.ts',
+    'src/controllers/auth.ts',
+    'src/controllers/gamification.controller.ts',
+    'src/services/gamification.service.ts',
     '!src/**/*.d.ts',
     '!src/server.ts',
     '!src/**/__tests__/**',

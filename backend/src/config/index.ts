@@ -20,11 +20,38 @@ const looksPlaceholderSecret = (value: string) => {
 };
 
 if (nodeEnv !== 'test') {
+  const criticalErrors: string[] = [];
+
   if (!jwtSecret || jwtSecret.length < 32 || looksPlaceholderSecret(jwtSecret)) {
-    console.error('[config] WARNING: JWT_SECRET is missing or weak — authentication will not work. Set a strong secret (>=32 chars).');
+    criticalErrors.push('JWT_SECRET is missing or weak (must be >=32 chars, no placeholder values)');
   }
   if (!jwtRefreshSecret || jwtRefreshSecret.length < 32 || looksPlaceholderSecret(jwtRefreshSecret)) {
-    console.error('[config] WARNING: JWT_REFRESH_SECRET is missing or weak — token refresh will not work. Set a strong secret (>=32 chars).');
+    criticalErrors.push('JWT_REFRESH_SECRET is missing or weak (must be >=32 chars, no placeholder values)');
+  }
+
+  const cookieSecret = process.env.COOKIE_SECRET || '';
+  if (!cookieSecret || cookieSecret.length < 32 || looksPlaceholderSecret(cookieSecret)) {
+    criticalErrors.push('COOKIE_SECRET is missing or weak (must be >=32 chars) — signed cookies will fail');
+  }
+
+  if (nodeEnv === 'production') {
+    if (!process.env.DATABASE_URL && !process.env.DB_HOST) {
+      criticalErrors.push('DATABASE_URL (or DB_HOST) is required in production');
+    }
+    if (!process.env.FRONTEND_URL) {
+      criticalErrors.push('FRONTEND_URL is required in production for CORS and cookie domains');
+    }
+    if (criticalErrors.length > 0) {
+      // Throw hard in production so misconfigured deployments fail immediately with a clear message
+      throw new Error(
+        `[config] FATAL: Missing or invalid required environment variables:\n  • ${criticalErrors.join('\n  • ')}\n\nFix these in your deployment environment before starting the server.`
+      );
+    }
+  } else {
+    // Development: warn but don't throw
+    for (const err of criticalErrors) {
+      console.warn(`[config] WARNING: ${err}`);
+    }
   }
 }
 

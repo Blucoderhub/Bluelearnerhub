@@ -86,6 +86,11 @@ const nextConfig = {
       'framer-motion',
       '@radix-ui/react-dialog',
       '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-select',
+      'recharts',
+      'sonner',
+      '@tanstack/react-query',
     ],
   },
 
