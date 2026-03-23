@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || '';
-const stripe = stripeKey
+export const stripe = stripeKey
   ? new Stripe(stripeKey, { apiVersion: '2023-10-16' as any })
   : null as unknown as Stripe;
 

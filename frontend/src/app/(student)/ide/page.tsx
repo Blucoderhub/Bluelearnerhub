@@ -84,7 +84,7 @@ const MOCK_PROBLEM = {
   likes: 52400,
   submissions: 98200,
   tags: ['Array', 'Hash Table'],
-  description: `Given an array of integers <code class="font-mono bg-muted/50 px-1 rounded text-primary">nums</code> and an integer <code class="font-mono bg-muted/50 px-1 rounded text-primary">target</code>, return <em>indices of the two numbers such that they add up to</em> <code class="font-mono bg-muted/50 px-1 rounded text-primary">target</code>.`,
+  description: `Given an array of integers \`nums\` and an integer \`target\`, return indices of the two numbers such that they add up to \`target\`.`,
   note: 'You may assume that each input would have exactly one solution, and you may not use the same element twice.',
   examples: [
     { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
@@ -349,7 +349,7 @@ export default function CodingPracticePage() {
             {leftPanel === 'description' && (
               <>
                 <div className="space-y-3">
-                  <p className="text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: MOCK_PROBLEM.description }} />
+                  <p className="text-sm leading-relaxed text-muted-foreground">{MOCK_PROBLEM.description}</p>
                   <p className="text-sm leading-relaxed text-muted-foreground">{MOCK_PROBLEM.note}</p>
                 </div>
                 <div className="space-y-3">
@@ -423,7 +423,7 @@ export default function CodingPracticePage() {
           </div>
 
           <div className="min-h-0 flex-1">
-            <CodeEditor />
+            <CodeEditor key={language} />
           </div>
         </div>
 

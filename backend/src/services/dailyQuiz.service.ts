@@ -28,9 +28,81 @@ export interface DailyQuiz {
 export interface MCQ {
   question:     string;
   options:      string[];
-  correctIndex: number;
-  explanation:  string;
+  correctIndex: number;   // NEVER send to client
+  explanation:  string;   // Sent only after submission
   difficulty:   'easy' | 'medium' | 'hard';
+}
+
+/**
+ * Safe public shape — no correctIndex, no explanation.
+ * This is the ONLY shape the frontend ever receives before submission.
+ */
+export interface MCQPublic {
+  question:   string;
+  options:    string[];
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
+export interface DailyQuizPublic {
+  domain:     string;
+  date:       string;
+  questions:  MCQPublic[];
+}
+
+/** XP per correct answer keyed by difficulty */
+const XP_PER_DIFFICULTY: Record<MCQ['difficulty'], number> = {
+  easy:   10,
+  medium: 20,
+  hard:   30,
+};
+
+/**
+ * Strip correctIndex and explanation before sending to the client.
+ * The server keeps the original DailyQuiz in its cache and uses it for scoring.
+ */
+export function getPublicQuiz(quiz: DailyQuiz): DailyQuizPublic {
+  return {
+    domain:    quiz.domain,
+    date:      quiz.date,
+    questions: quiz.questions.map(({ question, options, difficulty }) => ({
+      question,
+      options,
+      difficulty,
+    })),
+  };
+}
+
+export interface ScoreResult {
+  correctCount:   number;
+  score:          number;   // 0–100 percentage
+  xpEarned:       number;
+  correctAnswers: number[]; // indices, revealed only after submission
+  explanations:   string[]; // revealed only after submission
+}
+
+/**
+ * Score a quiz server-side.
+ * answers[] must have the same length as quiz.questions[].
+ * Any out-of-range index is treated as wrong.
+ */
+export function scoreQuiz(quiz: DailyQuiz, answers: number[]): ScoreResult {
+  let correctCount = 0;
+  let xpEarned     = 0;
+
+  quiz.questions.forEach((q, i) => {
+    if (answers[i] === q.correctIndex) {
+      correctCount++;
+      xpEarned += XP_PER_DIFFICULTY[q.difficulty] ?? 10;
+    }
+  });
+
+  return {
+    correctCount,
+    score:          Math.round((correctCount / quiz.questions.length) * 100),
+    xpEarned,
+    correctAnswers: quiz.questions.map((q) => q.correctIndex),
+    explanations:   quiz.questions.map((q) => q.explanation),
+  };
 }
 
 // In-memory cache — keyed by `${domain}:${date}`

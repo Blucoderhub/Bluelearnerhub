@@ -6,6 +6,7 @@
 
 import { Request, Response } from 'express';
 import { db } from '../db';
+import { sanitizeText, sanitizeRichText } from '../utils/sanitize';
 import { eq, and, desc, ilike, SQL } from 'drizzle-orm';
 import {
   organizations, orgMembers, talentPool, innovationChallenges,
@@ -82,7 +83,15 @@ export const getOrganization = async (req: Request, res: Response) => {
 export const createOrganization = async (req: Request, res: Response) => {
   try {
     const adminId = req.user!.id;
-    const { name, slug, description, orgType, website, logoUrl } = req.body;
+    const { name: rawName, slug: rawSlug, description: rawDesc, orgType, website, logoUrl } = req.body;
+
+    const name        = sanitizeText(rawName).slice(0, 200);
+    const slug        = sanitizeText(rawSlug).toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 100);
+    const description = sanitizeRichText(rawDesc).slice(0, 2_000);
+
+    if (!name || !slug) {
+      return res.status(400).json({ success: false, message: 'Organization name and slug are required' });
+    }
 
     // Slug uniqueness check
     const [existing] = await db
@@ -117,7 +126,9 @@ export const inviteMember = async (req: Request, res: Response) => {
   try {
     const adminId = req.user!.id;
     const orgId   = parseInt(req.params.id);
-    const { userId, role = 'MEMBER' } = req.body;
+    const { userId, role: rawRole = 'MEMBER' } = req.body;
+    const VALID_MEMBER_ROLES = ['MEMBER', 'ADMIN', 'VIEWER'] as const;
+    const role = VALID_MEMBER_ROLES.includes(rawRole) ? rawRole : 'MEMBER';
 
     // Verify requester is org admin
     const [adminMember] = await db
@@ -185,7 +196,8 @@ export const addToTalentPool = async (req: Request, res: Response) => {
   try {
     const orgId  = parseInt(req.params.id);
     const userId = req.user!.id;
-    const { stage = 'prospects', notes } = req.body;
+    // Stage and notes are org-admin fields — never accept from the applicant
+    const stage = 'prospects';
 
     const [existing] = await db
       .select()
@@ -193,17 +205,12 @@ export const addToTalentPool = async (req: Request, res: Response) => {
       .where(and(eq(talentPool.orgId, orgId), eq(talentPool.candidateId, userId)));
 
     if (existing) {
-      const [updated] = await db
-        .update(talentPool)
-        .set({ stage, notes })
-        .where(and(eq(talentPool.orgId, orgId), eq(talentPool.candidateId, userId)))
-        .returning();
-      return res.json({ success: true, data: updated });
+      return res.json({ success: true, data: existing, message: 'Already in talent pool' });
     }
 
     const [entry] = await db
       .insert(talentPool)
-      .values({ orgId, candidateId: userId, stage, notes })
+      .values({ orgId, candidateId: userId, stage })
       .returning();
 
     res.status(201).json({ success: true, data: entry });
@@ -238,7 +245,16 @@ export const createChallenge = async (req: Request, res: Response) => {
   try {
     const orgId     = parseInt(req.params.id);
     const creatorId = req.user!.id;
-    const { title, description, deadline, prizeDescription, evaluationCriteria } = req.body;
+    const { title: rawTitle, description: rawDesc, deadline, prizeDescription: rawPrize, evaluationCriteria: rawCriteria } = req.body;
+
+    const title               = sanitizeText(rawTitle).slice(0, 300);
+    const description         = sanitizeRichText(rawDesc).slice(0, 5_000);
+    const prizeDescription    = sanitizeRichText(rawPrize).slice(0, 1_000);
+    const evaluationCriteria  = sanitizeRichText(rawCriteria).slice(0, 2_000);
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Challenge title is required' });
+    }
 
     // Verify creator is org member
     const [member] = await db

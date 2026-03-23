@@ -141,16 +141,17 @@ export function errorHandler(err: any, req: Request, res: Response, _next: NextF
     logger.warn('Client Error:', logData);
   }
 
-  // Send error response
-  const responseError = {
+  // Send error response — never expose internals outside localhost
+  const isLocal = config.nodeEnv === 'development' && (req.ip === '127.0.0.1' || req.ip === '::1');
+  const responseError: Record<string, unknown> = {
     success: false,
-    message: error.message,
+    message: error.statusCode < 500 ? error.message : 'An internal error occurred',
     requestId: req.requestId,
-    ...(config.nodeEnv === 'development' && {
-      stack: err.stack,
-      error: err,
-    }),
   };
+  if (isLocal) {
+    responseError.detail = error.message;
+    responseError.stack  = err.stack;
+  }
 
   res.status(error.statusCode || 500).json(responseError);
 }

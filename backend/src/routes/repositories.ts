@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/auth';
+import { authenticate, optionalAuth } from '../middleware/auth';
 import * as ctrl from '../controllers/repositories.controller';
 
 const router = Router();
@@ -12,9 +12,9 @@ router.get('/:username/:slug',       ctrl.getRepository);
 router.get('/:id/file',              authenticate, ctrl.getFileContent);
 router.post('/',                     authenticate, ctrl.createRepository);
 router.post('/:id/commits',          authenticate, ctrl.createCommit);
-router.get('/:id/issues',            ctrl.listIssues);
+router.get('/:id/issues',            optionalAuth, ctrl.listIssues);   // private repos need auth
 router.post('/:id/issues',           authenticate, ctrl.createIssue);
-router.get('/:id/pulls',             ctrl.listPullRequests);
+router.get('/:id/pulls',             optionalAuth, ctrl.listPullRequests);
 router.post('/:id/pulls',            authenticate, ctrl.createPullRequest);
 router.post('/:id/pulls/:prId/review', authenticate, ctrl.requestAIReview);
 router.post('/:id/star',             authenticate, ctrl.toggleStar);

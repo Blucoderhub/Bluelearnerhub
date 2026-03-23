@@ -6,6 +6,7 @@ import { pool } from '../utils/database';
 import logger from '../utils/logger';
 import { config } from '../config';
 import { sendEmail, buildPasswordResetEmail } from '../utils/email';
+import { setCsrfCookie, clearCsrfCookie } from '../middleware/csrf';
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -81,6 +82,7 @@ export class AuthController {
 
       // Set HttpOnly cookies instead of returning tokens in body
       setAuthCookies(res, result.accessToken, result.refreshToken);
+      setCsrfCookie(res); // Issue CSRF token so frontend can attach it to subsequent requests
 
       res.status(201).json({
         success: true,
@@ -103,6 +105,7 @@ export class AuthController {
 
       // Set HttpOnly cookies instead of returning tokens in body
       setAuthCookies(res, result.accessToken, result.refreshToken);
+      setCsrfCookie(res); // Issue CSRF token so frontend can attach it to subsequent requests
 
       res.json({
         success: true,
@@ -127,6 +130,7 @@ export class AuthController {
 
       // Clear cookies
       clearAuthCookies(res);
+      clearCsrfCookie(res);
 
       res.json({
         success: true,
@@ -180,7 +184,17 @@ export class AuthController {
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user!.id;
-      const updates = req.body;
+      // Whitelist only safe profile fields — never accept role, email, password, or lockout fields
+      const {
+        fullName, bio, location, profilePicture, educationLevel, collegeName,
+        graduationYear, currentPosition, company, yearsExperience,
+        linkedinUrl, githubUrl, portfolioUrl, avatarConfig,
+      } = req.body;
+      const updates = {
+        fullName, bio, location, profilePicture, educationLevel, collegeName,
+        graduationYear, currentPosition, company, yearsExperience,
+        linkedinUrl, githubUrl, portfolioUrl, avatarConfig,
+      };
 
       const user = await UserModel.update(userId, updates);
 
@@ -225,15 +239,13 @@ export class AuthController {
       const resetUrl = `${config.frontendUrl}/reset-password?token=${rawToken}`;
       await sendEmail(buildPasswordResetEmail(email.toLowerCase().trim(), resetUrl));
 
-      const responseData: Record<string, unknown> = { message: 'If that email is registered, a reset link has been sent.' };
-      // Expose token in non-production for easier testing without email setup
+      // In non-production, log the reset URL so devs can test without an email provider
       if (config.nodeEnv !== 'production') {
-        responseData.devToken = rawToken;
-        responseData.devResetUrl = resetUrl;
+        logger.info(`[DEV] Password reset URL for ${email}: ${resetUrl}`);
       }
 
       logger.info(`Password reset requested for ${email}`);
-      res.json({ success: true, ...responseData });
+      res.json({ success: true, message: 'If that email is registered, a reset link has been sent.' });
     } catch (error) {
       next(error);
     }

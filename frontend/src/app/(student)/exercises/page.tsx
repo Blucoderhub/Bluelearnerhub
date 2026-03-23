@@ -114,14 +114,15 @@ export default function ChallengeHub() {
 
   // ── Fetch exercises ────────────────────────────────────────────────────────
   useEffect(() => {
+    let mounted = true
     setLoading(true)
     exercisesAPI
       .list({ sort })
       .then((d: any) => {
+        if (!mounted) return
         const list = d?.data ?? d
         if (Array.isArray(list) && list.length > 0) {
           setChallenges(list)
-          // Extract unique domains from API data
           const unique = [
             'All Domains',
             ...Array.from(new Set<string>(list.map((c: any) => c.domain).filter(Boolean))),
@@ -129,26 +130,29 @@ export default function ChallengeHub() {
           setDomains(unique)
         }
       })
-      .catch(() => {
-        /* keep fallback */
-      })
-      .finally(() => setLoading(false))
+      .catch(() => { /* keep fallback */ })
+      .finally(() => { if (mounted) setLoading(false) })
+    return () => { mounted = false }
   }, [sort])
 
   // ── Fetch leaderboard rank for sidebar ────────────────────────────────────
   useEffect(() => {
     if (!user?.id) return
+    let mounted = true
     gamificationAPI
       .leaderboard(50)
       .then((d: any) => {
-        const list: any[] = d?.data ?? d ?? []
+        if (!mounted) return
+        const raw = d?.data ?? d ?? []
+        const list: any[] = Array.isArray(raw) ? raw : []
         const me = list.find((u: any) => u.id === user.id)
         if (me) {
-          setUserXP(me.xp)
-          setUserLevel(me.level)
+          setUserXP(me.totalPoints ?? me.xp ?? 0)
+          setUserLevel(me.level ?? 1)
         }
       })
       .catch(() => {})
+    return () => { mounted = false }
   }, [user?.id])
 
   // ── Filtered view ─────────────────────────────────────────────────────────

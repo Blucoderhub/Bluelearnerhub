@@ -170,11 +170,21 @@ export const orgsAPI = {
 // ─── Daily Quiz ───────────────────────────────────────────────────────────────
 
 export const dailyQuizAPI = {
-  domains: () => api.get('/daily-quiz/domains').then((r) => r.data),
+  domains: () =>
+    api.get('/daily-quiz/domains').then((r) => r.data),
+
+  /** Returns questions WITHOUT correctIndex — safe for client display. */
   getQuiz: (domain: string) =>
     api.get(`/daily-quiz/${encodeURIComponent(domain)}`).then((r) => r.data),
-  submitResult: (domain: string, score: number, xpEarned: number) =>
-    api.post('/daily-quiz/submit', { domain, score, xpEarned }).then((r) => r.data),
+
+  /**
+   * Submit raw answers to the backend for server-side scoring.
+   * answers[i] = index of the option selected for question i.
+   * Backend returns { score, correctCount, xpEarned, correctAnswers, explanations }.
+   * Never send scores or XP — the server computes everything.
+   */
+  submitAnswers: (domain: string, answers: number[]) =>
+    api.post('/daily-quiz/submit', { domain, answers }).then((r) => r.data),
 }
 
 // ─── Gamification ────────────────────────────────────────────────────────────

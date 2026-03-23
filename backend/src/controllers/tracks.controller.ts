@@ -78,6 +78,10 @@ export const enrollInTrack = async (req: Request, res: Response) => {
     const userId  = req.user!.id;
     const trackId = parseInt(req.params.id);
 
+    if (isNaN(trackId) || trackId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid track id' });
+    }
+
     const [existing] = await db
       .select()
       .from(trackEnrollments)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { gamificationAPI } from '@/lib/api-civilization'
@@ -145,9 +145,11 @@ export default function StudentDashboard() {
   const [leaderboardEntries, setLeaderboardEntries] = useState(MOCK_LEADERBOARD)
 
   useEffect(() => {
+    let mounted = true
     gamificationAPI
       .leaderboard(4)
       .then((d: any) => {
+        if (!mounted) return
         const list = (d?.data ?? d) as any[]
         if (Array.isArray(list) && list.length > 0) {
           setLeaderboardEntries(
@@ -164,6 +166,7 @@ export default function StudentDashboard() {
         }
       })
       .catch(() => {})
+    return () => { mounted = false }
   }, [])
 
   const leaderboard = useMemo(
@@ -173,26 +176,38 @@ export default function StudentDashboard() {
 
   const [showConfetti, setShowConfetti] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
+  const celebrationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [achievements, setAchievements] =
     useState<typeof FALLBACK_ACHIEVEMENTS>(FALLBACK_ACHIEVEMENTS)
 
   useEffect(() => {
+    let mounted = true
     gamificationAPI
       .achievements()
       .then((d: any) => {
+        if (!mounted) return
         const list = d?.data ?? d
         if (Array.isArray(list) && list.length > 0) setAchievements(list)
       })
       .catch(() => {})
+    return () => { mounted = false }
   }, [])
 
   const newAchievements = achievements.filter((a) => a.status === 'new')
   const hasNewAchievement = newAchievements.length > 0
 
+  // Cleanup celebration timer on unmount to prevent setState on unmounted component
+  useEffect(() => {
+    return () => {
+      if (celebrationTimerRef.current) clearTimeout(celebrationTimerRef.current)
+    }
+  }, [])
+
   const handleCelebrate = useCallback(() => {
     setShowConfetti(true)
     setShowCelebration(true)
-    setTimeout(() => {
+    if (celebrationTimerRef.current) clearTimeout(celebrationTimerRef.current)
+    celebrationTimerRef.current = setTimeout(() => {
       setShowConfetti(false)
       setShowCelebration(false)
     }, 3500)

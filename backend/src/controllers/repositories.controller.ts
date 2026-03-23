@@ -23,6 +23,7 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import axios from 'axios';
 import { db } from '../db';
+import { sanitizeText, sanitizeRichText } from '../utils/sanitize';
 import { eq, desc, and, sql } from 'drizzle-orm';
 import {
   repositories, repositoryFiles, commits, issues,
@@ -161,8 +162,21 @@ function buildTree(files: { id: number; path: string; language: string | null; s
 
 export const getFileContent = async (req: Request, res: Response) => {
   try {
-    const repoId  = parseInt(req.params.id);
-    const { path } = req.query as { path: string };
+    const repoId     = parseInt(req.params.id);
+    const { path }   = req.query as { path: string };
+    const requesterId = req.user?.id;
+
+    // Verify repository exists and requester has access
+    const [repo] = await db
+      .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
+      .from(repositories)
+      .where(eq(repositories.id, repoId));
+
+    if (!repo) return res.status(404).json({ success: false, message: 'Repository not found' });
+
+    if (repo.visibility === 'private' && requesterId !== repo.ownerId) {
+      return res.status(403).json({ success: false, message: 'Repository is private' });
+    }
 
     const [file] = await db
       .select()
@@ -185,7 +199,15 @@ export const getFileContent = async (req: Request, res: Response) => {
 export const createRepository = async (req: Request, res: Response) => {
   try {
     const ownerId = req.user!.id;
-    const { name, description, visibility, language, topics, license } = req.body;
+    const { name: rawName, description: rawDesc, visibility, language, topics, license } = req.body;
+
+    // Sanitize user-supplied text fields
+    const name        = sanitizeText(rawName).slice(0, 100);
+    const description = sanitizeText(rawDesc).slice(0, 500);
+
+    if (!name) {
+      return res.status(400).json({ success: false, message: 'Repository name is required' });
+    }
 
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
@@ -220,8 +242,9 @@ export const createCommit = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
     const authorId = req.user!.id;
-    const { message, files, branch = 'main' } = req.body;
+    const { message: rawMessage, files, branch = 'main' } = req.body;
     // files: [{ path, content, language }]
+    const message = sanitizeText(rawMessage).slice(0, 500) || 'Update files';
 
     // Verify ownership or collaborator access
     const [repo] = await db
@@ -284,8 +307,25 @@ export const createCommit = async (req: Request, res: Response) => {
 
 export const listIssues = async (req: Request, res: Response) => {
   try {
-    const repoId = parseInt(req.params.id);
+    const repoId      = parseInt(req.params.id);
+    const requesterId = req.user?.id;
     const { status = 'open' } = req.query as { status?: string };
+
+    if (isNaN(repoId) || repoId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid repository id' });
+    }
+
+    // Enforce visibility: private repos require ownership
+    const [repo] = await db
+      .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
+      .from(repositories)
+      .where(eq(repositories.id, repoId));
+
+    if (!repo) return res.status(404).json({ success: false, message: 'Repository not found' });
+
+    if (repo.visibility === 'private' && requesterId !== repo.ownerId) {
+      return res.status(403).json({ success: false, message: 'Repository is private' });
+    }
 
     const rows = await db
       .select()
@@ -303,7 +343,30 @@ export const createIssue = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
     const authorId = req.user!.id;
-    const { title, body, labels } = req.body;
+    const { title: rawTitle, body: rawBody, labels } = req.body;
+
+    if (isNaN(repoId) || repoId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid repository id' });
+    }
+
+    const title = sanitizeText(rawTitle).slice(0, 300);
+    const body  = sanitizeRichText(rawBody).slice(0, 20_000);
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Issue title is required' });
+    }
+
+    // Block writes on private repos the requester doesn't own
+    const [repo] = await db
+      .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
+      .from(repositories)
+      .where(eq(repositories.id, repoId));
+
+    if (!repo) return res.status(404).json({ success: false, message: 'Repository not found' });
+
+    if (repo.visibility === 'private' && authorId !== repo.ownerId) {
+      return res.status(403).json({ success: false, message: 'Repository is private' });
+    }
 
     // Get next issue number for this repo
     const [{ count }] = await db
@@ -329,7 +392,24 @@ export const createIssue = async (req: Request, res: Response) => {
 
 export const listPullRequests = async (req: Request, res: Response) => {
   try {
-    const repoId = parseInt(req.params.id);
+    const repoId      = parseInt(req.params.id);
+    const requesterId = req.user?.id;
+
+    if (isNaN(repoId) || repoId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid repository id' });
+    }
+
+    const [repo] = await db
+      .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
+      .from(repositories)
+      .where(eq(repositories.id, repoId));
+
+    if (!repo) return res.status(404).json({ success: false, message: 'Repository not found' });
+
+    if (repo.visibility === 'private' && requesterId !== repo.ownerId) {
+      return res.status(403).json({ success: false, message: 'Repository is private' });
+    }
+
     const rows = await db
       .select()
       .from(pullRequests)
@@ -346,7 +426,29 @@ export const createPullRequest = async (req: Request, res: Response) => {
   try {
     const repoId   = parseInt(req.params.id);
     const authorId = req.user!.id;
-    const { title, description, sourceBranch, targetBranch = 'main', diffContent } = req.body;
+    const { title: rawTitle, description: rawDesc, sourceBranch, targetBranch = 'main', diffContent } = req.body;
+
+    if (isNaN(repoId) || repoId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid repository id' });
+    }
+
+    const title       = sanitizeText(rawTitle).slice(0, 300);
+    const description = sanitizeRichText(rawDesc).slice(0, 20_000);
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Pull request title is required' });
+    }
+
+    const [repo] = await db
+      .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
+      .from(repositories)
+      .where(eq(repositories.id, repoId));
+
+    if (!repo) return res.status(404).json({ success: false, message: 'Repository not found' });
+
+    if (repo.visibility === 'private' && authorId !== repo.ownerId) {
+      return res.status(403).json({ success: false, message: 'Repository is private' });
+    }
 
     const [{ count }] = await db
       .select({ count: sql<number>`count(*)` })

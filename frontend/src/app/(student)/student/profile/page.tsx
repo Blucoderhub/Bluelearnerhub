@@ -71,10 +71,12 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) return
+    let mounted = true
     Promise.all([
       gamificationAPI.achievements().catch(() => null),
       gamificationAPI.leaderboard(10).catch(() => null),
     ]).then(([achData, lbData]) => {
+      if (!mounted) return
       if (achData?.achievements?.length || achData?.length) {
         const raw = achData?.achievements ?? achData
         setAchievements(
@@ -89,7 +91,8 @@ export default function ProfilePage() {
       if (lbData?.leaderboard?.length || lbData?.length) {
         setLeaderboard(lbData?.leaderboard ?? lbData)
       }
-    }).finally(() => setLoadingData(false))
+    }).finally(() => { if (mounted) setLoadingData(false) })
+    return () => { mounted = false }
   }, [user])
 
   if (!user)

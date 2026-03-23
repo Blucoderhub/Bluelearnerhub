@@ -2,6 +2,17 @@ import axios from 'axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
+/**
+ * Read the _csrf cookie value set by the backend on login.
+ * The cookie is NOT httpOnly so that this function can access it.
+ * Returns null in SSR context (no document).
+ */
+function getCsrfToken(): string | null {
+  if (typeof document === 'undefined') return null
+  const match = document.cookie.match(/(?:^|;\s*)_csrf=([^;]+)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 export const api = axios.create({
   baseURL: `${API_URL}/api`,
   headers: {
@@ -9,6 +20,20 @@ export const api = axios.create({
   },
   withCredentials: true, // Required for HttpOnly cookies
   timeout: 10000,
+})
+
+// ─── CSRF request interceptor ─────────────────────────────────────────────────
+// Attach the _csrf cookie value as X-CSRF-Token header on all mutating requests.
+// GET/HEAD/OPTIONS are safe methods and don't need it.
+const SAFE_METHODS = new Set(['get', 'head', 'options'])
+api.interceptors.request.use((config) => {
+  if (!SAFE_METHODS.has((config.method ?? 'get').toLowerCase())) {
+    const token = getCsrfToken()
+    if (token) {
+      config.headers['X-CSRF-Token'] = token
+    }
+  }
+  return config
 })
 
 // ─── Token refresh state ──────────────────────────────────────────────────────

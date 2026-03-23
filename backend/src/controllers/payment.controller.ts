@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { StripeService } from '../services/stripe.service';
+import { StripeService, stripe } from '../services/stripe.service';
+import logger from '../utils/logger';
 
 export class PaymentController {
     static async createCheckoutSession(req: Request, res: Response) {
@@ -8,13 +9,14 @@ export class PaymentController {
             const userId = req.user!.id;
 
             if (!['EXPLORER', 'INNOVATOR', 'ENTERPRISE'].includes(tier)) {
-                return res.status(400).json({ message: 'Invalid subscription tier' });
+                return res.status(400).json({ success: false, message: 'Invalid subscription tier' });
             }
 
             const session = await StripeService.createCheckoutSession(userId, tier as any);
-            res.json({ url: session.url });
+            res.json({ success: true, data: { url: session.url } });
         } catch (error: any) {
-            res.status(500).json({ message: error.message });
+            logger.error('createCheckoutSession error', error);
+            res.status(500).json({ success: false, message: 'Failed to create checkout session' });
         }
     }
 
@@ -22,23 +24,34 @@ export class PaymentController {
         try {
             const userId = req.user!.id;
             const session = await StripeService.createPortalSession(userId);
-            res.json({ url: session.url });
+            res.json({ success: true, data: { url: session.url } });
         } catch (error: any) {
-            res.status(500).json({ message: error.message });
+            logger.error('createPortalSession error', error);
+            res.status(500).json({ success: false, message: 'Failed to create portal session' });
         }
     }
 
     static async handleWebhook(req: Request, res: Response) {
+        const sig = req.headers['stripe-signature'] as string;
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+        if (!webhookSecret) {
+            logger.error('STRIPE_WEBHOOK_SECRET not configured');
+            return res.status(500).json({ success: false, message: 'Webhook not configured' });
+        }
+        if (!sig) {
+            return res.status(400).json({ success: false, message: 'Missing stripe-signature header' });
+        }
+
         try {
-            const sig = req.headers['stripe-signature'] as string;
-            // Note: In a real production app, we would use stripe.webhooks.constructEvent
-            // with a raw body parser and the webhook secret.
-            // For this implementation, we'll assume the event is handled directly for now.
-            const event = req.body;
+            // req.body is a raw Buffer here (express.raw middleware applied at route level)
+            const event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
             await StripeService.handleWebhook(event);
             res.json({ received: true });
         } catch (error: any) {
-            res.status(400).send(`Webhook Error: ${error.message}`);
+            // Stripe signature mismatch — log internally, return generic message
+            logger.warn('Stripe webhook signature verification failed', { message: error.message });
+            res.status(400).json({ success: false, message: 'Webhook verification failed' });
         }
     }
 }

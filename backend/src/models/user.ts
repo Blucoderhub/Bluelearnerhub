@@ -62,8 +62,6 @@ export interface UpdateUserDTO {
   githubUrl?: string;
   portfolioUrl?: string;
   avatarConfig?: any;
-  failed_login_attempts?: number;
-  locked_until?: Date | null;
 }
 
 export class UserModel {

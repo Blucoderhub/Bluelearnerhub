@@ -9,6 +9,8 @@ export {
   apiLimiter,
   uploadLimiter,
   strictLimiter,
+  webhookLimiter,
+  passwordResetLimiter,
   notebookAiLimiter,
   notebookIngestLimiter,
 } from './rateLimiter';

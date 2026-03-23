@@ -173,6 +173,11 @@ export const getTutorial = async (req: Request, res: Response) => {
 export const createTutorial = async (req: Request, res: Response) => {
   try {
     const authorId = req.user!.id;
+
+    if (req.user!.role === 'student') {
+      return res.status(403).json({ success: false, message: 'Only instructors can create tutorials' });
+    }
+
     const {
       title, slug, description, domain, subDomain, difficulty,
       estimatedMinutes, xpReward, tags, prerequisites, sections,
@@ -223,6 +228,13 @@ export const markSectionComplete = async (req: Request, res: Response) => {
     const userId     = req.user!.id;
     const tutorialId = parseInt(req.params.id);
     const { sectionId } = req.body;
+
+    if (isNaN(tutorialId) || tutorialId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid tutorial id' });
+    }
+    if (!sectionId || typeof sectionId !== 'number') {
+      return res.status(400).json({ success: false, message: 'sectionId is required' });
+    }
 
     // Upsert progress record
     await db
@@ -287,9 +299,21 @@ export const markSectionComplete = async (req: Request, res: Response) => {
 // RUN CODE — proxies to Judge0 via AI service
 // ────────────────────────────────────────────────────────────────────────────
 
+const ALLOWED_RUN_LANGUAGES = new Set(['python', 'javascript', 'java', 'cpp', 'c', 'typescript', 'go', 'rust']);
+
 export const runCode = async (req: Request, res: Response) => {
   try {
     const { code, language, stdin, testCases } = req.body;
+
+    if (!code || typeof code !== 'string') {
+      return res.status(400).json({ success: false, message: 'code is required' });
+    }
+    if (code.length > 50_000) {
+      return res.status(413).json({ success: false, message: 'Code exceeds 50 KB limit' });
+    }
+    if (!language || !ALLOWED_RUN_LANGUAGES.has(String(language).toLowerCase())) {
+      return res.status(400).json({ success: false, message: `Unsupported language. Allowed: ${[...ALLOWED_RUN_LANGUAGES].join(', ')}` });
+    }
 
     const { data } = await axios.post(`${config.aiServiceUrl}/api/v1/hackathon/evaluate`, {
       code,

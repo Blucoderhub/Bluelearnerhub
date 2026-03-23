@@ -63,6 +63,7 @@ export default function AskQuestionPage() {
       router.push('/qna?posted=1')
     } catch (err: any) {
       toast.error(err?.response?.data?.message ?? 'Failed to post question. Please try again.')
+    } finally {
       setSubmitting(false)
     }
   }

@@ -9,6 +9,7 @@ import routes from './routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 import { generalLimiter } from './middleware/rateLimiter';
 import { requestContext } from './middleware/requestContext';
+import { csrfProtection } from './middleware/csrf';
 import logger from './utils/logger';
 
 export function createApp(): Application {
@@ -101,10 +102,13 @@ export function createApp(): Application {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'X-CSRF-Token'],
     exposedHeaders: ['set-cookie'],
   };
   app.use(cors(corsOptions));
+
+  // Stripe webhook needs raw body BEFORE the JSON parser
+  app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
   // Body parsing
   app.use(express.json({ limit: '10mb' }));
@@ -136,6 +140,9 @@ export function createApp(): Application {
 
   // Rate limiting
   app.use('/api', generalLimiter);
+
+  // CSRF protection — Double Submit Cookie Pattern (skipped in development)
+  app.use(csrfProtection);
 
   // Routes
   app.use('/api', routes);

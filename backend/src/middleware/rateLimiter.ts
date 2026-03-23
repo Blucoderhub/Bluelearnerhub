@@ -64,3 +64,25 @@ export const strictLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// Password reset — 3 requests per hour per IP (prevents email spam)
+export const passwordResetLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3,
+  message: { success: false, message: 'Too many password reset requests. Please try again in an hour.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// High-capacity limiter for Stripe webhooks — Stripe retries on 429, so don't block real events
+export const webhookLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 300, // 300 req/min — plenty for Stripe burst retries
+  message: { success: false, message: 'Webhook rate limit exceeded' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => {
+    // Only apply to requests bearing a valid stripe-signature header; block raw floods
+    return !!req.headers['stripe-signature']
+  },
+});

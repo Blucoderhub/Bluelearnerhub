@@ -3,176 +3,176 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, CheckCircle2, XCircle, ChevronRight, Trophy, RotateCcw, Clock } from 'lucide-react'
+import { Zap, CheckCircle2, XCircle, ChevronRight, Trophy, RotateCcw, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { dailyQuizAPI } from '@/lib/api-civilization'
+import { toast } from 'sonner'
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+/** Public question shape — correctIndex is NEVER present (stripped by server). */
+interface MCQPublic {
+  question:   string
+  options:    string[]
+  difficulty: 'easy' | 'medium' | 'hard'
+}
+
+interface PublicQuiz {
+  domain:           string
+  date:             string
+  questions:        MCQPublic[]
+  alreadySubmitted: boolean
+  previousResult:   { score: number; xp_earned: number } | null
+}
+
+/** What the server returns after a successful submission. */
+interface SubmitResult {
+  score:          number
+  correctCount:   number
+  totalQuestions: number
+  xpEarned:       number
+  correctAnswers: number[]   // revealed only post-submission
+  explanations:   string[]   // revealed only post-submission
+}
+
+// ─── Constants ───────────────────────────────────────────────────────────────
 
 const DOMAINS_FALLBACK = [
-  'JavaScript',
-  'TypeScript',
-  'Python',
-  'React',
-  'Node.js',
-  'PostgreSQL',
-  'Docker',
-  'System Design',
+  'JavaScript', 'TypeScript', 'Python', 'React', 'Node.js',
+  'PostgreSQL', 'Docker', 'System Design',
 ]
 
-const MOCK_QUIZ = {
-  domain: 'TypeScript',
-  date: '2026-03-10',
-  questions: [
-    {
-      question: 'What does the `keyof` operator return in TypeScript?',
-      options: [
-        'A union type of all property names of a type',
-        'The keys of a JavaScript object at runtime',
-        'An array of strings representing enum values',
-        'A type that maps keys to boolean values',
-      ],
-      correctIndex: 0,
-      explanation:
-        '`keyof T` produces a union type of all known public property names (keys) of type T. For example, `keyof { a: number; b: string }` yields `"a" | "b"`.',
-      difficulty: 'medium' as const,
-    },
-    {
-      question: 'Which utility type makes all properties of type T optional?',
-      options: ['Required<T>', 'Partial<T>', 'Readonly<T>', 'Pick<T, K>'],
-      correctIndex: 1,
-      explanation:
-        '`Partial<T>` constructs a type with all properties set to optional. `Required<T>` does the opposite, making all properties required.',
-      difficulty: 'easy' as const,
-    },
-    {
-      question: 'What is a discriminated union in TypeScript?',
-      options: [
-        'A union type where one member is excluded',
-        'A union where each member has a common literal type property for narrowing',
-        'A union that only allows primitive types',
-        'A union combined with an intersection type',
-      ],
-      correctIndex: 1,
-      explanation:
-        'A discriminated union uses a shared "discriminant" property (usually a string literal) that TypeScript uses to narrow the type inside conditionals.',
-      difficulty: 'medium' as const,
-    },
-    {
-      question: 'What does `infer` do inside a conditional type?',
-      options: [
-        'Infers the return type of a function at runtime',
-        'Declares a type variable to be inferred within the conditional branch',
-        'Forces TypeScript to infer generics automatically',
-        'Removes the need for explicit type annotations',
-      ],
-      correctIndex: 1,
-      explanation:
-        '`infer R` introduces a type variable R that TypeScript infers within a conditional type. E.g., `type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never`.',
-      difficulty: 'hard' as const,
-    },
-    {
-      question: 'Which of the following correctly describes `never`?',
-      options: [
-        'It is the same as void — used when a function returns nothing',
-        'It represents a type that no value can satisfy (bottom type)',
-        'It represents undefined and null together',
-        'It is an alias for unknown in strict mode',
-      ],
-      correctIndex: 1,
-      explanation:
-        "`never` is the bottom type — no value can be assigned to it. It's used for functions that never return (throw or infinite loop) and for exhaustive checks.",
-      difficulty: 'medium' as const,
-    },
-  ],
-}
-
-const DIFFICULTY_COLORS = {
-  easy: 'bg-muted text-foreground/70',
+const DIFFICULTY_COLORS: Record<MCQPublic['difficulty'], string> = {
+  easy:   'bg-muted text-foreground/70',
   medium: 'bg-blue-900/50 text-blue-400',
-  hard: 'bg-purple-900/50 text-purple-400',
+  hard:   'bg-purple-900/50 text-purple-400',
 }
 
-type QuizState = 'domain-select' | 'in-progress' | 'completed'
+type QuizState = 'domain-select' | 'in-progress' | 'submitting' | 'completed' | 'already-done'
 
 const TODAY = new Date().toISOString().slice(0, 10)
 
+// ─── Component ───────────────────────────────────────────────────────────────
+
 export default function DailyQuizPage() {
   const router = useRouter()
-  const [state, setState] = useState<QuizState>('domain-select')
-  const [selectedDomain, setDomain] = useState('TypeScript')
+
+  const [state,          setState]         = useState<QuizState>('domain-select')
+  const [selectedDomain, setDomain]        = useState('TypeScript')
+  const [domains,        setDomains]       = useState<string[]>(DOMAINS_FALLBACK)
+  const [quiz,           setQuiz]          = useState<PublicQuiz | null>(null)
+  const [loadingQuiz,    setLoading]       = useState(false)
+
+  // Per-question state (no correctIndex — purely UI)
   const [current, setCurrent] = useState(0)
-  const [answers, setAnswers] = useState<(number | null)[]>([])
-  const [chosen, setChosen] = useState<number | null>(null)
-  const [revealed, setRevealed] = useState(false)
-  const [xpEarned, setXpEarned] = useState(0)
-  const [domains, setDomains] = useState<string[]>(DOMAINS_FALLBACK)
-  const [quiz, setQuiz] = useState(MOCK_QUIZ)
-  const [loadingQuiz, setLoading] = useState(false)
+  const [chosen,  setChosen]  = useState<number | null>(null)
+  // answers[i] = option index chosen for question i
+  const [answers, setAnswers] = useState<number[]>([])
+
+  // Result returned by the server after submission
+  const [result, setResult] = useState<SubmitResult | null>(null)
+
+  // ── Domain list ────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    dailyQuizAPI
-      .domains()
-      .then((d) => {
-        if (d?.length) setDomains(d)
-      })
-      .catch(() => {
-        /* keep fallback domain list */
-      })
+    dailyQuizAPI.domains()
+      .then((d: string[]) => { if (d?.length) setDomains(d) })
+      .catch(() => { /* keep fallback */ })
   }, [])
+
+  // ── Load quiz (questions only — no correctIndex) ───────────────────────────
 
   const loadQuiz = async (domain: string) => {
     setLoading(true)
     try {
-      const d = await dailyQuizAPI.getQuiz(domain)
-      if (d?.questions?.length) setQuiz(d)
+      const data: PublicQuiz = await dailyQuizAPI.getQuiz(domain)
+      if (data?.questions?.length) {
+        setQuiz(data)
+        if (data.alreadySubmitted) {
+          setState('already-done')
+          return
+        }
+      } else {
+        toast.error('Quiz unavailable for this domain. Try another.')
+      }
     } catch {
-      /* keep mock */
+      toast.error('Failed to load quiz. Please try again.')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
-  const q = quiz.questions[current]
-  const total = quiz.questions.length
-
-  const correctCount = answers.filter((a, i) => a === quiz.questions[i]?.correctIndex).length
-  const score = Math.round((correctCount / total) * 100)
 
   const startQuiz = async () => {
     setAnswers([])
     setChosen(null)
-    setRevealed(false)
     setCurrent(0)
+    setResult(null)
     await loadQuiz(selectedDomain)
     setState('in-progress')
   }
 
+  // ── Answer selection (no scoring here — purely UI state) ──────────────────
+
   const handleChoose = (idx: number) => {
-    if (revealed) return
+    if (chosen !== null) return   // already answered this question
     setChosen(idx)
-    setRevealed(true)
-    const correct = idx === q.correctIndex
-    const xp = correct ? (q.difficulty === 'hard' ? 30 : q.difficulty === 'medium' ? 20 : 10) : 0
-    setXpEarned((x) => x + xp)
   }
 
-  const handleNext = () => {
+  // ── Advance to next question or submit on last ─────────────────────────────
+
+  const handleNext = async () => {
+    if (chosen === null || !quiz) return
+
     const updatedAnswers = [...answers, chosen]
     setAnswers(updatedAnswers)
-    if (current + 1 >= total) {
-      const finalScore = Math.round(
-        (updatedAnswers.filter((a, i) => a === quiz.questions[i]?.correctIndex).length / total) *
-          100
-      )
-      // Persist XP to backend (fire-and-forget)
-      dailyQuizAPI.submitResult(selectedDomain, finalScore, xpEarned).catch(() => {})
-      setState('completed')
+
+    if (current + 1 >= quiz.questions.length) {
+      // Last question — submit to server
+      setState('submitting')
+      try {
+        const serverResult: SubmitResult = await dailyQuizAPI.submitAnswers(
+          selectedDomain,
+          updatedAnswers
+        )
+        setResult(serverResult)
+        setState('completed')
+      } catch (err: any) {
+        const msg: string = err?.response?.data?.message ?? ''
+        if (err?.response?.status === 409) {
+          setState('already-done')
+          toast.info('You already completed this quiz today.')
+        } else {
+          toast.error(msg || 'Failed to submit quiz. Please try again.')
+          setState('in-progress')   // let them retry submission
+          setAnswers(updatedAnswers) // keep their answers
+          setCurrent(quiz.questions.length - 1)
+          setChosen(chosen)
+        }
+      }
     } else {
       setCurrent(current + 1)
       setChosen(null)
-      setRevealed(false)
     }
   }
+
+  const resetToSelect = () => {
+    setState('domain-select')
+    setAnswers([])
+    setQuiz(null)
+    setResult(null)
+    setCurrent(0)
+    setChosen(null)
+  }
+
+  // ── Derived ────────────────────────────────────────────────────────────────
+
+  const q     = quiz?.questions[current]
+  const total = quiz?.questions.length ?? 0
+
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -193,6 +193,40 @@ export default function DailyQuizPage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-6 py-8">
+
+        {/* ── Already submitted ── */}
+        {state === 'already-done' && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+              <CheckCircle2 className="h-8 w-8 text-foreground/60" />
+            </div>
+            <h2 className="mb-2 text-xl font-bold">Already completed!</h2>
+            <p className="mb-2 text-sm text-gray-400">
+              You've already taken the <span className="font-semibold text-foreground">{selectedDomain}</span> quiz today.
+            </p>
+            {quiz?.previousResult && (
+              <p className="mb-6 text-sm text-gray-400">
+                Your score: <span className="font-semibold text-foreground">{quiz.previousResult.score}%</span>
+                {' · '}XP earned: <span className="font-semibold text-foreground/70">+{quiz.previousResult.xp_earned}</span>
+              </p>
+            )}
+            <p className="mb-8 text-xs text-gray-500">Come back tomorrow for a new quiz!</p>
+            <div className="flex gap-3 justify-center">
+              <Button variant="outline" className="gap-2 border-gray-700" onClick={resetToSelect}>
+                <RotateCcw className="h-4 w-4" /> Try another domain
+              </Button>
+              <Button
+                className="bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
+                onClick={() => router.push('/student/dashboard')}
+              >
+                Back to Dashboard
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
         {/* ── Domain Select ── */}
         {state === 'domain-select' && (
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
@@ -217,24 +251,23 @@ export default function DailyQuizPage() {
               disabled={loadingQuiz}
               className="h-12 w-full bg-gradient-to-r from-primary to-primary text-base font-semibold hover:opacity-90"
             >
-              {loadingQuiz ? 'Loading…' : `Start ${selectedDomain} Quiz`}{' '}
+              {loadingQuiz ? 'Loading…' : `Start ${selectedDomain} Quiz`}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </motion.div>
         )}
 
         {/* ── In Progress ── */}
-        {state === 'in-progress' && (
+        {(state === 'in-progress' || state === 'submitting') && q && (
           <motion.div key={current} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-            {/* Progress */}
+            {/* Progress bar */}
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm text-gray-500">
                 Question {current + 1} of {total}
               </span>
-              <div className="flex items-center gap-2 text-sm text-foreground/70">
-                <Zap className="h-3.5 w-3.5" />
-                {xpEarned} XP
-              </div>
+              <span className="text-sm text-foreground/70">
+                {answers.length} answered
+              </span>
             </div>
             <Progress value={(current / total) * 100} className="mb-6 h-1.5" />
 
@@ -251,33 +284,24 @@ export default function DailyQuizPage() {
 
                 <div className="space-y-2.5">
                   {q.options.map((opt, idx) => {
+                    // UI-only styling: selected = blue, locked = dim. No correct/wrong reveal.
                     let style = 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600'
-                    if (revealed) {
-                      if (idx === q.correctIndex)
-                        style = 'border-primary bg-muted/60 text-foreground/60'
-                      else if (idx === chosen) style = 'border-red-600 bg-red-900/30 text-red-300'
-                      else style = 'border-gray-800 bg-gray-900/50 text-gray-600'
-                    } else if (chosen === idx) {
-                      style = 'border-blue-500 bg-blue-900/20 text-blue-300'
+                    if (chosen !== null) {
+                      if (idx === chosen)       style = 'border-blue-500 bg-blue-900/30 text-blue-300'
+                      else                      style = 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-default'
                     }
 
                     return (
                       <button
                         key={idx}
                         onClick={() => handleChoose(idx)}
-                        disabled={revealed}
+                        disabled={chosen !== null || state === 'submitting'}
                         className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all ${style}`}
                       >
                         <span className="shrink-0 font-mono text-xs text-gray-500">
                           {String.fromCharCode(65 + idx)}
                         </span>
                         <span className="flex-1">{opt}</span>
-                        {revealed && idx === q.correctIndex && (
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-foreground/70" />
-                        )}
-                        {revealed && idx === chosen && idx !== q.correctIndex && (
-                          <XCircle className="h-4 w-4 shrink-0 text-red-400" />
-                        )}
                       </button>
                     )
                   })}
@@ -285,9 +309,9 @@ export default function DailyQuizPage() {
               </CardContent>
             </Card>
 
-            {/* Explanation */}
+            {/* Hint when answered */}
             <AnimatePresence>
-              {revealed && (
+              {chosen !== null && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
@@ -295,10 +319,9 @@ export default function DailyQuizPage() {
                 >
                   <Card className="mb-5 border-gray-800 bg-gray-900">
                     <CardContent className="p-4">
-                      <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
-                        Explanation
+                      <p className="text-sm text-gray-400">
+                        Answer locked in. Results will be revealed after you complete the quiz.
                       </p>
-                      <p className="text-sm leading-relaxed text-gray-300">{q.explanation}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -307,17 +330,21 @@ export default function DailyQuizPage() {
 
             <Button
               onClick={handleNext}
-              disabled={!revealed}
+              disabled={chosen === null || state === 'submitting'}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
             >
-              {current + 1 >= total ? 'See Results' : 'Next Question'}{' '}
+              {state === 'submitting'
+                ? 'Submitting…'
+                : current + 1 >= total
+                  ? 'Submit & See Results'
+                  : 'Next Question'}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </motion.div>
         )}
 
-        {/* ── Completed ── */}
-        {state === 'completed' && (
+        {/* ── Completed — results from server ── */}
+        {state === 'completed' && result && quiz && (
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}>
             <div className="mb-8 text-center">
               <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary shadow-lg shadow-primary/20">
@@ -325,7 +352,7 @@ export default function DailyQuizPage() {
               </div>
               <h2 className="mb-1 text-2xl font-bold">Quiz Complete!</h2>
               <p className="text-sm text-gray-400">
-                You scored {correctCount}/{total} on today's {selectedDomain} quiz
+                {result.correctCount}/{result.totalQuestions} correct on today's {selectedDomain} quiz
               </p>
             </div>
 
@@ -334,38 +361,53 @@ export default function DailyQuizPage() {
               <CardContent className="p-6">
                 <div className="mb-5 grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-3xl font-bold text-white">{score}%</p>
+                    <p className="text-3xl font-bold text-white">{result.score}%</p>
                     <p className="text-xs text-gray-500">Score</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-foreground/70">{correctCount}</p>
+                    <p className="text-3xl font-bold text-foreground/70">{result.correctCount}</p>
                     <p className="text-xs text-gray-500">Correct</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-foreground/70">+{xpEarned}</p>
+                    <p className="text-3xl font-bold text-foreground/70">+{result.xpEarned}</p>
                     <p className="text-xs text-gray-500">XP Earned</p>
                   </div>
                 </div>
 
-                <Progress value={score} className="mb-4 h-2" />
+                <Progress value={result.score} className="mb-4 h-2" />
 
-                {/* Per-question summary */}
-                <div className="space-y-2">
+                {/* Per-question review — correctAnswers now safely from server */}
+                <div className="space-y-4">
                   {quiz.questions.map((question, i) => {
-                    const ans = answers[i] ?? null
-                    const correct = ans === question.correctIndex
+                    const given   = answers[i] ?? -1
+                    const correct = result.correctAnswers[i]
+                    const isRight = given === correct
+
                     return (
-                      <div key={i} className="flex items-start gap-2 text-sm">
-                        {correct ? (
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-foreground/70" />
-                        ) : (
-                          <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                      <div key={i} className="rounded-lg border border-gray-800 p-3">
+                        <div className="mb-2 flex items-start gap-2">
+                          {isRight
+                            ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                            : <XCircle      className="mt-0.5 h-4 w-4 shrink-0 text-red-400"   />
+                          }
+                          <span className="text-sm leading-relaxed text-gray-300">
+                            {question.question}
+                          </span>
+                        </div>
+
+                        {/* Show correct answer if wrong */}
+                        {!isRight && (
+                          <p className="ml-6 text-xs text-green-400">
+                            Correct: {question.options[correct]}
+                          </p>
                         )}
-                        <span
-                          className={`text-xs leading-relaxed ${correct ? 'text-gray-300' : 'text-gray-500'}`}
-                        >
-                          {question.question}
-                        </span>
+
+                        {/* Explanation — revealed post-submission only */}
+                        {result.explanations[i] && (
+                          <p className="ml-6 mt-1 text-xs leading-relaxed text-gray-500">
+                            {result.explanations[i]}
+                          </p>
+                        )}
                       </div>
                     )
                   })}
@@ -375,19 +417,11 @@ export default function DailyQuizPage() {
 
             <div className="flex gap-3">
               <Button
-                onClick={() => {
-                  setState('domain-select')
-                  setXpEarned(0)
-                  setAnswers([])
-                  setQuiz(MOCK_QUIZ)
-                  setCurrent(0)
-                  setChosen(null)
-                  setRevealed(false)
-                }}
+                onClick={resetToSelect}
                 variant="outline"
                 className="flex-1 gap-2 border-gray-700 text-gray-300 hover:text-white"
               >
-                <RotateCcw className="h-4 w-4" /> Try Another
+                <RotateCcw className="h-4 w-4" /> Try Another Domain
               </Button>
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"

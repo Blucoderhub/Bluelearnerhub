@@ -7,6 +7,7 @@
 
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth';
+import { strictLimiter } from '../middleware/rateLimiter';
 import { executeCode, LANGUAGE_IDS } from '../services/judge0.service';
 import { GamificationService } from '../services/gamification.service';
 import logger from '../utils/logger';
@@ -18,8 +19,8 @@ router.get('/languages', (_req, res) => {
   res.json({ success: true, data: Object.keys(LANGUAGE_IDS) });
 });
 
-// POST /api/code/execute — authenticated, rate limited at API layer
-router.post('/execute', authenticate, async (req, res) => {
+// POST /api/code/execute — authenticated + strict rate limit (prevents abuse)
+router.post('/execute', strictLimiter, authenticate, async (req, res) => {
   try {
     const { code, language, stdin } = req.body as {
       code: string;

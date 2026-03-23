@@ -87,3 +87,27 @@ export const commonValidators = {
     query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be 1-100'),
   ],
 };
+
+export const profileValidators = {
+  update: [
+    body('fullName').optional().trim().isLength({ min: 1, max: 100 }).withMessage('Full name must be 1-100 characters'),
+    body('bio').optional().trim().isLength({ max: 500 }).withMessage('Bio must be at most 500 characters'),
+    body('location').optional().trim().isLength({ max: 100 }).withMessage('Location must be at most 100 characters'),
+    body('profilePicture').optional().isURL().withMessage('Profile picture must be a valid URL'),
+    body('linkedinUrl').optional().isURL().withMessage('LinkedIn URL must be valid'),
+    body('githubUrl').optional().isURL().withMessage('GitHub URL must be valid'),
+    body('portfolioUrl').optional().isURL().withMessage('Portfolio URL must be valid'),
+    body('graduationYear').optional().isInt({ min: 1950, max: 2100 }).withMessage('Invalid graduation year'),
+    body('yearsExperience').optional().isInt({ min: 0, max: 60 }).withMessage('Invalid years of experience'),
+    body('currentPosition').optional().trim().isLength({ max: 150 }).withMessage('Position must be at most 150 characters'),
+    body('company').optional().trim().isLength({ max: 150 }).withMessage('Company must be at most 150 characters'),
+    body('collegeName').optional().trim().isLength({ max: 150 }).withMessage('College name must be at most 150 characters'),
+    // Reject any attempt to set privileged fields
+    body('role').not().exists().withMessage('role cannot be updated via profile'),
+    body('email').not().exists().withMessage('email cannot be updated via profile'),
+    body('password').not().exists().withMessage('password cannot be updated via profile'),
+    body('isActive').not().exists().withMessage('isActive cannot be updated via profile'),
+    body('failedLoginAttempts').not().exists().withMessage('failedLoginAttempts cannot be updated via profile'),
+    body('lockedUntil').not().exists().withMessage('lockedUntil cannot be updated via profile'),
+  ],
+};

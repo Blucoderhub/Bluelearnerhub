@@ -18,6 +18,7 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import crypto from 'crypto';
 import { db } from '../db';
+import { sanitizeText, sanitizeRichText } from '../utils/sanitize';
 import { eq, desc, and, sql } from 'drizzle-orm';
 import {
   qnaQuestions, qnaAnswers, qnaVotes, tags,
@@ -63,8 +64,11 @@ function computeRank(points: number): string {
 
 export const listQuestions = async (req: Request, res: Response) => {
   try {
-    const { domain, tag, sort = 'recent', page = '1', limit = '20' } = req.query as Record<string, string>;
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const { domain, tag, page = '1', limit = '20' } = req.query as Record<string, string>;
+    const rawSort = String(req.query.sort ?? 'recent');
+    const sort = ['recent', 'votes'].includes(rawSort) ? rawSort : 'recent';
+    const safeLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+    const offset = (parseInt(page) - 1) * safeLimit;
 
     const rows = await db
       .select({
@@ -82,7 +86,7 @@ export const listQuestions = async (req: Request, res: Response) => {
       .from(qnaQuestions)
       .leftJoin(users, eq(qnaQuestions.authorId, users.id))
       .orderBy(sort === 'votes' ? desc(qnaQuestions.voteScore) : desc(qnaQuestions.createdAt))
-      .limit(parseInt(limit))
+      .limit(safeLimit)
       .offset(offset);
 
     res.json({ success: true, data: rows, page: parseInt(page) });
@@ -164,7 +168,22 @@ export const getQuestion = async (req: Request, res: Response) => {
 export const askQuestion = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const { title, body, domain, tagNames } = req.body;
+    const { title: rawTitle, body: rawBody, domain: rawDomain, tagNames } = req.body;
+
+    if (!rawTitle || typeof rawTitle !== 'string' || rawTitle.trim().length < 15 || rawTitle.length > 300) {
+      return res.status(400).json({ success: false, message: 'Title must be 15-300 characters' });
+    }
+    if (!rawBody || typeof rawBody !== 'string' || rawBody.trim().length < 30 || rawBody.length > 10_000) {
+      return res.status(400).json({ success: false, message: 'Body must be 30-10,000 characters' });
+    }
+    if (!rawDomain || typeof rawDomain !== 'string') {
+      return res.status(400).json({ success: false, message: 'Domain is required' });
+    }
+
+    // Sanitize user-supplied content before storage
+    const title  = sanitizeText(rawTitle);
+    const body   = sanitizeRichText(rawBody);
+    const domain = sanitizeText(rawDomain);
 
     // 1. Check for semantic duplicates before publishing
     let duplicates: any[] = [];
@@ -196,7 +215,9 @@ export const askQuestion = async (req: Request, res: Response) => {
 
     // 3. Create / associate tags
     if (Array.isArray(tagNames) && tagNames.length > 0) {
-      for (const name of tagNames.slice(0, 5)) {
+      for (const rawName of tagNames.slice(0, 5)) {
+        const name = sanitizeText(rawName).slice(0, 50);
+        if (!name) continue;
         const slug = name.toLowerCase().replace(/\s+/g, '-');
 
         // Upsert tag
@@ -232,7 +253,16 @@ export const postAnswer = async (req: Request, res: Response) => {
   try {
     const userId     = req.user!.id;
     const questionId = parseInt(req.params.id);
-    const { body }   = req.body;
+    const { body: rawBody } = req.body;
+
+    if (isNaN(questionId) || questionId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid question id' });
+    }
+    if (!rawBody || typeof rawBody !== 'string' || rawBody.trim().length < 10 || rawBody.length > 20_000) {
+      return res.status(400).json({ success: false, message: 'Answer body must be 10-20,000 characters' });
+    }
+
+    const body = sanitizeRichText(rawBody);
 
     const [answer] = await db
       .insert(qnaAnswers)
@@ -265,6 +295,24 @@ export const castVote = async (req: Request, res: Response) => {
 
     if (!['question', 'answer'].includes(targetType)) {
       return res.status(400).json({ success: false, message: 'Invalid target type' });
+    }
+    if (!['up', 'down'].includes(vote)) {
+      return res.status(400).json({ success: false, message: 'vote must be "up" or "down"' });
+    }
+
+    // Prevent self-voting
+    let contentAuthorId: number | null = null;
+    if (targetType === 'question') {
+      const [q] = await db.select({ authorId: qnaQuestions.authorId }).from(qnaQuestions).where(eq(qnaQuestions.id, targetId));
+      if (!q) return res.status(404).json({ success: false, message: 'Question not found' });
+      contentAuthorId = q.authorId;
+    } else {
+      const [a] = await db.select({ authorId: qnaAnswers.authorId }).from(qnaAnswers).where(eq(qnaAnswers.id, targetId));
+      if (!a) return res.status(404).json({ success: false, message: 'Answer not found' });
+      contentAuthorId = a.authorId;
+    }
+    if (contentAuthorId === userId) {
+      return res.status(400).json({ success: false, message: 'Cannot vote on your own content' });
     }
 
     // Upsert vote
@@ -316,6 +364,10 @@ export const acceptAnswer = async (req: Request, res: Response) => {
     const userId     = req.user!.id;
     const questionId = parseInt(req.params.id);
     const answerId   = parseInt(req.params.answerId);
+
+    if (isNaN(questionId) || questionId <= 0 || isNaN(answerId) || answerId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid question or answer id' });
+    }
 
     const [question] = await db
       .select()

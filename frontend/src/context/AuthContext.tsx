@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { User } from '@/types'
 import api from '@/lib/api'
 
@@ -62,43 +62,59 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  // Deduplicate concurrent refreshUser calls — only one non-silent request in flight at a time
+  const refreshInFlightRef = useRef<Promise<void> | null>(null)
 
   const refreshUser = useCallback(async (silent = false) => {
-    try {
-      const response = await api.get('/auth/me')
-      const fetchedUser = response.data?.data ?? response.data ?? null
-      setUser(fetchedUser)
-      if (fetchedUser) setAuthHintCookie()
-      else clearAuthHintCookie()
-    } catch (err: any) {
-      // Only clear on a definitive HTTP 401/403 — not on network errors or
-      // timeouts, which would log the user out when the backend is slow.
-      const isDefinitiveAuthFailure =
-        err?.response?.status === 401 || err?.response?.status === 403
+    // If a non-silent refresh is already in flight, reuse that promise
+    if (!silent && refreshInFlightRef.current) return refreshInFlightRef.current
 
-      if (!silent && isDefinitiveAuthFailure) {
-        // Use the functional form of setUser so we read the CURRENT state at
-        // the time this callback runs, not the stale closure value.
-        //
-        // Race condition this prevents:
-        //   T=0   refreshUser() fires (GET /auth/me in-flight)
-        //   T=500 login() succeeds → setUser(user) → setAuthHintCookie()
-        //   T=1s  GET /auth/me returns 401 → this catch block runs
-        //
-        // Without the check, setUser(null) would wipe the user set by login(),
-        // clearing auth_hint and leaving the user stuck on the login page.
-        setUser((current) => {
-          if (current !== null) {
-            // login() ran concurrently and already set the user — preserve it.
-            return current
-          }
-          clearAuthHintCookie()
-          return null
-        })
+    const doRefresh = async () => {
+      try {
+        const response = await api.get('/auth/me')
+        const fetchedUser = response.data?.data ?? response.data ?? null
+        setUser(fetchedUser)
+        if (fetchedUser) setAuthHintCookie()
+        else clearAuthHintCookie()
+      } catch (err: any) {
+        // Only clear on a definitive HTTP 401/403 — not on network errors or
+        // timeouts, which would log the user out when the backend is slow.
+        const isDefinitiveAuthFailure =
+          err?.response?.status === 401 || err?.response?.status === 403
+
+        if (!silent && isDefinitiveAuthFailure) {
+          // Use the functional form of setUser so we read the CURRENT state at
+          // the time this callback runs, not the stale closure value.
+          //
+          // Race condition this prevents:
+          //   T=0   refreshUser() fires (GET /auth/me in-flight)
+          //   T=500 login() succeeds → setUser(user) → setAuthHintCookie()
+          //   T=1s  GET /auth/me returns 401 → this catch block runs
+          //
+          // Without the check, setUser(null) would wipe the user set by login(),
+          // clearing auth_hint and leaving the user stuck on the login page.
+          setUser((current) => {
+            if (current !== null) {
+              // login() ran concurrently and already set the user — preserve it.
+              return current
+            }
+            clearAuthHintCookie()
+            return null
+          })
+        }
+      } finally {
+        if (!silent) {
+          setLoading(false)
+          refreshInFlightRef.current = null
+        }
       }
-    } finally {
-      if (!silent) setLoading(false)
     }
+
+    if (!silent) {
+      refreshInFlightRef.current = doRefresh()
+      return refreshInFlightRef.current
+    }
+    return doRefresh()
   }, [])
 
   // ── Mount: restore session only if we have an auth hint ──────────────────

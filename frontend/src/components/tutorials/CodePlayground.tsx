@@ -5,6 +5,7 @@ import CodeEditor from '@/components/domain-specific/computer-science/CodeEditor
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, RotateCcw, Download } from 'lucide-react'
+import { codeAPI } from '@/lib/api-civilization'
 
 interface CodePlaygroundProps {
   initialCode?: string
@@ -25,24 +26,16 @@ export default function CodePlayground({
     setOutput(['Running...'])
 
     try {
-      // Simulate code execution (replace with actual API call)
-      setTimeout(() => {
-        if (initialLanguage === 'javascript') {
-          try {
-            // DANGEROUS: Only for demo purposes
-            // In production, use a sandboxed environment
-            const result = eval(code)
-            setOutput([String(result)])
-          } catch (error: any) {
-            setOutput([`Error: ${error.message}`])
-          }
-        } else {
-          setOutput(['Code executed successfully!'])
-        }
-        setIsRunning(false)
-      }, 1000)
-    } catch (error) {
-      setOutput(['Execution failed'])
+      const data = await codeAPI.execute(code, initialLanguage)
+      const result = data?.data ?? data
+      const lines: string[] = []
+      if (result?.stdout) lines.push(...result.stdout.split('\n').filter(Boolean))
+      if (result?.stderr) lines.push(`Error: ${result.stderr}`)
+      if (result?.compile_output) lines.push(`Compile error: ${result.compile_output}`)
+      setOutput(lines.length > 0 ? lines : ['(no output)'])
+    } catch (error: any) {
+      setOutput([`Execution failed: ${error?.message ?? 'unknown error'}`])
+    } finally {
       setIsRunning(false)
     }
   }
