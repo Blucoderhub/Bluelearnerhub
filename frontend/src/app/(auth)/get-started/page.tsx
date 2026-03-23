@@ -34,8 +34,10 @@ function GetStartedContent() {
       } else {
         await login(data.email, data.password)
       }
-      // Do NOT call router.push here — the useEffect above handles navigation
-      // once isAuthenticated updates. A double-push causes a race condition.
+      // Primary navigation: redirect immediately after auth resolves.
+      // The useEffect(isAuthenticated) below is a fallback.
+      const from = searchParams.get('from')
+      router.replace(from && from.startsWith('/') ? from : '/student/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Protocol initialization failed.')
     }

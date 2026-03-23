@@ -30,9 +30,11 @@ function LoginPortalContent() {
     setError(null)
     try {
       await login(data.email, data.password)
-      // Do NOT call router.push here — the useEffect above handles navigation
-      // once isAuthenticated updates. Calling push here AND in the effect causes
-      // a double-navigation race that can leave the user stuck on the login page.
+      // Primary navigation: redirect immediately after login() resolves.
+      // The useEffect(isAuthenticated) below is a fallback for edge cases where
+      // state updates resolve before this line runs.
+      const from = searchParams.get('from')
+      router.replace(from && from.startsWith('/') ? from : '/student/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }
