@@ -4,8 +4,15 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ArrowLeft, Zap, Trophy, CheckCircle2, XCircle,
-  ChevronRight, RotateCcw, Clock, Loader2,
+  ArrowLeft,
+  Zap,
+  Trophy,
+  CheckCircle2,
+  XCircle,
+  ChevronRight,
+  RotateCcw,
+  Clock,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -51,9 +58,9 @@ interface Exercise {
 // ─── Difficulty config ────────────────────────────────────────────────────────
 
 const DIFF_COLOUR: Record<string, string> = {
-  Easy:   'bg-green-500/10 text-green-400 border-green-500/20',
+  Easy: 'bg-green-500/10 text-green-400 border-green-500/20',
   Medium: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  Hard:   'bg-red-500/10 text-red-400 border-red-500/20',
+  Hard: 'bg-red-500/10 text-red-400 border-red-500/20',
 }
 
 const XP_PER_CORRECT: Record<string, number> = { Easy: 10, Medium: 20, Hard: 30 }
@@ -73,21 +80,24 @@ const FALLBACK: Exercise = {
       text: 'What is the time complexity of binary search?',
       options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'],
       correctIndex: 1,
-      explanation: 'Binary search halves the search space each iteration, giving O(log n) time complexity.',
+      explanation:
+        'Binary search halves the search space each iteration, giving O(log n) time complexity.',
     },
     {
       id: 2,
       text: 'Which data structure uses LIFO ordering?',
       options: ['Queue', 'Stack', 'Heap', 'Tree'],
       correctIndex: 1,
-      explanation: 'A stack follows Last-In-First-Out (LIFO) — the last element pushed is the first popped.',
+      explanation:
+        'A stack follows Last-In-First-Out (LIFO) — the last element pushed is the first popped.',
     },
     {
       id: 3,
       text: 'What does a hash table offer for average-case lookup?',
       options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
       correctIndex: 2,
-      explanation: 'Hash tables provide O(1) average-case time for insertions, deletions, and lookups.',
+      explanation:
+        'Hash tables provide O(1) average-case time for insertions, deletions, and lookups.',
     },
   ],
 }
@@ -173,9 +183,7 @@ export default function ExerciseDetailPage() {
         (updatedAnswers.filter((a, i) => a === questions[i]?.correctIndex).length / total) * 100
       )
       // Persist XP to backend
-      gamificationAPI
-        .achievements()
-        .catch(() => {})
+      gamificationAPI.achievements().catch(() => {})
       toast.success(`Challenge complete! +${xpEarned} XP earned`)
       setPageState('completed')
     } else {
@@ -199,7 +207,10 @@ export default function ExerciseDetailPage() {
   if (pageState === 'intro') {
     return (
       <div className="mx-auto max-w-2xl space-y-8 py-12">
-        <Link href="/exercises" className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground">
+        <Link
+          href="/exercises"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to Challenges
         </Link>
 
@@ -209,7 +220,7 @@ export default function ExerciseDetailPage() {
           className="overflow-hidden rounded-[2.5rem] border border-border bg-card"
         >
           <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/80 to-primary" />
-          <div className="p-10 space-y-6">
+          <div className="space-y-6 p-10">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
@@ -217,7 +228,9 @@ export default function ExerciseDetailPage() {
                 </p>
                 <h1 className="text-3xl font-black italic tracking-tight">{exercise.title}</h1>
               </div>
-              <Badge className={`shrink-0 border px-3 py-1 text-xs font-black ${DIFF_COLOUR[exercise.difficulty]}`}>
+              <Badge
+                className={`shrink-0 border px-3 py-1 text-xs font-black ${DIFF_COLOUR[exercise.difficulty]}`}
+              >
                 {exercise.difficulty}
               </Badge>
             </div>
@@ -225,15 +238,23 @@ export default function ExerciseDetailPage() {
             <div className="grid grid-cols-3 gap-4 rounded-2xl border border-border bg-background/50 p-6">
               <div className="text-center">
                 <p className="text-2xl font-black text-primary">{total}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Questions</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Questions
+                </p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-black text-xp-gold">{exercise.points}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Points</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Points
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-black text-achievement-cyan">{total * (XP_PER_CORRECT[exercise.difficulty] ?? 20)}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Max XP</p>
+                <p className="text-2xl font-black text-achievement-cyan">
+                  {total * (XP_PER_CORRECT[exercise.difficulty] ?? 20)}
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Max XP
+                </p>
               </div>
             </div>
 
@@ -278,7 +299,7 @@ export default function ExerciseDetailPage() {
           className="overflow-hidden rounded-[2.5rem] border border-border bg-card text-center"
         >
           <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/80 to-primary" />
-          <div className="p-10 space-y-8">
+          <div className="space-y-8 p-10">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-primary shadow-xl shadow-primary/20">
               <Trophy className="h-10 w-10 text-white" />
             </div>
@@ -291,15 +312,23 @@ export default function ExerciseDetailPage() {
             <div className="grid grid-cols-3 gap-4 rounded-2xl border border-border bg-background/50 p-6">
               <div className="text-center">
                 <p className="text-3xl font-black text-primary">{score}%</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Score</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Score
+                </p>
               </div>
               <div className="text-center">
                 <p className="text-3xl font-black text-xp-gold">+{xpEarned}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">XP Earned</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  XP Earned
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-black text-reward-green">{correctCount}/{total}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Correct</p>
+                <p className="text-3xl font-black text-reward-green">
+                  {correctCount}/{total}
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Correct
+                </p>
               </div>
             </div>
 
@@ -353,7 +382,7 @@ export default function ExerciseDetailPage() {
           className="overflow-hidden rounded-[2.5rem] border border-border bg-card"
         >
           <div className="h-1 w-full bg-gradient-to-r from-primary/60 to-primary" />
-          <div className="p-6 space-y-4">
+          <div className="space-y-4 p-6">
             <p className="text-sm font-semibold leading-relaxed text-muted-foreground">
               {exercise.codeChallenge.description}
             </p>
@@ -370,77 +399,85 @@ export default function ExerciseDetailPage() {
       {/* MCQ tab */}
       {tab === 'mcq' && (
         <>
-      {/* Progress bar */}
-      <div className="space-y-2 px-1">
-        <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
-          <span>Question {current + 1} of {total}</span>
-          <span className="flex items-center gap-1 text-xp-gold">
-            <Zap className="h-3.5 w-3.5" /> {xpEarned} XP
-          </span>
-        </div>
-        <Progress value={((current) / total) * 100} className="h-1.5" />
-      </div>
-
-      {/* Question card */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          className="overflow-hidden rounded-[2.5rem] border border-border bg-card"
-        >
-          <div className="h-1 w-full bg-gradient-to-r from-primary/60 to-primary" />
-          <div className="p-8 space-y-6">
-            <p className="text-xl font-bold leading-snug">{q?.text}</p>
-
-            <div className="space-y-3">
-              {q?.options?.map((opt, idx) => {
-                const isCorrect = idx === q.correctIndex
-                const isChosen = idx === chosen
-                let cls = 'border border-border bg-background/50 hover:border-primary/50 hover:bg-primary/5'
-                if (revealed && isCorrect) cls = 'border border-green-500/50 bg-green-500/10'
-                else if (revealed && isChosen && !isCorrect) cls = 'border border-red-500/50 bg-red-500/10'
-
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => handleChoose(idx)}
-                    disabled={revealed}
-                    className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-sm font-semibold transition-all ${cls}`}
-                  >
-                    <span>{opt}</span>
-                    {revealed && isCorrect && <CheckCircle2 className="h-5 w-5 shrink-0 text-green-400" />}
-                    {revealed && isChosen && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-red-400" />}
-                  </button>
-                )
-              })}
+          {/* Progress bar */}
+          <div className="space-y-2 px-1">
+            <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
+              <span>
+                Question {current + 1} of {total}
+              </span>
+              <span className="flex items-center gap-1 text-xp-gold">
+                <Zap className="h-3.5 w-3.5" /> {xpEarned} XP
+              </span>
             </div>
-
-            {revealed && q?.explanation && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="rounded-2xl border border-border bg-muted/30 p-4 text-sm text-muted-foreground"
-              >
-                <span className="font-black text-foreground/80">Explanation: </span>
-                {q.explanation}
-              </motion.div>
-            )}
-
-            {revealed && (
-              <Button
-                onClick={handleNext}
-                className="h-12 w-full rounded-xl bg-primary font-black italic shadow-lg shadow-primary/15 hover:bg-primary/90"
-              >
-                {current + 1 >= total ? 'FINISH' : 'NEXT_QUESTION'}
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            )}
+            <Progress value={(current / total) * 100} className="h-1.5" />
           </div>
-        </motion.div>
-      </AnimatePresence>
-      </>
+
+          {/* Question card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="overflow-hidden rounded-[2.5rem] border border-border bg-card"
+            >
+              <div className="h-1 w-full bg-gradient-to-r from-primary/60 to-primary" />
+              <div className="space-y-6 p-8">
+                <p className="text-xl font-bold leading-snug">{q?.text}</p>
+
+                <div className="space-y-3">
+                  {q?.options?.map((opt, idx) => {
+                    const isCorrect = idx === q.correctIndex
+                    const isChosen = idx === chosen
+                    let cls =
+                      'border border-border bg-background/50 hover:border-primary/50 hover:bg-primary/5'
+                    if (revealed && isCorrect) cls = 'border border-green-500/50 bg-green-500/10'
+                    else if (revealed && isChosen && !isCorrect)
+                      cls = 'border border-red-500/50 bg-red-500/10'
+
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleChoose(idx)}
+                        disabled={revealed}
+                        className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-sm font-semibold transition-all ${cls}`}
+                      >
+                        <span>{opt}</span>
+                        {revealed && isCorrect && (
+                          <CheckCircle2 className="h-5 w-5 shrink-0 text-green-400" />
+                        )}
+                        {revealed && isChosen && !isCorrect && (
+                          <XCircle className="h-5 w-5 shrink-0 text-red-400" />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {revealed && q?.explanation && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="rounded-2xl border border-border bg-muted/30 p-4 text-sm text-muted-foreground"
+                  >
+                    <span className="font-black text-foreground/80">Explanation: </span>
+                    {q.explanation}
+                  </motion.div>
+                )}
+
+                {revealed && (
+                  <Button
+                    onClick={handleNext}
+                    className="h-12 w-full rounded-xl bg-primary font-black italic shadow-lg shadow-primary/15 hover:bg-primary/90"
+                  >
+                    {current + 1 >= total ? 'FINISH' : 'NEXT_QUESTION'}
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </>
       )}
     </div>
   )

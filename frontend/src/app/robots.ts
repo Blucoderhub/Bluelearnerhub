@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
-          '/student/',    // authenticated area — no indexing
+          '/student/', // authenticated area — no indexing
           '/teacher/',
           '/admin/',
           '/mentor/',
@@ -27,13 +27,7 @@ export default function robots(): MetadataRoute.Robots {
         // Allow Googlebot full access to public pages
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: [
-          '/student/',
-          '/teacher/',
-          '/admin/',
-          '/api/',
-          '/_next/',
-        ],
+        disallow: ['/student/', '/teacher/', '/admin/', '/api/', '/_next/'],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,

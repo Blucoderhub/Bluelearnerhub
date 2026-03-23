@@ -227,7 +227,7 @@ export default function Sidebar() {
               </div>
               <div className="h-1.5 w-full rounded-full bg-border">
                 <div
-                  className="h-1.5 rounded-full bg-gradient-to-r from-brand to-brand-light transition-all duration-700"
+                  className="from-brand to-brand-light h-1.5 rounded-full bg-gradient-to-r transition-all duration-700"
                   style={{ width: `${Math.min((userTotalPoints % 1000) / 10, 100)}%` }}
                 />
               </div>

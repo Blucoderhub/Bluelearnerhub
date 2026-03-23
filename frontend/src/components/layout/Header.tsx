@@ -46,10 +46,30 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 
 const hackathonLinks = [
-  { name: 'Browse Hackathons', description: 'Explore all active and upcoming hackathons', href: '/hackathons', icon: Trophy },
-  { name: 'My Registrations', description: 'View hackathons you have joined', href: '/hackathons/my', icon: BookMarked },
-  { name: 'My Team', description: 'Manage your team and collaborators', href: '/hackathons/team', icon: Users },
-  { name: 'Leaderboard', description: 'See top performers and rankings', href: '/hackathons/leaderboard', icon: BarChart3 },
+  {
+    name: 'Browse Hackathons',
+    description: 'Explore all active and upcoming hackathons',
+    href: '/hackathons',
+    icon: Trophy,
+  },
+  {
+    name: 'My Registrations',
+    description: 'View hackathons you have joined',
+    href: '/hackathons/my',
+    icon: BookMarked,
+  },
+  {
+    name: 'My Team',
+    description: 'Manage your team and collaborators',
+    href: '/hackathons/team',
+    icon: Users,
+  },
+  {
+    name: 'Leaderboard',
+    description: 'See top performers and rankings',
+    href: '/hackathons/leaderboard',
+    icon: BarChart3,
+  },
 ]
 
 type MenuKey = 'tutorials' | 'hackathon' | 'spaces' | 'mentor' | 'getin' | null
@@ -88,18 +108,20 @@ export default function Header() {
 
   const navLinkCls = (active: boolean) =>
     cn(
-      "relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold uppercase tracking-widest transition-all duration-300",
-      active 
-        ? "text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:bg-primary" 
-        : "text-muted-foreground hover:text-foreground"
+      'relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
+      active
+        ? 'text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:bg-primary'
+        : 'text-muted-foreground hover:text-foreground'
     )
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-[60] w-full border-b border-border/50 transition-all duration-500",
-          scrolled ? "bg-background/80 backdrop-blur-2xl py-0 shadow-2xl shadow-black/50" : "bg-transparent py-2"
+          'sticky top-0 z-[60] w-full border-b border-border/50 transition-all duration-500',
+          scrolled
+            ? 'bg-background/80 py-0 shadow-2xl shadow-black/50 backdrop-blur-2xl'
+            : 'bg-transparent py-2'
         )}
       >
         <div className="bg-noise pointer-events-none opacity-20" />
@@ -113,23 +135,36 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="hidden h-full flex-1 items-center justify-center gap-2 lg:flex">
-            <div className="relative h-full" onMouseEnter={() => openHover('tutorials')} onMouseLeave={closeHover}>
+            <div
+              className="relative h-full"
+              onMouseEnter={() => openHover('tutorials')}
+              onMouseLeave={closeHover}
+            >
               <button className={navLinkCls(pathname?.startsWith('/tutorials'))}>
-                Library <ChevronDown className={cn("h-3 w-3 transition-transform", openMenu === 'tutorials' && "rotate-180")} />
+                Library{' '}
+                <ChevronDown
+                  className={cn(
+                    'h-3 w-3 transition-transform',
+                    openMenu === 'tutorials' && 'rotate-180'
+                  )}
+                />
               </button>
               <AnimatePresence>
                 {openMenu === 'tutorials' && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     className="absolute left-0 top-full w-[280px] pt-2"
                   >
-                    <div className="overflow-hidden rounded-3xl border border-border bg-card/60 p-4 shadow-3xl backdrop-blur-3xl">
+                    <div className="shadow-3xl overflow-hidden rounded-3xl border border-border bg-card/60 p-4 backdrop-blur-3xl">
                       <div className="space-y-6">
                         {allDomains.map((domain) => (
                           <div key={domain.id} className="space-y-3">
-                            <Badge variant="outline" className="rounded-full border-primary/20 px-3 text-[9px] font-black uppercase tracking-widest text-primary/70">
+                            <Badge
+                              variant="outline"
+                              className="rounded-full border-primary/20 px-3 text-[9px] font-black uppercase tracking-widest text-primary/70"
+                            >
                               {domain.name}
                             </Badge>
                             <div className="grid gap-1">
@@ -153,39 +188,64 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
-            <Link href="/hackathons" className={navLinkCls(pathname?.startsWith('/hackathons'))}>Hackathons</Link>
-            <Link href="/spaces" className={navLinkCls(pathname?.startsWith('/spaces'))}>Spaces</Link>
-            <Link href="/mentor" className={navLinkCls(pathname?.startsWith('/mentor'))}>Mentor</Link>
+            <Link href="/hackathons" className={navLinkCls(pathname?.startsWith('/hackathons'))}>
+              Hackathons
+            </Link>
+            <Link href="/spaces" className={navLinkCls(pathname?.startsWith('/spaces'))}>
+              Spaces
+            </Link>
+            <Link href="/mentor" className={navLinkCls(pathname?.startsWith('/mentor'))}>
+              Mentor
+            </Link>
           </nav>
 
           {/* Right side */}
           <div className="flex items-center gap-4">
             {user ? (
-               <DropdownMenu>
-               <DropdownMenuTrigger asChild>
-                 <button className="flex items-center gap-3 rounded-full border border-border bg-card/40 pl-2 pr-5 py-2 transition-all hover:bg-card hover:shadow-xl">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-3 rounded-full border border-border bg-card/40 py-2 pl-2 pr-5 transition-all hover:bg-card hover:shadow-xl">
                     <Avatar className="h-8 w-8 border border-primary/20">
-                      <AvatarImage src={user.avatarConfig ? generateAvatarURL(user.avatarConfig) : user.profilePicture} />
+                      <AvatarImage
+                        src={
+                          user.avatarConfig
+                            ? generateAvatarURL(user.avatarConfig)
+                            : user.profilePicture
+                        }
+                      />
                       <AvatarFallback className="bg-primary text-[10px] font-bold text-white">
                         {user.fullName?.charAt(0) || 'U'}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-[13px] font-bold text-foreground uppercase tracking-widest">Portal</span>
-                 </button>
-               </DropdownMenuTrigger>
-               <DropdownMenuContent align="end" className="w-64 rounded-3xl border-border bg-card/80 p-2 backdrop-blur-3xl">
-                 <DropdownMenuLabel className="p-4 font-heading text-lg text-white">Identity Hub</DropdownMenuLabel>
-                 <DropdownMenuSeparator className="bg-border/50" />
-                 <DropdownMenuItem asChild className="rounded-2xl p-3 focus:bg-primary focus:text-white">
-                   <Link href="/student/dashboard" className="flex items-center gap-3">
-                     <LayoutDashboard size={18} /> Dashboard
-                   </Link>
-                 </DropdownMenuItem>
-                 <DropdownMenuItem onClick={logout} className="rounded-2xl p-3 text-red-500 focus:bg-red-500 focus:text-white">
-                   <LogOut size={18} /> Terminate Session
-                 </DropdownMenuItem>
-               </DropdownMenuContent>
-             </DropdownMenu>
+                    <span className="text-[13px] font-bold uppercase tracking-widest text-foreground">
+                      Portal
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-64 rounded-3xl border-border bg-card/80 p-2 backdrop-blur-3xl"
+                >
+                  <DropdownMenuLabel className="p-4 font-heading text-lg text-white">
+                    Identity Hub
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-border/50" />
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-2xl p-3 focus:bg-primary focus:text-white"
+                  >
+                    <Link href="/student/dashboard" className="flex items-center gap-3">
+                      <LayoutDashboard size={18} /> Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={logout}
+                    className="rounded-2xl p-3 text-red-500 focus:bg-red-500 focus:text-white"
+                  >
+                    <LogOut size={18} /> Terminate Session
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
@@ -217,27 +277,53 @@ export default function Header() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-[70] bg-background/80 backdrop-blur-xl md:hidden" />
-            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-y-0 right-0 z-[80] w-[300px] border-l border-border bg-card p-8 md:hidden">
-               <div className="mb-12 flex items-center justify-between">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-[70] bg-background/80 backdrop-blur-xl md:hidden"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              className="fixed inset-y-0 right-0 z-[80] w-[300px] border-l border-border bg-card p-8 md:hidden"
+            >
+              <div className="mb-12 flex items-center justify-between">
                 <span className="font-heading text-lg font-bold text-white">BlueLearnerHub</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="rounded-full border border-border p-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-full border border-border p-2"
+                >
                   <X className="h-4 w-4" />
                 </button>
               </div>
               <nav className="space-y-4">
-                 <Link href="/tutorials" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
-                   <BookOpen size={18} /> Library
-                 </Link>
-                 <Link href="/hackathons" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
-                   <Trophy size={18} /> Hackathons
-                 </Link>
-                 <Link href="/spaces" className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white">
-                   <Globe size={18} /> Spaces
-                 </Link>
-                 <Link href="/login" className="mt-12 flex h-14 items-center justify-center rounded-2xl bg-primary text-xs font-black uppercase tracking-widest text-white">
-                    Get Started
-                 </Link>
+                <Link
+                  href="/tutorials"
+                  className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+                >
+                  <BookOpen size={18} /> Library
+                </Link>
+                <Link
+                  href="/hackathons"
+                  className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+                >
+                  <Trophy size={18} /> Hackathons
+                </Link>
+                <Link
+                  href="/spaces"
+                  className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+                >
+                  <Globe size={18} /> Spaces
+                </Link>
+                <Link
+                  href="/login"
+                  className="mt-12 flex h-14 items-center justify-center rounded-2xl bg-primary text-xs font-black uppercase tracking-widest text-white"
+                >
+                  Get Started
+                </Link>
               </nav>
             </motion.div>
           </>

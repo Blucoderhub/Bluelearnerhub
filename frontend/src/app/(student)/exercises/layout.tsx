@@ -5,9 +5,15 @@ export const metadata: Metadata = {
   description:
     'Solve 1,200+ coding challenges in Python, JavaScript, and more. DSA, algorithms, system design exercises with instant AI feedback. Free on BlueLearnerHub.',
   keywords: [
-    'coding challenges', 'dsa practice', 'algorithm problems', 'leetcode alternative free',
-    'competitive programming practice', 'python exercises', 'javascript challenges',
-    'data structures problems', 'coding interview prep free',
+    'coding challenges',
+    'dsa practice',
+    'algorithm problems',
+    'leetcode alternative free',
+    'competitive programming practice',
+    'python exercises',
+    'javascript challenges',
+    'data structures problems',
+    'coding interview prep free',
   ],
   openGraph: {
     title: 'Coding Challenges & Exercises — BlueLearnerHub',

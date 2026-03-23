@@ -26,9 +26,7 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
           <GraduationCap size={20} />
         </div>
-        <span className="text-lg font-bold tracking-tight text-white">
-          BlueLearnerHub
-        </span>
+        <span className="text-lg font-bold tracking-tight text-white">BlueLearnerHub</span>
       </motion.div>
 
       {/* Main Card */}
@@ -48,7 +46,10 @@ export const StudentLoginLayout: React.FC<StudentLoginLayoutProps> = ({ children
         transition={{ delay: 0.4 }}
         className="relative z-10 mt-6 text-center"
       >
-        <a href="/help" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+        <a
+          href="/help"
+          className="text-xs text-muted-foreground transition-colors hover:text-primary"
+        >
           Need help? Support Center
         </a>
       </motion.div>

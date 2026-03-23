@@ -120,7 +120,8 @@ export default function OrganizationsPage() {
   const [type, setType] = useState('All')
 
   useEffect(() => {
-    orgsAPI.list()
+    orgsAPI
+      .list()
       .then((d: any) => {
         const list = d?.data ?? d
         if (Array.isArray(list) && list.length > 0) setOrgs(list)

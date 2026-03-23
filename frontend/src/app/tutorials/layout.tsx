@@ -5,9 +5,16 @@ export const metadata: Metadata = {
   description:
     'Interactive coding tutorials in Python, JavaScript, TypeScript, React, Node.js, System Design, and more. Learn at your own pace. 100% free on BlueLearnerHub.',
   keywords: [
-    'free coding tutorials', 'learn python free', 'javascript tutorial', 'react tutorial beginner',
-    'node js tutorial', 'typescript course', 'system design tutorial', 'web development free',
-    'programming tutorial for beginners', 'interactive coding course',
+    'free coding tutorials',
+    'learn python free',
+    'javascript tutorial',
+    'react tutorial beginner',
+    'node js tutorial',
+    'typescript course',
+    'system design tutorial',
+    'web development free',
+    'programming tutorial for beginners',
+    'interactive coding course',
   ],
   openGraph: {
     title: 'Free Coding Tutorials — BlueLearnerHub',

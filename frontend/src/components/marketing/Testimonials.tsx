@@ -81,7 +81,7 @@ export default function Testimonials() {
 
   return (
     <section className="relative overflow-hidden bg-card/30 px-4 py-16 md:py-24">
-      <div className="from-level-purple/5 absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-level-purple/5 via-transparent to-transparent" />
       <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

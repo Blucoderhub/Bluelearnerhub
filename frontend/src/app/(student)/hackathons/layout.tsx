@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   description:
     'Join live AI-powered coding hackathons on BlueLearnerHub. Compete globally, earn prizes, get noticed by top tech companies. Free to enter.',
   keywords: [
-    'online hackathon', 'coding competition', 'AI hackathon', 'programming contest', 'win prizes coding',
-    'hackathon for students', 'tech competition India', 'competitive programming',
+    'online hackathon',
+    'coding competition',
+    'AI hackathon',
+    'programming contest',
+    'win prizes coding',
+    'hackathon for students',
+    'tech competition India',
+    'competitive programming',
   ],
   openGraph: {
     title: 'AI Hackathons — Compete Globally on BlueLearnerHub',

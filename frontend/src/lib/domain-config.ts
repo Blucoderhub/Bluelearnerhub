@@ -5,32 +5,19 @@ export const DOMAINS = {
     id: 'computer-science',
     name: 'CS',
     icon: '💻',
-    categories: [
-      'Artificial Intelligence',
-      'Data Science',
-      'Python',
-      'Java'
-    ],
+    categories: ['Artificial Intelligence', 'Data Science', 'Python', 'Java'],
   },
   MECHANICAL: {
     id: 'mechanical',
     name: 'Mechanical',
     icon: '⚙️',
-    categories: [
-      'Thermodynamics',
-      'CAD Engineering',
-      'Fluid Dynamics',
-      'FAE'
-    ],
+    categories: ['Thermodynamics', 'CAD Engineering', 'Fluid Dynamics', 'FAE'],
   },
   MANAGEMENT: {
     id: 'management',
     name: 'Management',
     icon: '💼',
-    categories: [
-      'Lean Six Sigma',
-      'Investment Banking'
-    ],
+    categories: ['Lean Six Sigma', 'Investment Banking'],
   },
 } as const
 

@@ -159,7 +159,8 @@ export default function DailyQuizPage() {
     setAnswers(updatedAnswers)
     if (current + 1 >= total) {
       const finalScore = Math.round(
-        (updatedAnswers.filter((a, i) => a === quiz.questions[i]?.correctIndex).length / total) * 100
+        (updatedAnswers.filter((a, i) => a === quiz.questions[i]?.correctIndex).length / total) *
+          100
       )
       // Persist XP to backend (fire-and-forget)
       dailyQuizAPI.submitResult(selectedDomain, finalScore, xpEarned).catch(() => {})

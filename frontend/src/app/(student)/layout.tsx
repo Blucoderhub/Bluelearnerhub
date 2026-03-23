@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from 'react'
 import { useState } from 'react'
@@ -59,7 +59,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   return (
     <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
       <div className="bg-noise pointer-events-none opacity-50" />
-      
+
       {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
       <aside className="sticky top-0 z-40 hidden h-screen w-72 flex-col border-r border-border bg-card transition-all duration-500 md:flex">
         <div className="flex h-20 items-center justify-between px-8">
@@ -94,7 +94,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                       : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                   )}
                 >
-                  <Icon className={cn("h-5 w-5", isActive ? "text-primary-foreground" : "text-primary/70")} />
+                  <Icon
+                    className={cn(
+                      'h-5 w-5',
+                      isActive ? 'text-primary-foreground' : 'text-primary/70'
+                    )}
+                  />
                   <span className="truncate">{item.title}</span>
                   {item.badge && (
                     <span className="ml-auto rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-primary">
@@ -102,7 +107,10 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                     </span>
                   )}
                   {isActive && (
-                    <motion.div layoutId="active-pill" className="absolute left-0 h-6 w-1 rounded-full bg-white" />
+                    <motion.div
+                      layoutId="active-pill"
+                      className="absolute left-0 h-6 w-1 rounded-full bg-white"
+                    />
                   )}
                 </Link>
               )
@@ -112,7 +120,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
         <div className="border-t border-border/40 p-6">
           <div className="flex items-center gap-4 rounded-2xl border border-border/50 bg-secondary/30 p-4 transition-all hover:bg-secondary/50">
-            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-border/40 bg-background text-lg font-serif font-medium text-white shadow-inner">
+            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-border/40 bg-background font-serif text-lg font-medium text-white shadow-inner">
               {user?.avatarConfig ? (
                 <img
                   src={generateAvatarURL(user.avatarConfig)}
@@ -127,7 +135,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               <p className="truncate text-sm font-bold text-foreground">{displayName}</p>
               <div className="flex items-center gap-1.5">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Active Learner</p>
+                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+                  Active Learner
+                </p>
               </div>
             </div>
           </div>
@@ -157,7 +167,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                     <ShieldCheck className="h-6 w-6 text-white" />
                   </div>
-                  <span className="font-serif text-lg font-medium text-foreground">Bluelearner</span>
+                  <span className="font-serif text-lg font-medium text-foreground">
+                    Bluelearner
+                  </span>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -198,10 +210,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         <main className="relative flex-1 overflow-y-auto pb-32">
           {/* Subtle Page Glow */}
           <div className="pointer-events-none absolute left-0 top-0 h-[500px] w-full bg-gradient-to-b from-primary/5 to-transparent" />
-          
-          <div className="mx-auto w-full max-w-[1400px] p-8 md:p-12 lg:p-16">
-            {children}
-          </div>
+
+          <div className="mx-auto w-full max-w-[1400px] p-8 md:p-12 lg:p-16">{children}</div>
         </main>
 
         {/* ─── MOBILE BOTTOM NABAR ────────────────────────────────────────── */}
@@ -220,7 +230,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   className="flex flex-col items-center justify-center gap-1 p-2 text-muted-foreground"
                 >
                   <Icon className="h-6 w-6" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">{item.title}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">
+                    {item.title}
+                  </span>
                 </button>
               ) : (
                 <Link
@@ -232,9 +244,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   )}
                 >
                   <Icon className={cn('h-6 w-6', isActive && 'shadow-primary/50')} />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">{item.title}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">
+                    {item.title}
+                  </span>
                   {isActive && (
-                    <motion.div layoutId="mobile-pill" className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-primary" />
+                    <motion.div
+                      layoutId="mobile-pill"
+                      className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-primary"
+                    />
                   )}
                 </Link>
               )

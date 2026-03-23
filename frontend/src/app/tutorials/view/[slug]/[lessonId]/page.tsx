@@ -84,8 +84,21 @@ while count < 5:
 
 const FALLBACK_LESSONS = [
   { id: '1', title: 'Introduction to Python', completed: true, duration: '8 min', type: 'article' },
-  { id: '2', title: 'Variables & Data Types', completed: true, duration: '12 min', type: 'article' },
-  { id: '3', title: 'Control Flow & Loops', completed: false, duration: '15 min', type: 'article', active: true },
+  {
+    id: '2',
+    title: 'Variables & Data Types',
+    completed: true,
+    duration: '12 min',
+    type: 'article',
+  },
+  {
+    id: '3',
+    title: 'Control Flow & Loops',
+    completed: false,
+    duration: '15 min',
+    type: 'article',
+    active: true,
+  },
 ]
 
 const STATIC_RESOURCES = [
@@ -138,7 +151,10 @@ function LessonContent({ content }: { content: string }) {
       {sections.map((s, idx) => {
         if (s.type === 'heading2') {
           return (
-            <h2 key={idx} className="mb-4 mt-12 font-serif text-3xl font-medium tracking-tight text-white">
+            <h2
+              key={idx}
+              className="mb-4 mt-12 font-serif text-3xl font-medium tracking-tight text-white"
+            >
               {s.value}
             </h2>
           )
@@ -152,9 +168,14 @@ function LessonContent({ content }: { content: string }) {
         }
         if (s.type === 'code') {
           return (
-            <div key={idx} className="relative my-8 overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm">
+            <div
+              key={idx}
+              className="relative my-8 overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm"
+            >
               <div className="flex items-center justify-between border-b border-border/50 bg-secondary/30 px-5 py-2">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.lang}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  {s.lang}
+                </span>
                 <div className="flex gap-1.5 text-muted-foreground/30">
                   <div className="h-2 w-2 rounded-full bg-current" />
                   <div className="h-2 w-2 rounded-full bg-current" />
@@ -228,7 +249,8 @@ export default function LessonPage() {
       return
     }
 
-    tutorialsAPI.get(tutorialSlug)
+    tutorialsAPI
+      .get(tutorialSlug)
       .then((data: any) => {
         const tut = data?.tutorial ?? data?.data ?? data
         const sections: any[] = data?.sections ?? tut?.sections ?? []
@@ -262,10 +284,15 @@ export default function LessonPage() {
 
   useEffect(() => {
     if (!tutorialSlug) return
-    void tutorialsAPI.trackBehavior(tutorialSlug as any, 'lesson_opened', { lessonId: params.lessonId }).catch(() => undefined)
-    void tutorialsAPI.adaptiveGuidance(tutorialSlug as any)
+    void tutorialsAPI
+      .trackBehavior(tutorialSlug as any, 'lesson_opened', { lessonId: params.lessonId })
+      .catch(() => undefined)
+    void tutorialsAPI
+      .adaptiveGuidance(tutorialSlug as any)
       .then((data: any) => {
-        const guidance = Array.isArray(data?.guidance) ? data.guidance.filter((g: unknown) => typeof g === 'string') : []
+        const guidance = Array.isArray(data?.guidance)
+          ? data.guidance.filter((g: unknown) => typeof g === 'string')
+          : []
         setAdaptiveGuidance(guidance.slice(0, 3))
       })
       .catch(() => setAdaptiveGuidance([]))
@@ -282,7 +309,9 @@ export default function LessonPage() {
       const sectionId = (activeLesson as any).dbId
       if (tutorialSlug && sectionId) await tutorialsAPI.complete(tutorialSlug as any, sectionId)
       setLessonComplete(true)
-      setLessons((prev) => prev.map((l, i) => (i === activeLessonIndex ? { ...l, completed: true } : l)))
+      setLessons((prev) =>
+        prev.map((l, i) => (i === activeLessonIndex ? { ...l, completed: true } : l))
+      )
       toast.success('Lesson complete! +30 XP earned!')
     } catch {
       setLessonComplete(true)
@@ -298,12 +327,14 @@ export default function LessonPage() {
     router.push(`/tutorials/view/${tutorialSlug}/lesson-${newIndex + 1}`)
   }
 
-  const playgroundCode = starterCode || 'score = 85\n\nif score >= 90:\n    grade = "A"\nelif score >= 80:\n    grade = "B"\nelse:\n    grade = "F"\n\nprint(f"Grade: {grade}")'
+  const playgroundCode =
+    starterCode ||
+    'score = 85\n\nif score >= 90:\n    grade = "A"\nelif score >= 80:\n    grade = "B"\nelse:\n    grade = "F"\n\nprint(f"Grade: {grade}")'
 
   return (
     <div className="-mx-4 flex h-[calc(100vh-64px)] overflow-hidden bg-background sm:-mx-6 lg:-mx-8">
       <div className="bg-noise" />
-      
+
       {/* ─── LEFT SIDEBAR ─────────────────────────────────────────────────── */}
       <AnimatePresence>
         {sidebarOpen && (
@@ -317,7 +348,10 @@ export default function LessonPage() {
             <div className="shrink-0 space-y-6 border-b border-border p-8">
               <div className="flex items-start justify-between">
                 <div>
-                  <Badge variant="outline" className="mb-2 rounded-full border-primary/30 bg-primary/5 text-[9px] font-bold uppercase tracking-widest text-primary">
+                  <Badge
+                    variant="outline"
+                    className="mb-2 rounded-full border-primary/30 bg-primary/5 text-[9px] font-bold uppercase tracking-widest text-primary"
+                  >
                     Curriculum
                   </Badge>
                   <h2 className="font-serif text-lg font-medium leading-tight text-white">
@@ -331,14 +365,18 @@ export default function LessonPage() {
                   <X className="h-3 w-3" />
                 </button>
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   <span>Overall Mastery</span>
                   <span className="text-primary">{progress}%</span>
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-                   <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} className="h-full bg-primary" />
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    className="h-full bg-primary"
+                  />
                 </div>
               </div>
             </div>
@@ -349,28 +387,53 @@ export default function LessonPage() {
                   key={lesson.id}
                   onClick={() => router.push(`/tutorials/view/${tutorialSlug}/lesson-${i + 1}`)}
                   className={cn(
-                    "group flex w-full items-center gap-4 rounded-2xl px-4 py-4 text-left transition-all hover:scale-[1.02]",
-                    i === activeLessonIndex 
-                      ? "bg-primary text-white shadow-xl shadow-primary/20" 
-                      : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+                    'group flex w-full items-center gap-4 rounded-2xl px-4 py-4 text-left transition-all hover:scale-[1.02]',
+                    i === activeLessonIndex
+                      ? 'bg-primary text-white shadow-xl shadow-primary/20'
+                      : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'
                   )}
                 >
                   <div className="shrink-0">
                     {lesson.completed ? (
-                      <div className={cn("flex h-6 w-6 items-center justify-center rounded-full border border-emerald-500/50 bg-emerald-500/10", i === activeLessonIndex && "border-white/50 bg-white/20")}>
-                        <CheckCircle2 className={cn("h-3.5 w-3.5 text-emerald-400", i === activeLessonIndex && "text-white")} />
+                      <div
+                        className={cn(
+                          'flex h-6 w-6 items-center justify-center rounded-full border border-emerald-500/50 bg-emerald-500/10',
+                          i === activeLessonIndex && 'border-white/50 bg-white/20'
+                        )}
+                      >
+                        <CheckCircle2
+                          className={cn(
+                            'h-3.5 w-3.5 text-emerald-400',
+                            i === activeLessonIndex && 'text-white'
+                          )}
+                        />
                       </div>
                     ) : (
-                      <div className={cn("flex h-6 w-6 items-center justify-center rounded-full border border-border", i === activeLessonIndex && "border-white")}>
+                      <div
+                        className={cn(
+                          'flex h-6 w-6 items-center justify-center rounded-full border border-border',
+                          i === activeLessonIndex && 'border-white'
+                        )}
+                      >
                         <span className="text-[10px]">{i + 1}</span>
                       </div>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className={cn("truncate text-sm font-medium leading-none", i === activeLessonIndex ? "text-white" : "text-foreground")}>
+                    <p
+                      className={cn(
+                        'truncate text-sm font-medium leading-none',
+                        i === activeLessonIndex ? 'text-white' : 'text-foreground'
+                      )}
+                    >
                       {lesson.title}
                     </p>
-                    <div className={cn("mt-1.5 flex items-center gap-2 text-[10px]", i === activeLessonIndex ? "text-white/70" : "text-muted-foreground")}>
+                    <div
+                      className={cn(
+                        'mt-1.5 flex items-center gap-2 text-[10px]',
+                        i === activeLessonIndex ? 'text-white/70' : 'text-muted-foreground'
+                      )}
+                    >
                       {typeIcon(lesson.type)}
                       <span>{lesson.duration}</span>
                     </div>
@@ -401,23 +464,32 @@ export default function LessonPage() {
               <span className="text-foreground">{activeLesson?.title}</span>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Button
               size="sm"
               variant={playgroundOpen ? 'default' : 'outline'}
               onClick={() => setPlaygroundOpen(!playgroundOpen)}
-              className={cn("h-10 gap-2 rounded-full border-border px-6 text-[11px] font-black uppercase tracking-widest", playgroundOpen && "bg-primary text-white shadow-lg shadow-primary/20")}
+              className={cn(
+                'h-10 gap-2 rounded-full border-border px-6 text-[11px] font-black uppercase tracking-widest',
+                playgroundOpen && 'bg-primary text-white shadow-lg shadow-primary/20'
+              )}
             >
-              <Play className={cn("h-3.5 w-3.5", playgroundOpen && "fill-current")} />
+              <Play className={cn('h-3.5 w-3.5', playgroundOpen && 'fill-current')} />
               {playgroundOpen ? 'Close Editor' : 'Open Editor'}
             </Button>
-            <div className="h-8 w-[1px] bg-border mx-2" />
+            <div className="mx-2 h-8 w-[1px] bg-border" />
             <div className="flex items-center gap-1">
-               <button className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all hover:bg-secondary">
+              <button className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all hover:bg-secondary">
                 <Bookmark className="h-4 w-4" />
               </button>
-              <button onClick={() => setRightPanelOpen(!rightPanelOpen)} className={cn("flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all hover:bg-secondary", rightPanelOpen && "bg-primary border-primary text-white")}>
+              <button
+                onClick={() => setRightPanelOpen(!rightPanelOpen)}
+                className={cn(
+                  'flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all hover:bg-secondary',
+                  rightPanelOpen && 'border-primary bg-primary text-white'
+                )}
+              >
                 <BookOpen className="h-4 w-4" />
               </button>
             </div>
@@ -426,7 +498,12 @@ export default function LessonPage() {
 
         {/* Lesson Workspace */}
         <div className="flex min-h-0 flex-1">
-          <div className={cn("overflow-y-auto transition-all duration-500", playgroundOpen ? 'w-1/2' : 'flex-1')}>
+          <div
+            className={cn(
+              'overflow-y-auto transition-all duration-500',
+              playgroundOpen ? 'w-1/2' : 'flex-1'
+            )}
+          >
             <div className="mx-auto max-w-3xl px-12 py-16 pb-32">
               {/* Header */}
               <header className="mb-12 space-y-4">
@@ -434,7 +511,9 @@ export default function LessonPage() {
                   <Badge className="border-primary/20 bg-primary/5 text-[10px] font-bold uppercase tracking-widest text-primary">
                     Lesson {activeLessonIndex + 1}
                   </Badge>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">• {activeLesson?.duration} read</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    • {activeLesson?.duration} read
+                  </span>
                 </div>
                 <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
                   {activeLesson?.title}
@@ -444,20 +523,28 @@ export default function LessonPage() {
               {loadingContent ? (
                 <div className="flex flex-col items-center justify-center py-32 text-center">
                   <Loader2 className="mb-4 h-8 w-8 animate-spin text-primary" />
-                  <p className="font-serif text-lg text-muted-foreground">Synthesizing content...</p>
+                  <p className="font-serif text-lg text-muted-foreground">
+                    Synthesizing content...
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-12">
-                   <LessonContent content={content} />
-                   
-                   {adaptiveGuidance.length > 0 && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-[2rem] border border-blue-500/20 bg-blue-500/5 p-8">
-                       <div className="absolute top-0 right-0 p-4">
-                         <Lightbulb size={40} className="text-blue-500/10" />
-                       </div>
-                       <div className="mb-4 flex items-center gap-2">
+                  <LessonContent content={content} />
+
+                  {adaptiveGuidance.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="relative overflow-hidden rounded-[2rem] border border-blue-500/20 bg-blue-500/5 p-8"
+                    >
+                      <div className="absolute right-0 top-0 p-4">
+                        <Lightbulb size={40} className="text-blue-500/10" />
+                      </div>
+                      <div className="mb-4 flex items-center gap-2">
                         <Lightbulb className="h-5 w-5 text-blue-400" />
-                        <span className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Contextual Insight</span>
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">
+                          Contextual Insight
+                        </span>
                       </div>
                       <ul className="space-y-3">
                         {adaptiveGuidance.map((tip, i) => (
@@ -474,14 +561,18 @@ export default function LessonPage() {
               {/* Progress Navigation */}
               <div className="mt-24 space-y-8 border-t border-border/10 pt-16">
                 {!lessonComplete ? (
-                   <button
-                   onClick={handleMarkComplete}
-                   disabled={completing || loadingContent}
-                   className="group relative flex w-full items-center justify-center gap-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 py-5 text-sm font-black uppercase tracking-widest text-emerald-400 transition-all hover:bg-emerald-500/10 active:scale-95 disabled:opacity-50"
-                 >
-                    {completing ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-6 w-6" />}
+                  <button
+                    onClick={handleMarkComplete}
+                    disabled={completing || loadingContent}
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 py-5 text-sm font-black uppercase tracking-widest text-emerald-400 transition-all hover:bg-emerald-500/10 active:scale-95 disabled:opacity-50"
+                  >
+                    {completing ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-6 w-6" />
+                    )}
                     {completing ? 'Synchronizing Mastery...' : 'Mark Module as Complete (+30 XP)'}
-                 </button>
+                  </button>
                 ) : (
                   <div className="flex items-center justify-center gap-3 rounded-full border border-emerald-500/20 bg-emerald-500/5 py-5 text-sm font-black uppercase tracking-widest text-emerald-400">
                     <CheckCircle2 className="h-6 w-6" />
@@ -490,10 +581,19 @@ export default function LessonPage() {
                 )}
 
                 <div className="flex gap-4">
-                  <Button variant="outline" onClick={() => navigateLesson('prev')} disabled={activeLessonIndex === 0} className="h-14 flex-1 rounded-full border-border font-bold text-[11px] uppercase tracking-widest hover:bg-secondary">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigateLesson('prev')}
+                    disabled={activeLessonIndex === 0}
+                    className="h-14 flex-1 rounded-full border-border text-[11px] font-bold uppercase tracking-widest hover:bg-secondary"
+                  >
                     <ChevronLeft className="mr-2 h-4 w-4" /> Previous Module
                   </Button>
-                  <Button onClick={() => navigateLesson('next')} disabled={activeLessonIndex === lessons.length - 1} className="h-14 flex-1 rounded-full bg-white font-bold text-[11px] text-black uppercase tracking-widest hover:scale-105 transition-transform">
+                  <Button
+                    onClick={() => navigateLesson('next')}
+                    disabled={activeLessonIndex === lessons.length - 1}
+                    className="h-14 flex-1 rounded-full bg-white text-[11px] font-bold uppercase tracking-widest text-black transition-transform hover:scale-105"
+                  >
                     Next Module <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -504,13 +604,23 @@ export default function LessonPage() {
           {/* Playground Pane */}
           <AnimatePresence>
             {playgroundOpen && (
-              <motion.div initial={{ width: 0 }} animate={{ width: '50%' }} exit={{ width: 0 }} className="relative flex flex-col border-l border-border bg-[#0a0f1e]">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: '50%' }}
+                exit={{ width: 0 }}
+                className="relative flex flex-col border-l border-border bg-[#0a0f1e]"
+              >
                 <div className="flex h-14 shrink-0 items-center justify-between border-b border-white/5 bg-black/20 px-6 backdrop-blur-md">
                   <div className="flex items-center gap-3">
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Runtime Environment</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                      Runtime Environment
+                    </span>
                   </div>
-                  <button onClick={() => setPlaygroundOpen(false)} className="text-white/20 hover:text-white">
+                  <button
+                    onClick={() => setPlaygroundOpen(false)}
+                    className="text-white/20 hover:text-white"
+                  >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
@@ -526,15 +636,22 @@ export default function LessonPage() {
       {/* ─── RIGHT SIDEBAR ────────────────────────────────────────────────── */}
       <AnimatePresence>
         {rightPanelOpen && (
-          <motion.aside initial={{ width: 0 }} animate={{ width: 340 }} exit={{ width: 0 }} className="flex shrink-0 flex-col overflow-hidden border-l border-border bg-card/60 backdrop-blur-xl">
+          <motion.aside
+            initial={{ width: 0 }}
+            animate={{ width: 340 }}
+            exit={{ width: 0 }}
+            className="flex shrink-0 flex-col overflow-hidden border-l border-border bg-card/60 backdrop-blur-xl"
+          >
             <div className="flex border-b border-border bg-black/10">
               {(['notes', 'resources', 'discussion'] as SideTab[]).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setSideTab(tab)}
                   className={cn(
-                    "flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all",
-                    sideTab === tab ? "bg-primary/10 text-primary shadow-[inset_0_-2px_0_hsl(var(--primary))]" : "text-muted-foreground hover:text-white"
+                    'flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all',
+                    sideTab === tab
+                      ? 'bg-primary/10 text-primary shadow-[inset_0_-2px_0_hsl(var(--primary))]'
+                      : 'text-muted-foreground hover:text-white'
                   )}
                 >
                   {tab}
@@ -547,7 +664,9 @@ export default function LessonPage() {
                 <div className="space-y-6">
                   <div className="space-y-1">
                     <h4 className="text-xs font-bold text-white">Private Study Notes</h4>
-                    <p className="text-xs text-muted-foreground">Autosaved to your personal profile.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Autosaved to your personal profile.
+                    </p>
                   </div>
                   <textarea
                     value={noteValue}
@@ -565,13 +684,18 @@ export default function LessonPage() {
                 <div className="space-y-4">
                   <h4 className="text-xs font-bold text-white">Curated Extension Material</h4>
                   {STATIC_RESOURCES.map((r, i) => (
-                    <div key={i} className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-border bg-background/40 p-5 transition-all hover:bg-secondary">
+                    <div
+                      key={i}
+                      className="group flex cursor-pointer items-center gap-4 rounded-2xl border border-border bg-background/40 p-5 transition-all hover:bg-secondary"
+                    >
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-white">
                         <FileText size={18} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[13px] font-medium text-white">{r.title}</p>
-                        <p className="text-[10px] uppercase font-bold text-muted-foreground/60">{r.type}</p>
+                        <p className="text-[10px] font-bold uppercase text-muted-foreground/60">
+                          {r.type}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -585,9 +709,14 @@ export default function LessonPage() {
                   </div>
                   <div className="space-y-2">
                     <h4 className="text-sm font-bold text-white">Global Discourse</h4>
-                    <p className="text-xs text-muted-foreground">Join the conversation with other mastery students.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Join the conversation with other mastery students.
+                    </p>
                   </div>
-                  <Button variant="outline" className="rounded-full border-border px-8 text-[11px] font-black uppercase tracking-widest">
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-border px-8 text-[11px] font-black uppercase tracking-widest"
+                  >
                     Enter Discussion
                   </Button>
                 </div>

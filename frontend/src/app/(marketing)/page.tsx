@@ -2,9 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import {
-  ChevronDown,
-} from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { HomeJsonLd } from '@/components/seo/JsonLd'
@@ -12,11 +10,26 @@ import { HomeJsonLd } from '@/components/seo/JsonLd'
 // ─── Static data ──────────────────────────────────────────────────────────────
 
 const faqs = [
-  { q: 'Is BlueLearnerHub completely free?', a: 'Yes. Our core platform — including all learning tracks, coding challenges, daily AI quizzes, and community Q&A — is 100% free. A premium tier unlocks advanced features like priority AI coaching and exclusive hackathon prizes.' },
-  { q: 'What courses are available?', a: 'Python, JavaScript, TypeScript, React, Node.js, System Design, Data Structures & Algorithms, Docker, Machine Learning, SQL, and DevOps — with new tracks launched monthly.' },
-  { q: 'Are the certificates recognised by employers?', a: 'Yes. Each certificate has a unique verifiable URL and is accepted by our partner companies in their hiring pipelines. Sharing your BlueLearnerHub profile directly to recruiters is built-in.' },
-  { q: 'How do the AI hackathons work?', a: 'Our hackathons use Google Gemini AI to auto-generate problem sets, evaluate submissions, and provide personalised coaching tips. Students compete globally for real prizes.' },
-  { q: 'Can I use BlueLearnerHub to hire talent?', a: 'Absolutely. Our Organizations portal lets companies post challenges, filter by certificate, and directly recruit verified learners who have proven skills in their required domains.' },
+  {
+    q: 'Is BlueLearnerHub completely free?',
+    a: 'Yes. Our core platform — including all learning tracks, coding challenges, daily AI quizzes, and community Q&A — is 100% free. A premium tier unlocks advanced features like priority AI coaching and exclusive hackathon prizes.',
+  },
+  {
+    q: 'What courses are available?',
+    a: 'Python, JavaScript, TypeScript, React, Node.js, System Design, Data Structures & Algorithms, Docker, Machine Learning, SQL, and DevOps — with new tracks launched monthly.',
+  },
+  {
+    q: 'Are the certificates recognised by employers?',
+    a: 'Yes. Each certificate has a unique verifiable URL and is accepted by our partner companies in their hiring pipelines. Sharing your BlueLearnerHub profile directly to recruiters is built-in.',
+  },
+  {
+    q: 'How do the AI hackathons work?',
+    a: 'Our hackathons use Google Gemini AI to auto-generate problem sets, evaluate submissions, and provide personalised coaching tips. Students compete globally for real prizes.',
+  },
+  {
+    q: 'Can I use BlueLearnerHub to hire talent?',
+    a: 'Absolutely. Our Organizations portal lets companies post challenges, filter by certificate, and directly recruit verified learners who have proven skills in their required domains.',
+  },
 ]
 
 // ─── FAQ Accordion ────────────────────────────────────────────────────────────
@@ -30,7 +43,12 @@ function FAQItem({ q, a }: { q: string; a: string }) {
     >
       <div className="flex items-center justify-between gap-4">
         <h3 className="font-bold text-foreground">{q}</h3>
-        <ChevronDown className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')} />
+        <ChevronDown
+          className={cn(
+            'h-5 w-5 shrink-0 text-muted-foreground transition-transform',
+            open && 'rotate-180'
+          )}
+        />
       </div>
       <AnimatePresence>
         {open && (
@@ -58,7 +76,7 @@ export default function LandingPage() {
       <div className="bg-noise" />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative mx-auto max-w-[980px] px-6 pt-16 pb-32 sm:pt-24 sm:pb-48">
+      <section className="relative mx-auto max-w-[980px] px-6 pb-32 pt-16 sm:pb-48 sm:pt-24">
         <div className="absolute left-1/2 top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
 
         <motion.header
@@ -75,7 +93,8 @@ export default function LandingPage() {
 
           <p className="mx-auto mb-10 max-w-2xl font-serif text-xl leading-relaxed text-foreground/80 sm:text-2xl">
             Learn, build, and showcase your skills across any domain. Create real-world projects,
-            participate in challenges, and build a portfolio that gets you noticed. Join thousands of learners growing every day.
+            participate in challenges, and build a portfolio that gets you noticed. Join thousands
+            of learners growing every day.
           </p>
         </motion.header>
       </section>
@@ -83,11 +102,17 @@ export default function LandingPage() {
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 py-24">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">FAQ</h2>
-          <h3 className="font-serif text-4xl font-medium text-foreground">Frequently asked questions</h3>
+          <h2 className="mb-4 text-xs font-black uppercase tracking-[0.3em] text-primary/80">
+            FAQ
+          </h2>
+          <h3 className="font-serif text-4xl font-medium text-foreground">
+            Frequently asked questions
+          </h3>
         </div>
         <div className="space-y-3">
-          {faqs.map((f, i) => <FAQItem key={i} q={f.q} a={f.a} />)}
+          {faqs.map((f, i) => (
+            <FAQItem key={i} q={f.q} a={f.a} />
+          ))}
         </div>
       </section>
     </main>

@@ -82,9 +82,13 @@ export default function DevPortalPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user?.fullName) { setLoading(false); return }
+    if (!user?.fullName) {
+      setLoading(false)
+      return
+    }
     const username = user.fullName.toLowerCase().replace(/\s+/g, '-')
-    reposAPI.getUserRepos(username)
+    reposAPI
+      .getUserRepos(username)
       .then((d: any) => {
         const list = d?.data ?? d
         if (Array.isArray(list) && list.length > 0) setRepos(list)

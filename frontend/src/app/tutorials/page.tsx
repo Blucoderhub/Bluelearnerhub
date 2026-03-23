@@ -61,9 +61,30 @@ const MOCK_TUTORIAL_TRACKS: TrackGroup[] = [
     icon: Cpu,
     color: 'text-primary',
     tutorials: [
-      { id: 't1', title: 'Python for AI Mastery', lessons: 24, level: 'Advanced', progress: 45, icon: Zap },
-      { id: 't2', title: 'Machine Learning Fundamentals', lessons: 18, level: 'Intermediate', progress: 10, icon: Star },
-      { id: 't3', title: 'Mechatronics Systems', lessons: 32, level: 'Expert', progress: 0, icon: Settings },
+      {
+        id: 't1',
+        title: 'Python for AI Mastery',
+        lessons: 24,
+        level: 'Advanced',
+        progress: 45,
+        icon: Zap,
+      },
+      {
+        id: 't2',
+        title: 'Machine Learning Fundamentals',
+        lessons: 18,
+        level: 'Intermediate',
+        progress: 10,
+        icon: Star,
+      },
+      {
+        id: 't3',
+        title: 'Mechatronics Systems',
+        lessons: 32,
+        level: 'Expert',
+        progress: 0,
+        icon: Settings,
+      },
     ],
   },
 ]
@@ -82,7 +103,9 @@ function apiToTracks(tutorials: any[]): TrackGroup[] {
       id: `${t.id}`,
       title: t.title,
       lessons: t.sectionCount ?? (t.estimatedMinutes ? Math.ceil(t.estimatedMinutes / 15) : 10),
-      level: t.difficulty ? t.difficulty.charAt(0).toUpperCase() + t.difficulty.slice(1) : 'Intermediate',
+      level: t.difficulty
+        ? t.difficulty.charAt(0).toUpperCase() + t.difficulty.slice(1)
+        : 'Intermediate',
       progress: t.userProgress?.progressPercent ?? 0,
       icon: LEVEL_ICONS[t.difficulty] ?? Star,
     })
@@ -101,8 +124,11 @@ export default function TutorialsLibrary() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    tutorialsAPI.list()
-      .then((d: any) => { if (d?.length) setTutorialTracks(apiToTracks(d)) })
+    tutorialsAPI
+      .list()
+      .then((d: any) => {
+        if (d?.length) setTutorialTracks(apiToTracks(d))
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
@@ -110,15 +136,17 @@ export default function TutorialsLibrary() {
   const visibleTracks = tutorialTracks
     .map((track) => ({
       ...track,
-      tutorials: track.tutorials.filter((t) => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase())),
+      tutorials: track.tutorials.filter(
+        (t) => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
     }))
     .filter((track) => track.tutorials.length > 0)
 
   return (
     <main className="relative min-h-screen bg-background text-foreground selection:bg-primary/20">
       <div className="bg-noise" />
-      
-      <div className="relative mx-auto max-w-7xl px-6 space-y-24 pb-32 pt-16">
+
+      <div className="relative mx-auto max-w-7xl space-y-24 px-6 pb-32 pt-16">
         {/* Subtle Background Elements */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-[10%] left-[20%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
@@ -128,18 +156,21 @@ export default function TutorialsLibrary() {
         {/* Header Section */}
         <header className="mx-auto max-w-4xl space-y-12 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-            <Badge variant="outline" className="rounded-full border-primary/30 bg-primary/5 px-4 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+            <Badge
+              variant="outline"
+              className="rounded-full border-primary/30 bg-primary/5 px-4 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-primary"
+            >
               The Learning Library
             </Badge>
           </motion.div>
-          
+
           <div className="space-y-6">
             <h1 className="font-serif text-6xl font-medium tracking-tight text-foreground sm:text-7xl">
               Knowledge <span className="gradient-primary-text">Manifesto.</span>
             </h1>
             <p className="mx-auto max-w-2xl font-serif text-xl leading-relaxed text-muted-foreground">
-              Deep-dive into specialized interactive tutorials across every domain.
-              Master the principles of engineering, management, and technology.
+              Deep-dive into specialized interactive tutorials across every domain. Master the
+              principles of engineering, management, and technology.
             </p>
           </div>
 
@@ -178,7 +209,7 @@ export default function TutorialsLibrary() {
                         <track.icon size={32} />
                       </div>
                       <div className="space-y-1">
-                        <h2 className="font-serif text-4xl font-medium text-foreground tracking-tight">
+                        <h2 className="font-serif text-4xl font-medium tracking-tight text-foreground">
                           {track.category}
                         </h2>
                         <p className="text-sm font-medium text-muted-foreground">
@@ -186,8 +217,12 @@ export default function TutorialsLibrary() {
                         </p>
                       </div>
                     </div>
-                    <Button variant="link" className="group h-auto p-0 text-sm font-bold uppercase tracking-widest text-primary hover:no-underline">
-                      Explore Track <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <Button
+                      variant="link"
+                      className="group h-auto p-0 text-sm font-bold uppercase tracking-widest text-primary hover:no-underline"
+                    >
+                      Explore Track{' '}
+                      <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </div>
 
@@ -199,12 +234,15 @@ export default function TutorialsLibrary() {
                           className="group relative h-full overflow-hidden rounded-[2.5rem] bg-card p-10 transition-all hover:bg-card hover:shadow-2xl hover:shadow-primary/10"
                         >
                           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                          
+
                           <div className="mb-10 flex items-start justify-between">
                             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
                               <tutorial.icon size={32} />
                             </div>
-                            <Badge variant="outline" className="rounded-lg border-border/50 bg-secondary/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                            <Badge
+                              variant="outline"
+                              className="rounded-lg border-border/50 bg-secondary/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                            >
                               {tutorial.level}
                             </Badge>
                           </div>
@@ -227,7 +265,7 @@ export default function TutorialsLibrary() {
                             </div>
                           </div>
 
-                          <div className="mt-10 flex items-center justify-center gap-2 rounded-full bg-secondary py-3 text-[11px] font-black uppercase tracking-widest text-foreground opacity-0 transition-all duration-300 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-primary group-hover:text-primary-foreground">
+                          <div className="mt-10 flex translate-y-4 items-center justify-center gap-2 rounded-full bg-secondary py-3 text-[11px] font-black uppercase tracking-widest text-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-primary group-hover:text-primary-foreground group-hover:opacity-100">
                             <Play size={14} className="fill-current" /> Continue Learning
                           </div>
                         </motion.div>
@@ -241,22 +279,22 @@ export default function TutorialsLibrary() {
         </div>
 
         {/* Footer CTA */}
-        <motion.section 
+        <motion.section
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           className="relative overflow-hidden rounded-[3rem] bg-card p-20 text-center"
         >
           <div className="absolute -left-[10%] -top-[20%] -z-10 h-[300px] w-[300px] rounded-full bg-primary/20 blur-[100px]" />
-          <div className="absolute -right-[10%] -bottom-[20%] -z-10 h-[300px] w-[300px] rounded-full bg-violet-600/20 blur-[100px]" />
-          
+          <div className="absolute -bottom-[20%] -right-[10%] -z-10 h-[300px] w-[300px] rounded-full bg-violet-600/20 blur-[100px]" />
+
           <div className="mx-auto max-w-2xl space-y-8">
             <h2 className="font-serif text-5xl font-medium tracking-tight text-foreground">
               Ready for Certification?
             </h2>
             <p className="font-serif text-xl leading-relaxed text-muted-foreground">
-              Complete any track to earn industry-recognized credentials verified 
-              on the blockchain. Elevate your professional standing.
+              Complete any track to earn industry-recognized credentials verified on the blockchain.
+              Elevate your professional standing.
             </p>
             <Button className="h-16 rounded-full bg-white px-12 text-lg font-black text-black transition-all hover:scale-110 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)]">
               Get Certified Now

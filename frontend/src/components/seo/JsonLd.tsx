@@ -99,12 +99,42 @@ const courseListSchema = {
   name: 'BlueLearnerHub Free Courses',
   description: 'Free online courses in computer science and software engineering',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Python Programming', url: `${BASE_URL}/learning-tracks/python` },
-    { '@type': 'ListItem', position: 2, name: 'JavaScript Mastery', url: `${BASE_URL}/learning-tracks/javascript` },
-    { '@type': 'ListItem', position: 3, name: 'React Development', url: `${BASE_URL}/learning-tracks/react` },
-    { '@type': 'ListItem', position: 4, name: 'System Design', url: `${BASE_URL}/learning-tracks/system-design` },
-    { '@type': 'ListItem', position: 5, name: 'Data Structures & Algorithms', url: `${BASE_URL}/learning-tracks/data-structures` },
-    { '@type': 'ListItem', position: 6, name: 'Machine Learning', url: `${BASE_URL}/learning-tracks/machine-learning` },
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Python Programming',
+      url: `${BASE_URL}/learning-tracks/python`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'JavaScript Mastery',
+      url: `${BASE_URL}/learning-tracks/javascript`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'React Development',
+      url: `${BASE_URL}/learning-tracks/react`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: 'System Design',
+      url: `${BASE_URL}/learning-tracks/system-design`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      name: 'Data Structures & Algorithms',
+      url: `${BASE_URL}/learning-tracks/data-structures`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 6,
+      name: 'Machine Learning',
+      url: `${BASE_URL}/learning-tracks/machine-learning`,
+    },
   ],
 }
 
