@@ -51,9 +51,18 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
 };
 
 // Helper function to clear auth cookies
+// Must include the same SameSite/Secure/signed flags as setAuthCookies or
+// browsers (especially Chrome with SameSite=None) will ignore the clear.
 const clearAuthCookies = (res: Response) => {
-  res.clearCookie('accessToken', { path: '/' });
-  res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+  const isProduction = config.nodeEnv === 'production';
+  const baseOpts = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
+    signed: true,
+  };
+  res.clearCookie('accessToken', { ...baseOpts, path: '/' });
+  res.clearCookie('refreshToken', { ...baseOpts, path: '/api/auth/refresh' });
 };
 
 export class AuthController {
@@ -257,7 +266,7 @@ export class AuthController {
         return res.status(400).json({ success: false, message: 'Reset token has expired. Please request a new one.' });
       }
 
-      const { hashPassword } = await import('@/utils/encryption');
+      const { hashPassword } = await import('../utils/encryption');
       const hashedPassword = await hashPassword(password);
 
       await pool.query('UPDATE users SET password_hash = $1 WHERE email = $2', [hashedPassword, email]);
@@ -284,7 +293,7 @@ export class AuthController {
         });
       }
 
-      const { comparePassword } = await import('@/utils/encryption');
+      const { comparePassword } = await import('../utils/encryption');
       const isValid = await comparePassword(currentPassword, user.password_hash);
 
       if (!isValid) {
@@ -294,7 +303,7 @@ export class AuthController {
         });
       }
 
-      const { hashPassword } = await import('@/utils/encryption');
+      const { hashPassword } = await import('../utils/encryption');
       const hashedPassword = await hashPassword(newPassword);
 
       await pool.query(

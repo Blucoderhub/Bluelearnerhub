@@ -11,21 +11,72 @@ export const api = axios.create({
   timeout: 10000,
 })
 
+// ─── Token refresh state ──────────────────────────────────────────────────────
+// When the accessToken expires, we attempt a silent refresh ONCE before
+// redirecting to login. Multiple concurrent 401s queue up and retry together
+// after the single refresh completes.
+
+let isRefreshing = false
+let refreshQueue: Array<(success: boolean) => void> = []
+
+function drainRefreshQueue(success: boolean) {
+  refreshQueue.forEach((cb) => cb(success))
+  refreshQueue = []
+}
+
+function redirectToLogin() {
+  if (
+    typeof window !== 'undefined' &&
+    !window.location.pathname.startsWith('/login') &&
+    !window.location.pathname.startsWith('/get-started') &&
+    window.location.pathname !== '/'
+  ) {
+    const from = encodeURIComponent(window.location.pathname + window.location.search)
+    window.location.href = `/login?from=${from}`
+  }
+}
+
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      if (
-        typeof window !== 'undefined' &&
-        !window.location.pathname.startsWith('/login') &&
-        !window.location.pathname.startsWith('/get-started') &&
-        window.location.pathname !== '/'
-      ) {
-        const from = encodeURIComponent(window.location.pathname + window.location.search)
-        window.location.href = `/login?from=${from}`
+  async (error) => {
+    const originalRequest = error.config
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // Don't retry the refresh endpoint itself — avoids infinite loops
+      if (originalRequest.url?.includes('/auth/refresh')) {
+        redirectToLogin()
+        return Promise.reject(error)
       }
-    } else if (error.response?.status === 403) {
+
+      if (isRefreshing) {
+        // Queue this request to retry after the in-progress refresh completes
+        return new Promise((resolve, reject) => {
+          refreshQueue.push((success) => {
+            if (success) resolve(api(originalRequest))
+            else reject(error)
+          })
+        })
+      }
+
+      originalRequest._retry = true
+      isRefreshing = true
+
+      try {
+        // Attempt a silent token refresh using the HttpOnly refreshToken cookie
+        await api.post('/auth/refresh')
+        isRefreshing = false
+        drainRefreshQueue(true)
+        return api(originalRequest)
+      } catch {
+        isRefreshing = false
+        drainRefreshQueue(false)
+        redirectToLogin()
+        return Promise.reject(error)
+      }
+    }
+
+    if (error.response?.status === 403) {
       console.warn('Access forbidden:', error.response.data?.message)
     }
 

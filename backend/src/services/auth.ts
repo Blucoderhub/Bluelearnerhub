@@ -168,11 +168,14 @@ export class AuthService {
     };
   }
 
-  async logout(userId: number, refreshToken: string) {
-    // Revoke refresh token
+  async logout(userId: number, _refreshToken?: string) {
+    // Revoke ALL refresh tokens for this user.
+    // We cannot rely on matching a specific token because the refreshToken cookie
+    // is scoped to path '/api/auth/refresh' and the browser won't send it to
+    // '/api/auth/logout'. Revoking by user_id is also more secure (ends all sessions).
     await pool.query(
-      'UPDATE refresh_tokens SET revoked = true WHERE user_id = $1 AND token = $2',
-      [userId, refreshToken]
+      'UPDATE refresh_tokens SET revoked = true WHERE user_id = $1',
+      [userId]
     );
 
     logger.info(`User logged out: ${userId}`);

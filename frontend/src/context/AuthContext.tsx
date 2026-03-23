@@ -125,6 +125,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const registeredUser = response.data?.data?.user ?? response.data?.user
     if (!registeredUser) throw new Error('Invalid registration response from server')
     setUser(registeredUser)
+    // Set the auth hint so Next.js middleware allows navigation to protected routes
+    setAuthHintCookie()
     return registeredUser
   }
 

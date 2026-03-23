@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { StudentLoginForm } from '@/components/auth/StudentLoginForm'
 import { useAuth } from '@/hooks/useAuth'
 import { ArrowLeft, ShieldCheck } from 'lucide-react'
@@ -12,19 +12,25 @@ import { Badge } from '@/components/ui/badge'
 export default function LoginPortal() {
   const { login, isAuthenticated } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
 
+  // Single navigation point: fires when isAuthenticated flips to true (after login
+  // or on mount if already logged in). Respects the ?from= redirect set by middleware.
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/student/dashboard')
+      const from = searchParams.get('from')
+      router.replace(from && from.startsWith('/') ? from : '/student/dashboard')
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, searchParams])
 
   const handleSubmit = async (data: any) => {
     setError(null)
     try {
       await login(data.email, data.password)
-      router.push('/student/dashboard')
+      // Do NOT call router.push here — the useEffect above handles navigation
+      // once isAuthenticated updates. Calling push here AND in the effect causes
+      // a double-navigation race that can leave the user stuck on the login page.
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to initialize secure session.')
     }

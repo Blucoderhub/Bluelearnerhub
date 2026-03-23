@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StudentSignupForm } from '@/components/auth/StudentSignupForm'
 import { StudentLoginForm } from '@/components/auth/StudentLoginForm'
 import { useAuth } from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
@@ -14,13 +14,16 @@ import { Badge } from '@/components/ui/badge'
 export default function GetStartedPage() {
   const { login, register, isAuthenticated } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = React.useState<string | null>(null)
 
+  // Single navigation point — respects ?from= redirect set by middleware.
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/student/dashboard')
+      const from = searchParams.get('from')
+      router.replace(from && from.startsWith('/') ? from : '/student/dashboard')
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, searchParams])
 
   const handleAuth = async (data: any) => {
     setError(null)
@@ -30,7 +33,8 @@ export default function GetStartedPage() {
       } else {
         await login(data.email, data.password)
       }
-      router.push('/student/dashboard')
+      // Do NOT call router.push here — the useEffect above handles navigation
+      // once isAuthenticated updates. A double-push causes a race condition.
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Protocol initialization failed.')
     }

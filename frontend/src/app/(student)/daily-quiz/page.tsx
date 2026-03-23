@@ -96,6 +96,8 @@ const DIFFICULTY_COLORS = {
 
 type QuizState = 'domain-select' | 'in-progress' | 'completed'
 
+const TODAY = new Date().toISOString().slice(0, 10)
+
 export default function DailyQuizPage() {
   const router = useRouter()
   const [state, setState] = useState<QuizState>('domain-select')
@@ -180,7 +182,7 @@ export default function DailyQuizPage() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-4 py-1.5">
             <Zap className="h-4 w-4 text-foreground/70" />
             <span className="text-sm font-medium text-foreground/70">
-              Daily Challenge · {quiz.date}
+              Daily Challenge · {TODAY}
             </span>
           </div>
           <h1 className="mb-2 text-3xl font-bold">Daily Quiz</h1>
@@ -377,6 +379,10 @@ export default function DailyQuizPage() {
                   setState('domain-select')
                   setXpEarned(0)
                   setAnswers([])
+                  setQuiz(MOCK_QUIZ)
+                  setCurrent(0)
+                  setChosen(null)
+                  setRevealed(false)
                 }}
                 variant="outline"
                 className="flex-1 gap-2 border-gray-700 text-gray-300 hover:text-white"
