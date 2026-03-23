@@ -3,6 +3,7 @@ import { comparePassword } from '../utils/encryption';
 import { signAccessToken, signRefreshToken } from '../utils/jwt';
 import { AppError } from '../middleware/error';
 import { pool } from '../utils/database';
+import { config } from '../config';
 import logger from '../utils/logger';
 
 export class AuthService {
@@ -84,33 +85,47 @@ export class AuthService {
     // Verify password
     const isValidPassword = await comparePassword(password, user.password_hash);
     if (!isValidPassword) {
-      // Increment failed login attempts
-      const failedAttempts = (user.failed_login_attempts || 0) + 1;
-      const maxAttempts = 5; // config.security.maxLoginAttempts
-      let lockedUntil = null;
+      // Increment failed login attempts.
+      // Wrapped defensively: if migration 004 hasn't run yet the UPDATE will
+      // throw "column does not exist" — we log and continue so login still works.
+      try {
+        const failedAttempts = (user.failed_login_attempts || 0) + 1;
+        const maxAttempts = config.security.maxLoginAttempts;
+        const lockoutMs = config.security.lockoutDuration;
+        let lockedUntil: Date | null = null;
 
-      if (failedAttempts >= maxAttempts) {
-        // Lock account for 15 minutes
-        lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
-      }
+        if (failedAttempts >= maxAttempts) {
+          lockedUntil = new Date(Date.now() + lockoutMs);
+        }
 
-      await pool.query(
-        'UPDATE users SET failed_login_attempts = $1, locked_until = $2 WHERE id = $3',
-        [failedAttempts, lockedUntil, user.id]
-      );
+        await pool.query(
+          'UPDATE users SET failed_login_attempts = $1, locked_until = $2 WHERE id = $3',
+          [failedAttempts, lockedUntil, user.id]
+        );
 
-      if (lockedUntil) {
-        throw new AppError('Too many failed attempts. Account locked for 15 minutes.', 429);
+        if (lockedUntil) {
+          throw new AppError(
+            `Too many failed attempts. Account locked for ${Math.round(lockoutMs / 60000)} minutes.`,
+            429
+          );
+        }
+      } catch (lockErr) {
+        if (lockErr instanceof AppError) throw lockErr; // re-throw lockout errors
+        logger.warn('[auth] Login attempt tracking unavailable — run DB migrations:', (lockErr as Error).message);
       }
 
       throw new AppError('Invalid credentials', 401);
     }
 
-    // Reset failed attempts on successful login
-    await pool.query(
-      'UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = $1',
-      [user.id]
-    );
+    // Reset failed attempts on successful login (defensive — same guard as above)
+    try {
+      await pool.query(
+        'UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = $1',
+        [user.id]
+      );
+    } catch (err) {
+      logger.warn('[auth] Could not reset login attempts — run DB migrations:', (err as Error).message);
+    }
 
     // Generate tokens
     const accessToken = signAccessToken({

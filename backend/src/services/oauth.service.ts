@@ -147,10 +147,17 @@ export async function issueTokensForUser(user: any) {
     [user.id, refreshToken],
   );
 
-  await pool.query(
-    'UPDATE users SET last_login_at = NOW(), failed_login_attempts = 0 WHERE id = $1',
-    [user.id],
-  );
+  await pool.query('UPDATE users SET last_login_at = NOW() WHERE id = $1', [user.id]);
+
+  // Reset lockout counter — defensive in case migration 004 hasn't run yet
+  try {
+    await pool.query(
+      'UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = $1',
+      [user.id],
+    );
+  } catch (err: any) {
+    // Column doesn't exist yet — safe to ignore, will work once migrations run
+  }
 
   return { accessToken, refreshToken };
 }
