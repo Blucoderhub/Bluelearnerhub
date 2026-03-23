@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StudentSignupForm } from '@/components/auth/StudentSignupForm'
@@ -9,9 +9,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { Badge } from '@/components/ui/badge'
 
-export default function GetStartedPage() {
+// useSearchParams() must live inside a component wrapped in <Suspense>.
+// Next.js 16 enforces this at build time.
+function GetStartedContent() {
   const { login, register, isAuthenticated } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -69,7 +70,7 @@ export default function GetStartedPage() {
               <ShieldCheck className="h-6 w-6 text-primary" />
             </div>
             <div className="space-y-1">
-              <h1 className="font-pixel text-2xl text-black">
+              <h1 className="font-pixel text-2xl text-foreground">
                 Initialize Identity.
               </h1>
               <p className="mx-auto max-w-md font-pixel text-sm text-muted-foreground">
@@ -117,5 +118,13 @@ export default function GetStartedPage() {
         </p>
       </motion.div>
     </div>
+  )
+}
+
+export default function GetStartedPage() {
+  return (
+    <Suspense>
+      <GetStartedContent />
+    </Suspense>
   )
 }

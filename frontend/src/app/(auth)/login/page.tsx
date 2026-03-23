@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { StudentLoginForm } from '@/components/auth/StudentLoginForm'
@@ -9,7 +9,9 @@ import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 
-export default function LoginPortal() {
+// useSearchParams() must live inside a component wrapped in <Suspense>.
+// Next.js 16 enforces this at build time.
+function LoginPortalContent() {
   const { login, isAuthenticated } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -91,5 +93,13 @@ export default function LoginPortal() {
         </p>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPortal() {
+  return (
+    <Suspense>
+      <LoginPortalContent />
+    </Suspense>
   )
 }
