@@ -15,14 +15,14 @@ export default function Footer() {
     <footer className="border-t border-border/50 bg-background">
       <div className="mx-auto max-w-[1400px] px-6 py-8">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-          <div className="space-y-1">
-            <span className="text-sm font-bold tracking-tight text-foreground">BlueLearnerHub</span>
-            <p className="text-xs text-muted-foreground">
+          <div className="space-y-2">
+            <span className="font-pixel text-sm text-foreground">BlueLearnerHub</span>
+            <p className="font-pixel text-[10px] text-muted-foreground">
               Learn, build, and showcase your skills. Free forever.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
+          <div className="font-pixel flex flex-wrap items-center gap-6 text-[10px] text-muted-foreground">
             <Link href="/terms" className="transition-colors hover:text-primary">
               Terms
             </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 border-t border-border/30 pt-5 text-xs text-muted-foreground/50">
+        <div className="mt-6 border-t border-border/30 pt-5 font-pixel text-[10px] text-muted-foreground/50">
           © 2026 BlueLearnerHub. All rights reserved.
         </div>
       </div>
