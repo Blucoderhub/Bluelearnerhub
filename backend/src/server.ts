@@ -1,9 +1,11 @@
 console.log('>>> SERVER.TS STARTING <<<');
 import http from 'http';
+import { execFile } from 'child_process';
+import path from 'path';
 import { createApp } from './app';
 import { SocketService } from './sockets';
-import { 
-  testPostgresConnection, 
+import {
+  testPostgresConnection,
   testRedisConnection,
   pool,
   redisClient
@@ -11,6 +13,21 @@ import {
 import { config } from './config';
 import logger from './utils/logger';
 import { initDailyQuizCron } from './services/dailyQuiz.service';
+
+function runMigrations(): Promise<void> {
+  return new Promise((resolve) => {
+    // __dirname in compiled output is dist/, so scripts/ is one level up
+    const script = path.join(__dirname, '../scripts/migrate.js');
+    execFile('node', [script], (err, stdout, stderr) => {
+      if (stdout) process.stdout.write(stdout);
+      if (stderr) process.stderr.write(stderr);
+      if (err) {
+        logger.error('Migration failed — server will continue but some features may not work:', err.message);
+      }
+      resolve(); // always resolve so server keeps running
+    });
+  });
+}
 
 async function startServer() {
   try {
@@ -53,6 +70,10 @@ async function startServer() {
       });
       httpServer.on('error', reject);
     });
+
+    // Run DB migrations after port is bound so Render detects the port immediately
+    logger.info('📦 Running database migrations...');
+    await runMigrations();
 
     // Test database connections after port is bound
     logger.info('🔌 Testing database connections...');

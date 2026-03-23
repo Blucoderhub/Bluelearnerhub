@@ -27,10 +27,9 @@ const poolConfig = process.env.DATABASE_URL
 
 export const pool = new Pool(poolConfig);
 
-// Enhanced error handling for pool
+// Log idle pool errors but do NOT exit — let the app handle DB errors at request time
 pool.on('error', (err: unknown) => {
-  logger.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  logger.error('Unexpected error on idle PostgreSQL client:', err);
 });
 
 pool.on('connect', () => {
@@ -69,13 +68,18 @@ export const testPostgresConnection = async (): Promise<void> => {
 
 // Redis Client — prefer REDIS_URL (provided by Render, Railway, etc.)
 // over individual host/port/password config vars.
+const MAX_REDIS_RETRIES = 5;
 const redisBaseOptions = {
   retryStrategy: (times: number) => {
-    const delay = Math.min(times * 50, 2000);
-    logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
+    if (times > MAX_REDIS_RETRIES) {
+      logger.warn('Redis max retries exceeded — Redis unavailable. Caching disabled.');
+      return null; // stop retrying
+    }
+    const delay = Math.min(times * 500, 3000);
+    logger.info(`Redis retry attempt ${times}/${MAX_REDIS_RETRIES}, waiting ${delay}ms`);
     return delay;
   },
-  maxRetriesPerRequest: 3,
+  maxRetriesPerRequest: null, // don't throw on individual commands — let them queue
   lazyConnect: true,
   keepAlive: 30000,
 };

@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/server.ts",
     "build": "tsc && tsc-alias",
-    "prestart": "node scripts/migrate.js",
     "start": "node dist/server.js",
     "migrate": "node scripts/migrate.js",
     "lint": "eslint . --ext .ts",
