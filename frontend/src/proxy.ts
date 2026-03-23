@@ -6,6 +6,9 @@ import type { NextRequest } from 'next/server'
  * The cookie presence check is a heuristic — full JWT validation happens in the
  * Express backend on every API call. This prevents unauthenticated crawlers and
  * direct URL access from receiving protected page HTML.
+ *
+ * NOTE: Next.js 16 renamed middleware.ts → proxy.ts (export function proxy).
+ * See: https://nextjs.org/docs/messages/middleware-to-proxy
  */
 const PROTECTED_PREFIXES = [
   '/student',
@@ -33,7 +36,7 @@ const PROTECTED_PREFIXES = [
   '/ai-companion',
 ]
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // OAuth callback must be reachable before cookies are set

@@ -49,8 +49,11 @@ const nextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
 
   // Turbopack configuration (required for Next.js 16)
+  // root must point to the Next.js project directory (frontend/), NOT the
+  // monorepo root — setting it to '..' causes src/ paths to be doubled in
+  // error messages and breaks middleware/proxy file detection.
   turbopack: {
-    root: path.resolve(__dirname, '..'),
+    root: __dirname,
   },
 
   // Allow Replit's dev proxy origins
