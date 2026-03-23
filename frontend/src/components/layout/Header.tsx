@@ -108,7 +108,7 @@ export default function Header() {
 
   const navLinkCls = (active: boolean) =>
     cn(
-      'relative flex items-center gap-1.5 px-4 h-full text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
+      'relative flex items-center font-pixel gap-1.5 px-4 h-full text-[11px] uppercase tracking-widest transition-all duration-300',
       active
         ? 'text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:bg-primary'
         : 'text-muted-foreground hover:text-foreground'
@@ -128,7 +128,7 @@ export default function Header() {
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-8 lg:px-12">
           {/* Brand */}
           <Link href="/" className="group flex items-center">
-            <span className="font-heading text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+            <span className="font-pixel text-lg tracking-tight text-foreground transition-colors group-hover:text-primary">
               BlueLearnerHub
             </span>
           </Link>
@@ -250,13 +250,13 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="rounded-full px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-foreground transition-all hover:text-primary"
+                  className="rounded-full px-6 py-2.5 text-[10px] font-pixel uppercase tracking-[0.2em] text-foreground transition-all hover:text-primary"
                 >
                   Access
                 </Link>
                 <Link
                   href="/get-started"
-                  className="rounded-full bg-primary px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                  className="rounded-full bg-primary px-8 py-3 text-[10px] font-pixel uppercase tracking-[0.2em] text-white shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95"
                 >
                   Join Matrix
                 </Link>

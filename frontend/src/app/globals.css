@@ -7,9 +7,9 @@
 
 @layer base {
   :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-    --font-heading: 'DM Sans', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --font-sans: var(--font-retro);
+    --font-heading: var(--font-retro);
+    --font-mono: var(--font-retro);
     --radius: 0.5rem;
 
     /* ── Anthropic-Inspired Aesthetic (Global Lite) ── */
