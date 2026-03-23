@@ -14,8 +14,9 @@ import logger from './utils/logger';
 export function createApp(): Application {
   const app = express();
 
-  // Trust proxy for deployment behind load balancers
-  app.set('trust proxy', process.env.TRUST_PROXY === 'true' ? 1 : false);
+  // Trust proxy for deployment behind load balancers (Render, Vercel, etc.)
+  // Render always runs behind a proxy — trust the first hop unconditionally in production.
+  app.set('trust proxy', config.nodeEnv === 'production' ? 1 : (process.env.TRUST_PROXY === 'true' ? 1 : false));
 
   // HTTPS redirect in production
   if (config.nodeEnv === 'production') {
@@ -74,14 +75,27 @@ export function createApp(): Application {
   );
 
   // CORS
+  // Build the allowed-origins set once: CORS_ORIGINS env var + FRONTEND_URL env var.
+  // In production we also accept any *.vercel.app preview URL for this project so that
+  // preview deploys work without having to update CORS_ORIGINS on every PR.
+  const allowedOrigins = new Set<string>(config.corsOrigins);
+  if (config.frontendUrl) allowedOrigins.add(config.frontendUrl);
+
   const corsOptions: cors.CorsOptions = {
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       // Allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
 
-      if (config.corsOrigins.indexOf(origin) !== -1 || config.nodeEnv === 'development') {
+      const isAllowed =
+        allowedOrigins.has(origin) ||
+        config.nodeEnv === 'development' ||
+        /^https:\/\/[a-z0-9-]+-bluelearnerhub\.vercel\.app$/.test(origin) ||
+        origin === 'https://bluelearnerhub.vercel.app';
+
+      if (isAllowed) {
         callback(null, true);
       } else {
+        logger.warn(`CORS blocked origin: ${origin}`);
         callback(new Error('Not allowed by CORS'));
       }
     },

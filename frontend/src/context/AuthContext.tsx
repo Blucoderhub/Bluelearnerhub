@@ -69,9 +69,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Keep the frontend-domain hint cookie in sync
       if (fetchedUser) setAuthHintCookie()
       else clearAuthHintCookie()
-    } catch {
-      if (!silent) {
-        // Only wipe user on the initial mount check, not during background hydration
+    } catch (err: any) {
+      // Only clear auth state on a definitive 401/403 from the server.
+      // Network errors, CORS failures, and timeouts (no response.status) must NOT
+      // wipe the auth_hint cookie — doing so would log the user out of the UI
+      // whenever the backend is slow or unreachable.
+      const isDefinitiveAuthFailure =
+        err?.response?.status === 401 || err?.response?.status === 403
+      if (!silent && isDefinitiveAuthFailure) {
         setUser(null)
         clearAuthHintCookie()
       }
