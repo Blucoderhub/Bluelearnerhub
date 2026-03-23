@@ -5,6 +5,26 @@ import { User } from '@/types'
 import api from '@/lib/api'
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Auth hint cookie — lives on the FRONTEND domain (Vercel) so the Next.js
+// middleware can read it.  It carries NO sensitive data; it is purely a
+// presence signal.  The real security is enforced by the Express backend
+// (HttpOnly signed JWT) on every API call.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const AUTH_HINT_COOKIE = 'auth_hint'
+const AUTH_HINT_MAX_AGE = 7 * 24 * 60 * 60 // 7 days, same as accessToken TTL
+
+function setAuthHintCookie() {
+  if (typeof document === 'undefined') return
+  document.cookie = `${AUTH_HINT_COOKIE}=1; path=/; max-age=${AUTH_HINT_MAX_AGE}; SameSite=Lax`
+}
+
+function clearAuthHintCookie() {
+  if (typeof document === 'undefined') return
+  document.cookie = `${AUTH_HINT_COOKIE}=; path=/; max-age=0; SameSite=Lax`
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -21,7 +41,9 @@ interface AuthContextValue {
     role: string
     fullName?: string
   }) => Promise<User>
-  refreshUser: () => Promise<void>
+  /** Full profile refresh.  Pass silent=true to skip clearing user on failure
+   *  (used for background hydration after login where user is already set). */
+  refreshUser: (silent?: boolean) => Promise<void>
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -38,16 +60,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const refreshUser = useCallback(async () => {
+  const refreshUser = useCallback(async (silent = false) => {
     try {
       const response = await api.get('/auth/me')
       // Backend: { success, data: userObject }
-      setUser(response.data?.data ?? response.data ?? null)
+      const fetchedUser = response.data?.data ?? response.data ?? null
+      setUser(fetchedUser)
+      // Keep the frontend-domain hint cookie in sync
+      if (fetchedUser) setAuthHintCookie()
+      else clearAuthHintCookie()
     } catch {
-      // Cookies will be cleared by backend on 401
-      setUser(null)
+      if (!silent) {
+        // Only wipe user on the initial mount check, not during background hydration
+        setUser(null)
+        clearAuthHintCookie()
+      }
     } finally {
-      setLoading(false)
+      if (!silent) setLoading(false)
     }
   }, [])
 
@@ -62,13 +91,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const loggedInUser = response.data?.data?.user ?? response.data?.user
     if (!loggedInUser) throw new Error('Invalid login response from server')
     setUser(loggedInUser)
-    // Hydrate full profile (totalPoints, level, streak, stats, skills)
-    refreshUser().catch(() => {})
+    // Set the frontend-domain hint cookie so Next.js middleware allows navigation
+    setAuthHintCookie()
+    // Hydrate full profile in the background (silent — don't wipe user on failure)
+    refreshUser(true).catch(() => {})
     return loggedInUser
   }
 
   const logout = () => {
     // Always clear local state — API call is best-effort
+    clearAuthHintCookie()
     api.post('/auth/logout').finally(() => {
       setUser(null)
       window.location.href = '/login'

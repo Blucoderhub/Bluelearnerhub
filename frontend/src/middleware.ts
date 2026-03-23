@@ -43,11 +43,13 @@ export function middleware(request: NextRequest) {
 
   if (!isProtected) return NextResponse.next()
 
-  // accessToken is an HttpOnly signed cookie set by the Express auth controller.
-  // We check for its presence; actual JWT validation happens server-side in Express.
-  const accessToken = request.cookies.get('accessToken')?.value
+  // auth_hint is a non-sensitive presence signal set by AuthContext on the
+  // frontend (Vercel) domain after successful login.  The real JWT (accessToken)
+  // lives on the Express/Render domain as an HttpOnly cookie and is validated
+  // server-side on every API call — this middleware is only a UX guard.
+  const authHint = request.cookies.get('auth_hint')?.value
 
-  if (!accessToken) {
+  if (!authHint) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('from', pathname)
     return NextResponse.redirect(loginUrl)
