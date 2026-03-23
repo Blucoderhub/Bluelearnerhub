@@ -66,63 +66,112 @@ export const testPostgresConnection = async (): Promise<void> => {
   }
 };
 
-// Redis Client — prefer REDIS_URL (provided by Render, Railway, etc.)
-// over individual host/port/password config vars.
-const MAX_REDIS_RETRIES = 5;
-const redisBaseOptions = {
-  retryStrategy: (times: number) => {
-    if (times > MAX_REDIS_RETRIES) {
-      logger.warn('Redis max retries exceeded — Redis unavailable. Caching disabled.');
-      return null; // stop retrying
-    }
-    const delay = Math.min(times * 500, 3000);
-    logger.info(`Redis retry attempt ${times}/${MAX_REDIS_RETRIES}, waiting ${delay}ms`);
-    return delay;
-  },
-  maxRetriesPerRequest: null, // don't throw on individual commands — let them queue
-  lazyConnect: true,
-  keepAlive: 30000,
-};
+// ─── Redis / In-Memory Cache ──────────────────────────────────────────────────
+//
+// If REDIS_URL is set, use a real Redis connection.
+// Otherwise fall back to a lightweight in-memory store so the server runs
+// without any Redis infrastructure (suitable for free-tier single-instance).
 
-export const redisClient = process.env.REDIS_URL
-  ? new Redis(process.env.REDIS_URL, redisBaseOptions)
-  : new Redis({
-      host: config.redis.host,
-      port: config.redis.port,
-      password: config.redis.password || undefined,
-      db: config.redis.db,
-      ...redisBaseOptions,
-    });
+interface CacheEntry { value: string; expiresAt?: number }
 
-// Redis event handlers
-redisClient.on('connect', () => {
-  logger.info('✓ Redis connected successfully');
-});
+class InMemoryCache {
+  private store = new Map<string, CacheEntry>();
+  readonly status = 'ready';
 
-redisClient.on('ready', () => {
-  logger.info('✓ Redis ready to receive commands');
-});
+  private live(e: CacheEntry | undefined): e is CacheEntry {
+    if (!e) return false;
+    if (e.expiresAt !== undefined && Date.now() > e.expiresAt) { this.store.delete(''); return false; }
+    return true;
+  }
 
-redisClient.on('error', (error: any) => {
-  logger.error('✗ Redis connection error:', error);
-});
+  async get(key: string): Promise<string | null> {
+    const e = this.store.get(key);
+    if (!e || (e.expiresAt !== undefined && Date.now() > e.expiresAt)) { this.store.delete(key); return null; }
+    return e.value;
+  }
+  async set(key: string, value: string): Promise<'OK'> { this.store.set(key, { value }); return 'OK'; }
+  async setex(key: string, seconds: number, value: string): Promise<'OK'> {
+    this.store.set(key, { value, expiresAt: Date.now() + seconds * 1000 }); return 'OK';
+  }
+  async del(...keys: string[]): Promise<number> {
+    return keys.filter(k => this.store.delete(k)).length;
+  }
+  async incr(key: string): Promise<number> {
+    const e = this.store.get(key);
+    const n = (e ? parseInt(e.value, 10) || 0 : 0) + 1;
+    this.store.set(key, { value: String(n), expiresAt: e?.expiresAt }); return n;
+  }
+  async expire(key: string, seconds: number): Promise<number> {
+    const e = this.store.get(key); if (!e) return 0;
+    this.store.set(key, { ...e, expiresAt: Date.now() + seconds * 1000 }); return 1;
+  }
+  async exists(...keys: string[]): Promise<number> {
+    return keys.filter(k => { const e = this.store.get(k); return e && !(e.expiresAt !== undefined && Date.now() > e.expiresAt); }).length;
+  }
+  async keys(pattern: string): Promise<string[]> {
+    const re = new RegExp('^' + pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+    return [...this.store.keys()].filter(k => { const e = this.store.get(k); return e && !(e.expiresAt !== undefined && Date.now() > e.expiresAt) && re.test(k); });
+  }
+  async ttl(key: string): Promise<number> {
+    const e = this.store.get(key); if (!e) return -2; if (e.expiresAt === undefined) return -1;
+    return Math.ceil((e.expiresAt - Date.now()) / 1000);
+  }
+  async hset(key: string, field: string, value: string): Promise<number> {
+    const e = this.store.get(key); const h = e ? JSON.parse(e.value) : {}; h[field] = value;
+    this.store.set(key, { value: JSON.stringify(h) }); return 1;
+  }
+  async hget(key: string, field: string): Promise<string | null> {
+    const e = this.store.get(key); if (!e) return null;
+    try { return JSON.parse(e.value)[field] ?? null; } catch { return null; }
+  }
+  async lpush(key: string, value: string): Promise<number> {
+    const e = this.store.get(key); const l = e ? JSON.parse(e.value) : []; l.unshift(value);
+    this.store.set(key, { value: JSON.stringify(l) }); return l.length;
+  }
+  async rpop(key: string): Promise<string | null> {
+    const e = this.store.get(key); if (!e) return null; const l = JSON.parse(e.value); const v = l.pop() ?? null;
+    this.store.set(key, { value: JSON.stringify(l) }); return v;
+  }
+  async ping(): Promise<'PONG'> { return 'PONG'; }
+  on(_: string, __: any): this { return this; }
+  quit(): void {}
+  disconnect(): void {}
+}
 
-redisClient.on('close', () => {
-  logger.warn('Redis connection closed');
-});
+const redisConfigured = Boolean(process.env.REDIS_URL);
 
-redisClient.on('reconnecting', () => {
-  logger.info('Redis reconnecting...');
-});
+export const redisClient: any = redisConfigured
+  ? (() => {
+      const client = new Redis(process.env.REDIS_URL!, {
+        retryStrategy: (times: number) => {
+          if (times > 5) { logger.warn('Redis max retries exceeded — caching disabled.'); return null; }
+          const delay = Math.min(times * 500, 3000);
+          logger.info(`Redis retry ${times}/5, waiting ${delay}ms`);
+          return delay;
+        },
+        maxRetriesPerRequest: null as any,
+        lazyConnect: true,
+      });
+      client.on('connect', () => logger.info('✓ Redis connected'));
+      client.on('error', (e: any) => logger.error('✗ Redis error:', e.message));
+      return client;
+    })()
+  : (() => {
+      logger.warn('REDIS_URL not set — using in-memory cache (caching is local to this instance).');
+      return new InMemoryCache();
+    })();
 
 // Test Redis connection
 export const testRedisConnection = async (): Promise<void> => {
+  if (!redisConfigured) {
+    logger.info('ℹ️  Redis not configured — in-memory cache active.');
+    return;
+  }
   try {
     await redisClient.ping();
-    logger.info('✓ Redis connected successfully');
+    logger.info('✅ Redis connected successfully');
   } catch (error) {
-    logger.error('✗ Redis connection failed:', error);
-    throw error;
+    logger.warn('⚠️  Redis ping failed — caching may be degraded:', error);
   }
 };
 
@@ -266,6 +315,6 @@ export const redisHelpers = {
 // Graceful shutdown
 export const closeConnections = async (): Promise<void> => {
   await pool.end();
-  redisClient.quit();
+  if (redisConfigured) redisClient.quit();
   console.log('All database connections closed');
 };
