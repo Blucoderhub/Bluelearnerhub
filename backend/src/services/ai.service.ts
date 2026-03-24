@@ -29,6 +29,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
 import { config } from '../config';
 import logger from '../utils/logger';
+import { generate as coreGenerate } from './aiCoreBridge.service';
 
 // ---------------------------------------------------------------------------
 // Provider interface — every backend must implement this
@@ -43,6 +44,7 @@ interface AIProvider {
     persona?: 'tutor' | 'technical' | 'manager' | 'career' | 'competition'
   ): Promise<AsyncIterable<{ text(): string }>>;
   generateQuiz(domain: string, level: number, performance: string): Promise<{ questions: unknown[] } | null>;
+  generate(prompt: string): Promise<string>;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,6 +133,11 @@ class GeminiProvider implements AIProvider {
     const result = await model.generateContent(prompt);
     return (await result.response).text();
   }
+
+  async generate(prompt: string): Promise<string> {
+    // Route through AI_core bridge (in-process Gemini, with HTTP fallback)
+    return coreGenerate(prompt);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -217,6 +224,10 @@ class LocalLLMProvider implements AIProvider {
     }
   }
 
+  async generate(prompt: string): Promise<string> {
+    return coreGenerate(prompt);
+  }
+
   /** Build a plain-text prompt that Mistral / Llama instruction models understand. */
   private buildPrompt(query: string, context: Record<string, unknown>): string {
     return [
@@ -281,6 +292,14 @@ export class AIService {
 
   chatAssistant(query: string, context: Record<string, unknown>) {
     return this.provider.chatAssistant(query, context);
+  }
+
+  /**
+   * General-purpose text generation.
+   * Powers POST /api/ai/generate — routes through AI_core/ai-services in-process.
+   */
+  generate(prompt: string): Promise<string> {
+    return this.provider.generate(prompt);
   }
 }
 
