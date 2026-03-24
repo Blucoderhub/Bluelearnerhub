@@ -158,7 +158,7 @@ export const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit, 
             disabled={loading}
             className="h-11 w-full rounded-2xl bg-primary font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? 'Synchronizing Node...' : 'Initialize Identity'}
+            {loading ? 'Creating account...' : 'Create Account'}
           </Button>
         </div>
       </form>

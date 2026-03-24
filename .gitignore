@@ -59,3 +59,7 @@ env/
 ENV/
 .vercel
 .env*.local
+
+# Playwright test artifacts
+playwright-report/
+test-results/

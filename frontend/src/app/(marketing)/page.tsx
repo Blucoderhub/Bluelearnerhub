@@ -96,6 +96,21 @@ export default function LandingPage() {
             participate in challenges, and build a portfolio that gets you noticed. Join thousands
             of learners growing every day.
           </p>
+
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/get-started"
+              className="rounded-full bg-primary px-10 py-4 text-[10px] font-pixel uppercase tracking-[0.2em] text-white shadow-xl shadow-primary/30 transition-all hover:scale-105 active:scale-95"
+            >
+              Get Started — It&apos;s Free
+            </Link>
+            <Link
+              href="/login"
+              className="rounded-full border border-border px-8 py-4 text-[10px] font-pixel uppercase tracking-[0.2em] text-foreground transition-all hover:border-primary/50 hover:text-primary"
+            >
+              Login
+            </Link>
+          </div>
         </motion.header>
       </section>
 
