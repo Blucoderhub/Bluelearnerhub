@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Building2,
@@ -13,15 +14,53 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { tracksAPI, gamificationAPI } from '@/lib/api-civilization'
 
-const stats = [
-  { title: 'Total Enrollment', value: '4,820', icon: GraduationCap, color: 'text-foreground/70' },
-  { title: 'Faculty Members', value: '156', icon: Users, color: 'text-blue-400' },
-  { title: 'Average CGPA', value: '3.4', icon: BarChart3, color: 'text-foreground/70' },
-  { title: 'Placement Rate', value: '88%', icon: PieChart, color: 'text-purple-400' },
-]
+interface LeaderboardEntry {
+  userId: number
+  fullName: string
+  totalPoints: number
+  level: number
+}
+
+interface Track {
+  id: number
+  title: string
+  domain: string
+  enrollmentCount: number
+}
 
 export default function InstitutionDashboard() {
+  const [topStudents, setTopStudents] = useState<LeaderboardEntry[]>([])
+  const [tracks, setTracks] = useState<Track[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.allSettled([
+      gamificationAPI.leaderboard(5),
+      tracksAPI.list(),
+    ]).then(([lb, tr]) => {
+      if (lb.status === 'fulfilled') {
+        const data = lb.value?.data ?? lb.value ?? []
+        setTopStudents(Array.isArray(data) ? data : [])
+      }
+      if (tr.status === 'fulfilled') {
+        const data = tr.value?.data ?? tr.value ?? []
+        setTracks(Array.isArray(data) ? data.slice(0, 5) : [])
+      }
+      setLoading(false)
+    })
+  }, [])
+
+  const totalEnrolled = tracks.reduce((s, t) => s + (t.enrollmentCount ?? 0), 0)
+
+  const stats = [
+    { title: 'Total Enrollment', value: loading ? '...' : totalEnrolled.toLocaleString(), icon: GraduationCap, color: 'text-foreground/70' },
+    { title: 'Active Tracks', value: loading ? '...' : String(tracks.length), icon: BarChart3, color: 'text-blue-400' },
+    { title: 'Top Learners', value: loading ? '...' : String(topStudents.length), icon: Users, color: 'text-foreground/70' },
+    { title: 'Placement Rate', value: '88%', icon: PieChart, color: 'text-purple-400' },
+  ]
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 space-y-8 duration-700">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -34,10 +73,7 @@ export default function InstitutionDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="border-border bg-card/50 text-white hover:bg-secondary"
-          >
+          <Button variant="outline" className="border-border bg-card/50 text-white hover:bg-secondary">
             <Settings className="mr-2 h-4 w-4" />
             Institution Settings
           </Button>
@@ -62,9 +98,7 @@ export default function InstitutionDashboard() {
                 <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                   {stat.title}
                 </CardTitle>
-                <stat.icon
-                  className={`h-4 w-4 ${stat.color} transition-transform group-hover:rotate-12`}
-                />
+                <stat.icon className={`h-4 w-4 ${stat.color} transition-transform group-hover:rotate-12`} />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-black text-white">{stat.value}</div>
@@ -77,63 +111,76 @@ export default function InstitutionDashboard() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Analytics Section */}
         <div className="space-y-6 lg:col-span-2">
+          {/* Track Enrollment Chart */}
           <Card className="border-border bg-slate-900/40">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-bold">Domain Growth Analytics</CardTitle>
-                <CardDescription>
-                  Enrollment and performance trends across different domains.
-                </CardDescription>
+                <CardTitle className="text-lg font-bold">Track Enrollment Overview</CardTitle>
+                <CardDescription>Enrollment counts across active learning tracks.</CardDescription>
               </div>
               <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="flex h-[300px] items-center justify-center rounded-xl border border-slate-800/50 bg-background/20 italic text-muted-foreground">
-                Growth visualization would render here
-              </div>
+              {loading ? (
+                <div className="flex h-[220px] items-center justify-center text-sm text-muted-foreground">
+                  Loading...
+                </div>
+              ) : tracks.length === 0 ? (
+                <div className="flex h-[220px] items-center justify-center text-sm text-muted-foreground">
+                  No tracks available
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {tracks.map((track) => {
+                    const max = Math.max(...tracks.map((t) => t.enrollmentCount ?? 0), 1)
+                    const pct = Math.round(((track.enrollmentCount ?? 0) / max) * 100)
+                    return (
+                      <div key={track.id} className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="truncate font-medium text-white">{track.title}</span>
+                          <span className="ml-2 shrink-0 font-bold text-foreground/70">
+                            {track.enrollmentCount ?? 0} enrolled
+                          </span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-secondary">
+                          <div className="h-full bg-primary transition-all duration-700" style={{ width: `${pct}%` }} />
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Card className="border-border bg-slate-900/40">
-              <CardHeader>
-                <CardTitle className="text-base font-bold">Top Performing Faculty</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[1, 2, 3].map((f) => (
-                  <div key={f} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg border border-border bg-secondary" />
-                      <span className="text-sm font-medium">Faculty Member {f}</span>
+          {/* Top Students */}
+          <Card className="border-border bg-slate-900/40">
+            <CardHeader>
+              <CardTitle className="text-base font-bold">Top Performing Students</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {loading
+                ? [1, 2, 3].map((i) => (
+                    <div key={i} className="h-10 animate-pulse rounded-lg bg-secondary" />
+                  ))
+                : topStudents.slice(0, 5).map((s, idx) => (
+                    <div key={s.userId} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-secondary text-xs font-bold text-primary">
+                          #{idx + 1}
+                        </div>
+                        <span className="text-sm font-medium text-white">{s.fullName}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs font-bold text-foreground/70">
+                          {s.totalPoints.toLocaleString()} XP
+                        </span>
+                        <span className="ml-2 text-[10px] text-muted-foreground">Lv.{s.level}</span>
+                      </div>
                     </div>
-                    <span className="text-xs font-bold text-foreground/70">9.2 Rating</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="border-border bg-slate-900/40">
-              <CardHeader>
-                <CardTitle className="text-base font-bold">Student Success Rate</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[
-                  { domain: 'Engineering', rate: 94 },
-                  { domain: 'Management', rate: 89 },
-                ].map((d, i) => (
-                  <div key={i} className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span>{d.domain}</span>
-                      <span className="font-bold text-foreground/70">{d.rate}%</span>
-                    </div>
-                    <div className="h-1 overflow-hidden rounded-full bg-secondary">
-                      <div className="h-full bg-primary" style={{ width: `${d.rate}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+                  ))}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Sidebar */}
@@ -147,14 +194,10 @@ export default function InstitutionDashboard() {
                 <ShieldCheck className="mt-1 h-4 w-4 shrink-0 text-foreground/70" />
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   All academic records for{' '}
-                  <span className="font-medium text-white">Winter 2026</span> are synchronized and
-                  secured.
+                  <span className="font-medium text-white">Winter 2026</span> are synchronized and secured.
                 </p>
               </div>
-              <Button
-                variant="outline"
-                className="h-10 w-full border-border text-xs hover:bg-secondary"
-              >
+              <Button variant="outline" className="h-10 w-full border-border text-xs hover:bg-secondary">
                 Audit Registry
               </Button>
             </CardContent>
@@ -162,16 +205,12 @@ export default function InstitutionDashboard() {
 
           <Card className="group overflow-hidden border-border bg-gradient-to-t from-muted/20 to-background/40">
             <div className="p-6">
-              <Building2 className="text-foreground/80/50 mb-4 h-10 w-10 transition-transform group-hover:scale-110" />
+              <Building2 className="mb-4 h-10 w-10 text-foreground/80 transition-transform group-hover:scale-110" />
               <h4 className="text-lg font-black italic tracking-tight">INSTITUTIONAL AI</h4>
               <p className="mb-4 mt-2 text-xs text-muted-foreground">
-                Leverage predictive analytics to forecast enrollment trends and student success
-                bottlenecks.
+                Leverage predictive analytics to forecast enrollment trends and student success bottlenecks.
               </p>
-              <Button
-                size="sm"
-                className="h-10 w-full bg-slate-100 text-[10px] font-black tracking-widest text-black hover:bg-white"
-              >
+              <Button size="sm" className="h-10 w-full bg-slate-100 text-[10px] font-black tracking-widest text-black hover:bg-white">
                 LAUNCH ANALYTICS ENGINE
               </Button>
             </div>

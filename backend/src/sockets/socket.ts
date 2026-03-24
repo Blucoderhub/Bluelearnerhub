@@ -22,22 +22,62 @@ export class SocketService {
 
   private setupMiddleware() {
     this.io.use((socket: Socket, next) => {
-      const token = socket.handshake.auth?.token as string | undefined;
-
-      if (!token) {
-        next(new Error('Authentication error'));
-        return;
+      // 1. Try explicit auth.token (for non-browser clients or future use)
+      const explicitToken = socket.handshake.auth?.token as string | undefined;
+      if (explicitToken) {
+        try {
+          const decoded = verifyAccessToken(explicitToken);
+          socket.data.userId = decoded.userId;
+          socket.data.userEmail = decoded.email;
+          return next();
+        } catch {
+          return next(new Error('Authentication error'));
+        }
       }
 
-      try {
-        const decoded = verifyAccessToken(token);
-        socket.data.userId = decoded.userId;
-        socket.data.userEmail = decoded.email;
-        next();
-      } catch (_error) {
-        next(new Error('Authentication error'));
+      // 2. Fall back to signed cookie (browser clients using HttpOnly cookies)
+      const rawCookie = socket.handshake.headers.cookie ?? '';
+      const cookieToken = this.extractSignedCookie(rawCookie, 'accessToken');
+      if (cookieToken) {
+        try {
+          const decoded = verifyAccessToken(cookieToken);
+          socket.data.userId = decoded.userId;
+          socket.data.userEmail = decoded.email;
+          return next();
+        } catch {
+          return next(new Error('Authentication error'));
+        }
       }
+
+      next(new Error('Authentication error'));
     });
+  }
+
+  /**
+   * Parse a signed cookie from a raw `Cookie` header string.
+   * cookie-parser signs values as `s:<value>.<hmac>` using HMAC-SHA256.
+   * We replicate that check here so Socket.IO can reuse the same cookie.
+   */
+  private extractSignedCookie(cookieHeader: string, name: string): string | null {
+    const pairs = cookieHeader.split(';').map((s) => s.trim());
+    for (const pair of pairs) {
+      const idx = pair.indexOf('=');
+      if (idx === -1) continue;
+      const key = decodeURIComponent(pair.slice(0, idx).trim());
+      if (key !== name) continue;
+      const raw = decodeURIComponent(pair.slice(idx + 1).trim());
+      // Signed cookies from cookie-parser start with 's:'
+      if (!raw.startsWith('s:')) return null;
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const sig = require('cookie-signature') as { unsign: (val: string, secret: string) => string | false };
+        const unsigned = sig.unsign(raw.slice(2), config.session.cookieSecret);
+        return unsigned === false ? null : unsigned;
+      } catch {
+        return null;
+      }
+    }
+    return null;
   }
 
   private setupEventHandlers() {

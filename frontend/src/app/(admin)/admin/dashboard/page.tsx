@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Users,
@@ -7,22 +8,77 @@ import {
   Trophy,
   Activity,
   ShieldAlert,
-  Cpu,
-  Database,
   Globe,
-  Server,
   Terminal,
-  Lock,
   Zap,
   ChevronRight,
-  TrendingUp,
   AlertTriangle,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { analyticsAPI } from '@/lib/api-civilization'
+
+interface PlatformStats {
+  users: { total_users: number; new_users_last_30_days: number }
+  quizzes: { total_quizzes: number; active_quizzes: number }
+  learning: { total_learning_paths: number; published_learning_paths: number; total_enrollments: number }
+  hackathons: { total_hackathons: number; upcoming_hackathons: number; ongoing_hackathons: number; completed_hackathons: number }
+  totalXpAwarded: number
+}
+
+const FALLBACK: PlatformStats = {
+  users: { total_users: 0, new_users_last_30_days: 0 },
+  quizzes: { total_quizzes: 0, active_quizzes: 0 },
+  learning: { total_learning_paths: 0, published_learning_paths: 0, total_enrollments: 0 },
+  hackathons: { total_hackathons: 0, upcoming_hackathons: 0, ongoing_hackathons: 0, completed_hackathons: 0 },
+  totalXpAwarded: 0,
+}
 
 export default function AdminDashboardPage() {
+  const [stats, setStats] = useState<PlatformStats>(FALLBACK)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    analyticsAPI.platform()
+      .then((d) => setStats(d?.data ?? d ?? FALLBACK))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const fmt = (n: number) =>
+    n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1_000 ? `${(n / 1_000).toFixed(1)}K` : String(n)
+
+  const metrics = [
+    {
+      label: 'Total_Users_Live',
+      value: loading ? '...' : fmt(stats.users.total_users),
+      change: loading ? '' : `+${stats.users.new_users_last_30_days} this month`,
+      icon: Users,
+      color: 'text-primary/80',
+    },
+    {
+      label: 'Course_Engagements',
+      value: loading ? '...' : fmt(stats.learning.total_enrollments),
+      change: loading ? '' : `${stats.learning.published_learning_paths} active paths`,
+      icon: BookOpen,
+      color: 'text-purple-500',
+    },
+    {
+      label: 'Hackathons_Hosted',
+      value: loading ? '...' : fmt(stats.hackathons.total_hackathons),
+      change: loading ? '' : `${stats.hackathons.ongoing_hackathons} live now`,
+      icon: Trophy,
+      color: 'text-foreground/80',
+    },
+    {
+      label: 'Total_XP_Awarded',
+      value: loading ? '...' : fmt(stats.totalXpAwarded),
+      change: loading ? '' : `${stats.quizzes.active_quizzes} active quizzes`,
+      icon: Zap,
+      color: 'text-foreground/80',
+    },
+  ]
+
   const systemVitals = [
     { label: 'CPU_LOAD', value: '42%', status: 'nominal', color: 'text-foreground/80' },
     { label: 'MEMORY_USAGE', value: '8.4GB', status: 'optimal', color: 'text-primary/80' },
@@ -39,8 +95,7 @@ export default function AdminDashboardPage() {
             SYS_MASTER <span className="ai-glow text-red-600">ONLINE</span>
           </h1>
           <p className="max-w-xl text-[10px] font-bold uppercase leading-relaxed tracking-widest text-muted-foreground">
-            Centralized Command for BLUELEARNERHUB Global Infrastructure. Monitoring 1.2M Concurrent
-            User Vectors.
+            Centralized Command for BLUELEARNERHUB Global Infrastructure.
           </p>
         </div>
         <div className="flex gap-3">
@@ -55,36 +110,7 @@ export default function AdminDashboardPage() {
 
       {/* Global Metrics Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {[
-          {
-            label: 'Total_Users_Live',
-            value: '12,456',
-            change: '+12.4%',
-            icon: Users,
-            color: 'text-primary/80',
-          },
-          {
-            label: 'Course_Engagements',
-            value: '842,001',
-            change: '+8.2%',
-            icon: BookOpen,
-            color: 'text-purple-500',
-          },
-          {
-            label: 'Hackathons_Hosted',
-            value: '1,248',
-            change: '+15.1%',
-            icon: Trophy,
-            color: 'text-foreground/80',
-          },
-          {
-            label: 'Total_XP_Awarded',
-            value: '4.2M',
-            change: '+22.4%',
-            icon: Zap,
-            color: 'text-foreground/80',
-          },
-        ].map((metric, i) => (
+        {metrics.map((metric, i) => (
           <motion.div
             key={metric.label}
             initial={{ opacity: 0, scale: 0.95 }}
@@ -132,7 +158,6 @@ export default function AdminDashboardPage() {
             ))}
           </Card>
 
-          {/* Theoretical Network Map / Server Clusters */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {[
               { name: 'EDGE_01_MUNICH', status: 'Online', load: '12%' },

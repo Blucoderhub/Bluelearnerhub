@@ -230,3 +230,10 @@ export const aiAPI = {
   generatePath: (goal: string, currentSkills: string[]) =>
     api.post('/ai/learning-path', { goal, current_skills: currentSkills }).then((r) => r.data),
 }
+
+// ─── Analytics ────────────────────────────────────────────────────────────────
+
+export const analyticsAPI = {
+  platform: () => api.get('/analytics/platform').then((r) => r.data),
+  userStats: () => api.get('/analytics/user/stats').then((r) => r.data),
+}

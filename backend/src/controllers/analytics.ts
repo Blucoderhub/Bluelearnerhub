@@ -171,7 +171,7 @@ export class AnalyticsController {
 
   async getPlatformAnalytics(_req: Request, res: Response, next: NextFunction) {
     try {
-      const [usersResult, roleDistributionResult, quizResult, learningResult, hackathonResult] = await Promise.all([
+      const [usersResult, roleDistributionResult, quizResult, learningResult, hackathonResult, xpResult] = await Promise.all([
         pool.query(
           `SELECT
              COUNT(*)::int AS total_users,
@@ -207,6 +207,7 @@ export class AnalyticsController {
              COUNT(*) FILTER (WHERE status = 'completed')::int AS completed_hackathons
            FROM hackathons`
         ),
+        pool.query('SELECT COALESCE(SUM(total_points), 0)::bigint AS total_xp FROM users'),
       ]);
 
       res.json({
@@ -217,6 +218,7 @@ export class AnalyticsController {
           quizzes: quizResult.rows[0],
           learning: learningResult.rows[0],
           hackathons: hackathonResult.rows[0],
+          totalXpAwarded: Number(xpResult.rows[0].total_xp),
         },
       });
     } catch (error) {
