@@ -6,7 +6,7 @@
   "workspaces": [
     "frontend",
     "backend",
-    "AI_core/ai-services"
+    "backend/AI_core/ai-services"
   ],
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
