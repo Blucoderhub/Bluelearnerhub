@@ -1,9 +1,9 @@
-# AI Training Data Management System
-# Database schema for storing quiz and hackathon questions for AI model training
+-- AI Training Data Management System
+-- Database schema for storing quiz and hackathon questions for AI model training
 
-# ==============================================================================
-# QUIZ QUESTIONS TABLE
-# ==============================================================================
+-- ==============================================================================
+-- QUIZ QUESTIONS TABLE
+-- ==============================================================================
 CREATE TABLE IF NOT EXISTS quiz_questions (
     id SERIAL PRIMARY KEY,
     question_text TEXT NOT NULL,
@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
     validation_split VARCHAR(20) DEFAULT 'train' -- 'train', 'validation', 'test'
 );
 
-# ==============================================================================
-# HACKATHON QUESTIONS TABLE  
-# ==============================================================================
+-- ==============================================================================
+-- HACKATHON QUESTIONS TABLE  
+-- ==============================================================================
 CREATE TABLE IF NOT EXISTS hackathon_questions (
     id SERIAL PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -53,9 +53,9 @@ CREATE TABLE IF NOT EXISTS hackathon_questions (
     validation_split VARCHAR(20) DEFAULT 'train'
 );
 
-# ==============================================================================
-# QUESTION CATEGORIES TABLE
-# ==============================================================================
+-- ==============================================================================
+-- QUESTION CATEGORIES TABLE
+-- ==============================================================================
 CREATE TABLE IF NOT EXISTS question_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS question_categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-# ==============================================================================
-# TRAINING DATASETS TABLE
-# ==============================================================================  
+-- ==============================================================================
+-- TRAINING DATASETS TABLE
+-- ==============================================================================  
 CREATE TABLE IF NOT EXISTS training_datasets (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -83,9 +83,9 @@ CREATE TABLE IF NOT EXISTS training_datasets (
     status VARCHAR(20) DEFAULT 'pending' -- 'pending', 'generating', 'completed', 'error'
 );
 
-# ==============================================================================
-# INDICES FOR PERFORMANCE
-# ==============================================================================
+-- ==============================================================================
+-- INDICES FOR PERFORMANCE
+-- ==============================================================================
 CREATE INDEX IF NOT EXISTS idx_quiz_questions_category ON quiz_questions(category);
 CREATE INDEX IF NOT EXISTS idx_quiz_questions_difficulty ON quiz_questions(difficulty_level);
 CREATE INDEX IF NOT EXISTS idx_quiz_questions_topic ON quiz_questions(topic);
@@ -97,9 +97,9 @@ CREATE INDEX IF NOT EXISTS idx_hackathon_questions_difficulty ON hackathon_quest
 CREATE INDEX IF NOT EXISTS idx_hackathon_questions_validation_split ON hackathon_questions(validation_split);
 CREATE INDEX IF NOT EXISTS idx_hackathon_questions_active ON hackathon_questions(is_active);
 
-# ==============================================================================
-# INITIAL CATEGORIES DATA
-# ==============================================================================
+-- ==============================================================================
+-- INITIAL CATEGORIES DATA
+-- ==============================================================================
 INSERT INTO question_categories (name, description) VALUES
 ('Programming Fundamentals', 'Basic programming concepts, variables, data types'),
 ('Data Structures', 'Arrays, linked lists, stacks, queues, trees, graphs'),
