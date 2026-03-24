@@ -37,7 +37,9 @@ import { fetchAdaptiveGuidanceFromAI, fallbackTutorialGuidance } from '../servic
 export const listTutorials = async (req: Request, res: Response) => {
   try {
     const { domain, subDomain, difficulty, page = '1', limit = '20' } = req.query as Record<string, string>;
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 20));
+    const offset = (pageNum - 1) * limitNum;
 
     const conditions: any[] = [eq(tutorials.isPublished, true)];
     if (domain)     conditions.push(ilike(tutorials.domain, `%${domain}%`));
@@ -64,10 +66,10 @@ export const listTutorials = async (req: Request, res: Response) => {
       .leftJoin(users, eq(tutorials.authorId, users.id))
       .where(and(...conditions))
       .orderBy(desc(tutorials.viewCount))
-      .limit(parseInt(limit))
+      .limit(limitNum)
       .offset(offset);
 
-    res.json({ success: true, data: rows, page: parseInt(page), limit: parseInt(limit) });
+    res.json({ success: true, data: rows, page: pageNum, limit: limitNum });
   } catch (err) {
     logger.error('listTutorials error', err);
     res.status(500).json({ success: false, message: 'Failed to fetch tutorials' });

@@ -252,7 +252,7 @@ export default function Header() {
                   href="/login"
                   className="rounded-full px-6 py-2.5 text-[10px] font-pixel uppercase tracking-[0.2em] text-foreground transition-all hover:text-primary"
                 >
-                  Access
+                  Login
                 </Link>
                 <Link
                   href="/get-started"

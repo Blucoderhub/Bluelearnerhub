@@ -90,8 +90,14 @@ export function createApp(): Application {
       const isAllowed =
         allowedOrigins.has(origin) ||
         config.nodeEnv === 'development' ||
+        // Any Vercel preview deploy for this project (matches any *.vercel.app subdomain)
         /^https:\/\/[a-z0-9-]+-bluelearnerhub\.vercel\.app$/.test(origin) ||
-        origin === 'https://bluelearnerhub.vercel.app';
+        // Vercel project with arbitrary prefix (e.g. bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app)
+        /^https:\/\/bluelearnerhub[a-z0-9-]*\.vercel\.app$/.test(origin) ||
+        /^https:\/\/[a-z0-9-]+-bluecoderhubs?-projects?\.vercel\.app$/.test(origin) ||
+        origin === 'https://bluelearnerhub.vercel.app' ||
+        origin === 'https://www.bluelearnerhub.com' ||
+        origin === 'https://bluelearnerhub.com';
 
       if (isAllowed) {
         callback(null, true);
