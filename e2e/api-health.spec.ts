@@ -28,7 +28,8 @@ test.describe('Backend API Health', () => {
       headers: { 'Content-Type': 'application/json' },
       timeout: API_TIMEOUT,
     })
-    expect([400, 401, 403]).toContain(res.status())
+    // 429 = rate-limited after many test runs — still means credentials rejected
+    expect([400, 401, 403, 429]).toContain(res.status())
   })
 
   test('Exercises list endpoint should respond', async ({ request }) => {

@@ -15,7 +15,9 @@ services:
       - key: FRONTEND_URL
         value: https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app
       - key: CORS_ORIGINS
-        value: https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app,http://localhost:3000
+        value: https://bluelearnerhub-frontend-bluecoderhubs-projects.vercel.app,https://bluelearnerhub.com,https://www.bluelearnerhub.com,http://localhost:3000
+      - key: BACKEND_URL
+        value: https://bluelearnerhub-backend.onrender.com
       - key: AI_PROVIDER
         value: gemini
       - key: GEMINI_API_KEY
