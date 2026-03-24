@@ -100,10 +100,10 @@ export const qnaAPI = {
     voteType: 'up' | 'down'
   ) =>
     api
-      .post(`/qna/questions/${questionId}/vote`, { targetId, targetType, voteType })
+      .post(`/qna/votes`, { targetId, targetType, voteType })
       .then((r) => r.data),
   acceptAnswer: (questionId: number, answerId: number) =>
-    api.post(`/qna/questions/${questionId}/answers/${answerId}/accept`).then((r) => r.data),
+    api.post(`/qna/questions/${questionId}/accept/${answerId}`).then((r) => r.data),
   listTags: () => api.get('/qna/tags').then((r) => r.data),
 }
 
@@ -114,7 +114,7 @@ export const reposAPI = {
   getRepo: (username: string, slug: string) =>
     api.get(`/repositories/${username}/${slug}`).then((r) => r.data),
   getFile: (repoId: number, path: string) =>
-    api.get(`/repositories/${repoId}/files`, { params: { path } }).then((r) => r.data),
+    api.get(`/repositories/${repoId}/file`, { params: { path } }).then((r) => r.data),
   createRepo: (body: { name: string; description?: string; visibility: string }) =>
     api.post('/repositories', body).then((r) => r.data),
   createCommit: (
@@ -227,6 +227,6 @@ export const aiAPI = {
     api.post('/ai/quiz', { topic, count }).then((r) => r.data),
   reviewCode: (code: string, language: string) =>
     api.post('/ai/review', { code, language }).then((r) => r.data),
-  generatePath: (goal: string, currentSkills: string[]) =>
-    api.post('/ai/learning-path', { goal, current_skills: currentSkills }).then((r) => r.data),
+  generatePath: (goal?: string, currentSkills?: string[]) =>
+    api.get('/ai/recommend', { params: { goal, skills: currentSkills?.join(',') } }).then((r) => r.data),
 }

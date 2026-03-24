@@ -39,9 +39,9 @@ export const users = pgTable('users', {
     password: text('password'), // Nullable if using OIDC
     fullName: varchar('full_name', { length: 255 }).notNull(),
     role: roleEnum('role').default('STUDENT').notNull(),
-    xp: integer('xp').default(0).notNull(),
+    xp: integer('total_points').default(0).notNull(),
     level: integer('level').default(1).notNull(),
-    streak: integer('streak').default(0).notNull(),
+    streak: integer('current_streak').default(0).notNull(),
     avatarConfig: jsonb('avatar_config'),
     lastActive: timestamp('last_active').defaultNow().notNull(),
     // Account lockout — added by migration 004_account_lockout.sql
