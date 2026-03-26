@@ -8,7 +8,7 @@ import { apiLimiter } from '../middleware/rateLimiter';
 const router = Router();
 const controller = new JobController();
 
-router.get('/', apiLimiter, optionalAuth, controller.getJobs.bind(controller));
+router.get('/', apiLimiter, optionalAuth, commonValidators.pagination, validate, controller.getJobs.bind(controller));
 router.get('/:id', apiLimiter, optionalAuth, commonValidators.idParam, validate, controller.getJobById.bind(controller));
 
 router.post('/:id/apply', apiLimiter, authenticate, authorize('student'), commonValidators.idParam, jobValidators.apply, validate, controller.applyForJob.bind(controller));

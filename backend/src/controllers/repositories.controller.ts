@@ -309,13 +309,16 @@ export const listIssues = async (req: Request, res: Response) => {
   try {
     const repoId      = parseInt(req.params.id);
     const requesterId = req.user?.id;
-    const { status = 'open' } = req.query as { status?: string };
+    const { status = 'open', page = 1, limit = 30 } = req.query as { status?: string; page?: string; limit?: string };
 
     if (isNaN(repoId) || repoId <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid repository id' });
     }
 
-    // Enforce visibility: private repos require ownership
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 30));
+    const offset = (pageNum - 1) * limitNum;
+
     const [repo] = await db
       .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
       .from(repositories)
@@ -327,13 +330,32 @@ export const listIssues = async (req: Request, res: Response) => {
       return res.status(403).json({ success: false, message: 'Repository is private' });
     }
 
-    const rows = await db
-      .select()
-      .from(issues)
-      .where(and(eq(issues.repoId, repoId), eq(issues.status, status as any)))
-      .orderBy(desc(issues.createdAt));
+    const [rows, countResult] = await Promise.all([
+      db
+        .select()
+        .from(issues)
+        .where(and(eq(issues.repoId, repoId), eq(issues.status, status as any)))
+        .orderBy(desc(issues.createdAt))
+        .limit(limitNum)
+        .offset(offset),
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(issues)
+        .where(and(eq(issues.repoId, repoId), eq(issues.status, status as any)))
+    ]);
 
-    res.json({ success: true, data: rows });
+    const total = Number(countResult[0]?.count) || 0;
+
+    res.json({
+      success: true,
+      data: {
+        data: rows,
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum)
+      }
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to load issues' });
   }
@@ -394,10 +416,15 @@ export const listPullRequests = async (req: Request, res: Response) => {
   try {
     const repoId      = parseInt(req.params.id);
     const requesterId = req.user?.id;
+    const { page = 1, limit = 30 } = req.query as { page?: string; limit?: string };
 
     if (isNaN(repoId) || repoId <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid repository id' });
     }
+
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 30));
+    const offset = (pageNum - 1) * limitNum;
 
     const [repo] = await db
       .select({ ownerId: repositories.ownerId, visibility: repositories.visibility })
@@ -410,13 +437,32 @@ export const listPullRequests = async (req: Request, res: Response) => {
       return res.status(403).json({ success: false, message: 'Repository is private' });
     }
 
-    const rows = await db
-      .select()
-      .from(pullRequests)
-      .where(eq(pullRequests.repoId, repoId))
-      .orderBy(desc(pullRequests.createdAt));
+    const [rows, countResult] = await Promise.all([
+      db
+        .select()
+        .from(pullRequests)
+        .where(eq(pullRequests.repoId, repoId))
+        .orderBy(desc(pullRequests.createdAt))
+        .limit(limitNum)
+        .offset(offset),
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(pullRequests)
+        .where(eq(pullRequests.repoId, repoId))
+    ]);
 
-    res.json({ success: true, data: rows });
+    const total = Number(countResult[0]?.count) || 0;
+
+    res.json({
+      success: true,
+      data: {
+        data: rows,
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum)
+      }
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to load pull requests' });
   }

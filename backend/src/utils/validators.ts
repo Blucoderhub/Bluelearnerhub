@@ -111,3 +111,25 @@ export const profileValidators = {
     body('lockedUntil').not().exists().withMessage('lockedUntil cannot be updated via profile'),
   ],
 };
+
+export const aiValidators = {
+  chat: [
+    body('message').isString().trim().notEmpty().withMessage('Message is required'),
+    body('persona').optional().isIn(['tutor', 'mentor', 'reviewer', 'interviewer']).withMessage('Invalid persona'),
+  ],
+
+  review: [
+    body('projectContent').isString().trim().notEmpty().withMessage('Project content is required'),
+    body('domain').isString().trim().notEmpty().withMessage('Domain is required'),
+    body('persona').optional().isIn(['technical', 'product', 'business']).withMessage('Invalid persona'),
+  ],
+
+  hackathonHelp: [
+    body('hackathonTheme').isString().trim().notEmpty().withMessage('Hackathon theme is required'),
+    body('query').isString().trim().notEmpty().withMessage('Query is required'),
+  ],
+
+  checkout: [
+    body('tier').isString().trim().isIn(['EXPLORER', 'INNOVATOR', 'ENTERPRISE']).withMessage('Invalid subscription tier'),
+  ],
+};

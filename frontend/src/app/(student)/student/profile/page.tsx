@@ -37,6 +37,8 @@ import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { generateAvatarURL } from '@/utils/generateAvatar'
 import { gamificationAPI } from '@/lib/api-civilization'
+import type { Achievement, LeaderboardEntry } from '@/types'
+import { toast } from 'sonner'
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: User },
@@ -65,32 +67,38 @@ const FALLBACK_ACHIEVEMENTS = [
 export default function ProfilePage() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('overview')
-  const [achievements, setAchievements] = useState(FALLBACK_ACHIEVEMENTS)
-  const [leaderboard, setLeaderboard] = useState<any[]>([])
+  const [achievements, setAchievements] = useState<{ title: string; desc: string; icon: string; unlocked: boolean }[]>(FALLBACK_ACHIEVEMENTS)
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [loadingData, setLoadingData] = useState(true)
 
   useEffect(() => {
     if (!user) return
     let mounted = true
     Promise.all([
-      gamificationAPI.achievements().catch(() => null),
-      gamificationAPI.leaderboard(10).catch(() => null),
-    ]).then(([achData, lbData]) => {
+      gamificationAPI.achievements(),
+      gamificationAPI.leaderboard(10),
+    ]).then(([achResponse, lbResponse]) => {
       if (!mounted) return
-      if (achData?.achievements?.length || achData?.length) {
-        const raw = achData?.achievements ?? achData
-        setAchievements(
-          raw.map((a: any) => ({
-            title: a.title,
-            desc: a.description,
-            icon: a.badgeIcon || a.badge_icon || '🏅',
-            unlocked: a.earned || a.unlocked || false,
-          }))
-        )
+      if (achResponse.error) {
+        toast.error('Failed to load achievements')
+      } else {
+        const raw = achResponse.data ?? []
+        if (raw.length) {
+          setAchievements(
+            raw.map((a: Achievement) => ({
+              title: a.title,
+              desc: a.description,
+              icon: a.badgeIcon || a.badge_icon || '🏅',
+              unlocked: a.earned || a.unlocked || false,
+            }))
+          )
+        }
       }
-      if (lbData?.leaderboard?.length || lbData?.length) {
-        setLeaderboard(lbData?.leaderboard ?? lbData)
+      if (!lbResponse.error) {
+        setLeaderboard(lbResponse.data ?? [])
       }
+    }).catch(() => {
+      toast.error('Failed to load profile data')
     }).finally(() => { if (mounted) setLoadingData(false) })
     return () => { mounted = false }
   }, [user])
@@ -120,21 +128,21 @@ export default function ProfilePage() {
     ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     : 'Recently'
 
-  // Build leaderboard with user entry
-  const userLbEntry = { rank: '?', name: 'You', xp: totalXP, isUser: true, trend: 'up' }
-  const topEntries = leaderboard.slice(0, 3).map((e: any, i: number) => ({
-    rank: i + 1,
-    name: e.fullName || e.full_name || e.name || `User ${i + 1}`,
-    xp: e.totalPoints || e.total_points || e.xp || 0,
-    isUser: false,
-    trend: 'same',
-  }))
-
-  const skills = (user.skills ?? []).map((s: any) => ({
+  const skills = (user.skills ?? []).map((s) => ({
     name: s.skill_name,
     level: Math.min(s.proficiency_level ?? 50, 100),
     color: 'bg-primary',
   }))
+
+  const topEntries = leaderboard.slice(0, 3).map((e, i) => ({
+    rank: i + 1,
+    name: e.name || `User ${i + 1}`,
+    xp: e.xp || e.totalPoints || 0,
+    isUser: false,
+    trend: 'same',
+  }))
+
+  const userLbEntry = { rank: '?', name: 'You', xp: totalXP, isUser: true, trend: 'up' as const }
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 pb-20">
@@ -189,7 +197,7 @@ export default function ProfilePage() {
             </div>
             {skills.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-2">
-                {skills.slice(0, 5).map((s: any) => (
+                {skills.slice(0, 5).map((s) => (
                   <Badge key={s.name} variant="outline" className="border-border text-[10px] text-muted-foreground">
                     {s.name}
                   </Badge>
@@ -321,7 +329,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="space-y-2">
                   {topEntries.length > 0 ? (
-                    [...topEntries, userLbEntry].map((entry: any, i: number) => (
+                    [...topEntries, userLbEntry].map((entry, i) => (
                       <div
                         key={i}
                         className={`flex items-center gap-3 rounded-xl p-3 transition-colors ${
@@ -387,7 +395,7 @@ export default function ProfilePage() {
               </h3>
               {skills.length > 0 ? (
                 <div className="space-y-5">
-                  {skills.map((skill: any) => (
+                  {skills.map((skill) => (
                     <div key={skill.name} className="space-y-2">
                       <div className="flex justify-between text-xs">
                         <span className="font-semibold text-foreground/90">{skill.name}</span>

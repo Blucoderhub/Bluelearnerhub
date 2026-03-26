@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { exercisesAPI, gamificationAPI } from '@/lib/api-civilization'
 import { useAuth } from '@/hooks/useAuth'
+import type { Exercise, LeaderboardEntry } from '@/types'
+import { toast } from 'sonner'
 
 // ─── Fallback static challenges (shown when API is unavailable) ──────────────
 
@@ -103,7 +105,7 @@ const DIFF_COLOUR: Record<string, string> = {
 export default function ChallengeHub() {
   const { user } = useAuth()
 
-  const [challenges, setChallenges] = useState(FALLBACK_CHALLENGES as any[])
+  const [challenges, setChallenges] = useState<Exercise[]>(FALLBACK_CHALLENGES)
   const [domains, setDomains] = useState(FALLBACK_DOMAINS)
   const [activeDomain, setActiveDomain] = useState('All Domains')
   const [search, setSearch] = useState('')
@@ -118,19 +120,25 @@ export default function ChallengeHub() {
     setLoading(true)
     exercisesAPI
       .list({ sort })
-      .then((d: any) => {
+      .then((response) => {
         if (!mounted) return
-        const list = d?.data ?? d
+        if (response.error) {
+          toast.error(response.error)
+          return
+        }
+        const list = response.data ?? []
         if (Array.isArray(list) && list.length > 0) {
           setChallenges(list)
           const unique = [
             'All Domains',
-            ...Array.from(new Set<string>(list.map((c: any) => c.domain).filter(Boolean))),
+            ...Array.from(new Set<string>(list.map((c) => c.domain).filter(Boolean))),
           ]
           setDomains(unique)
         }
       })
-      .catch(() => { /* keep fallback */ })
+      .catch((err) => {
+        toast.error('Failed to load exercises. Using fallback data.')
+      })
       .finally(() => { if (mounted) setLoading(false) })
     return () => { mounted = false }
   }, [sort])
@@ -141,19 +149,20 @@ export default function ChallengeHub() {
     let mounted = true
     gamificationAPI
       .leaderboard(50)
-      .then((d: any) => {
+      .then((response) => {
         if (!mounted) return
-        const raw = d?.data ?? d ?? []
-        const list: any[] = Array.isArray(raw) ? raw : []
-        const me = list.find((u: any) => u.id === user.id)
+        if (response.error) return
+        const raw = response.data ?? []
+        const list = Array.isArray(raw) ? raw : []
+        const me = list.find((u) => u.name === user.fullName || u.name === user.email)
         if (me) {
-          setUserXP(me.totalPoints ?? me.xp ?? 0)
+          setUserXP(me.xp ?? me.totalPoints ?? 0)
           setUserLevel(me.level ?? 1)
         }
       })
       .catch(() => {})
     return () => { mounted = false }
-  }, [user?.id])
+  }, [user?.id, user?.fullName, user?.email])
 
   // ── Filtered view ─────────────────────────────────────────────────────────
   const visible = useMemo(() => {
@@ -324,6 +333,7 @@ export default function ChallengeHub() {
                   <Link href={`/exercises/${challenge.id}`}>
                     <Button
                       variant="ghost"
+                      aria-label={`View ${challenge.title} details`}
                       className="h-16 w-16 rounded-3xl bg-secondary transition-all hover:bg-primary hover:text-white dark:bg-secondary/50"
                     >
                       <ChevronRight size={24} />

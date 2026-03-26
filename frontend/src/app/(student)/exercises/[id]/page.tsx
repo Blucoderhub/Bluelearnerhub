@@ -20,6 +20,7 @@ import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { exercisesAPI, codeAPI, gamificationAPI } from '@/lib/api-civilization'
 import { toast } from 'sonner'
+import { CodeExecutionResponse } from '@/types'
 import dynamic from 'next/dynamic'
 
 const CodePlayground = dynamic(() => import('@/components/tutorial/CodePlayground'), {
@@ -150,7 +151,7 @@ export default function ExerciseDetailPage() {
 
   const handleRunCode = async (code: string, language: string) => {
     try {
-      const d = await codeAPI.execute(code, language)
+      const d = await codeAPI.execute(code, language) as CodeExecutionResponse
       const result = d?.data ?? d
       if (result?.success) {
         setXpEarned((x) => x + 10)

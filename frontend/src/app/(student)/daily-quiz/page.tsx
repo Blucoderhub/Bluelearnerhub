@@ -9,34 +9,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { dailyQuizAPI } from '@/lib/api-civilization'
+import type { PublicQuiz, DailyQuizResult, MCQPublic } from '@/types'
 import { toast } from 'sonner'
-
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-/** Public question shape — correctIndex is NEVER present (stripped by server). */
-interface MCQPublic {
-  question:   string
-  options:    string[]
-  difficulty: 'easy' | 'medium' | 'hard'
-}
-
-interface PublicQuiz {
-  domain:           string
-  date:             string
-  questions:        MCQPublic[]
-  alreadySubmitted: boolean
-  previousResult:   { score: number; xp_earned: number } | null
-}
-
-/** What the server returns after a successful submission. */
-interface SubmitResult {
-  score:          number
-  correctCount:   number
-  totalQuestions: number
-  xpEarned:       number
-  correctAnswers: number[]   // revealed only post-submission
-  explanations:   string[]   // revealed only post-submission
-}
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -73,13 +47,17 @@ export default function DailyQuizPage() {
   const [answers, setAnswers] = useState<number[]>([])
 
   // Result returned by the server after submission
-  const [result, setResult] = useState<SubmitResult | null>(null)
+  const [result, setResult] = useState<DailyQuizResult | null>(null)
 
   // ── Domain list ────────────────────────────────────────────────────────────
 
   useEffect(() => {
     dailyQuizAPI.domains()
-      .then((d: string[]) => { if (d?.length) setDomains(d) })
+      .then((response) => {
+        if (!response.error && response.data?.length) {
+          setDomains(response.data)
+        }
+      })
       .catch(() => { /* keep fallback */ })
   }, [])
 
@@ -88,12 +66,17 @@ export default function DailyQuizPage() {
   const loadQuiz = async (domain: string) => {
     setLoading(true)
     try {
-      const data: PublicQuiz = await dailyQuizAPI.getQuiz(domain)
+      const response = await dailyQuizAPI.getQuiz(domain)
+      if (response.error) {
+        toast.error(response.error)
+        setLoading(false)
+        return
+      }
+      const data = response.data
       if (data?.questions?.length) {
         setQuiz(data)
         if (data.alreadySubmitted) {
           setState('already-done')
-          return
         }
       } else {
         toast.error('Quiz unavailable for this domain. Try another.')
@@ -130,27 +113,30 @@ export default function DailyQuizPage() {
     setAnswers(updatedAnswers)
 
     if (current + 1 >= quiz.questions.length) {
-      // Last question — submit to server
       setState('submitting')
       try {
-        const serverResult: SubmitResult = await dailyQuizAPI.submitAnswers(
-          selectedDomain,
-          updatedAnswers
-        )
-        setResult(serverResult)
-        setState('completed')
-      } catch (err: any) {
-        const msg: string = err?.response?.data?.message ?? ''
-        if (err?.response?.status === 409) {
-          setState('already-done')
-          toast.info('You already completed this quiz today.')
-        } else {
-          toast.error(msg || 'Failed to submit quiz. Please try again.')
-          setState('in-progress')   // let them retry submission
-          setAnswers(updatedAnswers) // keep their answers
-          setCurrent(quiz.questions.length - 1)
-          setChosen(chosen)
+        const response = await dailyQuizAPI.submitAnswers(selectedDomain, updatedAnswers)
+        if (response.error) {
+          if (response.message?.includes('already') || response.message?.includes('409')) {
+            setState('already-done')
+            toast.info('You already completed this quiz today.')
+          } else {
+            toast.error(response.error || 'Failed to submit quiz. Please try again.')
+            setState('in-progress')
+            setAnswers(updatedAnswers)
+            setCurrent(quiz.questions.length - 1)
+            setChosen(chosen)
+          }
+          return
         }
+        setResult(response.data ?? null)
+        setState('completed')
+      } catch (err) {
+        toast.error('Failed to submit quiz. Please try again.')
+        setState('in-progress')
+        setAnswers(updatedAnswers)
+        setCurrent(quiz.questions.length - 1)
+        setChosen(chosen)
       }
     } else {
       setCurrent(current + 1)

@@ -33,6 +33,9 @@ htmlcov/
 coverage/
 **/coverage/
 **/lcov-report/
+playwright-report/
+test-results/
+playwright/.cache/
 
 # Logs
 logs/

@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { tracksAPI } from '@/lib/api-civilization'
+import type { LearningTrack, LearningTrackPhase } from '@/types'
 
 const MOCK_TRACK = {
   id: 1,
@@ -84,35 +85,35 @@ const MOCK_TRACK = {
 }
 
 // Normalize the API response into the shape the page expects
-function normalizeTrack(data: any) {
+function normalizeTrack(data: unknown): LearningTrack | null {
   if (!data) return null
-  const track = data.track ?? data
-  const courses = data.courses ?? track.courses ?? []
-  const enrollment = data.enrollment ?? track.enrollment ?? null
+  const raw = data as Record<string, unknown>
+  const track = (raw.track ?? raw) as Record<string, unknown>
+  const courses = (raw.courses ?? track.courses ?? []) as unknown[]
+  const enrollment = (raw.enrollment ?? track.enrollment ?? null) as Record<string, unknown> | null
 
-  // Build phases from flat course list if needed
-  let phases = track.phases ?? []
+  const phases = (track.phases ?? []) as LearningTrackPhase[]
   if (!phases.length && courses.length) {
-    phases = [{ phase: 1, title: 'Course Content', weeks: track.estimatedWeeks ?? 12, courses }]
+    phases.push({ phase: 1, title: 'Course Content', weeks: (track.estimatedWeeks ?? track.estimated_weeks ?? 12) as number, courses: courses as LearningTrackPhase['courses'] })
   }
 
   return {
-    id: track.id ?? 1,
-    title: track.title ?? MOCK_TRACK.title,
-    slug: track.slug ?? MOCK_TRACK.slug,
-    description: track.description ?? MOCK_TRACK.description,
-    difficulty: track.difficulty ?? 'intermediate',
-    estimatedWeeks: track.estimatedWeeks ?? track.estimated_weeks ?? MOCK_TRACK.estimatedWeeks,
-    enrollmentCount: track.enrollmentCount ?? track.enrollment_count ?? MOCK_TRACK.enrollmentCount,
-    rating: track.rating ?? MOCK_TRACK.rating,
-    reviewCount: track.reviewCount ?? track.review_count ?? MOCK_TRACK.reviewCount,
-    hasCertificate: track.hasCertificate ?? track.has_certificate ?? true,
-    gradient: track.gradient ?? MOCK_TRACK.gradient,
+    id: (track.id ?? 1) as number,
+    title: (track.title ?? MOCK_TRACK.title) as string,
+    slug: (track.slug ?? MOCK_TRACK.slug) as string,
+    description: (track.description ?? MOCK_TRACK.description) as string,
+    difficulty: (track.difficulty ?? 'intermediate') as string,
+    estimatedWeeks: (track.estimatedWeeks ?? track.estimated_weeks ?? MOCK_TRACK.estimatedWeeks) as number,
+    enrollmentCount: (track.enrollmentCount ?? track.enrollment_count ?? MOCK_TRACK.enrollmentCount) as number,
+    rating: (track.rating ?? MOCK_TRACK.rating) as number,
+    reviewCount: (track.reviewCount ?? track.review_count ?? MOCK_TRACK.reviewCount) as number,
+    hasCertificate: (track.hasCertificate ?? track.has_certificate ?? true) as boolean,
+    gradient: (track.gradient ?? MOCK_TRACK.gradient) as string,
     phases: phases.length ? phases : MOCK_TRACK.phases,
-    skills: track.skills ?? track.skillsGained ?? MOCK_TRACK.skills,
-    instructors: track.instructors ?? MOCK_TRACK.instructors,
+    skills: (track.skills ?? track.skillsGained ?? MOCK_TRACK.skills) as string[],
+    instructors: (track.instructors ?? MOCK_TRACK.instructors) as LearningTrack['instructors'],
     isEnrolled: !!enrollment,
-    progressPercent: enrollment?.progressPercentage ?? 0,
+    progressPercent: (enrollment?.progressPercentage ?? 0) as number,
   }
 }
 
@@ -135,7 +136,7 @@ function TrackSkeleton() {
 
 export default function TrackDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = React.use(params)
-  const [track, setTrack] = useState<ReturnType<typeof normalizeTrack> | null>(null)
+  const [track, setTrack] = useState<LearningTrack | null>(null)
   const [loading, setLoading] = useState(true)
   const [enrolling, setEnrolling] = useState(false)
   const [isEnrolled, setIsEnrolled] = useState(false)
@@ -145,17 +146,25 @@ export default function TrackDetailPage({ params }: { params: Promise<{ slug: st
   useEffect(() => {
     tracksAPI
       .get(slug)
-      .then((data: any) => {
-        const normalized = normalizeTrack(data)
+      .then((response) => {
+        if (response.error) {
+          toast.error(response.error)
+          setTrack(normalizeTrack(MOCK_TRACK)!)
+          return
+        }
+        const normalized = normalizeTrack(response.data)
         if (normalized) {
           setTrack(normalized)
-          setIsEnrolled(normalized.isEnrolled)
+          setIsEnrolled(!!normalized.isEnrolled)
           setProgressPercent(normalized.progressPercent ?? 0)
         } else {
           setTrack(normalizeTrack(MOCK_TRACK)!)
         }
       })
-      .catch(() => setTrack(normalizeTrack(MOCK_TRACK)!))
+      .catch(() => {
+        toast.error('Failed to load track. Using fallback data.')
+        setTrack(normalizeTrack(MOCK_TRACK)!)
+      })
       .finally(() => setLoading(false))
   }, [slug])
 

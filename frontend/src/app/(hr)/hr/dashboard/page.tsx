@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { gamificationAPI, hackathonsAPI } from '@/lib/api-civilization'
+import { LeaderboardEntry } from '@/types'
 
 interface Candidate {
   userId: number
@@ -36,7 +37,14 @@ export default function HRDashboard() {
     ]).then(([lb, hk]) => {
       if (lb.status === 'fulfilled') {
         const data = lb.value?.data ?? lb.value ?? []
-        setCandidates(Array.isArray(data) ? data : [])
+        const entries = Array.isArray(data) ? data : []
+        setCandidates(entries.map((e: any) => ({
+          userId: Number(e.rank) || 0,
+          fullName: e.name,
+          totalPoints: e.xp || e.totalPoints || 0,
+          level: e.level,
+          rank: e.rank,
+        })))
       }
       if (hk.status === 'fulfilled') {
         const data = hk.value?.data ?? hk.value ?? []

@@ -1,15 +1,18 @@
-import type { Metadata } from 'next'
-import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display, Press_Start_2P } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import '../styles/animations.css'
 import { Providers } from './providers'
-import { AIAssistant } from '@/components/ai/AIAssistant'
 
+const BASE_URL = 'https://bluelearnerhub.com'
+
+// Optimize font loading - only load what we use
 const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-heading',
+  variable: '--font-dm-sans',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
+  preload: true,
 })
 
 const playfair = Playfair_Display({
@@ -17,56 +20,52 @@ const playfair = Playfair_Display({
   variable: '--font-serif',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
-})
-
-const retro = Press_Start_2P({
-  subsets: ['latin'],
-  variable: '--font-retro',
-  display: 'swap',
-  weight: ['400'],
+  preload: false, // Only used in specific components
 })
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-plus-jakarta-sans',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
+  preload: true,
 })
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-mono',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
+  preload: true,
 })
 
-const BASE_URL = 'https://bluelearnerhub.com'
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAF9F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A0A0F' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'BlueLearnerHub — Free Online Courses in Computer Science & Software Engineering',
+    default: 'BlueLearnerHub — Free Coding Bootcamp for Indian Students',
     template: '%s | BlueLearnerHub',
   },
   description:
-    'Learn computer science, software engineering, Python, JavaScript, React, system design, and more — for free. Compete in AI-powered hackathons, earn verified certificates, and land your dream tech job.',
+    'Learn Python, JavaScript, React, and System Design for FREE. AI-powered quizzes, weekly hackathons, verified certificates. Join 50,000+ Indian students landing tech jobs at Google, Amazon, and top startups.',
   keywords: [
-    'free online courses computer science',
-    'software engineering courses',
-    'learn python online free',
-    'learn javascript online',
-    'react course free',
-    'coding bootcamp free',
-    'system design course',
-    'hackathon platform',
-    'AI learning platform',
-    'programming challenges',
+    'free coding bootcamp India',
+    'learn programming free',
+    'Python JavaScript React free',
+    'system design course free',
+    'hackathon platform India',
     'coding interview prep',
-    'verified certificates online',
-    'learn coding free',
-    'computer science degree online',
-    'software developer courses',
+    'verified certificates',
     'BlueLearnerHub',
-    'edtech platform India',
+    'edtech India',
+    'software engineering',
   ],
   authors: [{ name: 'BlueLearnerHub', url: BASE_URL }],
   creator: 'BlueLearnerHub',
@@ -85,18 +84,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'en_IN',
     url: BASE_URL,
     siteName: 'BlueLearnerHub',
-    title: 'BlueLearnerHub — Free Online Courses in CS & Software Engineering',
+    title: 'BlueLearnerHub — Free Coding Bootcamp for Indian Students',
     description:
-      'Master coding, algorithms, and system design. Compete in AI-powered hackathons, earn certificates, and land top tech jobs. Start free today.',
+      'Learn Python, JavaScript, React, and System Design for FREE. AI-powered quizzes, weekly hackathons, verified certificates. Join 50,000+ Indian students.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'BlueLearnerHub — The Future of Tech Education',
+        alt: 'BlueLearnerHub — Free Coding Bootcamp',
       },
     ],
   },
@@ -104,9 +103,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@bluelearnerhub',
     creator: '@bluelearnerhub',
-    title: 'BlueLearnerHub — Free Courses in CS & Software Engineering',
+    title: 'BlueLearnerHub — Free Coding Bootcamp',
     description:
-      'Master coding for free. AI-powered quizzes, live hackathons, verified certificates. Join 50,000+ learners.',
+      'Learn to code for FREE. AI-powered quizzes, hackathons, verified certificates.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -118,20 +117,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: BASE_URL,
   },
-  verification: {
-    google: 'google-site-verification-token',
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} ${retro.variable} bg-background font-sans text-foreground antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-background font-sans text-foreground antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:font-bold"
+        >
+          Skip to main content
+        </a>
         <Providers>
-          {children}
-          <AIAssistant />
+          <main id="main-content">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

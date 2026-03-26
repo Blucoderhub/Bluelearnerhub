@@ -21,6 +21,7 @@ import {
 import { aiAPI } from '@/lib/api-civilization'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from 'sonner'
+import { AIChatResponse } from '@/types'
 
 interface Message {
   id: string
@@ -86,11 +87,11 @@ export default function AICompanionPage() {
       }
 
       try {
-        const data = await aiAPI.chat(trimmed, 512)
+        const data = await aiAPI.chat(trimmed, 512) as AIChatResponse
         const reply =
           data?.data?.response ||
-          data?.response ||
           data?.data?.text ||
+          data?.response ||
           data?.text ||
           'I received your message but the response format was unexpected. Please try again.'
 

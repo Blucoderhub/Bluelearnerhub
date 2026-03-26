@@ -7,23 +7,31 @@ export class LearningController {
     try {
       const { domain, difficulty, page = 1, limit = 10 } = req.query;
 
+      const validDomains = ['web', 'mobile', 'data-science', 'devops', 'security', 'cloud', 'ai-ml'];
+      const validDifficulties = ['beginner', 'intermediate', 'advanced', 'expert'];
+
+      const domainVal = typeof domain === 'string' && validDomains.includes(domain.toLowerCase()) ? domain.toLowerCase() : null;
+      const difficultyVal = typeof difficulty === 'string' && validDifficulties.includes(difficulty.toLowerCase()) ? difficulty.toLowerCase() : null;
+      const pageNum = Math.max(1, parseInt(page as string) || 1);
+      const limitNum = Math.min(100, Math.max(1, parseInt(limit as string) || 10));
+
       let whereClause = 'WHERE is_published = true';
       const values: any[] = [];
       let paramCount = 1;
 
-      if (domain) {
+      if (domainVal) {
         whereClause += ` AND domain = $${paramCount}`;
-        values.push(domain);
+        values.push(domainVal);
         paramCount++;
       }
 
-      if (difficulty) {
+      if (difficultyVal) {
         whereClause += ` AND difficulty = $${paramCount}`;
-        values.push(difficulty);
+        values.push(difficultyVal);
         paramCount++;
       }
 
-      const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
+      const offset = (pageNum - 1) * limitNum;
 
       const countQuery = `SELECT COUNT(*) FROM learning_paths ${whereClause}`;
       const countResult = await pool.query(countQuery, values);
@@ -35,7 +43,7 @@ export class LearningController {
         LIMIT $${paramCount} OFFSET $${paramCount + 1}
       `;
 
-      values.push(parseInt(limit as string), offset);
+      values.push(limitNum, offset);
       const result = await pool.query(query, values);
 
       res.json({
@@ -43,9 +51,9 @@ export class LearningController {
         data: {
           data: result.rows,
           total,
-          page: parseInt(page as string),
-          limit: parseInt(limit as string),
-          totalPages: Math.ceil(total / parseInt(limit as string)),
+          page: pageNum,
+          limit: limitNum,
+          totalPages: Math.ceil(total / limitNum),
         },
       });
     } catch (error) {

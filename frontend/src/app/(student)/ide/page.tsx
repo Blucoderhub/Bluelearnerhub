@@ -26,6 +26,7 @@ import { Progress } from '@/components/ui/progress'
 import { motion, AnimatePresence } from 'framer-motion'
 import { codeAPI, exercisesAPI } from '@/lib/api-civilization'
 import { toast } from 'sonner'
+import { CodeExecutionResponse } from '@/types'
 
 // Lazy load Monaco to avoid large initial bundle
 const CodeEditor = dynamic(() => import('@/components/ide/CodeEditor'), {
@@ -158,7 +159,7 @@ export default function CodingPracticePage() {
     setRunResult(null)
 
     try {
-      const data = await codeAPI.execute(code, LANGUAGE_MAP[language] || 'python')
+      const data = await codeAPI.execute(code, LANGUAGE_MAP[language] || 'python') as CodeExecutionResponse
       const result = data?.data ?? data
 
       if (result?.stderr || result?.compile_output) {
@@ -170,9 +171,9 @@ export default function CodingPracticePage() {
       } else {
         setRunResult({
           status: 'pass',
-          output: result.stdout || result.output || '(no output)',
-          runtime: result.time ? `${result.time}s` : undefined,
-          memory: result.memory ? `${(result.memory / 1024).toFixed(1)} MB` : undefined,
+          output: result?.stdout ?? result?.output ?? '(no output)',
+          runtime: result?.time ? `${result.time}s` : undefined,
+          memory: result?.memory ? `${(result.memory / 1024).toFixed(1)} MB` : undefined,
         })
       }
     } catch (err: any) {

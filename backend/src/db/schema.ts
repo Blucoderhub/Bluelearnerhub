@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, timestamp, integer, boolean, pgEnum, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, timestamp, integer, boolean, pgEnum, jsonb, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // Enums
@@ -36,7 +36,7 @@ export const subscriptionTierEnum = pgEnum('subscription_tier', [
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
     email: varchar('email', { length: 255 }).unique().notNull(),
-    password: text('password'), // Nullable if using OIDC
+    password: text('password'),
     fullName: varchar('full_name', { length: 255 }).notNull(),
     role: roleEnum('role').default('STUDENT').notNull(),
     xp: integer('xp').default(0).notNull(),
@@ -44,12 +44,13 @@ export const users = pgTable('users', {
     streak: integer('streak').default(0).notNull(),
     avatarConfig: jsonb('avatar_config'),
     lastActive: timestamp('last_active').defaultNow().notNull(),
-    // Account lockout — added by migration 004_account_lockout.sql
     failedLoginAttempts: integer('failed_login_attempts').default(0),
     lockedUntil: timestamp('locked_until'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+}, (t) => ({
+    lastActiveIdx: index('idx_users_last_active').on(t.lastActive),
+}));
 
 export const domains = pgTable('domains', {
     id: serial('id').primaryKey(),

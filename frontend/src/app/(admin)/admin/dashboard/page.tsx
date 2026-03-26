@@ -40,7 +40,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     analyticsAPI.platform()
-      .then((d) => setStats(d?.data ?? d ?? FALLBACK))
+      .then((d: any) => setStats(d?.data ?? FALLBACK))
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])

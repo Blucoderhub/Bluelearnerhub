@@ -6,15 +6,28 @@ import { config } from '../config';
 import logger from '../utils/logger';
 import { pool } from '../utils/database';
 
+interface HackathonFilters {
+  domain?: string;
+  status?: string;
+  search?: string;
+}
+
 export class HackathonService {
-  async getHackathons(filters: any, page: number, limit: number, userId?: number) {
+  private static readonly MAX_SOURCE_CODE_SIZE = 50 * 1024; // 50KB
+
+  async getHackathons(filters: HackathonFilters, page: number, limit: number, userId?: number) {
     const result = await HackathonModel.findAll(filters, page, limit);
 
-    // Check if user is registered for each hackathon
-    if (userId) {
-      for (const hackathon of result.data) {
-        hackathon.isRegistered = await HackathonModel.isUserRegistered(hackathon.id, userId);
-      }
+    if (userId && result.data.length > 0) {
+      const hackathonIds = result.data.map((h: { id: number }) => h.id);
+      const registrations = await pool.query(
+        'SELECT hackathon_id FROM hackathon_registrations WHERE user_id = $1 AND hackathon_id = ANY($2)',
+        [userId, hackathonIds]
+      );
+      const registeredIds = new Set(registrations.rows.map((r: { hackathon_id: number }) => r.hackathon_id));
+      result.data.forEach((h: { isRegistered?: boolean; id: number }) => {
+        h.isRegistered = registeredIds.has(h.id);
+      });
     }
 
     return result;
@@ -170,6 +183,11 @@ export class HackathonService {
 
     if (now > hackathon.end_time) {
       throw new AppError('Hackathon has ended', 400);
+    }
+
+    // Check source code size limit
+    if (sourceCode.length > HackathonService.MAX_SOURCE_CODE_SIZE) {
+      throw new AppError(`Source code exceeds maximum size of ${Math.floor(HackathonService.MAX_SOURCE_CODE_SIZE / 1024)}KB`, 400);
     }
 
     // Check if user is registered
@@ -365,5 +383,46 @@ export class HackathonService {
 
   async getUserSubmissions(hackathonId: number, userId: number) {
     return await SubmissionModel.findByUser(userId, hackathonId);
+  }
+
+  async transferTeamLeadership(hackathonId: number, currentLeaderId: number, newLeaderId: number) {
+    // Find the team where current user is leader
+    const teamResult = await pool.query(
+      `SELECT t.* FROM teams t
+       JOIN team_members tm ON t.id = tm.team_id
+       WHERE t.hackathon_id = $1 AND tm.user_id = $2 AND tm.role = 'leader'`,
+      [hackathonId, currentLeaderId]
+    );
+
+    if (teamResult.rows.length === 0) {
+      throw new AppError('You are not a team leader in this hackathon', 403);
+    }
+
+    const team = teamResult.rows[0];
+
+    // Check if new leader is a member of the team
+    const memberResult = await pool.query(
+      'SELECT * FROM team_members WHERE team_id = $1 AND user_id = $2',
+      [team.id, newLeaderId]
+    );
+
+    if (memberResult.rows.length === 0) {
+      throw new AppError('Target user is not a member of your team', 400);
+    }
+
+    // Update roles: demote current leader to member, promote new leader to leader
+    await pool.query(
+      'UPDATE team_members SET role = $1 WHERE team_id = $2 AND user_id = $3',
+      ['member', team.id, currentLeaderId]
+    );
+
+    await pool.query(
+      'UPDATE team_members SET role = $1 WHERE team_id = $2 AND user_id = $3',
+      ['leader', team.id, newLeaderId]
+    );
+
+    logger.info(`Team leadership transferred: ${currentLeaderId} → ${newLeaderId} in team ${team.id}`);
+
+    return { message: 'Team leadership transferred successfully' };
   }
 }

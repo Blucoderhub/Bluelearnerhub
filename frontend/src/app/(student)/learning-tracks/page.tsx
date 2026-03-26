@@ -24,6 +24,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { tracksAPI } from '@/lib/api-civilization'
+import { LearningTrack } from '@/types'
 
 const TRACKS_FALLBACK = [
   {
@@ -147,8 +148,13 @@ export default function LearningTracksPage() {
   useEffect(() => {
     tracksAPI
       .list()
-      .then((d) => {
-        if (d?.length) setTracks(d)
+      .then((response: { data?: LearningTrack[]; error?: string }) => {
+        if (response.error) {
+          console.warn('Failed to load tracks:', response.error)
+          return
+        }
+        const data = response?.data ?? []
+        if (data?.length) setTracks(data as any)
       })
       .catch(() => {
         /* keep fallback data */

@@ -1,5 +1,6 @@
 console.log('>>> SERVER.TS STARTING <<<');
 import http from 'http';
+import * as Sentry from '@sentry/node';
 import { execFile } from 'child_process';
 import path from 'path';
 import { createApp } from './app';
@@ -13,6 +14,15 @@ import {
 import { config } from './config';
 import logger from './utils/logger';
 import { initDailyQuizCron } from './services/dailyQuiz.service';
+
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: config.nodeEnv,
+    tracesSampleRate: config.nodeEnv === 'production' ? 0.1 : 1.0,
+  });
+  logger.info('✓ Sentry initialized');
+}
 
 function runMigrations(): Promise<void> {
   return new Promise((resolve) => {

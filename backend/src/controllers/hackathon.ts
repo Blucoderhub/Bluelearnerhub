@@ -201,6 +201,31 @@ export class HackathonController {
     }
   }
 
+  async transferTeamLeadership(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const currentLeaderId = req.user!.id;
+      const { newLeaderId } = req.body;
+
+      if (!newLeaderId || typeof newLeaderId !== 'number') {
+        return res.status(400).json({ success: false, message: 'newLeaderId is required and must be a number' });
+      }
+
+      const result = await hackathonService.transferTeamLeadership(
+        parseInt(id),
+        currentLeaderId,
+        newLeaderId
+      );
+
+      res.json({
+        success: true,
+        ...result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async createBehaviorEvent(req: Request, res: Response, next: NextFunction) {
     try {
       const hackathonId = parseInt(req.params.id, 10);

@@ -15,24 +15,25 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { tracksAPI, gamificationAPI } from '@/lib/api-civilization'
+import { LearningTrack } from '@/types'
 
 interface LeaderboardEntry {
-  userId: number
-  fullName: string
-  totalPoints: number
-  level: number
+  userId?: number
+  fullName?: string
+  totalPoints?: number
+  level?: number
 }
 
 interface Track {
   id: number
   title: string
-  domain: string
-  enrollmentCount: number
+  domain?: string
+  enrollmentCount?: number
 }
 
 export default function InstitutionDashboard() {
-  const [topStudents, setTopStudents] = useState<LeaderboardEntry[]>([])
-  const [tracks, setTracks] = useState<Track[]>([])
+  const [topStudents, setTopStudents] = useState<{ userId: number; fullName: string; totalPoints: number; level: number }[]>([])
+  const [tracks, setTracks] = useState<{ id: number; title: string; domain: string; enrollmentCount: number }[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -42,11 +43,23 @@ export default function InstitutionDashboard() {
     ]).then(([lb, tr]) => {
       if (lb.status === 'fulfilled') {
         const data = lb.value?.data ?? lb.value ?? []
-        setTopStudents(Array.isArray(data) ? data : [])
+        const entries = Array.isArray(data) ? data : []
+        setTopStudents((entries as any[]).map((e) => ({
+          userId: Number(e.rank) || 0,
+          fullName: e.name,
+          totalPoints: e.xp || e.totalPoints || 0,
+          level: e.level ?? 1,
+        })))
       }
       if (tr.status === 'fulfilled') {
         const data = tr.value?.data ?? tr.value ?? []
-        setTracks(Array.isArray(data) ? data.slice(0, 5) : [])
+        const trackData = Array.isArray(data) ? data : []
+        setTracks(trackData.slice(0, 5).map((t: any) => ({
+          id: t.id,
+          title: t.title,
+          domain: t.slug || '',
+          enrollmentCount: t.enrollmentCount,
+        })))
       }
       setLoading(false)
     })

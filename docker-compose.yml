@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: edtech_platform
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blh_pg_xK9mP2vL8qR4nW6yZ3aB7cD}
     ports:
       - "5432:5432"
     volumes:
@@ -24,7 +24,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: edtech_redis
-    command: redis-server --requirepass ${REDIS_PASSWORD:-redis123}
+    command: redis-server --requirepass ${REDIS_PASSWORD:-blh_redis_aB3cD5eF7gH9jK1l}
     ports:
       - "6379:6379"
     volumes:
@@ -49,12 +49,12 @@ services:
       
       # Database Configuration
       # DATABASE_URL used by Drizzle ORM (db/index.ts) — standard postgres:// for local Docker
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/edtech_platform
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-blh_pg_xK9mP2vL8qR4nW6yZ3aB7cD}@postgres:5432/edtech_platform
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=edtech_platform
       - DB_USER=postgres
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-blh_pg_xK9mP2vL8qR4nW6yZ3aB7cD}
       - DB_MAX_CONNECTIONS=20
       - DB_IDLE_TIMEOUT=30000
       - DB_CONNECTION_TIMEOUT=2000
@@ -62,12 +62,12 @@ services:
       # Redis Configuration
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-blh_redis_aB3cD5eF7gH9jK1l}
       - REDIS_DB=0
       
       # Security — defaults are dev-only values (override in production via .env)
-      - JWT_SECRET=${JWT_SECRET:-bluelearnerhub-jwt-dev-secret-key-32-plus-chars}
-      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-bluelearnerhub-refresh-dev-secret-32-plus-c}
+      - JWT_SECRET=${JWT_SECRET:-blh_jwt_S8kL2mN4pQ6rT9vX1yZ3aB5cD7eF9gH}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-blh_ref_J5kM7nN9pR2sT5vW8xY1zA3bC5dE7f}
       - JWT_EXPIRES_IN=7d
       - JWT_REFRESH_EXPIRES_IN=30d
       - SESSION_SECRET=${SESSION_SECRET:-bluelearnerhub-session-dev-secret-key-32plus}
@@ -111,10 +111,10 @@ services:
     container_name: edtech_ai_services
     environment:
       # Database Configuration
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/edtech_platform
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-blh_pg_xK9mP2vL8qR4nW6yZ3aB7cD}@postgres:5432/edtech_platform
       
       # Redis Configuration  
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379/1
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-blh_redis_aB3cD5eF7gH9jK1l}@redis:6379/1
       
       # AI API Keys
       - GEMINI_API_KEY=${GEMINI_API_KEY}

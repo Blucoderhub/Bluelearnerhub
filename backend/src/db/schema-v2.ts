@@ -49,20 +49,22 @@ export const tutorials = pgTable('tutorials', {
   title:            varchar('title', { length: 255 }).notNull(),
   description:      text('description'),
   authorId:         integer('author_id').references(() => users.id),
-  domain:           varchar('domain', { length: 100 }).notNull(),        // 'javascript', 'thermodynamics'
-  subDomain:        varchar('sub_domain', { length: 100 }),              // 'async', 'heat-transfer'
+  domain:           varchar('domain', { length: 100 }).notNull(),
+  subDomain:        varchar('sub_domain', { length: 100 }),
   difficulty:       difficultyEnum('difficulty').default('beginner'),
   estimatedMinutes: integer('estimated_minutes').default(15),
   xpReward:         integer('xp_reward').default(50).notNull(),
-  prerequisites:    text('prerequisites').array(),                       // Array of tutorial slugs
+  prerequisites:    text('prerequisites').array(),
   tags:             text('tags').array(),
   isPublished:      boolean('is_published').default(false).notNull(),
   viewCount:        integer('view_count').default(0).notNull(),
   completionCount:  integer('completion_count').default(0).notNull(),
-  // embedding vector(1536) — added via raw SQL migration (pgvector)
   createdAt:        timestamp('created_at').defaultNow().notNull(),
   updatedAt:        timestamp('updated_at').defaultNow().notNull(),
-});
+}, (t) => ({
+  authorIdx:        index('idx_tutorials_author').on(t.authorId),
+  publishedIdx:     index('idx_tutorials_published_difficulty').on(t.isPublished, t.difficulty),
+}));
 
 /**
  * tutorial_sections — individual steps inside a tutorial
@@ -125,19 +127,21 @@ export const qnaQuestions = pgTable('qna_questions', {
   id:               serial('id').primaryKey(),
   authorId:         integer('author_id').references(() => users.id).notNull(),
   title:            varchar('title', { length: 500 }).notNull(),
-  body:             text('body').notNull(),                               // Markdown
+  body:             text('body').notNull(),
   domain:           varchar('domain', { length: 100 }),
   viewCount:        integer('view_count').default(0).notNull(),
   answerCount:      integer('answer_count').default(0).notNull(),
-  voteScore:        integer('vote_score').default(0).notNull(),          // net votes
+  voteScore:        integer('vote_score').default(0).notNull(),
   isAnswered:       boolean('is_answered').default(false).notNull(),
-  acceptedAnswerId: integer('accepted_answer_id'),                       // FK set after answer created
+  acceptedAnswerId: integer('accepted_answer_id'),
   bountyAmount:     integer('bounty_amount').default(0).notNull(),
   bountyDeadline:   timestamp('bounty_deadline'),
-  // embedding vector(1536) — added via raw SQL migration
   createdAt:        timestamp('created_at').defaultNow().notNull(),
   updatedAt:        timestamp('updated_at').defaultNow().notNull(),
-});
+}, (t) => ({
+  authorIdx:     index('idx_qna_questions_author').on(t.authorId),
+  createdAtIdx:  index('idx_qna_questions_created').on(t.createdAt),
+}));
 
 /**
  * qna_answers — answers posted in response to a question
@@ -146,13 +150,16 @@ export const qnaAnswers = pgTable('qna_answers', {
   id:           serial('id').primaryKey(),
   questionId:   integer('question_id').references(() => qnaQuestions.id, { onDelete: 'cascade' }).notNull(),
   authorId:     integer('author_id').references(() => users.id).notNull(),
-  body:         text('body').notNull(),                                  // Markdown
+  body:         text('body').notNull(),
   voteScore:    integer('vote_score').default(0).notNull(),
   isAccepted:   boolean('is_accepted').default(false).notNull(),
   aiGenerated:  boolean('ai_generated').default(false).notNull(),
   createdAt:    timestamp('created_at').defaultNow().notNull(),
   updatedAt:    timestamp('updated_at').defaultNow().notNull(),
-});
+}, (t) => ({
+  authorIdx:   index('idx_qna_answers_author').on(t.authorId),
+  acceptedIdx: index('idx_qna_answers_accepted').on(t.isAccepted),
+}));
 
 /**
  * qna_votes — tracks who voted on what (prevents double-voting)
@@ -182,10 +189,11 @@ export const tags = pgTable('tags', {
 });
 
 export const qnaQuestionTags = pgTable('qna_question_tags', {
+  id:         serial('id').primaryKey(),
   questionId: integer('question_id').references(() => qnaQuestions.id, { onDelete: 'cascade' }).notNull(),
   tagId:      integer('tag_id').references(() => tags.id).notNull(),
 }, (t) => ({
-  pk: uniqueIndex('uq_question_tag').on(t.questionId, t.tagId),
+  uniq: uniqueIndex('uq_question_tag').on(t.questionId, t.tagId),
 }));
 
 /**
@@ -255,12 +263,13 @@ export const commits = pgTable('commits', {
   sha:            varchar('sha', { length: 64 }).unique().notNull(),
   authorId:       integer('author_id').references(() => users.id).notNull(),
   message:        text('message').notNull(),
-  changesSummary: jsonb('changes_summary'),                             // {filesChanged, additions, deletions}
+  changesSummary: jsonb('changes_summary'),
   parentSha:      varchar('parent_sha', { length: 64 }),
   branch:         varchar('branch', { length: 255 }).default('main').notNull(),
   createdAt:      timestamp('created_at').defaultNow().notNull(),
 }, (t) => ({
-  repoIdx: index('idx_commits_repo').on(t.repoId),
+  repoIdx:   index('idx_commits_repo').on(t.repoId),
+  authorIdx: index('idx_commits_author').on(t.authorId),
 }));
 
 /**
@@ -270,7 +279,7 @@ export const issues = pgTable('issues', {
   id:         serial('id').primaryKey(),
   repoId:     integer('repo_id').references(() => repositories.id, { onDelete: 'cascade' }).notNull(),
   authorId:   integer('author_id').references(() => users.id).notNull(),
-  number:     integer('number').notNull(),                              // Per-repo #1, #2…
+  number:     integer('number').notNull(),
   title:      varchar('title', { length: 500 }).notNull(),
   body:       text('body'),
   status:     issueStatusEnum('status').default('open').notNull(),
@@ -279,7 +288,9 @@ export const issues = pgTable('issues', {
   createdAt:  timestamp('created_at').defaultNow().notNull(),
   closedAt:   timestamp('closed_at'),
 }, (t) => ({
-  uniq: uniqueIndex('uq_issue_repo_num').on(t.repoId, t.number),
+  uniq:      uniqueIndex('uq_issue_repo_num').on(t.repoId, t.number),
+  authorIdx: index('idx_issues_author').on(t.authorId),
+  statusIdx: index('idx_issues_status').on(t.status),
 }));
 
 /**
@@ -295,27 +306,30 @@ export const pullRequests = pgTable('pull_requests', {
   sourceBranch:   varchar('source_branch', { length: 255 }).notNull(),
   targetBranch:   varchar('target_branch', { length: 255 }).default('main').notNull(),
   status:         prStatusEnum('status').default('open').notNull(),
-  diffContent:    text('diff_content'),                                 // Unified diff
-  aiReview:       text('ai_review'),                                    // AI-generated review
-  aiReviewScore:  smallint('ai_review_score'),                         // 0-100
+  diffContent:    text('diff_content'),
+  aiReview:       text('ai_review'),
+  aiReviewScore:  smallint('ai_review_score'),
   changesAdded:   integer('changes_added').default(0),
   changesRemoved: integer('changes_removed').default(0),
   createdAt:      timestamp('created_at').defaultNow().notNull(),
   mergedAt:       timestamp('merged_at'),
   closedAt:       timestamp('closed_at'),
 }, (t) => ({
-  uniq: uniqueIndex('uq_pr_repo_num').on(t.repoId, t.number),
+  uniq:      uniqueIndex('uq_pr_repo_num').on(t.repoId, t.number),
+  authorIdx: index('idx_pull_requests_author').on(t.authorId),
+  statusIdx: index('idx_pull_requests_status').on(t.status),
 }));
 
 /**
  * repository_stars — star/unstar tracking
  */
 export const repositoryStars = pgTable('repository_stars', {
+  id:        serial('id').primaryKey(),
   userId:    integer('user_id').references(() => users.id).notNull(),
   repoId:    integer('repo_id').references(() => repositories.id).notNull(),
   starredAt: timestamp('starred_at').defaultNow().notNull(),
 }, (t) => ({
-  pk: uniqueIndex('uq_repo_star').on(t.userId, t.repoId),
+  uniq: uniqueIndex('uq_repo_star').on(t.userId, t.repoId),
 }));
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -381,12 +395,13 @@ export const learningTracks = pgTable('learning_tracks', {
 });
 
 export const trackCourses = pgTable('track_courses', {
+  id:         serial('id').primaryKey(),
   trackId:    integer('track_id').references(() => learningTracks.id, { onDelete: 'cascade' }).notNull(),
   courseId:   integer('course_id').references(() => courses.id).notNull(),
   orderIndex: integer('order_index').notNull(),
   isRequired: boolean('is_required').default(true).notNull(),
 }, (t) => ({
-  pk: uniqueIndex('uq_track_course').on(t.trackId, t.courseId),
+  uniq: uniqueIndex('uq_track_course').on(t.trackId, t.courseId),
 }));
 
 export const trackEnrollments = pgTable('track_enrollments', {
@@ -428,12 +443,13 @@ export const organizations = pgTable('organizations', {
 });
 
 export const orgMembers = pgTable('org_members', {
+  id:       serial('id').primaryKey(),
   orgId:    integer('org_id').references(() => organizations.id, { onDelete: 'cascade' }).notNull(),
   userId:   integer('user_id').references(() => users.id).notNull(),
-  role:     varchar('role', { length: 50 }).default('member').notNull(), // 'owner','admin','member'
+  role:     varchar('role', { length: 50 }).default('member').notNull(),
   joinedAt: timestamp('joined_at').defaultNow().notNull(),
 }, (t) => ({
-  pk: uniqueIndex('uq_org_member').on(t.orgId, t.userId),
+  uniq: uniqueIndex('uq_org_member').on(t.orgId, t.userId),
 }));
 
 /**
@@ -511,7 +527,9 @@ export const notebooks = pgTable('notebooks', {
   sourceCount: integer('source_count').default(0).notNull(),
   createdAt:   timestamp('created_at').defaultNow().notNull(),
   updatedAt:   timestamp('updated_at').defaultNow().notNull(),
-});
+}, (t) => ({
+  userUpdatedIdx: index('idx_notebooks_user_updated').on(t.userId, t.updatedAt),
+}));
 
 /**
  * notebook_sources — individual documents or text snippets added to a notebook.

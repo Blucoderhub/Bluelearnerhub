@@ -13,6 +13,8 @@ import { db } from '../db';
 import { eq, sql, desc } from 'drizzle-orm';
 import { users, achievements, userAchievements } from '../db/schema';
 import logger from '../utils/logger';
+import { GamificationService, LeaderboardPeriod } from '../services/gamification.service';
+import { toUTCISOString } from '../utils/timezone';
 
 // ─── All defined achievements catalogue (shown with lock/unlock state) ──────
 
@@ -83,28 +85,15 @@ export const getMyAchievements = async (req: Request, res: Response) => {
 export const getLeaderboard = async (req: Request, res: Response) => {
   try {
     const limit = Math.min(parseInt(String(req.query.limit ?? '10')), 50);
+    const offset = Math.max(parseInt(String(req.query.offset ?? '0')), 0);
+    const period = (req.query.period ?? 'all-time') as LeaderboardPeriod;
+    
+    const validPeriods: LeaderboardPeriod[] = ['weekly', 'monthly', 'all-time'];
+    if (!validPeriods.includes(period)) {
+      return res.status(400).json({ success: false, message: 'Invalid period. Use: weekly, monthly, or all-time' });
+    }
 
-    const rows = await db
-      .select({
-        id:       users.id,
-        fullName: users.fullName,
-        xp:       users.xp,
-        level:    users.level,
-        role:     users.role,
-        streak:   users.streak,
-      })
-      .from(users)
-      .orderBy(desc(users.xp))
-      .limit(limit);
-
-    const leaderboard = rows.map((u: any, i: number) => ({
-      rank:     i + 1,
-      id:       u.id,
-      name:     u.fullName,
-      xp:       u.xp,
-      level:    u.level,
-      streak:   u.streak,
-    }));
+    const leaderboard = await GamificationService.getLeaderboard(limit, offset, period);
 
     res.json({ success: true, data: leaderboard });
   } catch (err) {

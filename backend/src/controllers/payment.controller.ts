@@ -8,15 +8,16 @@ export class PaymentController {
             const { tier } = req.body;
             const userId = req.user!.id;
 
-            if (!['EXPLORER', 'INNOVATOR', 'ENTERPRISE'].includes(tier)) {
-                return res.status(400).json({ success: false, message: 'Invalid subscription tier' });
+            const validTiers = ['EXPLORER', 'INNOVATOR', 'ENTERPRISE'];
+            if (!tier || typeof tier !== 'string' || !validTiers.includes(tier.toUpperCase())) {
+                return res.status(400).json({ success: false, message: 'Invalid subscription tier', error: 'INVALID_TIER' });
             }
 
-            const session = await StripeService.createCheckoutSession(userId, tier as any);
+            const session = await StripeService.createCheckoutSession(userId, tier.toUpperCase() as any);
             res.json({ success: true, data: { url: session.url } });
         } catch (error: any) {
             logger.error('createCheckoutSession error', error);
-            res.status(500).json({ success: false, message: 'Failed to create checkout session' });
+            res.status(500).json({ success: false, message: 'Failed to create checkout session', error: 'CHECKOUT_ERROR' });
         }
     }
 

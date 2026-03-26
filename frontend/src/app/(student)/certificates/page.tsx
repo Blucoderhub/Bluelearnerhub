@@ -173,8 +173,9 @@ export default function CertificatesPage() {
   useEffect(() => {
     certificatesAPI
       .mine()
-      .then((d) => {
-        if (d?.length) setCerts(d)
+      .then((d: any) => {
+        const certs = d?.data ?? d ?? []
+        if (certs?.length) setCerts(certs)
       })
       .catch(() => {
         /* keep mock fallback */

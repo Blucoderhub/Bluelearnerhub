@@ -70,6 +70,11 @@ async function submitToJudge0(
       source_code: sourceCode,
       language_id: languageId,
       stdin: stdin ?? '',
+      cpu_time_limit: 5,
+      wall_time_limit: 10,
+      memory_limit: 128000,
+      max_output_size: 10240,
+      enable_network: false,
     }),
   });
 

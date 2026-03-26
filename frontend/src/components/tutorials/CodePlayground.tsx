@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, RotateCcw, Download } from 'lucide-react'
 import { codeAPI } from '@/lib/api-civilization'
+import { CodeExecutionResponse } from '@/types'
 
 interface CodePlaygroundProps {
   initialCode?: string
@@ -26,7 +27,7 @@ export default function CodePlayground({
     setOutput(['Running...'])
 
     try {
-      const data = await codeAPI.execute(code, initialLanguage)
+      const data = await codeAPI.execute(code, initialLanguage) as CodeExecutionResponse
       const result = data?.data ?? data
       const lines: string[] = []
       if (result?.stdout) lines.push(...result.stdout.split('\n').filter(Boolean))

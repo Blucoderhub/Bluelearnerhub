@@ -87,11 +87,6 @@ export function csrfProtection(req: Request, res: Response, next: NextFunction):
     return next();
   }
 
-  // In development, skip CSRF to simplify local API testing
-  if (config.nodeEnv === 'development') {
-    return next();
-  }
-
   const cookieToken = req.cookies?.[CSRF_COOKIE];
   const headerToken = req.headers[CSRF_HEADER] as string | undefined;
 

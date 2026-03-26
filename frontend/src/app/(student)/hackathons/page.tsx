@@ -298,10 +298,11 @@ export default function HackathonsPage() {
   useEffect(() => {
     hackathonsAPI
       .list()
-      .then((d) => {
-        if (d?.length) {
+      .then((d: any) => {
+        const hackathons = d?.data ?? d ?? []
+        if (hackathons?.length) {
           setHackathons(
-            d.map((h: any) => {
+            hackathons.map((h: any) => {
               const meta = getMeta(h.domain)
               const deadline = h.registrationDeadline || h.deadline
               const daysLeft = deadline

@@ -114,13 +114,18 @@ export const getExercise = async (req: Request, res: Response) => {
       .from(questions)
       .where(eq(questions.quizId, id));
 
+    const questionsWithoutAnswers = qs.map((q: any) => {
+      const { correctAnswer, ...rest } = q;
+      return rest;
+    });
+
     res.json({
       success: true,
       data: {
         ...quiz,
         difficulty: difficultyLabel(quiz.difficulty),
         points:     difficultyPoints(quiz.difficulty),
-        questions:  qs,
+        questions:  questionsWithoutAnswers,
       },
     });
   } catch (err) {

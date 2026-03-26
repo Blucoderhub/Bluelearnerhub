@@ -15,8 +15,8 @@ router.get('/recommend',       authenticate, checkCredits, aiController.getRecom
 router.post('/hackathon-help', authenticate, checkCredits, aiController.getHackathonHelp);
 
 // ── AI_core-backed routes ─────────────────────────────────────────────────────
-// POST /api/ai/generate  — general-purpose text generation (public, rate-limited)
-router.post('/generate',       apiLimiter,                 aiController.generate);
+// POST /api/ai/generate  — general-purpose text generation (authenticated)
+router.post('/generate',       authenticate, apiLimiter,      aiController.generate);
 
 // POST /api/ai/quiz/generate — on-demand structured quiz creation (auth required)
 router.post('/quiz/generate',  authenticate,               aiController.generateQuiz);

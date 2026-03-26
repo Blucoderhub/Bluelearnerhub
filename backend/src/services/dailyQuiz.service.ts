@@ -106,14 +106,62 @@ export function scoreQuiz(quiz: DailyQuiz, answers: number[]): ScoreResult {
 }
 
 // In-memory cache — keyed by `${domain}:${date}`
-const quizCache = new Map<string, DailyQuiz>();
+const MAX_CACHE_SIZE = 100;
+const CACHE_ENTRY_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+interface CacheEntry<T> {
+  value: T;
+  createdAt: number;
+}
+
+const quizCache = new Map<string, CacheEntry<DailyQuiz>>();
+
+function cleanupCache(): void {
+  const now = Date.now();
+  let removed = 0;
+  
+  for (const [key, entry] of quizCache.entries()) {
+    if (now - entry.createdAt > CACHE_ENTRY_TTL_MS) {
+      quizCache.delete(key);
+      removed++;
+    }
+  }
+
+  // Also enforce max size by removing oldest entries
+  if (quizCache.size > MAX_CACHE_SIZE) {
+    const entries = Array.from(quizCache.entries())
+      .sort((a, b) => a[1].createdAt - b[1].createdAt);
+    
+    const toRemove = quizCache.size - MAX_CACHE_SIZE;
+    for (let i = 0; i < toRemove; i++) {
+      quizCache.delete(entries[i][0]);
+      removed++;
+    }
+  }
+
+  if (removed > 0) {
+    logger.info(`[DailyQuiz] Cache cleanup: removed ${removed} entries, ${quizCache.size} remaining`);
+  }
+}
+
+// Start automatic cleanup every hour
+setInterval(cleanupCache, 60 * 60 * 1000);
 
 // ─── Generator ────────────────────────────────────────────────────────────────
 
 async function generateQuizForDomain(domain: string, date: string): Promise<DailyQuiz> {
   const cacheKey = `${domain}:${date}`;
   const cached = quizCache.get(cacheKey);
-  if (cached) return cached;
+  const now = Date.now();
+  
+  if (cached && (now - cached.createdAt) < CACHE_ENTRY_TTL_MS) {
+    return cached.value;
+  }
+
+  // Enforce max cache size before adding new entry
+  if (quizCache.size >= MAX_CACHE_SIZE) {
+    cleanupCache();
+  }
 
   try {
     const { data } = await axios.post(`${AI_SERVICE_URL}/api/v1/ai/quiz/generate`, {
@@ -129,7 +177,7 @@ async function generateQuizForDomain(domain: string, date: string): Promise<Dail
       questions: data.questions ?? [],
     };
 
-    quizCache.set(cacheKey, quiz);
+    quizCache.set(cacheKey, { value: quiz, createdAt: Date.now() });
     logger.info(`Daily quiz generated: ${domain} (${date})`);
     return quiz;
   } catch (err) {

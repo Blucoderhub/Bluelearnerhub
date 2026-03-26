@@ -1,4 +1,3 @@
-// @ts-nocheck
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -50,8 +49,8 @@ export function createSecureApp(): Application {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          styleSrc: ["'self'", "'unsafe-inline'", 'https:'],  // Allow inline styles for Next.js
-          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https:'],  // Next.js requires unsafe-eval
+          styleSrc: ["'self'", 'https:'],
+          scriptSrc: ["'self'", 'https:'],
           imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
           fontSrc: ["'self'", 'data:', 'https:'],
           connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:3000'].filter(Boolean),
@@ -63,7 +62,7 @@ export function createSecureApp(): Application {
           frameAncestors: ["'none'"],
           upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : undefined,
         },
-        reportOnly: false,  // Set to true to report violations without blocking
+        reportOnly: false,
       },
 
       // Referrer Policy

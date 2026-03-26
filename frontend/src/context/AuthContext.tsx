@@ -16,12 +16,16 @@ const AUTH_HINT_MAX_AGE = 7 * 24 * 60 * 60 // 7 days, same as accessToken TTL
 
 function setAuthHintCookie() {
   if (typeof document === 'undefined') return
-  document.cookie = `${AUTH_HINT_COOKIE}=1; path=/; max-age=${AUTH_HINT_MAX_AGE}; SameSite=Lax`
+  const isProduction = process.env.NODE_ENV === 'production'
+  const secure = isProduction ? '; Secure' : ''
+  document.cookie = `${AUTH_HINT_COOKIE}=1; path=/; max-age=${AUTH_HINT_MAX_AGE}; SameSite=Lax${secure}`
 }
 
 function clearAuthHintCookie() {
   if (typeof document === 'undefined') return
-  document.cookie = `${AUTH_HINT_COOKIE}=; path=/; max-age=0; SameSite=Lax`
+  const isProduction = process.env.NODE_ENV === 'production'
+  const secure = isProduction ? '; Secure' : ''
+  document.cookie = `${AUTH_HINT_COOKIE}=; path=/; max-age=0; SameSite=Lax${secure}`
 }
 
 function hasAuthHintCookie(): boolean {

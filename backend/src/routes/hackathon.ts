@@ -8,7 +8,7 @@ import { apiLimiter } from '../middleware/rateLimiter';
 const router = Router();
 const controller = new HackathonController();
 
-router.get('/', apiLimiter, optionalAuth, controller.getHackathons.bind(controller));
+router.get('/', apiLimiter, optionalAuth, commonValidators.pagination, validate, controller.getHackathons.bind(controller));
 router.get('/:id', apiLimiter, optionalAuth, commonValidators.idParam, validate, controller.getHackathonById.bind(controller));
 router.get('/:id/leaderboard', apiLimiter, commonValidators.idParam, validate, controller.getLeaderboard.bind(controller));
 router.post('/:id/register', apiLimiter, authenticate, commonValidators.idParam, validate, controller.register.bind(controller));
@@ -18,6 +18,7 @@ router.post('/:id/submit', apiLimiter, authenticate, commonValidators.idParam, h
 router.post('/:id/run', apiLimiter, authenticate, commonValidators.idParam, validate, controller.runCode.bind(controller));
 router.get('/:id/submissions', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getUserSubmissions.bind(controller));
 router.get('/:id/matches', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getPotentialMatches.bind(controller));
+router.post('/:id/teams/transfer-leadership', apiLimiter, authenticate, commonValidators.idParam, validate, controller.transferTeamLeadership.bind(controller));
 router.post('/:id/behavior-events', apiLimiter, authenticate, commonValidators.idParam, hackathonValidators.behaviorEvent, validate, controller.createBehaviorEvent.bind(controller));
 router.get('/:id/adaptive-guidance', apiLimiter, authenticate, commonValidators.idParam, validate, controller.getAdaptiveGuidance.bind(controller));
 
