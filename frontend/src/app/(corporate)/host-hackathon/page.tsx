@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
 import {
   Trophy,
   Calendar,
@@ -17,12 +19,14 @@ import {
   Sparkles,
   Zap,
   Info,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { hackathonsAPI } from '@/lib/api-civilization'
 
 const steps = [
   { id: 'basics', title: 'MISSION_DATA', icon: Rocket },
@@ -32,19 +36,56 @@ const steps = [
 ]
 
 export default function HostHackathonPage() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     domain: '',
-    prizes: '',
+    prizePool: '',
     startDate: '',
     endDate: '',
     participantType: 'all',
+    rules: '',
+    teamSize: '4',
   })
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0))
+
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.description || !formData.startDate || !formData.endDate) {
+      toast.error('Please fill in all required fields')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const result = await hackathonsAPI.create({
+        title: formData.title,
+        description: formData.description,
+        domain: formData.domain.toUpperCase() || 'GENERAL',
+        prizePool: formData.prizePool,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        rules: formData.rules || 'Open to all participants. Teams of up to ' + formData.teamSize + ' members.',
+        teamSize: parseInt(formData.teamSize) || 4,
+        maxParticipants: 500,
+      })
+
+      if (result.error) {
+        throw new Error(result.error.message || 'Failed to create hackathon')
+      }
+
+      toast.success('Hackathon created successfully!')
+      router.push('/corporate/dashboard')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create hackathon')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-12 pb-32">
@@ -256,8 +297,19 @@ export default function HostHackathonPage() {
 
           <div className="flex gap-4">
             {currentStep === steps.length - 1 ? (
-              <Button className="h-14 bg-primary px-12 font-black uppercase italic tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(var(--primary),0.4)] hover:bg-primary/90">
-                DEPLOY_HACKATHON_V1
+              <Button 
+                onClick={handleSubmit}
+                disabled={submitting}
+                className="h-14 bg-primary px-12 font-black uppercase italic tracking-widest text-primary-foreground shadow-[0_0_30px_rgba(var(--primary),0.4)] hover:bg-primary/90"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    DEPLOYING...
+                  </>
+                ) : (
+                  'DEPLOY_HACKATHON_V1'
+                )}
               </Button>
             ) : (
               <Button

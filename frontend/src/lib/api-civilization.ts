@@ -241,10 +241,71 @@ export const hackathonsAPI = {
       return createErrorResponse(error)
     }
   },
+  create: async (data: Record<string, unknown>): Promise<ApiResponse<unknown>> => {
+    try {
+      const result = await handleApiResponse(api.post('/hackathons', data))
+      return { data: result }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
   register: async (id: number): Promise<ApiResponse<unknown>> => {
     try {
       const data = await handleApiResponse(api.post(`/hackathons/${id}/register`))
       return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  processPayment: async (id: number): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.post(`/hackathons/${id}/pay`))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getRegistrations: async (id: number): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get(`/hackathons/${id}/registrations`))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  getHosted: async (): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.get('/hackathons/hosted'))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  createTeam: async (id: number, teamName: string): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.post(`/hackathons/${id}/teams`, { teamName }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  joinTeam: async (id: number, teamCode: string): Promise<ApiResponse<unknown>> => {
+    try {
+      const data = await handleApiResponse(api.post(`/hackathons/${id}/teams/join`, { teamCode }))
+      return { data }
+    } catch (error) {
+      return createErrorResponse(error)
+    }
+  },
+  submitCode: async (id: number, data: {
+    language: string
+    sourceCode: string
+    demoUrl?: string
+    presentationUrl?: string
+  }): Promise<ApiResponse<unknown>> => {
+    try {
+      const result = await handleApiResponse(api.post(`/hackathons/${id}/submit`, data))
+      return { data: result }
     } catch (error) {
       return createErrorResponse(error)
     }

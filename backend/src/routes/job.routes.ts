@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { JobController } from '../controllers/job';
+import { JobController } from '../controllers/job.controller';
 import { jobValidators, commonValidators } from '../utils/validators';
 import { validate } from '../middleware/validate';
 import { authenticate, optionalAuth, authorize } from '../middleware/auth';

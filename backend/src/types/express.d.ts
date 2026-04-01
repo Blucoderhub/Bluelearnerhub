@@ -1,7 +1,10 @@
 /**
- * Extends Express's Request interface globally so req.user and req.correlationId
+ * Extends Express's Request interface globally so req.user and req.requestId
  * are fully typed across all controllers and middleware without (req as any) casts.
+ *
+ * Compatible with Express v5 + @types/express v5
  */
+
 declare global {
   namespace Express {
     interface Request {
@@ -15,14 +18,33 @@ declare global {
         role: string;
         fullName: string;
       };
-      /** Set by requestContext middleware — unique ID for log correlation. */
+
+      /**
+       * Set by requestContext middleware — unique ID for log correlation.
+       * Always present after requestContext middleware runs.
+       */
+      requestId: string;
+
+      /**
+       * Alias for requestId — legacy name.
+       * @deprecated Use requestId instead
+       */
       correlationId?: string;
-      /** Alias for correlationId — used by legacy middleware and error handlers. */
-      requestId?: string;
-      /** Express Session ID (set by express-session if used). */
+
+      /**
+       * Express Session ID (set by express-session if used).
+       */
       sessionID?: string;
+
+      /**
+       * Request timestamp for performance tracking
+       */
+      requestTime?: Date;
     }
   }
 }
 
+/**
+ * Re-export to make this a module augmentation
+ */
 export {};

@@ -298,13 +298,15 @@ export default function HackathonsPage() {
   useEffect(() => {
     hackathonsAPI
       .list()
-      .then((d: any) => {
-        const hackathons = d?.data ?? d ?? []
-        if (hackathons?.length) {
+      .then((result: any) => {
+        const response = result?.data
+        const hackathons = Array.isArray(response) ? response : (response?.data || [])
+        
+        if (hackathons.length > 0) {
           setHackathons(
             hackathons.map((h: any) => {
               const meta = getMeta(h.domain)
-              const deadline = h.registrationDeadline || h.deadline
+              const deadline = h.registration_deadline || h.registration_end
               const daysLeft = deadline
                 ? Math.max(0, Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000))
                 : 0
@@ -317,8 +319,8 @@ export default function HackathonsPage() {
                 domain: h.domain || 'Technology',
                 type: h.type || 'General',
                 status,
-                prize: h.prizePool || h.prize || 'N/A',
-                participants: h.participantCount ?? h.participants ?? 0,
+                prize: h.total_prize_pool || h.prize || 'N/A',
+                participants: h.total_participants || h.participants || 0,
                 daysLeft,
                 icon: meta.icon,
                 gradient: meta.gradient,

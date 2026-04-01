@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AnalyticsController } from '../controllers/analytics';
+import { AnalyticsController } from '../controllers/analytics.controller';
 import { authenticate } from '../middleware/auth';
 import { apiLimiter } from '../middleware/rateLimiter';
 

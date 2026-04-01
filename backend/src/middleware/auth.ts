@@ -1,21 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import { eq } from 'drizzle-orm';
 import { verifyAccessToken, TokenPayload } from '../utils/jwt';
-import { pool } from '../utils/database';
+import { db, users } from '../db';
 import logger from '../utils/logger';
-
-// Extend Express Request type
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: number;
-        email: string;
-        role: string;
-        fullName: string;
-      };
-    }
-  }
-}
 
 export const authenticate = async (
   req: Request,
@@ -46,13 +33,19 @@ export const authenticate = async (
     // Verify token
     const decoded: TokenPayload = verifyAccessToken(token);
 
-    // Get user from database
-    const result = await pool.query(
-      'SELECT id, email, role, full_name FROM users WHERE id = $1',
-      [decoded.userId]
-    );
+    // Get user from database using Drizzle ORM
+    const result = await db.query.users.findFirst({
+      where: eq(users.id, decoded.userId),
+      columns: {
+        id: true,
+        email: true,
+        role: true,
+        fullName: true,
+        isActive: true,
+      },
+    });
 
-    if (result.rows.length === 0) {
+    if (!result) {
       res.status(401).json({
         success: false,
         message: 'User not found',
@@ -60,21 +53,28 @@ export const authenticate = async (
       return;
     }
 
-    const user = result.rows[0];
+    // Check if user is active
+    if (!result.isActive) {
+      res.status(401).json({
+        success: false,
+        message: 'Account is deactivated',
+      });
+      return;
+    }
 
     // Attach user to request
     req.user = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      fullName: user.full_name,
+      id: result.id,
+      email: result.email,
+      role: result.role,
+      fullName: result.fullName,
     };
 
     // Update last active (fire-and-forget — never block auth on this)
-    pool.query(
-      'UPDATE users SET last_active = NOW() WHERE id = $1',
-      [user.id]
-    ).catch(() => { /* non-fatal */ });
+    db.update(users)
+      .set({ lastActive: new Date() })
+      .where(eq(users.id, result.id))
+      .catch(() => { /* non-fatal */ });
 
     next();
   } catch (error) {
@@ -129,17 +129,23 @@ export const optionalAuth = async (
 
     const decoded: TokenPayload = verifyAccessToken(token);
 
-    const result = await pool.query(
-      'SELECT id, email, role, full_name FROM users WHERE id = $1 AND is_active = true',
-      [decoded.userId]
-    );
+    const result = await db.query.users.findFirst({
+      where: eq(users.id, decoded.userId),
+      columns: {
+        id: true,
+        email: true,
+        role: true,
+        fullName: true,
+        isActive: true,
+      },
+    });
 
-    if (result.rows.length > 0) {
+    if (result && result.isActive) {
       req.user = {
-        id: result.rows[0].id,
-        email: result.rows[0].email,
-        role: result.rows[0].role,
-        fullName: result.rows[0].full_name,
+        id: result.id,
+        email: result.email,
+        role: result.role,
+        fullName: result.fullName,
       };
     }
 

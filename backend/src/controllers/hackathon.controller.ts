@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { HackathonService } from '../services/hackathon';
+import { MockPaymentService } from '../services/mockPayment';
 import { db } from '../db';
+import { hackathons, hackathonRegistrations } from '../db/schema';
 import { learningBehaviorEvents } from '../db/schema-v2';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import logger from '../utils/logger';
 import { fetchAdaptiveGuidanceFromAI, fallbackHackathonGuidance } from '../services/adaptiveGuidance';
 
@@ -15,6 +17,63 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> => (
 );
 
 export class HackathonController {
+  async createHackathon(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user!.id;
+      const {
+        title,
+        description,
+        startDate,
+        endDate,
+        registrationStart,
+        registrationEnd,
+        prizePool,
+        domain,
+        maxParticipants,
+        registrationFee,
+        problemStatement,
+        rules,
+        teamSizeMin = 1,
+        teamSizeMax = 4,
+      } = req.body;
+
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const registrationStartDate = registrationStart ? new Date(registrationStart) : new Date();
+      const registrationEndDate = registrationEnd ? new Date(registrationEnd) : new Date(startDate);
+
+      const hackathon = await db.insert(hackathons).values({
+        orgId: userId,
+        title,
+        slug,
+        description,
+        start_time: new Date(startDate),
+        end_time: new Date(endDate),
+        registration_start: registrationStartDate,
+        registration_end: registrationEndDate,
+        total_prize_pool: prizePool || null,
+        domain: (domain || 'GENERAL').toUpperCase(),
+        max_participants: maxParticipants || null,
+        registration_fee: registrationFee || 0,
+        problem_statement: problemStatement || null,
+        rules: rules || null,
+        team_size_min: teamSizeMin,
+        team_size_max: teamSizeMax || 4,
+        status: 'UPCOMING',
+        frequency: 'special',
+      }).returning();
+
+      logger.info(`Hackathon created: ${hackathon[0].id} by user ${userId}`);
+
+      res.status(201).json({
+        success: true,
+        message: 'Hackathon created successfully',
+        data: hackathon[0],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getHackathons(req: Request, res: Response, next: NextFunction) {
     try {
       const { status, domain, difficulty, page = 1, limit = 10 } = req.query;
@@ -35,7 +94,10 @@ export class HackathonController {
 
       res.json({
         success: true,
-        data: result,
+        data: result.data || result,
+        total: result.total,
+        page: result.page,
+        totalPages: result.totalPages,
       });
     } catch (error) {
       next(error);
@@ -58,6 +120,49 @@ export class HackathonController {
     }
   }
 
+  async getRegistrations(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      const registrations = await db
+        .select({
+          id: hackathonRegistrations.id,
+          userId: hackathonRegistrations.userId,
+          teamId: hackathonRegistrations.teamId,
+          status: hackathonRegistrations.registrationStatus,
+          registeredAt: hackathonRegistrations.registeredAt,
+          paymentStatus: hackathonRegistrations.paymentStatus,
+        })
+        .from(hackathonRegistrations)
+        .where(eq(hackathonRegistrations.hackathonId, parseInt(id)));
+
+      res.json({
+        success: true,
+        data: registrations,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getHostedHackathons(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user!.id;
+
+      const hostedHackathons = await db
+        .select()
+        .from(hackathons)
+        .where(eq(hackathons.orgId, userId));
+
+      res.json({
+        success: true,
+        data: hostedHackathons,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
@@ -73,6 +178,34 @@ export class HackathonController {
       res.json({
         success: true,
         data: result,
+        message: 'Registration successful',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async processPayment(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const userId = req.user!.id;
+      const hackathonId = parseInt(id);
+
+      const result = await hackathonService.registerForHackathon(hackathonId, userId);
+      
+      if (result.message !== 'Successfully registered for hackathon') {
+        throw new Error(result.message);
+      }
+
+      const paymentResult = await MockPaymentService.processPayment(userId, hackathonId, 0);
+
+      res.json({
+        success: paymentResult.success,
+        data: {
+          registration: result,
+          payment: paymentResult,
+        },
+        message: paymentResult.success ? 'Registration and payment successful' : 'Registration successful, payment pending',
       });
     } catch (error) {
       next(error);

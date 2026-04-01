@@ -2,66 +2,57 @@
 
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
+import { api } from '@/lib/api-client'
 
 interface LeaderboardEntry {
   rank: number
-  name: string
-  avatar: string
-  points: number
-  solvedProblems: number
-  submissions: number
+  user_id: number
+  full_name: string
+  team_name: string | null
+  final_score: number
+  submitted_at: string
 }
 
 interface LeaderboardTableProps {
   hackathonId: string
 }
 
-const mockLeaderboard: LeaderboardEntry[] = [
-  {
-    rank: 1,
-    name: 'Alex Kumar',
-    avatar: '👨‍💻',
-    points: 4500,
-    solvedProblems: 8,
-    submissions: 24,
-  },
-  {
-    rank: 2,
-    name: 'Sarah Chen',
-    avatar: '👩‍💻',
-    points: 4200,
-    solvedProblems: 7,
-    submissions: 19,
-  },
-  {
-    rank: 3,
-    name: 'Raj Patel',
-    avatar: '👨‍💼',
-    points: 3950,
-    solvedProblems: 7,
-    submissions: 17,
-  },
-  {
-    rank: 4,
-    name: 'Emma Wilson',
-    avatar: '👩‍🔬',
-    points: 3700,
-    solvedProblems: 6,
-    submissions: 15,
-  },
-  {
-    rank: 5,
-    name: 'Marco Rossi',
-    avatar: '👨‍🎓',
-    points: 3400,
-    solvedProblems: 6,
-    submissions: 13,
-  },
-]
+export default function LeaderboardTable({ hackathonId }: LeaderboardTableProps) {
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-export default function LeaderboardTable({ hackathonId: _hackathonId }: LeaderboardTableProps) {
-  // TODO: Implement leaderboard data fetching using _hackathonId
+  useEffect(() => {
+    if (!hackathonId) return
+
+    const fetchLeaderboard = async () => {
+      setLoading(true)
+      try {
+        const response = await api.get(`/hackathons/${hackathonId}/leaderboard`)
+        const data = response.data?.data || response.data || []
+        
+        if (Array.isArray(data)) {
+          setLeaderboard(data)
+        } else if (data?.data) {
+          setLeaderboard(data.data)
+        } else {
+          setLeaderboard([])
+        }
+      } catch (err) {
+        console.error('Failed to fetch leaderboard:', err)
+        setError('Failed to load leaderboard')
+        setLeaderboard([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchLeaderboard()
+  }, [hackathonId])
+
   const getMedalEmoji = (rank: number) => {
     switch (rank) {
       case 1:
@@ -73,6 +64,33 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
       default:
         return null
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="py-8 text-center text-muted-foreground">
+        {error}
+      </div>
+    )
+  }
+
+  if (leaderboard.length === 0) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">No submissions yet.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Be the first to submit and top the leaderboard!
+        </p>
+      </div>
+    )
   }
 
   return (
@@ -104,9 +122,9 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
             </tr>
           </thead>
           <tbody>
-            {mockLeaderboard.map((entry, idx) => (
+            {leaderboard.map((entry, idx) => (
               <motion.tr
-                key={entry.rank}
+                key={entry.user_id || idx}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
@@ -120,20 +138,31 @@ export default function LeaderboardTable({ hackathonId: _hackathonId }: Leaderbo
                 </td>
                 <td className="px-6 py-4 text-sm">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{entry.avatar}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{entry.name}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-sm font-bold">
+                      {(entry.full_name || 'U').charAt(0).toUpperCase()}
+                    </span>
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {entry.full_name || 'Anonymous'}
+                      </span>
+                      {entry.team_name && (
+                        <span className="ml-2 text-xs text-muted-foreground">
+                          ({entry.team_name})
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                    {entry.points}
+                    {entry.final_score || 0}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                  {entry.solvedProblems} problems
+                  {entry.final_score ? Math.floor(entry.final_score / 100) : 0} problems
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                  {entry.submissions}
+                  {entry.submitted_at ? new Date(entry.submitted_at).toLocaleDateString() : '-'}
                 </td>
               </motion.tr>
             ))}

@@ -1,6 +1,8 @@
 'use client'
 
-import { use, useState } from 'react'
+import { use, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users,
@@ -15,6 +17,9 @@ import {
   Briefcase,
   Zap,
   Info,
+  Copy,
+  Check,
+  Loader2,
 } from 'lucide-react'
 import {
   Card,
@@ -28,15 +33,74 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { hackathonsAPI } from '@/lib/api-civilization'
 
 export default function HackathonTeamPage({
   params,
 }: {
   params: Promise<{ hackathonId: string }>
 }) {
+  const router = useRouter()
   const { hackathonId } = use(params)
-  const [view, setView] = useState<'selection' | 'create' | 'match'>('selection')
+  const [view, setView] = useState<'selection' | 'create' | 'join'>('selection')
   const [teamName, setTeamName] = useState('')
+  const [teamCode, setTeamCode] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [createdTeam, setCreatedTeam] = useState<{ id: number; teamCode: string } | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const handleCreateTeam = async () => {
+    if (!teamName.trim()) {
+      toast.error('Please enter a team name')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const result = await hackathonsAPI.createTeam(Number(hackathonId), teamName)
+      if (result.error) {
+        throw new Error(result.error.message || 'Failed to create team')
+      }
+      const response = result.data as any
+      const teamCodeValue = response?.team_code || response?.teamCode || 'N/A'
+      setCreatedTeam({ id: response.id || Date.now(), teamCode: teamCodeValue })
+      toast.success('Team created successfully!')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create team')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleJoinTeam = async () => {
+    if (!teamCode.trim()) {
+      toast.error('Please enter a team code')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const result = await hackathonsAPI.joinTeam(Number(hackathonId), teamCode)
+      if (result.error) {
+        throw new Error(result.error.message || 'Failed to join team')
+      }
+      toast.success('Joined team successfully!')
+      router.push(`/hackathons/${hackathonId}`)
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to join team')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const copyTeamCode = () => {
+    if (createdTeam?.teamCode) {
+      navigator.clipboard.writeText(createdTeam.teamCode)
+      setCopied(true)
+      toast.success('Team code copied!')
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   const potentialMatches = [
     {
@@ -65,6 +129,32 @@ export default function HackathonTeamPage({
           Hackathon ID: #{hackathonId} • Build your dream squad.
         </p>
       </div>
+
+      {/* Created Team Success */}
+      {createdTeam && (
+        <Card className="border-emerald-500/30 bg-emerald-500/10">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-white">Team Created! 🎉</h3>
+                <p className="mt-1 text-sm text-emerald-400">Share this code with your teammates:</p>
+                <div className="mt-2 flex items-center gap-2">
+                  <code className="rounded bg-black/30 px-3 py-1 text-xl font-mono font-bold text-white">
+                    {createdTeam.teamCode}
+                  </code>
+                  <Button size="sm" variant="outline" onClick={copyTeamCode}>
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
+              <Button onClick={() => router.push(`/hackathons/${hackathonId}`)}>
+                Go to Hackathon
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card
@@ -139,8 +229,13 @@ export default function HackathonTeamPage({
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="h-12 bg-primary px-10 font-black italic text-primary-foreground">
-                  INITIALIZE_TEAM
+                <Button 
+                  onClick={handleCreateTeam}
+                  disabled={loading}
+                  className="h-12 bg-primary px-10 font-black italic text-primary-foreground"
+                >
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                  {loading ? 'CREATING...' : 'INITIALIZE_TEAM'}
                 </Button>
               </CardFooter>
             </Card>
@@ -161,14 +256,25 @@ export default function HackathonTeamPage({
                 <CardDescription>Join an existing team organized by your peers.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="E.g. BLUE-X92-2026"
-                    className="h-12 border-border bg-card font-mono uppercase text-white"
-                  />
-                  <Button className="h-12 bg-white px-8 font-black text-black hover:bg-white/90">
-                    JOIN
-                  </Button>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                    TEAM CODE
+                  </label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={teamCode}
+                      onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
+                      placeholder="E.g. ABC123XYZ"
+                      className="h-12 border-border bg-card font-mono uppercase text-white"
+                    />
+                    <Button 
+                      onClick={handleJoinTeam}
+                      disabled={loading}
+                      className="h-12 bg-white px-8 font-black text-black hover:bg-white/90"
+                    >
+                      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'JOIN'}
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -6,7 +6,7 @@ export interface User {
   email: string;
   password_hash: string;
   full_name: string;
-  role: 'student' | 'corporate' | 'college' | 'admin';
+  role: 'ADMIN' | 'CORPORATE' | 'HR' | 'STUDENT' | 'CANDIDATE' | 'FACULTY' | 'INSTITUTION';
   profile_picture?: string;
   bio?: string;
   location?: string;
@@ -41,7 +41,7 @@ export interface CreateUserDTO {
   email: string;
   password: string;
   fullName: string;
-  role: 'student' | 'corporate' | 'college';
+  role: 'ADMIN' | 'CORPORATE' | 'HR' | 'STUDENT' | 'CANDIDATE' | 'FACULTY' | 'INSTITUTION';
   collegeName?: string;
   company?: string;
   avatarConfig?: any;

@@ -1,4 +1,5 @@
 console.log('>>> SERVER.TS STARTING <<<');
+import './types/express'; // Import type augmentations first
 import http from 'http';
 import * as Sentry from '@sentry/node';
 import { execFile } from 'child_process';
@@ -51,8 +52,9 @@ async function startServer() {
     const socketService = new SocketService(httpServer);
     logger.info('✓ Socket.IO initialized');
 
-    // Make socket service available globally
-    (global as any).socketService = socketService;
+    // Store socket service reference for cleanup during shutdown
+    // Uses module-level variable instead of global to avoid memory leaks
+    const serverSocketService = socketService;
 
     // Initialize daily quiz cron (midnight UTC)
     initDailyQuizCron();
@@ -118,8 +120,8 @@ async function startServer() {
       });
 
       // Close Socket.IO connections
-      if (socketService) {
-        socketService.close();
+      if (serverSocketService) {
+        serverSocketService.close();
         logger.info('✓ Socket.IO connections closed');
       }
 

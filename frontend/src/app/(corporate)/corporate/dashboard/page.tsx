@@ -1,6 +1,9 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import {
   Building2,
   Users,
@@ -15,6 +18,8 @@ import {
   ChevronRight,
   TrendingUp,
   Target,
+  Calendar,
+  Loader2,
 } from 'lucide-react'
 import {
   Card,
@@ -26,38 +31,49 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { hackathonsAPI } from '@/lib/api-civilization'
+
+interface HostedHackathon {
+  id: number
+  title: string
+  status: string
+  startDate: string
+  endDate: string
+  participantCount?: number
+}
 
 export default function CorporateDashboardPage() {
-  const stats = [
-    {
-      label: 'Active Hackathons',
-      value: '03',
-      icon: Trophy,
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-    },
-    {
-      label: 'Open Positions',
-      value: '12',
-      icon: Briefcase,
-      color: 'text-purple-400',
-      bg: 'bg-purple-500/10',
-    },
-    {
-      label: 'Total Applicants',
-      value: '458',
-      icon: Users,
-      color: 'text-foreground/70',
-      bg: 'bg-primary/10',
-    },
-    {
-      label: 'Brand Reach',
-      value: '12.4K',
-      icon: LineChart,
-      color: 'text-foreground/70',
-      bg: 'bg-primary/10',
-    },
-  ]
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [hackathons, setHackathons] = useState<HostedHackathon[]>([])
+
+  useEffect(() => {
+    hackathonsAPI
+      .getHosted()
+      .then((result: any) => {
+        const data = result?.data || result || []
+        if (Array.isArray(data)) {
+          setHackathons(data.map((h: any) => ({
+            id: h.id,
+            title: h.title,
+            status: h.status || 'UPCOMING',
+            startDate: h.startDate || h.start_date,
+            endDate: h.endDate || h.end_date,
+            participantCount: h.participantCount || 0,
+          })))
+        }
+      })
+      .catch(() => {
+        setHackathons([])
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  const activeHackathons = hackathons.filter(h => h.status === 'OPEN' || h.status === 'UPCOMING')
+  const stats = {
+    activeHackathons: activeHackathons.length,
+    totalApplicants: hackathons.reduce((sum, h) => sum + (h.participantCount || 0), 0),
+  }
 
   return (
     <div className="animate-in fade-in space-y-8 pb-20 duration-700">
@@ -76,38 +92,172 @@ export default function CorporateDashboardPage() {
           <Button className="h-12 border-border bg-card px-6 font-bold italic text-white hover:bg-secondary">
             ORG_PROFILE
           </Button>
-          <Button className="h-12 bg-primary px-8 font-black italic tracking-widest text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.3)] hover:bg-primary/90">
-            NEW_HACKATHON_CHALLENGE
-          </Button>
+          <Link href="/host-hackathon">
+            <Button className="h-12 bg-primary px-8 font-black italic tracking-widest text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.3)] hover:bg-primary/90">
+              NEW_HACKATHON_CHALLENGE
+            </Button>
+          </Link>
         </div>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <Card className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60">
-              <div className="relative z-10 flex items-center justify-between p-6">
-                <div>
-                  <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                    {stat.label}
-                  </p>
-                  <p className="text-3xl font-black text-white">{stat.value}</p>
-                </div>
-                <div
-                  className={`rounded-2xl p-3 ${stat.bg} ${stat.color} transition-transform duration-500 group-hover:scale-110`}
-                >
-                  <stat.icon className="h-6 w-6" />
-                </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0 }}
+        >
+          <Card className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60">
+            <div className="relative z-10 flex items-center justify-between p-6">
+              <div>
+                <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Active Hackathons
+                </p>
+                <p className="text-3xl font-black text-white">{stats.activeHackathons}</p>
               </div>
-            </Card>
-          </motion.div>
-        ))}
+              <div className="rounded-2xl bg-blue-500/10 p-3 text-blue-400 transition-transform duration-500 group-hover:scale-110">
+                <Trophy className="h-6 w-6" />
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60">
+            <div className="relative z-10 flex items-center justify-between p-6">
+              <div>
+                <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Total Applicants
+                </p>
+                <p className="text-3xl font-black text-white">{stats.totalApplicants}</p>
+              </div>
+              <div className="rounded-2xl bg-primary/10 p-3 text-primary transition-transform duration-500 group-hover:scale-110">
+                <Users className="h-6 w-6" />
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60">
+            <div className="relative z-10 flex items-center justify-between p-6">
+              <div>
+                <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Brand Reach
+                </p>
+                <p className="text-3xl font-black text-white">12.4K</p>
+              </div>
+              <div className="rounded-2xl bg-primary/10 p-3 text-primary transition-transform duration-500 group-hover:scale-110">
+                <LineChart className="h-6 w-6" />
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60">
+            <div className="relative z-10 flex items-center justify-between p-6">
+              <div>
+                <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Open Positions
+                </p>
+                <p className="text-3xl font-black text-white">0</p>
+              </div>
+              <div className="rounded-2xl bg-purple-500/10 p-3 text-purple-400 transition-transform duration-500 group-hover:scale-110">
+                <Briefcase className="h-6 w-6" />
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Hosted Hackathons Section */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h3 className="flex items-center gap-2 text-xl font-black uppercase italic tracking-tighter text-white">
+            <Trophy className="h-5 w-5 text-primary" /> YOUR_HACKATHONS
+          </h3>
+          <Link href="/host-hackathon">
+            <Button className="h-10 bg-primary/10 text-[10px] font-black uppercase italic text-primary hover:bg-primary hover:text-primary-foreground">
+              + CREATE_NEW
+            </Button>
+          </Link>
+        </div>
+        
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : hackathons.length === 0 ? (
+          <Card className="border-border bg-card/40 p-12 text-center">
+            <Trophy className="mx-auto mb-4 h-12 w-12 text-muted-foreground opacity-30" />
+            <h4 className="mb-2 text-lg font-bold text-white">No Hackathons Yet</h4>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Create your first hackathon to start attracting talent
+            </p>
+            <Link href="/host-hackathon">
+              <Button className="bg-primary font-bold hover:bg-primary/90">
+                Create Your First Hackathon
+              </Button>
+            </Link>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {hackathons.map((hackathon, i) => (
+              <motion.div
+                key={hackathon.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Link href={`/hackathons/${hackathon.id}`}>
+                  <Card className="group cursor-pointer overflow-hidden border-border bg-card transition-all hover:bg-secondary/40">
+                    <div className={`h-1 w-full ${
+                      hackathon.status === 'OPEN' ? 'bg-emerald-500' :
+                      hackathon.status === 'UPCOMING' ? 'bg-blue-500' : 'bg-gray-500'
+                    }`} />
+                    <CardContent className="p-6">
+                      <div className="mb-3 flex items-start justify-between">
+                        <Badge className={`border-0 text-[10px] font-bold ${
+                          hackathon.status === 'OPEN' ? 'bg-emerald-500/20 text-emerald-400' :
+                          hackathon.status === 'UPCOMING' ? 'bg-blue-500/20 text-blue-400' :
+                          'bg-gray-500/20 text-gray-400'
+                        }`}>
+                          {hackathon.status}
+                        </Badge>
+                      </div>
+                      <h4 className="mb-2 text-base font-bold text-white group-hover:text-primary">
+                        {hackathon.title}
+                      </h4>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {hackathon.startDate && new Date(hackathon.startDate).toLocaleDateString()}
+                        {' - '}
+                        {hackathon.endDate && new Date(hackathon.endDate).toLocaleDateString()}
+                      </div>
+                      <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Users className="h-3.5 w-3.5" />
+                          {hackathon.participantCount || 0} registered
+                        </span>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">

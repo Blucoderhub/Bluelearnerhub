@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { QuizController } from '../controllers/quiz';
+import { QuizController } from '../controllers/quiz.controller';
 import { commonValidators } from '../utils/validators';
 import { validate } from '../middleware/validate';
 import { authenticate, optionalAuth } from '../middleware/auth';

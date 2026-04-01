@@ -27,37 +27,35 @@ import { hackathonsAPI } from '@/lib/api-civilization'
 
 const FALLBACK_HACKATHON = {
   id: 1,
-  title: 'Winter Code Challenge 2025',
+  title: 'Sample Hackathon',
   description:
-    'Join developers from around the world in this exciting 48-hour coding marathon. Solve algorithmic challenges, build creative projects, and compete for prizes.',
+    'Join this exciting hackathon. Solve challenges, build projects, and compete for prizes.',
   status: 'OPEN',
-  prizePool: '₹1,00,000',
-  participantCount: 2450,
-  maxParticipants: 5000,
+  prizePool: '$5,000',
+  participantCount: 100,
+  maxParticipants: 500,
   durationHours: 48,
   domain: 'software',
   difficulty: 'intermediate',
   startDate: new Date(Date.now() + 86400000 * 2).toISOString(),
   endDate: new Date(Date.now() + 86400000 * 4).toISOString(),
   prizes: [
-    { rank: '1st Place', amount: '₹50,000', label: '🥇' },
-    { rank: '2nd Place', amount: '₹30,000', label: '🥈' },
-    { rank: '3rd Place', amount: '₹20,000', label: '🥉' },
+    { rank: '1st Place', amount: '$2,500', label: '🥇' },
+    { rank: '2nd Place', amount: '$1,500', label: '🥈' },
+    { rank: '3rd Place', amount: '$1,000', label: '🥉' },
   ],
   rules: [
     'Individual or team participation (max 4 members)',
     'All code must be written during the hackathon window',
     'Use any programming language',
-    'AI-assisted coding is allowed; copied solutions are not',
-    'Submissions must include source code and a brief explanation',
+    'AI-assisted coding is allowed',
+    'Submissions must include source code',
   ],
   problems: [
-    { id: 1, title: 'Array Manipulation', difficulty: 'Easy', points: 100, solved: false },
-    { id: 2, title: 'Graph Traversal', difficulty: 'Medium', points: 200, solved: false },
-    { id: 3, title: 'DP Optimization', difficulty: 'Hard', points: 400, solved: false },
-    { id: 4, title: 'System Design Mini', difficulty: 'Hard', points: 300, solved: false },
+    { id: 1, title: 'Problem Solving', difficulty: 'Easy', points: 100, solved: false },
+    { id: 2, title: 'Algorithm Challenge', difficulty: 'Medium', points: 200, solved: false },
   ],
-  sponsors: ['TechCorp', 'InnovateLabs', 'CodeBase'],
+  sponsors: ['TechCorp', 'InnovateLabs'],
 }
 
 const diffColors: Record<string, string> = {
@@ -105,26 +103,32 @@ export default function HackathonDetailsPage() {
 
     hackathonsAPI
       .get(hackathonId)
-      .then((data: any) => {
-        const h = data?.hackathon ?? data
-        if (h?.id) {
+      .then((result: any) => {
+        const response = result?.data
+        const h = response?.data || response
+        
+        if (h && h.id) {
+          const startDate = h.start_time || h.startDate
+          const endDate = h.end_time || h.endDate
+          const durationHours = startDate && endDate
+            ? Math.round((new Date(endDate).getTime() - new Date(startDate).getTime()) / 3600000)
+            : 48
+          
           setHackathon({
             ...FALLBACK_HACKATHON,
             id: h.id,
             title: h.title ?? FALLBACK_HACKATHON.title,
             description: h.description ?? FALLBACK_HACKATHON.description,
-            status: h.status ?? 'OPEN',
-            prizePool: h.prizePool ?? h.prize_pool ?? FALLBACK_HACKATHON.prizePool,
-            participantCount:
-              h.participantCount ?? h.participant_count ?? FALLBACK_HACKATHON.participantCount,
-            maxParticipants:
-              h.maxParticipants ?? h.max_participants ?? FALLBACK_HACKATHON.maxParticipants,
-            durationHours: h.durationHours ?? h.duration_hours ?? 48,
-            domain: h.domain ?? 'software',
-            startDate: h.startDate ?? h.start_date ?? FALLBACK_HACKATHON.startDate,
-            endDate: h.endDate ?? h.end_date ?? FALLBACK_HACKATHON.endDate,
+            status: (h.status || 'OPEN').toUpperCase(),
+            prizePool: h.total_prize_pool ?? h.prizePool ?? FALLBACK_HACKATHON.prizePool,
+            participantCount: h.total_participants || 0,
+            maxParticipants: h.max_participants || 500,
+            durationHours: durationHours,
+            domain: (h.domain || 'software').toLowerCase(),
+            startDate: startDate || FALLBACK_HACKATHON.startDate,
+            endDate: endDate || FALLBACK_HACKATHON.endDate,
           })
-          setRegistered(h.isRegistered ?? h.is_registered ?? false)
+          setRegistered(h.isRegistered || h.is_registered || false)
         } else {
           setHackathon(FALLBACK_HACKATHON)
         }
@@ -135,9 +139,10 @@ export default function HackathonDetailsPage() {
     void hackathonsAPI.trackBehavior(hackathonId, 'hackathon_opened').catch(() => undefined)
     void hackathonsAPI
       .adaptiveGuidance(hackathonId)
-      .then((data: any) => {
-        const guidance = Array.isArray(data?.guidance)
-          ? data.guidance.filter((item: unknown) => typeof item === 'string')
+      .then((result: any) => {
+        const response = result?.data || result
+        const guidance = Array.isArray(response?.guidance)
+          ? response.guidance.filter((item: unknown) => typeof item === 'string')
           : []
         setAdaptiveGuidance(guidance.slice(0, 3))
       })
@@ -159,12 +164,22 @@ export default function HackathonDetailsPage() {
     }
     setRegistering(true)
     try {
-      await hackathonsAPI.register(hackathonId)
+      const result = await hackathonsAPI.register(hackathonId)
+      if (result.error) {
+        throw new Error(result.error.message || 'Registration failed')
+      }
+      
+      const response = result.data as any
+      if (response?.payment) {
+        toast.success('Registration and payment successful! Good luck!')
+      } else {
+        toast.success('Registered successfully! Good luck!')
+      }
+      
       void hackathonsAPI.trackBehavior(hackathonId, 'hackathon_registered').catch(() => undefined)
       setRegistered(true)
-      toast.success('Registered successfully! Good luck!')
-    } catch {
-      toast.error('Registration failed. Please try again.')
+    } catch (error: any) {
+      toast.error(error.message || 'Registration failed. Please try again.')
     } finally {
       setRegistering(false)
     }

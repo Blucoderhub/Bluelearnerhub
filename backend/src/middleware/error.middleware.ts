@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import logger from '../utils/logger';
 import { config } from '../config';
 
@@ -57,7 +57,7 @@ export class RateLimitError extends AppError {
   }
 }
 
-export function errorHandler(err: any, req: Request, res: Response, _next: NextFunction) {
+export const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: Response, _next: NextFunction): void => {
   let error = { ...err };
   error.message = err.message;
 
@@ -175,5 +175,7 @@ export function notFound(req: Request, res: Response) {
 }
 
 // Async error handler wrapper
-export const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) =>
-  Promise.resolve(fn(req, res, next)).catch(next);
+export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };

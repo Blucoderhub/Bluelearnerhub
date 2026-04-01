@@ -11,7 +11,7 @@ export const authValidators = {
       .matches(PASSWORD_COMPLEXITY_REGEX)
       .withMessage('Password must contain uppercase, lowercase, number and special character'),
     body('fullName').trim().notEmpty().withMessage('Full name is required'),
-    body('role').isIn(['student', 'corporate', 'college']).withMessage('Invalid role'),
+    body('role').isIn(['STUDENT', 'CORPORATE', 'CANDIDATE', 'FACULTY', 'INSTITUTION', 'HR', 'ADMIN']).withMessage('Invalid role'),
   ],
 
   login: [
@@ -48,9 +48,8 @@ export const hackathonValidators = {
   createHackathon: [
     body('title').trim().notEmpty().withMessage('Title is required'),
     body('description').trim().notEmpty().withMessage('Description is required'),
-    body('startTime').isISO8601().withMessage('Valid start time required'),
-    body('endTime').isISO8601().withMessage('Valid end time required'),
-    body('problemStatement').trim().notEmpty().withMessage('Problem statement required'),
+    body('startDate').notEmpty().withMessage('Start date is required'),
+    body('endDate').notEmpty().withMessage('End date is required'),
   ],
 
   submitCode: [
