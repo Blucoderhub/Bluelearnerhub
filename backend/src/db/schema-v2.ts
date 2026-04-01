@@ -19,7 +19,7 @@ import {
   smallint, pgEnum, jsonb, uniqueIndex, index,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { users, courses, modules } from './schema';
+import { users, courses } from './schema';
 
 // ────────────────────────────────────────────────────────────────────────────
 // NEW ENUMS

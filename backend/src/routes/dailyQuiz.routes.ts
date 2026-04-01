@@ -57,7 +57,7 @@ router.get('/domains', apiLimiter, (_req, res) => {
 
 router.get('/:domain', apiLimiter, authenticate, async (req, res) => {
   try {
-    const domain = decodeURIComponent(req.params.domain);
+    const domain = decodeURIComponent(req.params.domain as string);
     const allowedDomains = getAvailableDomains();
 
     if (!allowedDomains.includes(domain)) {
@@ -90,7 +90,7 @@ router.get('/:domain', apiLimiter, authenticate, async (req, res) => {
     });
   } catch (err) {
     logger.error('daily-quiz GET error', err);
-    res.status(500).json({ success: false, message: 'Failed to load daily quiz', error: null });
+    return res.status(500).json({ success: false, message: 'Failed to load daily quiz', error: null });
   }
 });
 
@@ -194,7 +194,7 @@ router.post('/submit', strictLimiter, authenticate, async (req, res) => {
     });
   } catch (err) {
     logger.error('daily-quiz submit error', err);
-    res.status(500).json({ success: false, message: 'Failed to record quiz result', error: null });
+    return res.status(500).json({ success: false, message: 'Failed to record quiz result', error: null });
   }
 });
 

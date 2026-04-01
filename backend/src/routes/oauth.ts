@@ -66,7 +66,7 @@ router.get('/github', (_req: Request, res: Response) => {
     state,
   });
 
-  res.redirect(`https://github.com/login/oauth/authorize?${params}`);
+  return res.redirect(`https://github.com/login/oauth/authorize?${params}`);
 });
 
 router.get('/github/callback', async (req: Request, res: Response) => {
@@ -91,7 +91,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
     res.redirect(`${config.frontendUrl}/oauth/callback?success=true`);
   } catch (err: any) {
     logger.error('GitHub OAuth callback error:', err.message);
-    redirectError(res, err.message || 'GitHub authentication failed');
+    return redirectError(res, err.message || 'GitHub authentication failed');
   }
 });
 
@@ -120,7 +120,7 @@ router.get('/google', (_req: Request, res: Response) => {
     prompt: 'select_account',
   });
 
-  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
+  return res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
 });
 
 router.get('/google/callback', async (req: Request, res: Response) => {
@@ -144,7 +144,7 @@ router.get('/google/callback', async (req: Request, res: Response) => {
     res.redirect(`${config.frontendUrl}/oauth/callback?success=true`);
   } catch (err: any) {
     logger.error('Google OAuth callback error:', err.message);
-    redirectError(res, err.message || 'Google authentication failed');
+    return redirectError(res, err.message || 'Google authentication failed');
   }
 });
 

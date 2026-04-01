@@ -8,17 +8,17 @@ import imageSize from 'image-size';
 
 // Configure storage
 const storage = multer.diskStorage({
-  destination: (req: any, file: any, cb: any) => {
+  destination: (_req: any, _file: any, cb: any) => {
     cb(null, config.upload.uploadDir);
   },
-  filename: (req: any, file: any, cb: any) => {
+  filename: (_req: any, file: any, cb: any) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   },
 });
 
 // File filter
-const fileFilter = (req: Request, file: any, cb: any) => {
+const fileFilter = (_req: Request, file: any, cb: any) => {
   const ext = path.extname(file.originalname).toLowerCase();
   const allowedExts = config.upload.allowedFileTypes || [];
   const allowedMimes = config.upload.allowedMimeTypes || [];
@@ -47,7 +47,7 @@ export const uploadMultiple = (fieldName: string, maxCount: number) =>
   upload.array(fieldName, maxCount);
 
 // Post-upload validations that run after multer has saved files to disk
-export const postUploadValidation = async (req: Request, res: Response, next: NextFunction) => {
+export const postUploadValidation = async (req: Request, _res: Response, next: NextFunction) => {
   try {
     const files: any[] = req.file ? [req.file] : ((req.files as any[]) || []);
 

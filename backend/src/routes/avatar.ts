@@ -8,7 +8,7 @@ const router = Router();
 // GET /api/avatar/:userId - Return avatar config
 router.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = parseInt(req.params.userId);
+    const userId = parseInt(req.params.userId as string);
     if (isNaN(userId)) {
       throw new AppError('Invalid User ID', 400);
     }

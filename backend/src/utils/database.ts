@@ -78,11 +78,6 @@ class InMemoryCache {
   private store = new Map<string, CacheEntry>();
   readonly status = 'ready';
 
-  private live(e: CacheEntry | undefined): e is CacheEntry {
-    if (!e) return false;
-    if (e.expiresAt !== undefined && Date.now() > e.expiresAt) { this.store.delete(''); return false; }
-    return true;
-  }
 
   async get(key: string): Promise<string | null> {
     const e = this.store.get(key);

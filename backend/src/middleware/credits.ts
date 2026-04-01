@@ -27,9 +27,9 @@ export const checkCredits = async (req: Request, res: Response, next: NextFuncti
             });
         }
 
-        next();
+        return next();
     } catch (error) {
-        res.status(500).json({ message: 'Error checking credits' });
+        return res.status(500).json({ message: 'Error checking credits' });
     }
 };
 

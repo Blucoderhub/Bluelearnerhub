@@ -365,7 +365,7 @@ export const createTutorialBehaviorEvent = async (req: Request, res: Response) =
 export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const tutorialId = parseInt(req.params.id, 10);
+    const tutorialId = parseInt(req.params.id as string, 10);
     if (!Number.isInteger(tutorialId) || tutorialId <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid tutorial id' });
     }
@@ -403,7 +403,7 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
     const fallbackGuidance = fallbackTutorialGuidance(snapshot);
 
     try {
-      const data = await fetchAdaptiveGuidanceFromAI('tutorial', String(req.requestId || 'unknown'), {
+      const data = await fetchAdaptiveGuidanceFromAI('tutorial', String((req as any).requestId || 'unknown'), {
         target_id: tutorialId,
         target_title: tutorial.title,
         metrics: snapshot,
@@ -431,6 +431,6 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
     }
   } catch (err) {
     logger.error('getTutorialAdaptiveGuidance error', err);
-    res.status(500).json({ success: false, message: 'Failed to generate adaptive guidance' });
+    return res.status(500).json({ success: false, message: 'Failed to generate adaptive guidance' });
   }
 };

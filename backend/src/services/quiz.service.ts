@@ -1,7 +1,7 @@
 import { db } from '../db';
 import { quizzes, questions, users } from '../db/schema';
 import { aiService } from './ai.service';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { GamificationService } from './gamification.service';
 
 export class QuizService {
@@ -13,7 +13,7 @@ export class QuizService {
         const quizData = await aiService.generateQuiz(
             user[0].role === 'STUDENT' ? 'Engineering' : 'Management',
             user[0].level,
-            `XP: ${user[0].xp}, Streak: ${user[0].streak}`
+            `XP: ${user[0].xp}, Streak: ${user[0].current_streak}`
         );
 
         if (!quizData) return null;

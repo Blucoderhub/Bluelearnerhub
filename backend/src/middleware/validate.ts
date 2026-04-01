@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { validationResult, ValidationError } from 'express-validator';
+import { validationResult } from 'express-validator';
 import logger from '../utils/logger';
-import { ValidationError as AppValidationError } from './error.middleware';
+// import { ValidationError as AppValidationError } from './error.middleware';
 
 export const validate = (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
@@ -35,7 +35,7 @@ export const validate = (req: Request, res: Response, next: NextFunction): void 
 };
 
 // Sanitization middleware
-export const sanitizeInput = (req: Request, res: Response, next: NextFunction): void => {
+export const sanitizeInput = (req: Request, _res: Response, next: NextFunction): void => {
   // Remove null bytes and other potentially dangerous characters
   const sanitize = (obj: any): any => {
     if (typeof obj === 'string') {

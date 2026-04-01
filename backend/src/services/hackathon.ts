@@ -1,5 +1,5 @@
 import { HackathonModel, SubmissionModel } from '../models/hackathon';
-import { UserModel } from '../models/user';
+// import { UserModel } from '../models/user';
 import { AppError } from '../middleware/error';
 import axios from 'axios';
 import { config } from '../config';
@@ -228,7 +228,7 @@ export class HackathonService {
     return submission;
   }
 
-  async runCode(hackathonId: number, code: string, language: string, input?: string) {
+  async runCode(_hackathonId: number, code: string, language: string, input?: string) {
     try {
       // Call Judge0 API to run code
       const response = await axios.post(
@@ -341,7 +341,7 @@ export class HackathonService {
       throw new AppError('User not found', 404);
     }
 
-    const { domain, skills } = userResult.rows[0];
+    const { domain, skills: _skills } = userResult.rows[0];
 
     // Find other registered users for this hackathon who are NOT in a team
     // and have complementary domains/skills

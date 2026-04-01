@@ -46,10 +46,10 @@ router.post('/execute', strictLimiter, authenticate, async (req, res) => {
       GamificationService.awardXP(req.user!.id, 5, 'code_execution').catch(() => {});
     }
 
-    res.json({ success: true, data: result });
+    return res.json({ success: true, data: result });
   } catch (err) {
     logger.error('code execute error', err);
-    res.status(500).json({ success: false, message: 'Code execution failed' });
+    return res.status(500).json({ success: false, message: 'Code execution failed' });
   }
 });
 

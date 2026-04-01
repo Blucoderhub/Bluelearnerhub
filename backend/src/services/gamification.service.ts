@@ -1,8 +1,8 @@
 import { db } from '../db';
 import { users, userAchievements, achievements } from '../db/schema';
-import { eq, sql, and, gte, lte } from 'drizzle-orm';
+import { eq, sql, and, gte } from 'drizzle-orm';
 import { redisHelpers } from '../utils/database';
-import type { Transaction } from 'drizzle-orm';
+import type { PgTransaction } from 'drizzle-orm/pg-core';
 
 const LEADERBOARD_CACHE_TTL = 300; // 5 minutes
 
@@ -34,7 +34,7 @@ export class GamificationService {
             .set({
                 xp: currentXp,
                 level: currentLevel,
-                lastActive: nowUtc
+                last_active: nowUtc
             })
             .where(eq(users.id, userId))
             .returning();
@@ -48,7 +48,7 @@ export class GamificationService {
         const user = await db.select().from(users).where(eq(users.id, userId));
         if (!user.length) return null;
 
-        const lastActive = new Date(user[0].lastActive);
+        const lastActive = new Date(user[0].last_active);
         const now = new Date();
         const diffInHours = (now.getTime() - lastActive.getTime()) / (1000 * 3600);
         const nowUtc = new Date(Date.UTC(
@@ -61,8 +61,8 @@ export class GamificationService {
             now.getUTCMilliseconds()
         ));
 
-        let streak = user[0].streak;
-        let longestStreak = user[0].longestStreak ?? 0;
+        let streak = user[0].current_streak;
+        let longestStreak = user[0].longest_streak ?? 0;
 
         if (diffInHours >= 24 && diffInHours < 48) {
             streak += 1;
@@ -77,7 +77,7 @@ export class GamificationService {
         }
 
         return await db.update(users)
-            .set({ streak, longestStreak, lastActive: nowUtc })
+            .set({ current_streak: streak, longest_streak: longestStreak, last_active: nowUtc })
             .where(eq(users.id, userId))
             .returning();
     }
@@ -91,8 +91,8 @@ export class GamificationService {
         }
     }
 
-    static async awardAchievement(userId: number, code: string, title: string, description?: string, xpReward?: number) {
-        return await db.transaction(async (tx: Transaction<any>) => {
+    static async awardAchievement(userId: number, _code: string, title: string, description?: string, xpReward?: number) {
+        return await db.transaction(async (tx: PgTransaction<any, any, any>) => {
             const existing = await tx.select()
                 .from(userAchievements)
                 .innerJoin(achievements, eq(userAchievements.achievementId, achievements.id))
@@ -120,7 +120,7 @@ export class GamificationService {
         });
     }
 
-    private static async addExperienceTransaction(tx: Transaction<any>, userId: number, amount: number) {
+    private static async addExperienceTransaction(tx: PgTransaction<any, any, any>, userId: number, amount: number) {
         const user = await tx.select().from(users).where(eq(users.id, userId));
         if (!user.length) return null;
 
@@ -141,7 +141,7 @@ export class GamificationService {
             .set({
                 xp: currentXp,
                 level: currentLevel,
-                lastActive: nowUtc
+                last_active: nowUtc
             })
             .where(eq(users.id, userId))
             .returning();
@@ -170,28 +170,28 @@ export class GamificationService {
         if (period === 'weekly') {
             const weekAgo = new Date(nowUtc);
             weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
-            dateFilter = gte(users.lastActive, weekAgo);
+            dateFilter = gte(users.last_active, weekAgo);
         } else if (period === 'monthly') {
             const monthAgo = new Date(nowUtc);
             monthAgo.setUTCMonth(monthAgo.getUTCMonth() - 1);
-            dateFilter = gte(users.lastActive, monthAgo);
+            dateFilter = gte(users.last_active, monthAgo);
         }
 
         const condition = dateFilter ? and(dateFilter) : undefined;
         
         const rows = await db.select({
             id: users.id,
-            name: users.fullName,
+            name: users.full_name,
             xp: users.xp,
             level: users.level,
             role: users.role,
-            streak: users.streak,
-            longestStreak: users.longestStreak,
-            lastActive: users.lastActive,
+            streak: users.current_streak,
+            longestStreak: users.longest_streak,
+            lastActive: users.last_active,
         })
             .from(users)
             .where(condition)
-            .orderBy(sql`${users.xp} DESC, ${users.lastActive} ASC`)
+            .orderBy(sql`${users.xp} DESC, ${users.last_active} ASC`)
             .limit(limit)
             .offset(offset);
 
