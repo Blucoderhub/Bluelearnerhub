@@ -40,7 +40,7 @@ export default function HackathonCard({
   participants,
   prizePool,
   difficulty,
-  image,
+  image: _image,
 }: HackathonCardProps) {
   return (
     <motion.div

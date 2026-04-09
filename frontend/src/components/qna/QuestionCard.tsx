@@ -5,9 +5,8 @@
  * Design: compact, data-dense, Stripe-inspired
  */
 
-import React from 'react'
 import Link from 'next/link'
-import { MessageSquare, Eye, ChevronUp, CheckCircle2 } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatDistanceToNow } from 'date-fns'
 import { generateAvatarURL } from '@/utils/generateAvatar'

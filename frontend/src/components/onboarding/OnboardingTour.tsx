@@ -53,17 +53,15 @@ const tourSteps = [
   },
 ]
 
-export function OnboardingTour({ onComplete, isFirstTime }: OnboardingTourProps) {
+export function OnboardingTour({ onComplete, isFirstTime: _isFirstTime }: OnboardingTourProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
-  const [isCompleted, setIsCompleted] = useState(false)
 
-  useEffect(() => {
-    if (isFirstTime && !isCompleted) {
-      const timer = setTimeout(() => setIsVisible(true), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [isFirstTime, isCompleted])
+  const handleComplete = useCallback(() => {
+    setIsVisible(false)
+    localStorage.setItem('onboarding_completed', 'true')
+    setTimeout(onComplete, 300)
+  }, [onComplete])
 
   const handleNext = useCallback(() => {
     if (currentStep < tourSteps.length - 1) {
@@ -71,20 +69,13 @@ export function OnboardingTour({ onComplete, isFirstTime }: OnboardingTourProps)
     } else {
       handleComplete()
     }
-  }, [currentStep])
+  }, [currentStep, handleComplete])
 
   const handlePrevious = useCallback(() => {
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1)
     }
   }, [currentStep])
-
-  const handleComplete = useCallback(() => {
-    setIsVisible(false)
-    setIsCompleted(true)
-    localStorage.setItem('onboarding_completed', 'true')
-    setTimeout(onComplete, 300)
-  }, [onComplete])
 
   const handleSkip = useCallback(() => {
     handleComplete()

@@ -12,7 +12,6 @@ import {
   Clock,
   Share2,
   Bookmark,
-  Award,
   Sparkles,
   Loader2,
 } from 'lucide-react'

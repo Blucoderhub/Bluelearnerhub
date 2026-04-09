@@ -6,7 +6,6 @@ import {
   Send,
   Bot,
   X,
-  Maximize2,
   Minimize2,
   Sparkles,
   MessageSquare,

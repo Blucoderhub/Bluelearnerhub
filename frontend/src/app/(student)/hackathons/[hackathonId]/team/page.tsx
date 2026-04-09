@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useState, useEffect } from 'react'
+import { use, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,14 +8,10 @@ import {
   Users,
   Plus,
   UserPlus,
-  Search,
   Sparkles,
   ShieldCheck,
   ArrowRight,
   Send,
-  Code2,
-  Briefcase,
-  Zap,
   Info,
   Copy,
   Check,
@@ -32,7 +28,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
 import { hackathonsAPI } from '@/lib/api-civilization'
 
 export default function HackathonTeamPage({
@@ -59,7 +54,7 @@ export default function HackathonTeamPage({
     try {
       const result = await hackathonsAPI.createTeam(Number(hackathonId), teamName)
       if (result.error) {
-        throw new Error(result.error.message || 'Failed to create team')
+        throw new Error(result.error || 'Failed to create team')
       }
       const response = result.data as any
       const teamCodeValue = response?.team_code || response?.teamCode || 'N/A'
@@ -82,7 +77,7 @@ export default function HackathonTeamPage({
     try {
       const result = await hackathonsAPI.joinTeam(Number(hackathonId), teamCode)
       if (result.error) {
-        throw new Error(result.error.message || 'Failed to join team')
+        throw new Error(result.error || 'Failed to join team')
       }
       toast.success('Joined team successfully!')
       router.push(`/hackathons/${hackathonId}`)
@@ -122,7 +117,7 @@ export default function HackathonTeamPage({
   return (
     <div className="animate-in fade-in mx-auto max-w-4xl space-y-8 pb-20 duration-700">
       <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-black italic tracking-tighter text-white">
+        <h1 className="text-4xl font-black italic tracking-tighter text-foreground">
           TEAM <span className="ai-glow text-primary">FORMATION</span>
         </h1>
         <p className="font-medium text-muted-foreground">
@@ -136,10 +131,10 @@ export default function HackathonTeamPage({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-bold text-white">Team Created! 🎉</h3>
+                <h3 className="text-lg font-bold text-foreground">Team Created! 🎉</h3>
                 <p className="mt-1 text-sm text-emerald-400">Share this code with your teammates:</p>
                 <div className="mt-2 flex items-center gap-2">
-                  <code className="rounded bg-black/30 px-3 py-1 text-xl font-mono font-bold text-white">
+                  <code className="rounded bg-black/30 px-3 py-1 text-xl font-mono font-bold text-foreground">
                     {createdTeam.teamCode}
                   </code>
                   <Button size="sm" variant="outline" onClick={copyTeamCode}>
@@ -159,39 +154,39 @@ export default function HackathonTeamPage({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card
           onClick={() => setView('create')}
-          className={`cursor-pointer border-border transition-all ${view === 'create' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+          className={`cursor-pointer border-border transition-all ${view === 'create' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card hover:bg-card/80'}`}
         >
           <CardHeader>
             <Plus
               className={`mb-2 h-8 w-8 ${view === 'create' ? 'text-primary' : 'text-muted-foreground'}`}
             />
-            <CardTitle className="text-lg font-bold text-white">CREATE_TEAM</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">CREATE_TEAM</CardTitle>
             <CardDescription className="text-xs">Start a new squad from scratch.</CardDescription>
           </CardHeader>
         </Card>
 
         <Card
           onClick={() => setView('selection')}
-          className={`cursor-pointer border-border transition-all ${view === 'selection' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+          className={`cursor-pointer border-border transition-all ${view === 'selection' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card hover:bg-card/80'}`}
         >
           <CardHeader>
             <UserPlus
               className={`mb-2 h-8 w-8 ${view === 'selection' ? 'text-primary' : 'text-muted-foreground'}`}
             />
-            <CardTitle className="text-lg font-bold text-white">JOIN_TEAM</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">JOIN_TEAM</CardTitle>
             <CardDescription className="text-xs">Enter a secret invite code.</CardDescription>
           </CardHeader>
         </Card>
 
         <Card
-          onClick={() => setView('match')}
-          className={`cursor-pointer border-border transition-all ${view === 'match' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-slate-900/40 hover:bg-card/60'}`}
+          onClick={() => setView('selection')}
+          className={`cursor-pointer border-border transition-all ${view === 'selection' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card hover:bg-card/80'}`}
         >
           <CardHeader className="relative">
             <Sparkles
-              className={`mb-2 h-8 w-8 ${view === 'match' ? 'text-primary' : 'text-muted-foreground'} animate-pulse`}
+              className={`mb-2 h-8 w-8 ${view === 'selection' ? 'text-primary' : 'text-muted-foreground'} animate-pulse`}
             />
-            <CardTitle className="text-lg font-bold text-white">AI_MATCHMAKER</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">AI_MATCHMAKER</CardTitle>
             <CardDescription className="text-xs font-bold text-primary">
               Recommended for you.
             </CardDescription>
@@ -224,7 +219,7 @@ export default function HackathonTeamPage({
                     value={teamName}
                     onChange={(e) => setTeamName(e.target.value)}
                     placeholder="Enter a legendary team name..."
-                    className="h-12 border-border bg-card text-white"
+                    className="h-12 border-border bg-card text-foreground"
                   />
                 </div>
               </CardContent>
@@ -265,7 +260,7 @@ export default function HackathonTeamPage({
                       value={teamCode}
                       onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
                       placeholder="E.g. ABC123XYZ"
-                      className="h-12 border-border bg-card font-mono uppercase text-white"
+                      className="h-12 border-border bg-card font-mono uppercase text-foreground"
                     />
                     <Button 
                       onClick={handleJoinTeam}
@@ -281,7 +276,7 @@ export default function HackathonTeamPage({
           </motion.div>
         )}
 
-        {view === 'match' && (
+        {view === 'selection' && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -291,7 +286,7 @@ export default function HackathonTeamPage({
             <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-4">
               <Sparkles className="h-6 w-6 shrink-0 text-primary" />
               <div>
-                <h4 className="text-sm font-bold uppercase italic text-white">
+                <h4 className="text-sm font-bold uppercase italic text-foreground">
                   AI Matchmaker Active
                 </h4>
                 <p className="text-xs text-muted-foreground">
@@ -308,7 +303,7 @@ export default function HackathonTeamPage({
               {potentialMatches.map((match, i) => (
                 <Card
                   key={i}
-                  className="group relative overflow-hidden border-border bg-slate-900/40 transition-all hover:bg-card/60"
+                  className="group relative overflow-hidden border-border bg-card transition-all hover:bg-card/80"
                 >
                   <div className="absolute right-0 top-0 p-4">
                     <Badge className="border-none bg-primary/20 text-[10px] font-black italic text-primary">
@@ -317,7 +312,7 @@ export default function HackathonTeamPage({
                   </div>
                   <CardHeader>
                     <div className="mb-2 h-12 w-12 rounded-full border border-border bg-secondary" />
-                    <CardTitle className="text-lg font-bold text-white">{match.name}</CardTitle>
+                    <CardTitle className="text-lg font-bold text-foreground">{match.name}</CardTitle>
                     <CardDescription className="text-xs font-black uppercase text-muted-foreground">
                       {match.domain}
                     </CardDescription>
@@ -334,11 +329,11 @@ export default function HackathonTeamPage({
                         </Badge>
                       ))}
                     </div>
-                    <div className="rounded-lg border border-slate-800/50 bg-background/50 p-3">
+                    <div className="rounded-lg border border-border/50 bg-background/50 p-3">
                       <p className="mb-1 text-[10px] font-black uppercase text-muted-foreground">
                         Proposed Role
                       </p>
-                      <p className="text-sm font-bold italic text-primary text-white">
+                      <p className="text-sm font-bold italic text-foreground">
                         {match.role}
                       </p>
                     </div>
@@ -358,7 +353,7 @@ export default function HackathonTeamPage({
             <div className="flex justify-center pt-6">
               <Button
                 variant="link"
-                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-white"
+                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
               >
                 <Info className="mr-2 h-4 w-4" /> How are match scores calculated?
               </Button>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, Tag, Search, Lightbulb, AlertCircle, ChevronRight } from 'lucide-react'
+import { Tag, Search, Lightbulb, AlertCircle, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -32,7 +32,6 @@ const SIMILAR_QUESTIONS = [
 
 export default function AskQuestionPage() {
   const router = useRouter()
-  const [step, setStep] = useState(1)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [domain, setDomain] = useState('')

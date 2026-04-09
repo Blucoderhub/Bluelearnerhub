@@ -108,8 +108,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
               <ShieldCheck className="h-6 w-6 text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tight text-foreground">
-              BlueLearner
+            <span className="font-semibold text-xl tracking-tight text-foreground">
+              BlueLearnerHub
             </span>
           </Link>
           <button
@@ -208,15 +208,15 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   className="absolute bottom-full left-0 right-0 mb-2 overflow-hidden rounded-xl border border-border bg-card shadow-xl"
                 >
                   <Link
-                    href="/profile"
+                    href={user?.role === 'CORPORATE' ? '/corporate/dashboard' : '/student/profile'}
                     onClick={() => setProfileOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-secondary/50"
                   >
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <span>My Profile</span>
+                    <span>{user?.role === 'CORPORATE' ? 'Dashboard' : 'My Profile'}</span>
                   </Link>
                   <Link
-                    href="/settings"
+                    href={user?.role === 'CORPORATE' ? '/corporate/dashboard' : '/student/profile'}
                     onClick={() => setProfileOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-secondary/50"
                   >
@@ -261,8 +261,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                     <ShieldCheck className="h-6 w-6 text-white" />
                   </div>
-                  <span className="font-bold text-lg text-foreground">
-                    BlueLearner
+                  <span className="font-semibold text-lg text-foreground">
+                    BlueLearnerHub
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

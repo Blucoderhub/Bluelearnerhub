@@ -23,7 +23,6 @@ export default function CountdownTimer({ endTime }: CountdownTimerProps) {
     minutes: 0,
     seconds: 0,
   })
-  const [isActive, setIsActive] = useState(true)
 
   useEffect(() => {
     const calculateTime = () => {
@@ -38,8 +37,6 @@ export default function CountdownTimer({ endTime }: CountdownTimerProps) {
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60),
         })
-      } else {
-        setIsActive(false)
       }
     }
 

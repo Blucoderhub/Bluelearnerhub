@@ -208,11 +208,14 @@ function StressCalculator() {
 }
 
 function ThermalCalculator() {
-  const [Q, setQ] = useState('')
+  const [Q] = useState('')
   const [A, setA] = useState('')
   const [deltaT, setDeltaT] = useState('')
   const [L, setL] = useState('')
   const [k, setK] = useState('401') // Copper default
+
+  // Use Q for display purposes only
+  void Q
 
   const [result, setResult] = useState<any>(null)
 

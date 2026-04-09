@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import {
   Zap,
   Shield,
-  Star,
   CheckCircle2,
   Crown,
   Cpu,
@@ -86,7 +85,7 @@ const tiers = [
 ]
 
 export default function PremiumHubPage() {
-  const { user } = useAuth()
+  useAuth()
   const [loading, setLoading] = useState<string | null>(null)
 
   const handleSubscribe = async (tier: string) => {

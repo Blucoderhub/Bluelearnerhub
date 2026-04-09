@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
-import { ArrowRight, Sparkles, GraduationCap, Rocket } from 'lucide-react'
+import { motion } from 'framer-motion'
+
 export default function CallToAction() {
   return (
     <section className="border-t border-white/10 bg-black px-4 py-32 text-center">

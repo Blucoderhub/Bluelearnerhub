@@ -35,6 +35,12 @@ export default function Oscilloscope() {
     period: 0,
   })
 
+  const animate = () => {
+    drawWaveform()
+    setPhase((prev) => (prev + frequency[0] * 0.05) % (2 * Math.PI))
+    animationRef.current = requestAnimationFrame(animate)
+  }
+
   useEffect(() => {
     if (isRunning) {
       animate()
@@ -50,12 +56,6 @@ export default function Oscilloscope() {
       }
     }
   }, [isRunning, waveform, frequency, amplitude, timeScale, voltageScale, offset])
-
-  const animate = () => {
-    drawWaveform()
-    setPhase((prev) => (prev + frequency[0] * 0.05) % (2 * Math.PI))
-    animationRef.current = requestAnimationFrame(animate)
-  }
 
   const drawWaveform = () => {
     const canvas = canvasRef.current

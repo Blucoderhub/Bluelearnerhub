@@ -8,18 +8,13 @@ import {
   Eye,
   GitBranch,
   Code2,
-  FileText,
   Bug,
   GitMerge,
-  Settings,
   BookOpen,
   ChevronRight,
-  ChevronDown,
   File,
   Folder,
   Clock,
-  MessageSquare,
-  Sparkles,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -28,7 +23,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { formatDistanceToNow } from 'date-fns'
 
 const MOCK_REPO = {
   name: 'neural-network-from-scratch',
@@ -155,7 +149,6 @@ pip install -r requirements.txt
 \`\`\``
 
 function FileTree() {
-  const [expanded, setExpanded] = useState<string[]>([])
   return (
     <div className="font-mono text-sm">
       {MOCK_FILES.map((f) => (

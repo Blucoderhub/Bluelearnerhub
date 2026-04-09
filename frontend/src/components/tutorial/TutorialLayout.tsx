@@ -11,7 +11,7 @@
  * On mobile: single column, tab-switched
  */
 
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { CheckCircle, ChevronRight, Code2, BookOpen, Terminal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import ContentViewer from './ContentViewer'

@@ -4,26 +4,10 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Building2,
-  Layers,
   Box,
-  Map,
-  Thermometer,
-  ShieldCheck,
-  Wind,
-  Hash,
-  ArrowUpRight,
   Zap,
   ChevronRight,
-  MousePointer2,
 } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 

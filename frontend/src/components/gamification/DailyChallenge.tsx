@@ -38,14 +38,9 @@ export function DailyChallenge({
     setMinutes(m)
 
     const interval = setInterval(() => {
-      setHours((prev) => {
-        const newTime = timeRemaining - Math.floor((Date.now() / 1000) % 86400)
-        return Math.floor(Math.max(0, newTime) / 3600)
-      })
-      setMinutes((prev) => {
-        const newTime = timeRemaining - Math.floor((Date.now() / 1000) % 86400)
-        return Math.floor((Math.max(0, newTime) % 3600) / 60)
-      })
+      const newTime = timeRemaining - Math.floor((Date.now() / 1000) % 86400)
+      setHours(Math.floor(Math.max(0, newTime) / 3600))
+      setMinutes(Math.floor((Math.max(0, newTime) % 3600) / 60))
     }, 60000)
 
     return () => clearInterval(interval)

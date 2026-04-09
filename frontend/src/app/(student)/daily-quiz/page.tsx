@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, CheckCircle2, XCircle, ChevronRight, Trophy, RotateCcw, AlertCircle } from 'lucide-react'
+import { Zap, CheckCircle2, XCircle, ChevronRight, Trophy, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -131,7 +131,7 @@ export default function DailyQuizPage() {
         }
         setResult(response.data ?? null)
         setState('completed')
-      } catch (err) {
+      } catch {
         toast.error('Failed to submit quiz. Please try again.')
         setState('in-progress')
         setAnswers(updatedAnswers)
@@ -172,7 +172,7 @@ export default function DailyQuizPage() {
             </span>
           </div>
           <h1 className="mb-2 text-3xl font-bold">Daily Quiz</h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground">
             5 questions · AI-generated · New every day · Earn XP
           </p>
         </div>
@@ -189,24 +189,21 @@ export default function DailyQuizPage() {
               <CheckCircle2 className="h-8 w-8 text-foreground/60" />
             </div>
             <h2 className="mb-2 text-xl font-bold">Already completed!</h2>
-            <p className="mb-2 text-sm text-gray-400">
-              You've already taken the <span className="font-semibold text-foreground">{selectedDomain}</span> quiz today.
+            <p className="mb-2 text-sm text-muted-foreground">
+              You&apos;ve already taken the <span className="font-semibold text-foreground">{selectedDomain}</span> quiz today.
             </p>
             {quiz?.previousResult && (
-              <p className="mb-6 text-sm text-gray-400">
+              <p className="mb-6 text-sm text-muted-foreground">
                 Your score: <span className="font-semibold text-foreground">{quiz.previousResult.score}%</span>
                 {' · '}XP earned: <span className="font-semibold text-foreground/70">+{quiz.previousResult.xp_earned}</span>
               </p>
             )}
-            <p className="mb-8 text-xs text-gray-500">Come back tomorrow for a new quiz!</p>
-            <div className="flex gap-3 justify-center">
-              <Button variant="outline" className="gap-2 border-gray-700" onClick={resetToSelect}>
+            <p className="mb-8 text-xs text-muted-foreground">Come back tomorrow for a new quiz!</p>
+            <div className="flex justify-center gap-3">
+              <Button variant="outline" className="gap-2" onClick={resetToSelect}>
                 <RotateCcw className="h-4 w-4" /> Try another domain
               </Button>
-              <Button
-                className="bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
-                onClick={() => router.push('/student/dashboard')}
-              >
+              <Button onClick={() => router.push('/student/dashboard')}>
                 Back to Dashboard
               </Button>
             </div>
@@ -224,8 +221,8 @@ export default function DailyQuizPage() {
                   onClick={() => setDomain(d)}
                   className={`rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
                     selectedDomain === d
-                      ? 'border-primary bg-muted/20 text-foreground/70'
-                      : 'border-gray-700 bg-gray-900 text-gray-400 hover:border-gray-600'
+                      ? 'border-primary bg-muted/20 text-foreground'
+                      : 'border-border bg-card text-muted-foreground hover:border-border-accent hover:text-foreground'
                   }`}
                 >
                   {d}
@@ -235,7 +232,7 @@ export default function DailyQuizPage() {
             <Button
               onClick={startQuiz}
               disabled={loadingQuiz}
-              className="h-12 w-full bg-gradient-to-r from-primary to-primary text-base font-semibold hover:opacity-90"
+              className="h-12 w-full text-base font-semibold"
             >
               {loadingQuiz ? 'Loading…' : `Start ${selectedDomain} Quiz`}
               <ChevronRight className="ml-2 h-4 w-4" />
@@ -248,19 +245,19 @@ export default function DailyQuizPage() {
           <motion.div key={current} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
             {/* Progress bar */}
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-muted-foreground">
                 Question {current + 1} of {total}
               </span>
-              <span className="text-sm text-foreground/70">
+              <span className="text-sm text-muted-foreground">
                 {answers.length} answered
               </span>
             </div>
             <Progress value={(current / total) * 100} className="mb-6 h-1.5" />
 
-            <Card className="mb-4 border-gray-800 bg-gray-900">
+            <Card className="mb-4 border-border bg-card">
               <CardContent className="p-6">
                 <div className="mb-5 flex items-start justify-between gap-3">
-                  <h2 className="text-base font-semibold leading-relaxed text-white">
+                  <h2 className="text-base font-semibold leading-relaxed text-foreground">
                     {q.question}
                   </h2>
                   <Badge className={`shrink-0 text-xs ${DIFFICULTY_COLORS[q.difficulty]}`}>
@@ -270,11 +267,10 @@ export default function DailyQuizPage() {
 
                 <div className="space-y-2.5">
                   {q.options.map((opt, idx) => {
-                    // UI-only styling: selected = blue, locked = dim. No correct/wrong reveal.
-                    let style = 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600'
+                    let style = 'border-border bg-secondary text-foreground hover:border-border-accent'
                     if (chosen !== null) {
-                      if (idx === chosen)       style = 'border-blue-500 bg-blue-900/30 text-blue-300'
-                      else                      style = 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-default'
+                      if (idx === chosen) style = 'border-primary bg-primary/10 text-foreground'
+                      else style = 'border-border bg-secondary/50 text-muted-foreground cursor-default'
                     }
 
                     return (
@@ -284,7 +280,7 @@ export default function DailyQuizPage() {
                         disabled={chosen !== null || state === 'submitting'}
                         className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all ${style}`}
                       >
-                        <span className="shrink-0 font-mono text-xs text-gray-500">
+                        <span className="shrink-0 font-mono text-xs text-muted-foreground">
                           {String.fromCharCode(65 + idx)}
                         </span>
                         <span className="flex-1">{opt}</span>
@@ -303,9 +299,9 @@ export default function DailyQuizPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
-                  <Card className="mb-5 border-gray-800 bg-gray-900">
+                  <Card className="mb-5 border-border bg-card">
                     <CardContent className="p-4">
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         Answer locked in. Results will be revealed after you complete the quiz.
                       </p>
                     </CardContent>
@@ -317,7 +313,7 @@ export default function DailyQuizPage() {
             <Button
               onClick={handleNext}
               disabled={chosen === null || state === 'submitting'}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
+              className="w-full font-semibold"
             >
               {state === 'submitting'
                 ? 'Submitting…'
@@ -337,60 +333,60 @@ export default function DailyQuizPage() {
                 <Trophy className="h-10 w-10 text-white" />
               </div>
               <h2 className="mb-1 text-2xl font-bold">Quiz Complete!</h2>
-              <p className="text-sm text-gray-400">
-                {result.correctCount}/{result.totalQuestions} correct on today's {selectedDomain} quiz
+              <p className="text-sm text-muted-foreground">
+                {result.correctCount}/{result.totalQuestions} correct on today&apos;s {selectedDomain} quiz
               </p>
             </div>
 
             {/* Score card */}
-            <Card className="mb-5 border-gray-800 bg-gray-900">
+            <Card className="mb-5 border-border bg-card">
               <CardContent className="p-6">
                 <div className="mb-5 grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-3xl font-bold text-white">{result.score}%</p>
-                    <p className="text-xs text-gray-500">Score</p>
+                    <p className="text-3xl font-bold text-foreground">{result.score}%</p>
+                    <p className="text-xs text-muted-foreground">Score</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-foreground/70">{result.correctCount}</p>
-                    <p className="text-xs text-gray-500">Correct</p>
+                    <p className="text-3xl font-bold text-foreground">{result.correctCount}</p>
+                    <p className="text-xs text-muted-foreground">Correct</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-foreground/70">+{result.xpEarned}</p>
-                    <p className="text-xs text-gray-500">XP Earned</p>
+                    <p className="text-3xl font-bold text-foreground">+{result.xpEarned}</p>
+                    <p className="text-xs text-muted-foreground">XP Earned</p>
                   </div>
                 </div>
 
                 <Progress value={result.score} className="mb-4 h-2" />
 
-                {/* Per-question review — correctAnswers now safely from server */}
+                {/* Per-question review */}
                 <div className="space-y-4">
                   {quiz.questions.map((question, i) => {
-                    const given   = answers[i] ?? -1
+                    const given = answers[i] ?? -1
                     const correct = result.correctAnswers[i]
                     const isRight = given === correct
 
                     return (
-                      <div key={i} className="rounded-lg border border-gray-800 p-3">
+                      <div key={i} className="rounded-lg border border-border p-3">
                         <div className="mb-2 flex items-start gap-2">
                           {isRight
-                            ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
-                            : <XCircle      className="mt-0.5 h-4 w-4 shrink-0 text-red-400"   />
+                            ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                            : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
                           }
-                          <span className="text-sm leading-relaxed text-gray-300">
+                          <span className="text-sm leading-relaxed text-foreground">
                             {question.question}
                           </span>
                         </div>
 
                         {/* Show correct answer if wrong */}
                         {!isRight && (
-                          <p className="ml-6 text-xs text-green-400">
+                          <p className="ml-6 text-xs text-emerald-500">
                             Correct: {question.options[correct]}
                           </p>
                         )}
 
-                        {/* Explanation — revealed post-submission only */}
+                        {/* Explanation */}
                         {result.explanations[i] && (
-                          <p className="ml-6 mt-1 text-xs leading-relaxed text-gray-500">
+                          <p className="ml-6 mt-1 text-xs leading-relaxed text-muted-foreground">
                             {result.explanations[i]}
                           </p>
                         )}
@@ -405,12 +401,12 @@ export default function DailyQuizPage() {
               <Button
                 onClick={resetToSelect}
                 variant="outline"
-                className="flex-1 gap-2 border-gray-700 text-gray-300 hover:text-white"
+                className="flex-1 gap-2"
               >
                 <RotateCcw className="h-4 w-4" /> Try Another Domain
               </Button>
               <Button
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 font-semibold hover:opacity-90"
+                className="flex-1 font-semibold"
                 onClick={() => router.push('/student/dashboard')}
               >
                 Back to Dashboard

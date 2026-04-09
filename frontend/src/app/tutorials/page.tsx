@@ -15,7 +15,7 @@ export default function TutorialsPage() {
             </span>
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Learn to code with our W3Schools-style interactive tutorials. 
+            Learn to code with our interactive step-by-step tutorials. 
             Write and run code directly in your browser, track your progress, and earn certificates.
           </p>
         </div>

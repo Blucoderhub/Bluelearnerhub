@@ -7,7 +7,7 @@
  * Supports 20+ programming languages.
  */
 
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Editor, { OnMount } from '@monaco-editor/react'
 import { Play, RotateCcw, Copy, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'

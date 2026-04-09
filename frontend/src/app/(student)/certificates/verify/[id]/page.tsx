@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Shield, CheckCircle2, XCircle, Award, Calendar, ExternalLink } from 'lucide-react'
+import { Shield, CheckCircle2, XCircle, Award, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
@@ -22,7 +22,7 @@ const MOCK_CERT = {
 }
 
 export default function VerifyCertificatePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params)
+  React.use(params)
   const cert = MOCK_CERT
 
   return (

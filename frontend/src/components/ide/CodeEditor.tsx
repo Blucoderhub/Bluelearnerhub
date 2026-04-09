@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Editor, { OnMount } from '@monaco-editor/react'
 import {
   Play,
@@ -23,11 +23,11 @@ const LANGUAGES = [
 ]
 
 export default function CodeEditor() {
-  const [language, setLanguage] = useState(LANGUAGES[0])
+  const [language] = useState(LANGUAGES[0])
   const [code, setCode] = useState('')
   const [output, setOutput] = useState('')
   const [isRunning, setIsRunning] = useState(false)
-  const [theme, setTheme] = useState<'vs-dark' | 'light'>('vs-dark')
+  const [theme] = useState<'vs-dark' | 'light'>('vs-dark')
   const editorRef = useRef<any>(null)
 
   const handleEditorDidMount: OnMount = (editor) => {

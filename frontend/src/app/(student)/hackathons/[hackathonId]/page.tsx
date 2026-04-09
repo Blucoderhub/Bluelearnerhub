@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   Code2,
   ChevronRight,
-  ExternalLink,
   Lightbulb,
   Send,
 } from 'lucide-react'
@@ -67,14 +66,12 @@ const diffColors: Record<string, string> = {
 function HackathonSkeleton() {
   return (
     <div className="animate-pulse space-y-6 p-8">
-      <div className="h-10 w-2/3 rounded bg-gray-800" />
-      <div className="h-5 w-1/2 rounded bg-gray-800" />
+      <div className="h-10 w-2/3 rounded bg-muted" />
+      <div className="h-5 w-1/2 rounded bg-muted" />
       <div className="mt-4 flex gap-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-8 w-32 rounded-full bg-gray-800" />
-        ))}
+        <div key="badge" className="h-8 w-32 rounded-full bg-muted" />
       </div>
-      <div className="mt-6 h-10 w-40 rounded-lg bg-gray-800" />
+      <div className="mt-6 h-10 w-40 rounded-lg bg-muted" />
     </div>
   )
 }
@@ -166,7 +163,7 @@ export default function HackathonDetailsPage() {
     try {
       const result = await hackathonsAPI.register(hackathonId)
       if (result.error) {
-        throw new Error(result.error.message || 'Registration failed')
+        throw new Error(result.error || 'Registration failed')
       }
       
       const response = result.data as any
@@ -188,7 +185,7 @@ export default function HackathonDetailsPage() {
   const h = hackathon ?? FALLBACK_HACKATHON
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
         {/* Hero Banner */}
         {loading ? (
@@ -211,7 +208,7 @@ export default function HackathonDetailsPage() {
                         ? 'bg-emerald-500/20 text-emerald-300'
                         : h.status === 'UPCOMING'
                           ? 'bg-amber-500/20 text-amber-300'
-                          : 'bg-gray-500/20 text-gray-300'
+                          : 'bg-muted/20 text-muted-foreground'
                     }`}
                   >
                     {h.status}
@@ -296,7 +293,7 @@ export default function HackathonDetailsPage() {
         {/* Tabs */}
         {!loading && (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="border border-gray-800 bg-gray-900">
+            <TabsList className="border border-border bg-card">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="problems">Problems</TabsTrigger>
               <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
@@ -307,15 +304,15 @@ export default function HackathonDetailsPage() {
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* About + Rules */}
                 <div className="space-y-6 lg:col-span-2">
-                  <Card className="border-gray-800 bg-gray-900">
+                  <Card className="border-border bg-card">
                     <CardContent className="p-6">
-                      <h2 className="mb-3 text-lg font-bold text-white">About</h2>
-                      <p className="text-sm leading-relaxed text-gray-400">{h.description}</p>
+                      <h2 className="mb-3 text-lg font-bold text-foreground">About</h2>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{h.description}</p>
 
-                      <h3 className="mb-3 mt-6 text-base font-bold text-white">Rules</h3>
+                      <h3 className="mb-3 mt-6 text-base font-bold text-foreground">Rules</h3>
                       <ul className="space-y-2">
                         {h.rules.map((rule, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
+                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                             {rule}
                           </li>
@@ -325,14 +322,14 @@ export default function HackathonDetailsPage() {
                   </Card>
 
                   {h.sponsors?.length > 0 && (
-                    <Card className="border-gray-800 bg-gray-900">
+                    <Card className="border-border bg-card">
                       <CardContent className="p-6">
-                        <h3 className="mb-3 text-base font-bold text-white">Sponsors</h3>
+                        <h3 className="mb-3 text-base font-bold text-foreground">Sponsors</h3>
                         <div className="flex flex-wrap gap-3">
                           {h.sponsors.map((s: string) => (
                             <span
                               key={s}
-                              className="rounded-xl bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300"
+                              className="rounded-xl bg-secondary px-4 py-2 text-sm font-medium text-muted-foreground"
                             >
                               {s}
                             </span>
@@ -345,27 +342,27 @@ export default function HackathonDetailsPage() {
 
                 {/* Prizes */}
                 <div>
-                  <Card className="border-gray-800 bg-gray-900">
+                  <Card className="border-border bg-card">
                     <CardContent className="p-6">
-                      <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+                      <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
                         <Award className="h-5 w-5 text-amber-400" /> Prizes
                       </h2>
                       <div className="space-y-3">
                         {h.prizes.map((prize) => (
                           <div
                             key={prize.rank}
-                            className="flex items-center justify-between rounded-xl bg-gray-800 p-3"
+                            className="flex items-center justify-between rounded-xl bg-secondary p-3"
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-xl">{prize.label}</span>
-                              <span className="text-sm text-gray-300">{prize.rank}</span>
+                              <span className="text-sm text-muted-foreground">{prize.rank}</span>
                             </div>
-                            <span className="text-sm font-bold text-white">{prize.amount}</span>
+                            <span className="text-sm font-bold text-foreground">{prize.amount}</span>
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 border-t border-gray-800 pt-4 text-center">
-                        <p className="text-xs text-gray-500">Total Prize Pool</p>
+                      <div className="mt-4 border-t border-border pt-4 text-center">
+                        <p className="text-xs text-muted-foreground">Total Prize Pool</p>
                         <p className="text-2xl font-black text-amber-400">{h.prizePool}</p>
                       </div>
                     </CardContent>
@@ -375,10 +372,10 @@ export default function HackathonDetailsPage() {
             </TabsContent>
 
             <TabsContent value="problems">
-              <Card className="border-gray-800 bg-gray-900">
+              <Card className="border-border bg-card">
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-white">Problems</h2>
+                    <h2 className="text-lg font-bold text-foreground">Problems</h2>
                     {!registered && (
                       <Badge className="border-amber-500/20 bg-amber-500/10 text-xs text-amber-400">
                         Register to unlock all problems
@@ -394,16 +391,16 @@ export default function HackathonDetailsPage() {
                         transition={{ delay: i * 0.05 }}
                         className={`flex items-center gap-4 rounded-xl border p-4 transition-all ${
                           registered
-                            ? 'cursor-pointer border-gray-700 bg-gray-800/50 hover:bg-gray-800'
-                            : 'border-gray-800 bg-gray-900/50 opacity-60'
+                            ? 'cursor-pointer border-border bg-secondary/50 hover:bg-secondary'
+                            : 'border-border bg-card/50 opacity-60'
                         }`}
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-700 text-sm font-bold text-gray-300">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground">
                           {i + 1}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-white">{problem.title}</p>
-                          <p className="text-xs text-gray-500">{problem.points} points</p>
+                          <p className="text-sm font-semibold text-foreground">{problem.title}</p>
+                          <p className="text-xs text-muted-foreground">{problem.points} points</p>
                         </div>
                         <Badge
                           className={`border-0 text-[10px] ${diffColors[problem.difficulty] ?? ''}`}
@@ -414,7 +411,7 @@ export default function HackathonDetailsPage() {
                           <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
                         )}
                         {registered && !problem.solved && (
-                          <Code2 className="h-4 w-4 shrink-0 text-gray-500" />
+                          <Code2 className="h-4 w-4 shrink-0 text-muted-foreground" />
                         )}
                       </motion.div>
                     ))}
@@ -440,21 +437,21 @@ export default function HackathonDetailsPage() {
             </TabsContent>
 
             <TabsContent value="submissions">
-              <Card className="border-gray-800 bg-gray-900">
+              <Card className="border-border bg-card">
                 <CardContent className="p-6">
                   {registered ? (
                     <div className="space-y-4">
-                      <h2 className="mb-4 text-lg font-bold text-white">My Submissions</h2>
+                      <h2 className="mb-4 text-lg font-bold text-foreground">My Submissions</h2>
                       <div className="flex flex-col items-center gap-3 py-12 text-center">
-                        <Send className="h-10 w-10 text-gray-600" />
-                        <p className="text-sm text-gray-400">No submissions yet.</p>
-                        <p className="text-xs text-gray-600">
+                        <Send className="h-10 w-10 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">No submissions yet.</p>
+                        <p className="text-xs text-muted-foreground">
                           Go to Problems tab to start solving challenges.
                         </p>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="mt-2 border-gray-700"
+                          className="mt-2 border-border"
                           onClick={() => setActiveTab('problems')}
                         >
                           View Problems
@@ -463,8 +460,8 @@ export default function HackathonDetailsPage() {
                     </div>
                   ) : (
                     <div className="flex flex-col items-center gap-3 py-12 text-center">
-                      <Trophy className="h-10 w-10 text-gray-600" />
-                      <p className="text-sm text-gray-400">Register first to submit solutions.</p>
+                      <Trophy className="h-10 w-10 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">Register first to submit solutions.</p>
                       <Button
                         onClick={handleRegister}
                         disabled={registering}

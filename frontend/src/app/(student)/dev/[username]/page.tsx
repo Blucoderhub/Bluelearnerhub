@@ -1,21 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import {
-  GitBranch,
   Star,
   GitFork,
-  Eye,
   MapPin,
   Link2,
   Calendar,
   Award,
   Code2,
-  Users,
   Activity,
   Flame,
-  BookOpen,
   Trophy,
   ChevronRight,
   Lock,
@@ -23,7 +19,6 @@ import {
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 // Mock data — replace with API call: GET /api/repositories/:username
@@ -111,7 +106,7 @@ const LANG_COLORS: Record<string, string> = {
 function ContributionGraph() {
   const weeks = 16
   const days = 7
-  const cells = Array.from({ length: weeks * days }, (_, i) => {
+  const cells = Array.from({ length: weeks * days }, () => {
     const v = Math.random()
     return v < 0.4 ? 0 : v < 0.6 ? 1 : v < 0.75 ? 2 : v < 0.9 ? 3 : 4
   })
@@ -150,7 +145,7 @@ export default function DeveloperProfilePage({
 }: {
   params: Promise<{ username: string }>
 }) {
-  const { username } = React.use(params)
+  React.use(params)
   const user = MOCK_USER
   const repos = MOCK_REPOS
 

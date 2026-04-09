@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { KeyRound, ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Mail, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react'
 import { api } from '@/lib/api'
 
 export default function ForgotPasswordPage() {
@@ -29,117 +30,104 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden bg-background px-4 py-12">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[-10%] top-[-10%] h-[40%] w-[40%] animate-pulse rounded-full bg-primary/10 blur-[120px]" />
-        <div
-          className="absolute bottom-[-10%] right-[-10%] h-[40%] w-[40%] animate-pulse rounded-full bg-primary/5 blur-[120px]"
-          style={{ animationDelay: '2s' }}
-        />
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 py-12">
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/5 blur-[120px]" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="relative z-10 w-full max-w-[400px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-card/40 p-8 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl sm:p-10"
+        className="w-full max-w-[400px] space-y-8"
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
-
-        <div className="mb-8 flex justify-center">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 shadow-lg shadow-primary/10">
-            <KeyRound className="relative z-10 h-8 w-8 text-primary" />
-          </div>
-        </div>
-
-        {sent ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-6 text-center"
-          >
-            <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
-            <div className="space-y-2">
-              <h2 className="font-mono text-2xl font-black uppercase tracking-tight text-white">
-                Check_Inbox
-              </h2>
-              <p className="text-[11px] font-bold uppercase leading-relaxed tracking-wider text-muted-foreground">
-                If <span className="text-white">{email}</span> is registered, a reset link has been
-                dispatched.
-              </p>
-            </div>
-            <p className="font-mono text-[10px] leading-relaxed text-muted-foreground">
-              Didn&apos;t receive it? Check your spam folder or wait a few minutes before requesting
-              again.
-            </p>
-            <Button
-              variant="outline"
-              className="h-11 w-full border-white/20 bg-transparent font-mono text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white/5"
-              onClick={() => {
-                setSent(false)
-                setEmail('')
-              }}
-            >
-              Send_Again
-            </Button>
-          </motion.div>
-        ) : (
-          <div className="space-y-6">
-            <div className="space-y-2 text-center">
-              <h2 className="font-mono text-2xl font-black uppercase tracking-tight text-white">
-                Reset_Access
-              </h2>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                Enter your registered email to receive a reset link
-              </p>
-            </div>
-
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 font-mono text-[10px] leading-tight text-red-500"
-              >
-                <span className="font-bold uppercase tracking-widest">[ERROR]:</span> {error}
-              </motion.div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="ml-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Registered_Email
-                </label>
-                <Input
-                  type="email"
-                  placeholder="SYSTEM_ID@domain.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 border-white/20 bg-black font-mono text-xs transition-none placeholder:text-white/10 focus:border-white"
-                  required
-                />
-              </div>
-
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="h-12 w-full border-2 border-white bg-white font-mono text-[12px] font-black uppercase tracking-widest text-black transition-none hover:bg-black hover:text-white"
-                >
-                  {loading ? 'Dispatching...' : 'Send_Reset_Link'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        <div className="mt-8 text-center">
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-3 w-3" /> Back_To_Login
+        {/* Header */}
+        <div className="text-center">
+          <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
           </Link>
+          
+          <div className="mb-6 flex justify-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+              <Mail className="h-7 w-7 text-primary" />
+            </div>
+          </div>
+          
+          <h1 className="mb-2 text-2xl font-bold">Reset Password</h1>
+          <p className="text-muted-foreground">
+            Enter your email and we&apos;ll send you a reset link
+          </p>
         </div>
+
+        {/* Content */}
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          {sent ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="space-y-4 text-center"
+            >
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10">
+                <CheckCircle className="h-7 w-7 text-emerald-500" />
+              </div>
+              <div>
+                <h2 className="mb-1 text-lg font-semibold">Check your email</h2>
+                <p className="text-sm text-muted-foreground">
+                  We sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Didn&apos;t receive it? Check your spam folder or try again.
+              </p>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setSent(false)
+                  setEmail('')
+                }}
+              >
+                Send Again
+              </Button>
+            </motion.div>
+          ) : (
+            <>
+              {error && (
+                <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-500">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Sending...' : 'Send Reset Link'}
+                </Button>
+              </form>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-muted-foreground">
+          Remember your password?{' '}
+          <Link href="/login" className="font-semibold text-primary hover:underline">
+            Sign in
+          </Link>
+        </p>
       </motion.div>
     </div>
   )

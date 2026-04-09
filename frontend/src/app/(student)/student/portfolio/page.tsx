@@ -6,44 +6,22 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import {
   Trophy,
-  Code2,
   Award,
-  Calendar,
-  Users,
-  ExternalLink,
   Github,
   Linkedin,
   Globe,
   Loader2,
-  CheckCircle2,
   TrendingUp,
   Flame,
   Star,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { hackathonsAPI } from '@/lib/api-civilization'
 import { gamificationAPI } from '@/lib/api-civilization'
 
-interface RegisteredHackathon {
-  id: number
-  title: string
-  status: string
-  registeredAt: string
-  score?: number
-  rank?: number
-}
 
-interface HackathonRegistration {
-  id: number
-  hackathon_id: number
-  user_id: number
-  team_id: number | null
-  registration_status: string
-  registered_at: string
-  payment_status: string
-}
 
 interface Hackathon {
   id: number
@@ -68,7 +46,6 @@ interface Achievement {
 export default function PortfolioPage() {
   const { user } = useAuth()
   const [loading, setLoading] = useState(true)
-  const [registrations, setRegistrations] = useState<RegisteredHackathon[]>([])
   const [hackathons, setHackathons] = useState<Hackathon[]>([])
   const [achievements, setAchievements] = useState<Achievement[]>([])
   const [stats, setStats] = useState({
@@ -109,9 +86,9 @@ export default function PortfolioPage() {
         
         setStats(prev => ({
           ...prev,
-          totalXP: user.totalPoints || user.total_points || totalXP,
+          totalXP: user.totalPoints || totalXP,
           level: user.level || 1,
-          streak: user.currentStreak || user.current_streak || 0,
+          streak: user.currentStreak || 0,
         }))
       })
       .catch(console.error)

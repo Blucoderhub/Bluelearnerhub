@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft,
   ChevronRight,
   Menu,
   Play,
-  BookOpen,
   CheckCircle2,
   Share2,
   Maximize2,
@@ -43,7 +42,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
 
   return (
     <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-[#f8fafc] dark:bg-background">
-      {/* 1. Lesson Sidebar (HackerRank/W3Schools hybrid) */}
+      {/* 1. Lesson Sidebar (Professional Learning Layout) */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.aside
@@ -163,7 +162,7 @@ export const TutorialMasteryLayout: React.FC<TutorialMasteryLayoutProps> = ({
             </div>
           </div>
 
-          {/* 3. Interactive Playground (HackerRank/W3Schools blend) */}
+          {/* 3. Interactive Playground (Integrated IDE) */}
           <AnimatePresence>
             {isPlaygroundOpen && playground && (
               <motion.div

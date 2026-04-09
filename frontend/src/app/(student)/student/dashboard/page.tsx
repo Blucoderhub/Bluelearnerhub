@@ -1,32 +1,10 @@
 'use client'
 
-import { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { gamificationAPI } from '@/lib/api-civilization'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import type { Achievement, LeaderboardEntry } from '@/types'
-import { toast } from 'sonner'
-import {
-  BookOpen,
-  Code2,
-  Trophy,
-  Target,
-  Zap,
-  Flame,
-  TrendingUp,
-  Award,
-  ArrowRight,
-  CheckCircle2,
-  Circle,
-  Play,
-  Star,
-  Users,
-  Calendar,
-  Sparkles,
-  ChevronRight,
-  Loader2,
-} from 'lucide-react'
+import { BookOpen, Code2, Trophy, Target, Zap, Flame, Award, ArrowRight, CheckCircle2, Circle, Play, Users, Sparkles, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -35,9 +13,6 @@ import { OnboardingTour, useOnboarding } from '@/components/onboarding/Onboardin
 
 // Lazy load heavy components
 const XPProgressBar = lazy(() => import('@/components/gamification/XPProgressBar').then(m => ({ default: m.XPProgressBar })))
-const StreakDisplay = lazy(() => import('@/components/gamification/StreakDisplay').then(m => ({ default: m.StreakDisplay })))
-const ProgressChart = lazy(() => import('@/components/dashboard/ProgressChart'))
-const ActivityFeed = lazy(() => import('@/components/dashboard/ActivityFeed'))
 const Confetti = lazy(() => import('@/components/animations/Confetti'))
 
 // ─── Loading States ─────────────────────────────────────────────────────────────
@@ -212,7 +187,7 @@ export default function StudentDashboard() {
   const { user } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [showConfetti, setShowConfetti] = useState(false)
+  const [showConfetti] = useState(false)
   const { isFirstTime, showTour, completeTour } = useOnboarding()
 
   const xp = user?.totalPoints ?? 0
@@ -286,7 +261,7 @@ export default function StudentDashboard() {
         <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Welcome back, {firstName} 👋
+              Welcome back, {firstName}
             </h1>
             <p className="mt-1 text-muted-foreground">
               {isNewUser
@@ -315,7 +290,7 @@ export default function StudentDashboard() {
           >
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center">
               <div className="flex-1">
-                <h2 className="mb-2 text-2xl font-bold text-foreground">Start Your Journey 🚀</h2>
+                  <h2 className="mb-2 text-2xl font-bold text-foreground">Start Your Journey</h2>
                 <p className="text-muted-foreground">
                   Complete these quick steps to get the most out of BlueLearnerHub. Each step helps you build essential skills!
                 </p>
@@ -411,7 +386,7 @@ export default function StudentDashboard() {
               <div className="border-b border-border/50 bg-secondary/30 p-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
-                  <Link href="/activity" className="text-sm text-primary hover:underline">
+                  <Link href="/student/profile" className="text-sm text-primary hover:underline">
                     View all
                   </Link>
                 </div>
@@ -499,7 +474,7 @@ export default function StudentDashboard() {
                   </div>
                   <p className="mb-4 text-sm text-muted-foreground">
                     {streak >= 7
-                      ? "🔥 You're on fire! Keep your streak going!"
+                      ? "You're on fire! Keep your streak going!"
                       : "Don't break your streak! Complete a quiz today."}
                   </p>
                   <Button variant="outline" className="w-full" onClick={() => router.push('/daily-quiz')}>
@@ -538,21 +513,25 @@ export default function StudentDashboard() {
               <div className="border-b border-border/50 bg-secondary/30 p-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-foreground">Achievements</h2>
-                  <Link href="/achievements" className="text-sm text-primary hover:underline">
+                  <Link href="/student/profile" className="text-sm text-primary hover:underline">
                     View all
                   </Link>
                 </div>
               </div>
               <div className="p-6">
                 <div className="mb-4 flex justify-center gap-4">
-                  {['🎯', '💻', '🔥', '🏆'].map((emoji, i) => (
-                    <div
-                      key={i}
-                      className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-xl"
-                    >
-                      {emoji}
-                    </div>
-                  ))}
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                    <Target className="h-5 w-5" />
+                  </div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                    <Code2 className="h-5 w-5" />
+                  </div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                    <Flame className="h-5 w-5" />
+                  </div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                    <Trophy className="h-5 w-5" />
+                  </div>
                 </div>
                 <p className="text-center text-sm text-muted-foreground">
                   Complete challenges to unlock achievements!

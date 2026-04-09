@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import {
   Trophy,
@@ -448,7 +448,7 @@ export default function CodingPracticePage() {
             {outputTab === 'testcases' && (
               <>
                 <div className="flex gap-2">
-                  {MOCK_PROBLEM.testCases.map((tc, i) => (
+                  {MOCK_PROBLEM.testCases.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveCase(i)}

@@ -16,10 +16,8 @@ import {
   Users,
   Zap,
   TrendingUp,
-  Calendar,
   ChevronDown,
   ChevronRight,
-  GraduationCap,
   BookMarked,
   Bot,
   Star,
@@ -152,7 +150,8 @@ export default function Sidebar() {
     },
   ]
 
-  const navigation = user?.role === 'corporate' ? corporateNavigation : studentNavigation
+  const userRole = user?.role || 'STUDENT'
+  const navigation = userRole === 'CORPORATE' ? corporateNavigation : studentNavigation
   const userTotalPoints = user?.totalPoints ?? 0
   const userLevel = user?.level ?? 0
   const userStreak = user?.currentStreak ?? 0

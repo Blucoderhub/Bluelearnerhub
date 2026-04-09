@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft,
@@ -11,7 +11,6 @@ import {
   XCircle,
   ChevronRight,
   RotateCcw,
-  Clock,
   Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -109,7 +108,6 @@ type State = 'loading' | 'intro' | 'in-progress' | 'completed'
 
 export default function ExerciseDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const router = useRouter()
 
   const [exercise, setExercise] = useState<Exercise | null>(null)
   const [pageState, setPageState] = useState<State>('loading')
@@ -180,9 +178,6 @@ export default function ExerciseDetailPage() {
     const updatedAnswers = [...answers, chosen]
     setAnswers(updatedAnswers)
     if (current + 1 >= total) {
-      const finalScore = Math.round(
-        (updatedAnswers.filter((a, i) => a === questions[i]?.correctIndex).length / total) * 100
-      )
       // Persist XP to backend
       gamificationAPI.achievements().catch(() => {})
       toast.success(`Challenge complete! +${xpEarned} XP earned`)

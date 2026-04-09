@@ -13,8 +13,6 @@ import {
   Zap,
   TrendingUp,
   BookOpen,
-  DollarSign,
-  Filter,
   Search,
   Award,
 } from 'lucide-react'

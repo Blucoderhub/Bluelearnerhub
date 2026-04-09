@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
 import { useState } from 'react'
 import { Mail, MessageSquare, MapPin, CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'

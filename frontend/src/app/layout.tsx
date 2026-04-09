@@ -1,47 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { DM_Sans, Plus_Jakarta_Sans, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
-import '../styles/animations.css'
 import { Providers } from './providers'
+import { CustomCursor } from '@/components/ui/CustomCursor'
 
-const BASE_URL = 'https://bluelearnerhub.com'
-
-// Optimize font loading - only load what we use
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-  preload: true,
-})
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-  preload: false, // Only used in specific components
-})
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-plus-jakarta-sans',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-  preload: true,
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-  preload: true,
-})
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://bluelearnerhub.com'
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAF9F5' },
-    { media: '(prefers-color-scheme: dark)', color: '#0A0A0F' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0f' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -50,11 +20,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'BlueLearnerHub — Free Coding Bootcamp for Indian Students',
+    default: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
     template: '%s | BlueLearnerHub',
   },
   description:
-    'Learn Python, JavaScript, React, and System Design for FREE. AI-powered quizzes, weekly hackathons, verified certificates. Join 50,000+ Indian students landing tech jobs at Google, Amazon, and top startups.',
+    'India\'s premier EdTech platform for engineering students. Master programming with AI-powered quizzes, coding challenges, hackathons, and expert mentorship. Start your tech career today.',
   keywords: [
     'free coding bootcamp India',
     'learn programming free',
@@ -66,6 +36,7 @@ export const metadata: Metadata = {
     'BlueLearnerHub',
     'edtech India',
     'software engineering',
+    'AI learning platform',
   ],
   authors: [{ name: 'BlueLearnerHub', url: BASE_URL }],
   creator: 'BlueLearnerHub',
@@ -87,15 +58,15 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: BASE_URL,
     siteName: 'BlueLearnerHub',
-    title: 'BlueLearnerHub — Free Coding Bootcamp for Indian Students',
+    title: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
     description:
-      'Learn Python, JavaScript, React, and System Design for FREE. AI-powered quizzes, weekly hackathons, verified certificates. Join 50,000+ Indian students.',
+      'India\'s premier EdTech platform. AI-powered learning, coding challenges, hackathons, and mentorship for engineering students.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'BlueLearnerHub — Free Coding Bootcamp',
+        alt: 'BlueLearnerHub — Your Path to Tech Excellence',
       },
     ],
   },
@@ -103,9 +74,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@bluelearnerhub',
     creator: '@bluelearnerhub',
-    title: 'BlueLearnerHub — Free Coding Bootcamp',
+    title: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
     description:
-      'Learn to code for FREE. AI-powered quizzes, hackathons, verified certificates.',
+      'India\'s premier EdTech platform for engineering students. AI-powered learning, coding challenges, and hackathons.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -121,15 +92,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${dmSans.variable} ${playfair.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-background font-sans text-foreground antialiased">
+    <html lang="en" suppressHydrationWarning>
+      <body className={`min-h-screen bg-background font-sans antialiased ${inter.variable} ${playfair.variable}`}>
+        {/* Skip to main content - Accessibility */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:font-bold"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:font-semibold"
         >
           Skip to main content
         </a>
         <Providers>
+          <CustomCursor />
+          <div className="spilled-paint-bg">
+            <div className="blob blob-1" />
+            <div className="blob blob-2" />
+            <div className="blob blob-3" />
+          </div>
           <main id="main-content">
             {children}
           </main>

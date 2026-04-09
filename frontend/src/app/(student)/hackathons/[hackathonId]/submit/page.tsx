@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
@@ -9,7 +9,6 @@ import {
   Upload, 
   Send, 
   Loader2, 
-  FileCode,
   CheckCircle2,
   AlertCircle
 } from 'lucide-react'
@@ -108,7 +107,7 @@ export default function SubmissionForm({ hackathonId }: SubmissionFormProps) {
         >
           ← Back
         </Button>
-        <h1 className="text-2xl font-bold text-white">Submit Your Project</h1>
+        <h2 className="text-2xl font-bold text-foreground">Submit Your Project</h2>
       </div>
 
       <Card className="border-border bg-card">

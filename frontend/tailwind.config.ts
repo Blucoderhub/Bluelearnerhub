@@ -8,8 +8,18 @@ export default {
   ],
   theme: {
     extend: {
+      // Typography - Playfair Display for headings, Inter for body
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-playfair)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+      },
+      
+      // Colors - Using CSS custom properties
       colors: {
         background: 'hsl(var(--background))',
+        'background-secondary': 'hsl(var(--background-secondary))',
+        'background-tertiary': 'hsl(var(--background-tertiary))',
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
@@ -40,15 +50,11 @@ export default {
           foreground: 'hsl(var(--destructive-foreground))',
         },
         border: 'hsl(var(--border))',
+        'border-accent': 'hsl(var(--border-accent))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        chart: {
-          1: 'hsl(var(--chart-1))',
-          2: 'hsl(var(--chart-2))',
-          3: 'hsl(var(--chart-3))',
-          4: 'hsl(var(--chart-4))',
-          5: 'hsl(var(--chart-5))',
-        },
+        
+        // Sidebar colors
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar))',
           foreground: 'hsl(var(--sidebar-foreground))',
@@ -59,42 +65,65 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
-        /* Semantic palette */
-        success: { DEFAULT: '#10B981', light: '#D1FAE5', dark: '#065F46' },
-        warning: { DEFAULT: '#F59E0B', light: '#FEF3C7', dark: '#92400E' },
-        error: { DEFAULT: '#EF4444', light: '#FEE2E2', dark: '#991B1B' },
-        surface: { DEFAULT: '#F8FAFC', dark: 'hsl(240 10% 6%)' },
-
-        /* Gamification */
-        'xp-gold': '#F59E0B',
-        'streak-orange': '#F97316',
-        'level-purple': '#8B5CF6',
-        'achievement-cyan': '#06B6D4',
-        'reward-green': '#10B981',
+        
+        // Semantic colors
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          light: 'hsl(var(--success-light))',
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          light: 'hsl(var(--warning-light))',
+        },
+        error: {
+          DEFAULT: 'hsl(var(--error))',
+          light: 'hsl(var(--error-light))',
+        },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          light: 'hsl(var(--info-light))',
+        },
+        
+        // Gamification colors (Psychology: Achievement and progress)
+        'xp-gold': 'hsl(var(--xp-gold))',
+        'streak-orange': 'hsl(var(--streak-orange))',
+        'level-purple': 'hsl(var(--level-purple))',
+        'achievement-cyan': 'hsl(var(--achievement-cyan))',
+        'reward-green': 'hsl(var(--reward-green))',
       },
+      
+      // Border radius - hierarchical scale
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
+        none: '0',
         sm: 'calc(var(--radius) - 4px)',
-        xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 8px)',
+        DEFAULT: 'var(--radius)',
+        md: 'calc(var(--radius) + 2px)',
+        lg: 'calc(var(--radius) + 4px)',
+        xl: 'calc(var(--radius) + 8px)',
+        '2xl': 'calc(var(--radius) + 12px)',
+        full: '9999px',
       },
-      fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'monospace'],
-      },
+      
+      // Shadows - Layered depth (Psychology: Cards float above background)
       boxShadow: {
-        card: '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
-        'card-md': '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-        'card-lg': '0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
-        brand: '0 4px 14px 0 rgb(46 117 182 / 0.25)',
-        'brand-lg': '0 8px 25px 0 rgb(46 117 182 / 0.3)',
+        sm: 'var(--shadow-sm)',
+        DEFAULT: 'var(--shadow)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
+        xl: 'var(--shadow-xl)',
+        card: 'var(--shadow)',
+        'card-hover': 'var(--shadow-md)',
+        'card-elevated': 'var(--shadow-lg)',
       },
+      
+      // Animation keyframes
       animation: {
-        'fade-in': 'fade-in 0.35s ease-out',
-        'slide-up': 'slide-up 0.3s ease-out',
-        'scale-in': 'scale-in 0.2s ease-out',
+        'fade-in': 'fade-in 0.25s ease-out forwards',
+        'slide-up': 'slide-up 0.4s ease-out forwards',
+        'slide-down': 'slide-down 0.3s ease-out forwards',
+        'scale-in': 'scale-in 0.2s ease-out forwards',
+        'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+        'spin-slow': 'spin 3s linear infinite',
       },
       keyframes: {
         'fade-in': {
@@ -102,16 +131,54 @@ export default {
           to: { opacity: '1' },
         },
         'slide-up': {
-          from: { opacity: '0', transform: 'translateY(8px)' },
+          from: { opacity: '0', transform: 'translateY(10px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'slide-down': {
+          from: { opacity: '0', transform: 'translateY(-10px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
         'scale-in': {
           from: { opacity: '0', transform: 'scale(0.95)' },
           to: { opacity: '1', transform: 'scale(1)' },
         },
+        'pulse-soft': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
       },
+      
+      // Easing functions
       transitionTimingFunction: {
+        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'ease-in-out-expo': 'cubic-bezier(0.87, 0, 0.13, 1)',
         spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+      },
+      
+      // Spacing scale
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '30': '7.5rem',
+      },
+      
+      // Max widths
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
+      
+      // Container
+      container: {
+        center: true,
+        padding: '1rem',
+        screens: {
+          'sm': '640px',
+          'md': '768px',
+          'lg': '1024px',
+          'xl': '1280px',
+          '2xl': '1400px',
+        },
       },
     },
   },

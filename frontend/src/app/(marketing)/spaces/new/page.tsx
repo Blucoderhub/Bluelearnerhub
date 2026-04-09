@@ -1,30 +1,20 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
   Globe,
   Eye,
-  Save,
   Play,
-  Plus,
-  Trash2,
-  Settings,
   Code2,
-  ChevronDown,
-  X,
-  Share2,
-  ExternalLink,
   Lock,
   Unlock,
   RefreshCw,
-  Download,
   Copy,
   Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 
 type FileType = { id: string; name: string; lang: 'html' | 'css' | 'js'; content: string }
 

@@ -1,12 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
-import { W3TutorialLayout } from '@/components/tutorials/W3TutorialLayout'
-import { W3TryIt } from '@/components/tutorials/W3TryIt'
+import { LearningLayout } from '@/components/tutorials/LearningLayout'
+import { TryItYourself } from '@/components/tutorials/TryItYourself'
 import CodePlayground from '@/components/tutorials/CodePlayground'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+
 
 const lessons = [
   { id: 'introduction', title: 'Python Introduction', completed: true, active: false },
@@ -23,7 +20,7 @@ const lessons = [
 
 export default function PythonBasicsLesson() {
   return (
-    <W3TutorialLayout
+    <LearningLayout
       sidebarTitle="Python"
       lessons={lessons}
       progress={20}
@@ -183,7 +180,7 @@ print("After modification:", global_var)`}
         </section>
 
         {/* Exercise */}
-        <W3TryIt
+        <TryItYourself
           title="Exercise: Create Variables"
           language="python"
           code={`# Task: Create the following variables:
@@ -214,6 +211,6 @@ print(f"Is Learning: {is_learning}")`}
           </ul>
         </section>
       </div>
-    </W3TutorialLayout>
+    </LearningLayout>
   )
 }

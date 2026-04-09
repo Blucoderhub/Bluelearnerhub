@@ -10,22 +10,19 @@ import {
   ZoomOut,
   RotateCcw,
   Grid3x3,
-  Eye,
   Download,
   Upload,
-  Ruler,
   Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Slider } from '@/components/ui/slider'
 
 interface CADViewerProps {
   modelUrl?: string
   height?: string
   showControls?: boolean
   backgroundColor?: string
-  onMeasure?: (distance: number) => void
+  onMeasure?: (dimensions: { x: number; y: number; z: number }) => void
 }
 
 export default function CADViewer({
@@ -40,10 +37,10 @@ export default function CADViewer({
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const controlsRef = useRef<OrbitControls | null>(null)
-  const modelRef = useRef<THREE.Group | null>(null)
+  const modelRef = useRef<THREE.Object3D | null>(null)
 
   const [showGrid, setShowGrid] = useState(true)
-  const [showAxes, setShowAxes] = useState(true)
+  const [showAxes] = useState(true)
   const [wireframe, setWireframe] = useState(false)
   const [modelInfo, setModelInfo] = useState<{
     vertices: number
@@ -51,7 +48,50 @@ export default function CADViewer({
     dimensions: { x: number; y: number; z: number }
   } | null>(null)
   const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState({ x: 0, y: 0, z: 0 })
+
+  const loadModel = (url: string, scene: THREE.Scene) => {
+    const extension = url.split('.').pop()?.toLowerCase()
+
+    if (extension === 'stl') {
+      const loader = new STLLoader()
+      loader.load(url, (geometry) => {
+        const material = new THREE.MeshPhongMaterial({
+          color: 0x2563eb,
+          specular: 0x111111,
+          shininess: 200,
+        })
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+        const group = new THREE.Group()
+        group.add(mesh)
+        scene.add(group)
+        modelRef.current = group
+      })
+    } else if (extension === 'obj') {
+      const loader = new OBJLoader()
+      loader.load(url, (obj) => {
+        scene.add(obj)
+        const group = new THREE.Group()
+        group.add(obj)
+        modelRef.current = group
+      })
+    }
+  }
+
+  const createDefaultModel = (scene: THREE.Scene) => {
+    const geometry = new THREE.BoxGeometry(2, 2, 2)
+    const material = new THREE.MeshPhongMaterial({
+      color: 0x2563eb,
+      specular: 0x111111,
+      shininess: 200,
+    })
+    const cube = new THREE.Mesh(geometry, material)
+    cube.castShadow = true
+    cube.receiveShadow = true
+    scene.add(cube)
+    modelRef.current = cube
+  }
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -184,104 +224,12 @@ export default function CADViewer({
     cameraRef.current.updateProjectionMatrix()
   }, [zoom])
 
-  const loadModel = (url: string, scene: THREE.Scene) => {
-    const extension = url.split('.').pop()?.toLowerCase()
-
-    if (extension === 'stl') {
-      const loader = new STLLoader()
-      loader.load(url, (geometry) => {
-        const material = new THREE.MeshPhongMaterial({
-          color: 0x2563eb,
-          specular: 0x111111,
-          shininess: 200,
-        })
-        const mesh = new THREE.Mesh(geometry, material)
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-
-        // Center and scale model
-        geometry.computeBoundingBox()
-        const bbox = geometry.boundingBox!
-        const center = new THREE.Vector3()
-        bbox.getCenter(center)
-        mesh.position.sub(center)
-
-        const size = new THREE.Vector3()
-        bbox.getSize(size)
-        const maxDim = Math.max(size.x, size.y, size.z)
-        const scale = 5 / maxDim
-        mesh.scale.setScalar(scale)
-
-        const group = new THREE.Group()
-        group.add(mesh)
-        scene.add(group)
-        modelRef.current = group
-
-        // Set model info
-        setModelInfo({
-          vertices: geometry.attributes.position.count,
-          faces: geometry.attributes.position.count / 3,
-          dimensions: {
-            x: parseFloat(size.x.toFixed(2)),
-            y: parseFloat(size.y.toFixed(2)),
-            z: parseFloat(size.z.toFixed(2)),
-          },
-        })
-      })
-    } else if (extension === 'obj') {
-      const loader = new OBJLoader()
-      loader.load(url, (object) => {
-        scene.add(object)
-        modelRef.current = object
-      })
-    }
-  }
-
-  const createDefaultModel = (scene: THREE.Scene) => {
-    // Create a complex mechanical part as example
-    const group = new THREE.Group()
-
-    // Base
-    const baseGeometry = new THREE.BoxGeometry(4, 0.5, 3)
-    const baseMaterial = new THREE.MeshPhongMaterial({ color: 0x2563eb })
-    const base = new THREE.Mesh(baseGeometry, baseMaterial)
-    base.castShadow = true
-    base.receiveShadow = true
-    group.add(base)
-
-    // Cylinder
-    const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 3, 32)
-    const cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0x3b82f6 })
-    const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial)
-    cylinder.position.y = 1.75
-    cylinder.castShadow = true
-    group.add(cylinder)
-
-    // Top sphere
-    const sphereGeometry = new THREE.SphereGeometry(0.8, 32, 32)
-    const sphereMaterial = new THREE.MeshPhongMaterial({ color: 0x60a5fa })
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
-    sphere.position.y = 3.3
-    sphere.castShadow = true
-    group.add(sphere)
-
-    scene.add(group)
-    modelRef.current = group
-
-    setModelInfo({
-      vertices: 2000,
-      faces: 1500,
-      dimensions: { x: 4, y: 4, z: 3 },
-    })
-  }
-
   const handleReset = () => {
     if (!cameraRef.current || !controlsRef.current) return
 
     cameraRef.current.position.set(5, 5, 5)
     controlsRef.current.reset()
     setZoom(1)
-    setRotation({ x: 0, y: 0, z: 0 })
   }
 
   const handleZoomIn = () => {

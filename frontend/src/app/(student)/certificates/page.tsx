@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import {
   Award,
   Download,
-  Share2,
   ExternalLink,
   CheckCircle2,
   Shield,

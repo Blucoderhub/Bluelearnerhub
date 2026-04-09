@@ -12,9 +12,6 @@ import {
   Zap,
   Building2,
   Briefcase,
-  Users,
-  Clock,
-  Filter,
   Globe,
   Star,
   PlusCircle,
@@ -40,6 +37,7 @@ interface HackathonItem {
   icon: LucideIcon
   gradient: string
   description: string
+  difficulty: 'Beginner' | 'Intermediate' | 'Pro'
 }
 
 const DOMAIN_META: Record<string, { icon: LucideIcon; gradient: string }> = {
@@ -72,6 +70,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     gradient: 'from-blue-600 to-indigo-600',
     description:
       'Build the next generation of AI-powered tools that reshape how humans interact with technology.',
+    difficulty: 'Intermediate'
   },
   {
     id: 2,
@@ -86,6 +85,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     gradient: 'from-red-600 to-orange-600',
     description:
       'Design an autonomous driving simulation using physics engines and real-world sensor data.',
+    difficulty: 'Pro'
   },
   {
     id: 3,
@@ -99,6 +99,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     icon: Briefcase,
     gradient: 'from-emerald-600 to-teal-600',
     description: 'Create innovative financial products that promote financial inclusion globally.',
+    difficulty: 'Beginner'
   },
   {
     id: 4,
@@ -112,6 +113,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     icon: Building2,
     gradient: 'from-lime-600 to-green-600',
     description: 'Design sustainable structural solutions for the cities of the future.',
+    difficulty: 'Intermediate'
   },
   {
     id: 5,
@@ -125,6 +127,7 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     icon: Zap,
     gradient: 'from-yellow-500 to-amber-500',
     description: 'Engineer next-gen power electronics and smart grid solutions.',
+    difficulty: 'Pro'
   },
   {
     id: 6,
@@ -138,10 +141,12 @@ const MOCK_HACKATHONS: HackathonItem[] = [
     icon: Building2,
     gradient: 'from-slate-600 to-gray-600',
     description: 'Past hackathon on sustainable civil engineering structures.',
+    difficulty: 'Beginner'
   },
 ]
 
 const TABS = ['All', 'Active', 'Upcoming', 'Past']
+const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Pro']
 
 const statusConfig = {
   OPEN: {
@@ -188,6 +193,9 @@ function HackathonCard({ hack, index }: { hack: HackathonItem; index: number }) 
               className={`h-1.5 w-1.5 rounded-full ${config.dot} ${hack.status === 'OPEN' ? 'animate-pulse' : ''}`}
             />
             {config.label}
+          </Badge>
+          <Badge variant="outline" className="text-[10px] opacity-70">
+            {hack.difficulty}
           </Badge>
         </div>
 
@@ -294,6 +302,7 @@ export default function HackathonsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [activeTab, setActiveTab] = useState('All')
+  const [activeDifficulty, setActiveDifficulty] = useState('All')
 
   useEffect(() => {
     hackathonsAPI
@@ -325,6 +334,7 @@ export default function HackathonsPage() {
                 icon: meta.icon,
                 gradient: meta.gradient,
                 description: h.description || 'Participate and innovate.',
+                difficulty: (h.difficulty || 'Intermediate') as 'Beginner' | 'Intermediate' | 'Pro'
               } satisfies HackathonItem
             })
           )
@@ -344,7 +354,9 @@ export default function HackathonsPage() {
       (activeTab === 'Active' && h.status === 'OPEN') ||
       (activeTab === 'Upcoming' && h.status === 'UPCOMING') ||
       (activeTab === 'Past' && h.status === 'CLOSED')
-    return matchSearch && matchTab
+    const matchDifficulty =
+      activeDifficulty === 'All' || h.difficulty === activeDifficulty
+    return matchSearch && matchTab && matchDifficulty
   })
 
   const openCount = hackathons.filter((h) => h.status === 'OPEN').length
@@ -430,6 +442,23 @@ export default function HackathonsPage() {
                   {openCount}
                 </span>
               )}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2 items-center">
+          <span className="text-xs font-bold text-muted-foreground mr-2">Difficulty:</span>
+          {DIFFICULTIES.map((diff) => (
+            <button
+              key={diff}
+              onClick={() => setActiveDifficulty(diff)}
+              className={`rounded-full border px-4 py-1 text-[11px] font-bold transition-all ${
+                activeDifficulty === diff
+                  ? 'border-primary/50 bg-primary/10 text-primary'
+                  : 'border-border bg-card/30 text-muted-foreground hover:bg-card/50 hover:text-white'
+              }`}
+            >
+              {diff}
             </button>
           ))}
         </div>

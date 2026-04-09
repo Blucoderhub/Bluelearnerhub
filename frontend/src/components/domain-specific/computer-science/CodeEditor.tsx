@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import Editor, { OnMount } from '@monaco-editor/react'
 import * as monaco from 'monaco-editor'
+import type { IRange } from 'monaco-editor'
 import { Play, Save, Download, Maximize2, Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -62,7 +63,14 @@ export default function CodeEditor({
 
     // Auto-completion enhancement
     monaco.languages.registerCompletionItemProvider('javascript', {
-      provideCompletionItems: (_model: never, _position: never) => {
+      provideCompletionItems: (model, position) => {
+        const word = model.getWordUntilPosition(position)
+        const range: IRange = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
+        }
         const suggestions = [
           {
             label: 'console.log',
@@ -70,6 +78,7 @@ export default function CodeEditor({
             insertText: 'console.log(${1:value});',
             insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
             documentation: 'Log to console',
+            range,
           },
           {
             label: 'function',
@@ -77,6 +86,7 @@ export default function CodeEditor({
             insertText: 'function ${1:name}(${2:params}) {\n\t${3}\n}',
             insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
             documentation: 'Function declaration',
+            range,
           },
         ]
         return { suggestions }

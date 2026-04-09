@@ -1,21 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
-  Search,
-  Filter,
   CheckCircle2,
   GraduationCap,
   Users,
   Building2,
   Rocket,
   BarChart3,
-  ShieldCheck,
-  Clock,
   Zap,
   ChevronRight,
   PlayCircle,
-  Star,
   Award,
   TrendingUp,
 } from 'lucide-react'

@@ -11,15 +11,8 @@ import type { NextRequest } from 'next/server'
  * See: https://nextjs.org/docs/messages/middleware-to-proxy
  */
 const PROTECTED_PREFIXES = [
+  // Student routes
   '/student',
-  '/admin',
-  '/mentor',
-  '/teacher',
-  '/corporate',
-  '/hr',
-  '/institution',
-  '/candidate',
-  // Student feature routes (not under /student/ prefix but require auth)
   '/daily-quiz',
   '/exercises',
   '/hackathons',
@@ -34,6 +27,15 @@ const PROTECTED_PREFIXES = [
   '/ide',
   '/labs',
   '/ai-companion',
+  '/courses',
+  '/quiz',
+  '/community',
+  '/mentors',
+  '/tools',
+  // Mentor routes
+  '/mentor',
+  // Corporate routes
+  '/corporate',
 ]
 
 export function proxy(request: NextRequest) {
@@ -45,13 +47,14 @@ export function proxy(request: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
   if (!isProtected) return NextResponse.next()
 
-  // auth_hint is a non-sensitive presence signal set by AuthContext on the
-  // frontend (Vercel) domain after successful login.  The real JWT (accessToken)
-  // lives on the Express/Render domain as an HttpOnly cookie and is validated
-  // server-side on every API call — this middleware is only a UX guard.
-  const authHint = request.cookies.get('auth_hint')?.value
+  // Check for accessToken cookie set by backend after successful authentication.
+  // The real JWT (accessToken) lives on the Express domain as an HttpOnly signed
+  // cookie and is validated server-side on every API call. This middleware is
+  // only a UX guard to redirect unauthenticated users to login before they hit
+  // protected page HTML.
+  const accessToken = request.cookies.get('accessToken')?.value
 
-  if (!authHint) {
+  if (!accessToken) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('from', pathname)
     return NextResponse.redirect(loginUrl)
@@ -63,13 +66,6 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/student/:path*',
-    '/admin/:path*',
-    '/mentor/:path*',
-    '/teacher/:path*',
-    '/corporate/:path*',
-    '/hr/:path*',
-    '/institution/:path*',
-    '/candidate/:path*',
     '/daily-quiz/:path*',
     '/exercises/:path*',
     '/hackathons/:path*',
@@ -84,5 +80,12 @@ export const config = {
     '/ide/:path*',
     '/labs/:path*',
     '/ai-companion/:path*',
+    '/courses/:path*',
+    '/quiz/:path*',
+    '/community/:path*',
+    '/mentors/:path*',
+    '/tools/:path*',
+    '/mentor/:path*',
+    '/corporate/:path*',
   ],
 }

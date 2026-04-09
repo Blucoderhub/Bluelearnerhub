@@ -22,7 +22,6 @@ export interface User {
   email: string
   name: string
   fullName?: string
-  role: 'student' | 'candidate' | 'corporate' | 'hr' | 'admin'
   avatar?: string
   profilePicture?: string
   level?: number
@@ -34,6 +33,10 @@ export interface User {
   location?: string
   stats?: UserStats
   skills?: UserSkill[]
+  githubUrl?: string
+  linkedinUrl?: string
+  portfolioUrl?: string
+  role?: 'STUDENT' | 'CORPORATE' | 'ADMIN'
   createdAt: Date
 }
 

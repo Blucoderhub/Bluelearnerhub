@@ -4,7 +4,7 @@
  * ExercisePanel — Practice challenge with test case runner
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Terminal, CheckCircle2, XCircle, ChevronDown, ChevronUp, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import CodePlayground from './CodePlayground'
@@ -46,13 +46,10 @@ export default function ExercisePanel({
   const [isExpanded, setIsExpanded] = useState(false)
   const [testResults, setTestResults] = useState<TestResult[]>([])
   const [allPassed, setAllPassed] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [currentCode, setCurrentCode] = useState('')
 
   const visibleTests = testCases.filter((t) => !t.isHidden)
 
   const handleRunTests = async (code: string) => {
-    setIsSubmitting(true)
     const results: TestResult[] = []
 
     for (const tc of testCases) {
@@ -85,7 +82,6 @@ export default function ExercisePanel({
       await onComplete()
     }
 
-    setIsSubmitting(false)
     return { stdout: '', stderr: '', success: passed }
   }
 

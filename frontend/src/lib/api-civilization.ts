@@ -6,12 +6,9 @@
 import api from './api'
 import type {
   ApiResponse,
-  PaginatedResponse,
   LearningTrack,
   Exercise,
   ExerciseListParams,
-  GamificationLeaderboardResponse,
-  GamificationAchievementsResponse,
   PublicQuiz,
   DailyQuizResult,
   Achievement,

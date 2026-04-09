@@ -1,13 +1,13 @@
 # Frontend Configuration
 
-BluelearnerHub Frontend is a Next.js 14 application built with TypeScript, Tailwind CSS, and modern React patterns.
+BluelearnerHub Frontend is a Next.js 16 application built with TypeScript, Tailwind CSS, and modern React patterns.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ (Recommended: 20 LTS)
-- npm 9+ or yarn 3+
+- Node.js 20+ (Recommended: 22 LTS)
+- npm 10+ or yarn 3+
 
 ### Installation
 
@@ -29,57 +29,64 @@ Visit http://localhost:3000 to see your app running.
 ```
 frontend/
 ├── src/
-│   ├── app/              # Next.js 14 App Router
+│   ├── app/              # Next.js 16 App Router (proxy.ts for middleware)
 │   ├── components/       # Reusable React components
-│   ├── hooks/           # Custom React hooks
-│   ├── lib/             # Utility functions
-│   ├── store/           # Zustand state management
-│   ├── types/           # TypeScript types
-│   ├── styles/          # Global styles
-│   └── config/          # Configuration files
-├── public/              # Static assets
-└── [config files]       # Next.js, Tailwind, TypeScript configs
+│   │   ├── ui/           # shadcn/ui primitives
+│   │   ├── auth/         # Login/signup forms and guards
+│   │   ├── dashboard/    # Student dashboard widgets
+│   │   ├── domain-specific/  # Engineering simulators (CAD, Circuit, FEA)
+│   │   ├── ai/           # AI chat assistant
+│   │   ├── layout/       # Header, Sidebar
+│   │   └── marketing/    # Landing page sections
+│   ├── hooks/            # Custom React hooks (useAuth, useSocket)
+│   ├── lib/              # API client, utils, domain config
+│   ├── context/          # AuthContext provider
+│   ├── config/           # Theme, site metadata, navigation
+│   └── __tests__/        # Jest test files
+├── public/               # Static assets
+├── proxy.ts → src/proxy.ts   # Next.js 16 edge proxy (auth guard)
+└── [config files]        # Next.js, Tailwind, TypeScript configs
 ```
 
 ## 🛠️ Tech Stack
 
 ### Core Framework
 
-- **Next.js 14.2.0** - React framework with App Router
-- **React 18.3.0** - UI library
-- **TypeScript 5.4.3** - Type safety
+- **Next.js 16.1.6** - React framework with App Router (proxy.ts middleware)
+- **React 19.2.3** - UI library
+- **TypeScript 5.x** - Type safety
 
 ### Styling & UI
 
-- **Tailwind CSS 3.4.3** - Utility-first CSS
+- **Tailwind CSS 3.4.17** - Utility-first CSS
 - **shadcn/ui** - High-quality Radix UI components
 - **Lucide React** - Icon library
 - **Framer Motion 11.0.25** - Animation library
 
 ### Forms & Validation
 
-- **React Hook Form 7.51.0** - Performant form handling
-- **Zod 3.22.4** - Schema validation
+- **React Hook Form 7.71.2** - Performant form handling
+- **Zod 4.x** - Schema validation
 
 ### State Management & Data
 
-- **Zustand 4.5.2** - Lightweight state management
+- **Zustand 5.x** - Lightweight state management
 - **TanStack React Query 5.28.0** - Server state management
-- **Axios 1.6.8** - HTTP client
+- **Axios 1.6.8** - HTTP client with CSRF + token refresh interceptors
 
 ### Advanced Features
 
 - **Monaco Editor** - Code editing
-- **Three.js & React Three Fiber** - 3D graphics
+- **Three.js & React Three Fiber** - 3D graphics (CAD viewer, FEA simulator)
 - **Socket.IO** - Real-time communication
-- **Next.js Auth** - Authentication
+- **Sentry** - Error tracking
 - **NextThemes** - Dark mode support
 
 ### Development Tools
 
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **Tailwind CSS IntelliSense** - IDE support
+- **ESLint 9** - Code linting
+- **Prettier 3** - Code formatting
+- **Jest 29** - Testing with React Testing Library
 
 ## 🚀 Available Scripts
 

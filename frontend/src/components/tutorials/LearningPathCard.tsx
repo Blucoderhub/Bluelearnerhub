@@ -33,7 +33,6 @@ export default function LearningPathCard({
   domain,
   difficulty,
   coursesCount,
-  lessonsCount,
   duration,
   enrolledCount,
   rating,

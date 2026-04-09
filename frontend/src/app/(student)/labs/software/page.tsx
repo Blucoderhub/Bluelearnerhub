@@ -1,31 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import {
-  FileCode,
-  Files,
-  Terminal,
-  Play,
-  Save,
-  Bug,
-  Settings,
-  Layout,
-  ChevronRight,
-  ChevronDown,
-  Search,
-  Cpu,
-  Zap,
-  Bot,
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { FileCode, Files, Terminal, Play, Save, Bug, Layout, ChevronDown, Search, Cpu, Bot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 export default function SoftwareLabPage() {
   const [activeFile, setActiveFile] = useState('main.py')
-  const [terminalOutput, setTerminalOutput] = useState([
+  const [terminalOutput] = useState([
     '$ python main.py',
     'Initializing environment...',
     'Syncing with BlueCloud...',

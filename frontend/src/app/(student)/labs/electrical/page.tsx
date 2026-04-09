@@ -5,33 +5,17 @@ import { motion } from 'framer-motion'
 import {
   Zap,
   Cpu,
-  Settings,
   Plus,
   Eraser,
-  Play,
-  RefreshCcw,
   Activity,
   Waves,
-  Layout,
   MousePointer2,
-  Lock,
-  ChevronRight,
 } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Slider } from '@/components/ui/slider'
 
 export default function ElectricalLabPage() {
-  const [voltage, setVoltage] = useState(5.0)
   const [isPowerOn, setIsPowerOn] = useState(false)
 
   const components = [

@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Users, Sparkles, MessageSquare, ShieldCheck, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'

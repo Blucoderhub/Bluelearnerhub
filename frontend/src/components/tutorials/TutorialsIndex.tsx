@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
@@ -15,7 +15,6 @@ import {
   ChevronRight,
   Search,
   CheckCircle2,
-  Play,
   Star
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -298,7 +297,7 @@ export function TutorialsIndex() {
             <BookOpen className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">W3Schools-Style Learning</h2>
+            <h2 className="text-xl font-bold">Guided Learning</h2>
             <p className="text-sm text-muted-foreground">Interactive examples with every topic</p>
           </div>
         </div>

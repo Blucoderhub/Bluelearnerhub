@@ -131,7 +131,7 @@ NEXTAUTH_URL=http://localhost:3000
 
 ### Feature Components
 
-- `TutorialViewer` - W3Schools-style lesson viewer
+- `TutorialViewer` - Interactive lesson viewer
 - `CodePlayground` - Interactive code editor
 - `HackathonCard` - Hackathon preview
 - `AIChatInterface` - AI Syncc companion

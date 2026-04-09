@@ -1,193 +1,369 @@
 'use client'
 
 import * as React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
+import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
-  Building2,
+  Users,
   Trophy,
   Briefcase,
-  Video,
-  Search,
-  TrendingUp,
-  Settings,
-  ChevronRight,
+  Bot,
   LogOut,
-  Bell,
   Menu,
   X,
+  ChevronDown,
+  TrendingUp,
+  Search,
+  Sun,
+  Moon,
+  ShieldCheck,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { corporateNav } from '@/config/nav'
-import { cn } from '@/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const navItems = [
+  { title: 'Dashboard', href: '/corporate/dashboard', icon: LayoutDashboard },
+  { title: 'Candidates', href: '/corporate/candidates', icon: Users },
+  { title: 'Jobs', href: '/corporate/jobs', icon: Briefcase },
+  { title: 'Hackathons', href: '/corporate/hackathons', icon: Trophy },
+  { title: 'AI Screening', href: '/corporate/ai-screening', icon: Bot },
+  { title: 'Bounties', href: '/corporate/bounties', icon: TrendingUp },
+  { title: 'Analytics', href: '/corporate/analytics', icon: TrendingUp },
+]
+
+const mobileTabItems = [
+  { title: 'Home', href: '/corporate/dashboard', icon: LayoutDashboard },
+  { title: 'Jobs', href: '/corporate/jobs', icon: Briefcase },
+  { title: 'Candidates', href: '/corporate/candidates', icon: Users },
+  { title: 'More', href: '#more', icon: Menu },
+]
 
 export default function CorporateLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const { user, logout } = useAuth()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
 
-  const iconMap: Record<string, any> = {
-    dashboard: LayoutDashboard,
-    building: Building2,
-    flag: Trophy,
-    briefcase: Briefcase,
-    video: Video,
-    search: Search,
-    analytics: TrendingUp,
+  useEffect(() => {
+    const isDark = localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    setDarkMode(isDark)
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+    }
+  }, [])
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode
+    setDarkMode(newMode)
+    localStorage.setItem('theme', newMode ? 'dark' : 'light')
+    if (newMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
   }
 
-  return (
-    <div className="flex min-h-screen overflow-hidden bg-background font-sans text-foreground">
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
+  const handleLogout = () => {
+    logout()
+    window.location.href = '/login'
+  }
 
-      <aside
-        className={cn(
-          'fixed top-0 z-50 h-screen w-72 flex-col border-r border-border/40 bg-background transition-transform duration-300 md:sticky',
-          mobileOpen
-            ? 'flex translate-x-0'
-            : 'hidden -translate-x-full md:flex md:flex md:translate-x-0'
-        )}
-      >
-        <div className="flex h-20 items-center justify-between border-b border-border/40 px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border/40 bg-muted">
-              <Building2 className="h-5 w-5 text-foreground" />
+  const displayName = user?.fullName ?? user?.name ?? 'Corporate'
+  const initials = displayName.charAt(0).toUpperCase()
+
+  return (
+    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
+      <div className="bg-noise pointer-events-none absolute inset-0 opacity-50" />
+
+      {/* ─── DESKTOP SIDEBAR ──────────────────────────────────────────────── */}
+      <aside className="sticky top-0 z-40 hidden h-screen w-64 flex-col border-r border-border bg-card transition-all duration-300 lg:flex">
+        <div className="flex h-16 items-center justify-between px-6">
+          <Link href="/corporate/dashboard" className="group flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-primary shadow-lg shadow-violet-600/25">
+              <ShieldCheck className="h-6 w-6 text-white" />
             </div>
-            <h2 className="text-sm font-bold uppercase tracking-tight text-foreground">
-              Corporate <span className="opacity-70">Portal</span>
-            </h2>
-          </div>
+            <div>
+              <span className="font-semibold text-lg tracking-tight text-foreground">
+                BlueLearnerHub
+              </span>
+              <span className="ml-1 rounded bg-violet-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+                for Teams
+              </span>
+            </div>
+          </Link>
           <button
-            className="text-muted-foreground hover:text-white md:hidden"
-            onClick={() => setMobileOpen(false)}
+            onClick={toggleDarkMode}
+            className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            aria-label="Toggle dark mode"
           >
-            <X className="h-5 w-5" />
+            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
         </div>
 
-        <div className="flex-1 space-y-10 overflow-y-auto px-4 py-8">
-          <div className="space-y-2">
-            <p className="mb-6 px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Operations Center
-            </p>
-            {corporateNav.map((item) => {
-              const isActive = pathname === item.href
-              const Icon = iconMap[item.icon as string] || LayoutDashboard
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={cn(
-                    'group flex items-center justify-between rounded-md px-4 py-2.5 text-sm font-medium transition-colors',
-                    isActive
-                      ? 'bg-muted text-foreground'
-                      : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-                  )}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <Icon
-                      className={cn(
-                        'h-4 w-4 transition-colors',
-                        isActive
-                          ? 'text-foreground'
-                          : 'text-muted-foreground group-hover:text-foreground'
-                      )}
-                    />
-                    <span>{item.title}</span>
-                  </div>
-                  {isActive && <ChevronRight className="h-3 w-3 text-foreground" />}
-                </Link>
-              )
-            })}
-          </div>
-
-          <div className="px-4">
-            <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-muted/50 p-5">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-foreground">
-                Active Recruiting
-              </h4>
-              <p className="mt-2 text-[10px] font-medium text-muted-foreground">
-                3 New Matches Found
-              </p>
-              <Link
-                href="/candidates"
-                className="mt-4 inline-block text-[10px] font-bold text-foreground hover:underline"
-              >
-                Launch Talent Search →
-              </Link>
-            </div>
+        {/* Search */}
+        <div className="px-4 pb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search candidates..."
+              className="w-full rounded-xl border border-border bg-secondary/50 py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20"
+            />
           </div>
         </div>
 
-        {/* User Account / Organization Footer */}
-        <div className="border-t border-border/40 bg-muted/10 p-6">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-10 w-10 border border-border/40">
-              <AvatarImage src="" />
-              <AvatarFallback className="bg-muted font-bold text-foreground">BC</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-bold uppercase text-foreground">Bluecoderhub</p>
-              <p className="truncate text-[10px] font-medium uppercase text-muted-foreground">
-                Enterprise Level
-              </p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+        <div className="flex-1 space-y-1 overflow-y-auto px-3">
+          <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            Hiring
+          </p>
+          {navItems.slice(0, 5).map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href !== '/corporate/dashboard' && pathname.startsWith(item.href))
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
+                  isActive
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
+                )}
+              >
+                <Icon
+                  className={cn(
+                    'h-5 w-5',
+                    isActive ? 'text-white' : 'text-primary/70'
+                  )}
+                />
+                <span className="truncate">{item.title}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute left-0 h-5 w-1 rounded-full bg-white"
+                  />
+                )}
+              </Link>
+            )
+          })}
+
+          <p className="mb-3 mt-6 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            Tools
+          </p>
+          {navItems.slice(5).map((item) => {
+            const isActive = pathname === item.href
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
+                  isActive
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
+                )}
+              >
+                <Icon
+                  className={cn(
+                    'h-5 w-5',
+                    isActive ? 'text-white' : 'text-primary/70'
+                  )}
+                />
+                <span className="truncate">{item.title}</span>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* ─── Profile Section ─────────────────────────────────────────── */}
+        <div className="border-t border-border/50 p-4">
+          <div className="relative">
+            <button
+              onClick={() => setProfileOpen(!profileOpen)}
+              className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3 transition-all hover:bg-secondary/50"
             >
-              <LogOut className="h-4 w-4" />
-            </Button>
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-border/40 bg-gradient-to-br from-violet-600 to-primary font-bold text-white shadow-inner">
+                {initials}
+              </div>
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate text-sm font-semibold text-foreground">{displayName}</p>
+                <p className="text-xs text-violet-400">Corporate</p>
+              </div>
+              <ChevronDown className={cn('h-4 w-4 text-muted-foreground transition-transform', profileOpen && 'rotate-180')} />
+            </button>
+
+            <AnimatePresence>
+              {profileOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute bottom-full left-0 right-0 mb-2 overflow-hidden rounded-xl border border-border bg-card shadow-xl"
+                >
+                  <Link
+                    href="/corporate/dashboard"
+                    onClick={() => setProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-secondary/50"
+                  >
+                    <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <div className="border-t border-border/50" />
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-500 transition-colors hover:bg-red-500/10"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/40 bg-background px-4 md:h-20 md:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              className="text-muted-foreground hover:text-foreground md:hidden"
-              onClick={() => setMobileOpen(true)}
+      {/* ─── MOBILE DRAWER ────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-background/80 backdrop-blur-lg lg:hidden"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 z-50 w-[280px] overflow-y-auto border-r border-border bg-card p-6 lg:hidden"
             >
-              <Menu className="h-5 w-5" />
-            </button>
-            <Search className="h-4 w-4 cursor-pointer text-muted-foreground transition-colors hover:text-foreground" />
-            <div className="h-4 w-[1px] bg-border/40" />
-            <Badge
-              variant="outline"
-              className="rounded-sm border-border/40 bg-muted px-2 py-0.5 text-[10px] font-medium text-foreground"
-            >
-              Network: Stable
-            </Badge>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 rounded-md border border-border/40 bg-muted/30 px-3 py-1.5">
-              <span className="text-[10px] font-bold uppercase text-muted-foreground">
-                Credits:
-              </span>
-              <span className="text-xs font-bold text-foreground">$12,450.00</span>
-            </div>
-          </div>
-        </header>
+              <div className="mb-8 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+                    <ShieldCheck className="h-6 w-6 text-white" />
+                  </div>
+                  <span className="font-semibold text-lg text-foreground">
+                    BlueLearnerHub
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={toggleDarkMode}
+                    className="rounded-lg p-2 text-muted-foreground hover:bg-secondary"
+                  >
+                    {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  </button>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg border border-border p-2 text-muted-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <nav className="space-y-1">
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href
+                  const Icon = item.icon
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
+                        isActive
+                          ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                          : 'text-muted-foreground hover:bg-secondary/50'
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{item.title}</span>
+                    </Link>
+                  )
+                })}
+              </nav>
+              <div className="mt-6 border-t border-border/50 pt-6">
+                <button
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
-        <main className="relative mx-auto w-full max-w-[1700px] p-4 md:p-8 lg:p-12">
-          <div className="relative z-10 text-foreground">{children}</div>
+      {/* ─── MAIN CONTENT ─────────────────────────────────────────────────── */}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <main className="relative flex-1 overflow-y-auto pb-24">
+          <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-full bg-gradient-to-b from-violet-500/5 to-transparent" />
+
+          <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
+            {children}
+          </div>
         </main>
+
+        {/* ─── MOBILE BOTTOM NAVBAR ────────────────────────────────────────── */}
+        <nav className="safe-bottom fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur-xl lg:hidden">
+          <div className="flex h-16 items-center justify-around px-2">
+            {mobileTabItems.map((item) => {
+              const isActive =
+                item.href !== '#more' &&
+                (pathname === item.href ||
+                  (item.href !== '/corporate/dashboard' && pathname.startsWith(item.href)))
+              const Icon = item.icon
+              return item.href === '#more' ? (
+                <button
+                  key="more"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="flex flex-col items-center justify-center gap-0.5 p-2 text-muted-foreground"
+                >
+                  <Icon className="h-6 w-6" />
+                  <span className="text-[9px] font-bold uppercase tracking-wider">
+                    {item.title}
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'relative flex flex-col items-center justify-center gap-0.5 p-2 transition-all',
+                    isActive ? 'text-primary' : 'text-muted-foreground'
+                  )}
+                >
+                  <Icon className="h-6 w-6" />
+                  <span className="text-[9px] font-bold uppercase tracking-wider">
+                    {item.title}
+                  </span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="mobile-pill"
+                      className="absolute -top-px left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-primary"
+                    />
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
       </div>
     </div>
   )
-}
-
-function Badge({ children, variant, className }: any) {
-  return <span className={cn('rounded-full px-2 py-0.5', className)}>{children}</span>
 }

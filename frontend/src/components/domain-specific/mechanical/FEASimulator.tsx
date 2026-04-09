@@ -33,6 +33,23 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     safetyFactor: 0,
   })
 
+  const updateStressColors = (geometry: THREE.BoxGeometry, load: number = 0) => {
+    const positions = geometry.attributes.position
+    const colors = new Float32Array(positions.count * 3)
+
+    for (let i = 0; i < positions.count; i++) {
+      const y = positions.getY(i)
+      const stress = Math.sin(y * 3) * load * 0.01
+      const normalizedStress = Math.min(1, Math.max(0, (stress + load) / (load * 2)))
+
+      colors[i * 3] = normalizedStress
+      colors[i * 3 + 1] = 1 - normalizedStress
+      colors[i * 3 + 2] = 0
+    }
+
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  }
+
   useEffect(() => {
     if (!containerRef.current) return
 
@@ -99,6 +116,42 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     }
   }, [])
 
+  // Stress calculation functions - defined before useEffect to avoid lint errors
+  const calculateMaxStress = (load: number): number => {
+    const length = 4
+    const force = load * 10
+    const moment = (force * length) / 4
+    const c = 0.15
+    const I = (0.3 * 0.3 ** 3) / 12
+    return (moment * c) / I
+  }
+
+  const calculateMaxDisplacement = (load: number): number => {
+    const length = 4
+    const force = load * 10
+    const E = 200e9
+    const I = (0.3 * 0.3 ** 3) / 12
+    return (force * length ** 3) / (3 * E * I)
+  }
+
+  const calculateSafetyFactor = (maxStress: number): number => {
+    const yieldStrength = 250e6
+    return yieldStrength / maxStress
+  }
+
+  const deformMesh = (geometry: THREE.BoxGeometry, load: number, time: number) => {
+    const positions = geometry.attributes.position
+    const originalPositions = geometry.attributes.position.clone()
+
+    for (let i = 0; i < positions.count; i++) {
+      const x = originalPositions.getX(i)
+      const y = originalPositions.getY(i)
+      const displacement = ((x + 2) / 4) ** 2 * (load / 100) * 0.5 * Math.sin(time)
+      positions.setY(i, y - displacement)
+    }
+    positions.needsUpdate = true
+  }
+
   // Simulate stress analysis
   useEffect(() => {
     if (!isSimulating || !meshRef.current) return
@@ -109,7 +162,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
 
         // Update stress visualization
         const geometry = meshRef.current!.geometry as THREE.BoxGeometry
-        updateStressColors(geometry, newTime, loadValue[0])
+        updateStressColors(geometry, loadValue[0])
 
         // Calculate results
         const maxStress = calculateMaxStress(loadValue[0])
@@ -132,84 +185,6 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     return () => clearInterval(interval)
   }, [isSimulating, loadValue])
 
-  const updateStressColors = (geometry: THREE.BoxGeometry, time: number, load: number = 0) => {
-    const positions = geometry.attributes.position
-    const colors = new Float32Array(positions.count * 3)
-
-    for (let i = 0; i < positions.count; i++) {
-      const x = positions.getX(i)
-
-      // Stress increases from left (fixed) to right (loaded)
-      const stressLevel = ((x + 2) / 4) * (load / 100)
-
-      // Color gradient: blue (low stress) -> yellow -> red (high stress)
-      let r, g, b
-
-      if (stressLevel < 0.5) {
-        // Blue to yellow
-        r = stressLevel * 2
-        g = stressLevel * 2
-        b = 1 - stressLevel * 2
-      } else {
-        // Yellow to red
-        r = 1
-        g = 2 - stressLevel * 2
-        b = 0
-      }
-
-      colors[i * 3] = r
-      colors[i * 3 + 1] = g
-      colors[i * 3 + 2] = b
-    }
-
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-  }
-
-  const deformMesh = (geometry: THREE.BoxGeometry, load: number, time: number) => {
-    const positions = geometry.attributes.position
-    const originalPositions = geometry.attributes.position.clone()
-
-    for (let i = 0; i < positions.count; i++) {
-      const x = originalPositions.getX(i)
-      const y = originalPositions.getY(i)
-
-      // Displacement increases from left to right
-      const displacement = ((x + 2) / 4) ** 2 * (load / 100) * 0.5 * Math.sin(time)
-
-      positions.setY(i, y - displacement)
-    }
-
-    positions.needsUpdate = true
-  }
-
-  const calculateMaxStress = (load: number): number => {
-    // Simplified beam bending stress calculation
-    // σ = M*c/I where M = moment, c = distance to neutral axis, I = moment of inertia
-    const length = 4 // beam length
-    const force = load * 10 // applied force in N
-    const moment = (force * length) / 4
-    const c = 0.15 // half height
-    const I = (0.3 * 0.3 ** 3) / 12 // moment of inertia
-
-    return (moment * c) / I
-  }
-
-  const calculateMaxDisplacement = (load: number): number => {
-    // Simplified beam deflection formula
-    // δ = (F*L^3)/(3*E*I)
-    const length = 4
-    const force = load * 10
-    const E = 200e9 // Young's modulus (steel)
-    const I = (0.3 * 0.3 ** 3) / 12
-
-    return ((force * length ** 3) / (3 * E * I)) * 1000 // in mm
-  }
-
-  const calculateSafetyFactor = (maxStress: number): number => {
-    const yieldStrength = 250e6 // Steel yield strength in Pa
-    return maxStress > 0 ? yieldStrength / maxStress : Infinity
-  }
-
   const handleStartSimulation = () => {
     setIsSimulating(true)
     setSimulationTime(0)
@@ -226,7 +201,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
 
     if (meshRef.current) {
       const geometry = meshRef.current.geometry as THREE.BoxGeometry
-      updateStressColors(geometry, 0, 0)
+      updateStressColors(geometry, 0)
 
       // Reset deformation
       const positions = geometry.attributes.position

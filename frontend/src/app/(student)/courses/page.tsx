@@ -10,7 +10,6 @@ import {
   Users,
   BookOpen,
   ChevronRight,
-  Filter,
   X,
   Cpu,
   Zap,
@@ -19,14 +18,8 @@ import {
   Rocket,
   Bot,
   HeartPulse,
-  Factory,
-  FlaskConical,
-  Car,
-  DollarSign,
   Target,
-  Briefcase,
   BarChart3,
-  Globe,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -44,7 +37,6 @@ const CATEGORIES = [
   'AI & ML',
 ]
 const DIFFICULTIES = ['All Levels', 'Beginner', 'Intermediate', 'Advanced']
-const DURATIONS = ['Any Duration', 'Under 5 hours', '5–20 hours', '20+ hours']
 const SORT_OPTIONS = ['Most Popular', 'Latest', 'Highest Rated', 'Shortest First']
 
 const COURSES = [

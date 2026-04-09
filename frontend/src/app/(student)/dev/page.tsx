@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  GitBranch,
   Star,
   Plus,
   Search,
@@ -17,7 +16,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import RepoCard from '@/components/devportal/RepoCard'
 import { reposAPI } from '@/lib/api-civilization'
@@ -79,11 +77,9 @@ export default function DevPortalPage() {
   const [repos, setRepos] = useState(MOCK_REPOS as any[])
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'public' | 'private'>('all')
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user?.fullName) {
-      setLoading(false)
       return
     }
     const username = user.fullName.toLowerCase().replace(/\s+/g, '-')
@@ -94,7 +90,6 @@ export default function DevPortalPage() {
         if (Array.isArray(list) && list.length > 0) setRepos(list)
       })
       .catch(() => {})
-      .finally(() => setLoading(false))
   }, [user?.fullName])
 
   const filtered = repos.filter((r) => {

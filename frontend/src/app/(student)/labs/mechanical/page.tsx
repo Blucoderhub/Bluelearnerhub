@@ -5,13 +5,8 @@ import { motion } from 'framer-motion'
 import {
   Box,
   Layers,
-  Settings,
-  Thermometer,
-  Zap,
   RotateCw,
   Maximize2,
-  MousePointer2,
-  Cpu,
   ShieldCheck,
   ChevronRight,
   Info,
@@ -29,7 +24,6 @@ import { Badge } from '@/components/ui/badge'
 import { Slider } from '@/components/ui/slider'
 
 export default function MechanicalLabPage() {
-  const [rotation, setRotation] = useState(0)
   const [temperature, setTemperature] = useState(25)
   const [isSimulating, setIsSimulating] = useState(false)
 

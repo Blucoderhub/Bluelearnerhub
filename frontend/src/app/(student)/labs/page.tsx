@@ -8,10 +8,7 @@ import {
   Building2,
   FlaskConical,
   Blocks,
-  Cpu,
   MousePointer2,
-  Box,
-  Layers,
   ArrowRight,
 } from 'lucide-react'
 import {
@@ -19,7 +16,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardFooter,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

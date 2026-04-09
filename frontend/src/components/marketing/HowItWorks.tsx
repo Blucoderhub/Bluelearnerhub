@@ -1,25 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Compass, Code2, Rocket, BadgeCheck } from 'lucide-react'
-import dynamic from 'next/dynamic'
-
-const LearningCharacter = dynamic(
-  () => import('@/components/animations/characters/LearningCharacter'),
-  { ssr: false }
-)
-const CodingCharacter = dynamic(
-  () => import('@/components/animations/characters/CodingCharacter'),
-  { ssr: false }
-)
-const CelebrationCharacter = dynamic(
-  () => import('@/components/animations/characters/CelebrationCharacter'),
-  { ssr: false }
-)
-const CollaboratingCharacters = dynamic(
-  () => import('@/components/animations/characters/CollaboratingCharacters'),
-  { ssr: false }
-)
 
 const steps = [
   {

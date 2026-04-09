@@ -1,17 +1,8 @@
 'use client'
 
-import React from 'react'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
 import CodePlayground from '@/components/tutorials/CodePlayground'
-import { W3TryIt } from '@/components/tutorials/W3TryIt'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
-
-interface TutorialContentProps {
-  lessonId: string
-}
+import { TryItYourself } from '@/components/tutorials/TryItYourself'
+import { CheckCircle2 } from 'lucide-react'
 
 export function PythonBasicsContent() {
   return (
@@ -56,7 +47,7 @@ export function PythonBasicsContent() {
       </section>
 
       {/* Interactive Example */}
-      <W3TryIt
+      <TryItYourself
         title="Python Syntax"
         language="python"
         code={`# This is a comment
@@ -105,7 +96,7 @@ print(f"Welcome to {name} version {version}")`}
       </section>
 
       {/* Interactive Exercise */}
-      <W3TryIt
+      <TryItYourself
         title="Your First Exercise"
         language="python"
         code={`# Exercise: Fix the code below
@@ -175,7 +166,7 @@ export function JavaScriptBasicsContent() {
         </p>
       </section>
 
-      <W3TryIt
+      <TryItYourself
         title="JavaScript Can Change HTML Content"
         language="javascript"
         code={`document.getElementById("demo").innerHTML = "Hello JavaScript!";`}
@@ -203,7 +194,7 @@ function greet(user) {
 
 console.log(greet(name));`} />
 
-      <W3TryIt
+      <TryItYourself
         title="Interactive JavaScript"
         language="javascript"
         code={`// Try changing the values
@@ -231,7 +222,7 @@ export function HTMLBasicsContent() {
         </p>
       </section>
 
-      <W3TryIt
+      <TryItYourself
         title="A Simple HTML Document"
         language="html"
         code={`<!DOCTYPE html>
@@ -274,7 +265,7 @@ export function CSSBasicsContent() {
         </p>
       </section>
 
-      <W3TryIt
+      <TryItYourself
         title="CSS Example"
         language="css"
         code={`body {

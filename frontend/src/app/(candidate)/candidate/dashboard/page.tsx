@@ -4,9 +4,7 @@ import { motion } from 'framer-motion'
 import {
   Briefcase,
   Video,
-  FileText,
   CheckCircle2,
-  Clock,
   TrendingUp,
   Star,
   ChevronRight,

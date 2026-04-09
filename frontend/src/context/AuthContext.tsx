@@ -47,7 +47,6 @@ interface AuthContextValue {
     email: string
     password: string
     name: string
-    role: string
     fullName?: string
   }) => Promise<User>
   refreshUser: (silent?: boolean) => Promise<void>
@@ -156,7 +155,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string
     password: string
     name: string
-    role: string
   }): Promise<User> => {
     const { name, ...rest } = data
     const response = await api.post('/auth/register', { ...rest, fullName: name })

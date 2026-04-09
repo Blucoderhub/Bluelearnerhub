@@ -63,11 +63,13 @@ export function useSocket() {
     }
   }, [])
 
+  const connected = socketRef.current?.connected ?? false
+
   return {
     emit,
     on,
     off,
-    socket: socketRef.current,
+    connected,
   }
 }
 
