@@ -95,7 +95,7 @@ export const listExercises = async (req: Request, res: Response) => {
 
 export const getExercise = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id));
     if (isNaN(id)) return res.status(400).json({ success: false, message: 'Invalid exercise id' });
 
     const [quiz] = await db
@@ -133,3 +133,4 @@ export const getExercise = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Failed to load exercise' });
   }
 };
+

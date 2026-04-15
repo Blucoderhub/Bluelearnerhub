@@ -38,7 +38,7 @@ export const listTracks = async (req: Request, res: Response) => {
 
 export const getTrack = async (req: Request, res: Response) => {
   try {
-    const { slug }  = req.params;
+    const slug = String(req.params.slug);
     const userId    = req.user?.id;
 
     const [track] = await db
@@ -76,7 +76,7 @@ export const getTrack = async (req: Request, res: Response) => {
 export const enrollInTrack = async (req: Request, res: Response) => {
   try {
     const userId  = req.user!.id;
-    const trackId = parseInt(req.params.id);
+    const trackId = parseInt(String(req.params.id));
 
     if (isNaN(trackId) || trackId <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid track id' });
@@ -112,7 +112,7 @@ export const enrollInTrack = async (req: Request, res: Response) => {
 export const getTrackProgress = async (req: Request, res: Response) => {
   try {
     const userId  = req.user!.id;
-    const trackId = parseInt(req.params.id);
+    const trackId = parseInt(String(req.params.id));
 
     const [enrollment] = await db
       .select()
@@ -126,3 +126,5 @@ export const getTrackProgress = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Failed to load progress' });
   }
 };
+
+

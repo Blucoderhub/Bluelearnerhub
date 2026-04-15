@@ -14,7 +14,7 @@ module.exports = {
     'src/utils/validators.ts',
     'src/middleware/auth.ts',
     'src/middleware/error.middleware.ts',
-    'src/controllers/auth.ts',
+    'src/controllers/auth.controller.ts',
     'src/controllers/gamification.controller.ts',
     'src/services/gamification.service.ts',
     '!src/**/*.d.ts',

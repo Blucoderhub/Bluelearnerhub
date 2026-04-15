@@ -1,7 +1,7 @@
 /**
  * Tutorials Controller
  * ====================
- * Handles the interactive tutorial engine — the W3Schools-style learning core.
+ * Handles the interactive tutorial engine — the guided learning core.
  *
  * Routes:
  *   GET  /api/tutorials              — browse / filter tutorials
@@ -106,7 +106,7 @@ export const searchTutorials = async (req: Request, res: Response) => {
 
 export const getTutorial = async (req: Request, res: Response) => {
   try {
-    const { slug } = req.params;
+    const slug = String(req.params.slug);
     const userId = req.user?.id;
 
     const [tutorial] = await db
@@ -174,10 +174,7 @@ export const createTutorial = async (req: Request, res: Response) => {
   try {
     const authorId = req.user!.id;
 
-    if (req.user!.role === 'student') {
-      return res.status(403).json({ success: false, message: 'Only instructors can create tutorials' });
-    }
-
+    // All authenticated users can create tutorials now
     const {
       title, slug, description, domain, subDomain, difficulty,
       estimatedMinutes, xpReward, tags, prerequisites, sections,
@@ -226,7 +223,7 @@ export const createTutorial = async (req: Request, res: Response) => {
 export const markSectionComplete = async (req: Request, res: Response) => {
   try {
     const userId     = req.user!.id;
-    const tutorialId = parseInt(req.params.id);
+    const tutorialId = parseInt(String(req.params.id));
     const { sectionId } = req.body;
 
     if (isNaN(tutorialId) || tutorialId <= 0) {
@@ -337,7 +334,7 @@ export const runCode = async (req: Request, res: Response) => {
 export const createTutorialBehaviorEvent = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const tutorialId = parseInt(req.params.id, 10);
+    const tutorialId = parseInt(String(req.params.id), 10);
     const { eventType, eventPayload } = req.body || {};
 
     if (!Number.isInteger(tutorialId) || tutorialId <= 0) {
@@ -434,3 +431,5 @@ export const getTutorialAdaptiveGuidance = async (req: Request, res: Response) =
     return res.status(500).json({ success: false, message: 'Failed to generate adaptive guidance' });
   }
 };
+
+

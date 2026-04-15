@@ -1,5 +1,5 @@
 /**
- * Migration runner — applies SQL files from database/migrations/ in order.
+ * Migration runner — applies SQL files from devops/database/migrations/ in order.
  * Tracks applied migrations in a schema_migrations table so each file
  * only ever runs once. Safe to call on every deploy/startup.
  */
@@ -38,8 +38,8 @@ async function runMigrations() {
     const applied = new Set(rows.map(r => r.filename));
 
     // Resolve migrations directory relative to this script
-    // backend/scripts/ -> ../../database/migrations/
-    const migrationsDir = path.resolve(__dirname, '../../database/migrations');
+    // backend/scripts/ -> ../../devops/database/migrations/
+    const migrationsDir = path.resolve(__dirname, '../../devops/database/migrations');
 
     if (!fs.existsSync(migrationsDir)) {
       console.warn(`[migrate] Migrations directory not found: ${migrationsDir}`);

@@ -9,6 +9,7 @@ import {
   findOrCreateOAuthUser,
   issueTokensForUser,
 } from '../services/oauth.service';
+import { setCsrfCookie } from '../middleware/csrf';
 import logger from '../utils/logger';
 
 const router = Router();
@@ -19,6 +20,7 @@ const isProduction = config.nodeEnv === 'production';
 const STATE_COOKIE = 'oauth_state';
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+  const refreshPath = '/api/auth/refresh-token';
   const cookieOpts = {
     httpOnly: true,
     secure: isProduction,
@@ -34,7 +36,7 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
   res.cookie('refreshToken', refreshToken, {
     ...cookieOpts,
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    path: '/api/auth/refresh',
+    path: refreshPath,
   });
 }
 
@@ -88,6 +90,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
     const user = await findOrCreateOAuthUser(profile);
     const tokens = await issueTokensForUser(user);
     setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+    setCsrfCookie(res);
     res.redirect(`${config.frontendUrl}/oauth/callback?success=true`);
   } catch (err: any) {
     logger.error('GitHub OAuth callback error:', err.message);
@@ -141,6 +144,7 @@ router.get('/google/callback', async (req: Request, res: Response) => {
     const user = await findOrCreateOAuthUser(profile);
     const tokens = await issueTokensForUser(user);
     setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+    setCsrfCookie(res);
     res.redirect(`${config.frontendUrl}/oauth/callback?success=true`);
   } catch (err: any) {
     logger.error('Google OAuth callback error:', err.message);

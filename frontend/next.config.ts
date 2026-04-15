@@ -29,10 +29,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   webpack: (config: any, { isServer }: { isServer: boolean }) => {
     // Handle monaco-editor
     config.module.rules.push({
@@ -61,7 +57,7 @@ const nextConfig = {
   // hoisted packages from the root node_modules directory. Changing this to
   // __dirname breaks ALL Radix UI and other hoisted package imports.
   turbopack: {
-    root: path.resolve(__dirname),
+    root: path.resolve(__dirname, '..'),
   },
 
   // Allow Replit's dev proxy origins

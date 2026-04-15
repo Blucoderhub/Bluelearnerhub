@@ -148,7 +148,7 @@ describe('Mass assignment: updateProfile rejects privileged fields', () => {
   it('updateProfile handler whitelists fields (never uses req.body spread)', async () => {
     const fs = await import('fs');
     const path = await import('path');
-    const filePath = path.resolve(__dirname, '../../src/controllers/auth.ts');
+    const filePath = path.resolve(__dirname, '../../src/controllers/auth.controller.ts');
     const source = fs.readFileSync(filePath, 'utf-8');
 
     // The updateProfile function should NOT have a line like "const updates = req.body"
@@ -381,6 +381,28 @@ describe('CSRF: Double Submit Cookie middleware', () => {
     expect(next).toHaveBeenCalled();
   });
 
+  it('csrfProtection skips /api/auth/corporate/login', () => {
+    const { csrfProtection } = require('../../src/middleware/csrf');
+    const req = mockReq({ method: 'POST', path: '/api/auth/corporate/login', cookies: {} });
+    const res = mockRes();
+    const next = jest.fn();
+    csrfProtection(req, res, next);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('csrfProtection skips password reset bootstrap routes', () => {
+    const { csrfProtection } = require('../../src/middleware/csrf');
+    const routes = ['/api/auth/forgot-password', '/api/auth/reset-password'];
+
+    for (const path of routes) {
+      const req = mockReq({ method: 'POST', path, cookies: {} });
+      const res = mockRes();
+      const next = jest.fn();
+      csrfProtection(req, res, next);
+      expect(next).toHaveBeenCalled();
+    }
+  });
+
   it('csrfProtection skips /api/payments/webhook', () => {
     const { csrfProtection } = require('../../src/middleware/csrf');
     const req = mockReq({ method: 'POST', path: '/api/payments/webhook', cookies: {} });
@@ -462,11 +484,32 @@ describe('Auth controller consolidation', () => {
     const fs = await import('fs');
     const path = await import('path');
     const source = fs.readFileSync(
-      path.resolve(__dirname, '../../src/controllers/auth.ts'),
+      path.resolve(__dirname, '../../src/controllers/auth.controller.ts'),
       'utf-8'
     );
     expect(source).toMatch(/setCsrfCookie/);
     expect(source).toMatch(/clearCsrfCookie/);
+  });
+
+  it('oauth.ts imports setCsrfCookie and issues it after OAuth login', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+    const source = fs.readFileSync(
+      path.resolve(__dirname, '../../src/routes/oauth.ts'),
+      'utf-8'
+    );
+    expect(source).toMatch(/setCsrfCookie/);
+  });
+
+  it('frontend api client uses /auth/refresh-token for silent refresh', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+    const source = fs.readFileSync(
+      path.resolve(__dirname, '../../../frontend/src/lib/api.ts'),
+      'utf-8'
+    );
+    expect(source).toMatch(/\/auth\/refresh-token/);
+    expect(source).not.toMatch(/api\.post\('\/auth\/refresh'\)/);
   });
 });
 
@@ -477,7 +520,7 @@ describe('CRIT-A: Daily quiz — correctIndex never exposed to client', () => {
     const fs   = await import('fs');
     const path = await import('path');
     const source = fs.readFileSync(
-      path.resolve(__dirname, '../../src/routes/dailyQuiz.ts'),
+      path.resolve(__dirname, '../../src/routes/dailyQuiz.routes.ts'),
       'utf-8'
     );
     // Route must use getPublicQuiz() to strip correctIndex
@@ -533,7 +576,7 @@ describe('CRIT-A: Daily quiz — correctIndex never exposed to client', () => {
     const fs   = await import('fs');
     const path = await import('path');
     const source = fs.readFileSync(
-      path.resolve(__dirname, '../../src/routes/dailyQuiz.ts'),
+      path.resolve(__dirname, '../../src/routes/dailyQuiz.routes.ts'),
       'utf-8'
     );
     // The submit route must include authenticate middleware
@@ -548,7 +591,7 @@ describe('CRIT-A: Daily quiz — correctIndex never exposed to client', () => {
     const fs   = await import('fs');
     const path = await import('path');
     const source = fs.readFileSync(
-      path.resolve(__dirname, '../../src/routes/dailyQuiz.ts'),
+      path.resolve(__dirname, '../../src/routes/dailyQuiz.routes.ts'),
       'utf-8'
     );
     // Must have UNIQUE constraint error handling
@@ -563,7 +606,7 @@ describe('CRIT-A: Daily quiz — correctIndex never exposed to client', () => {
     const fs   = await import('fs');
     const path = await import('path');
     const source = fs.readFileSync(
-      path.resolve(__dirname, '../../src/routes/dailyQuiz.ts'),
+      path.resolve(__dirname, '../../src/routes/dailyQuiz.routes.ts'),
       'utf-8'
     );
     // Quiz fetch must require auth so we know who is taking the quiz

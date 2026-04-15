@@ -80,15 +80,15 @@ export class HackathonController {
       const userId = req.user?.id;
 
       const filters = {
-        status,
-        domain,
-        difficulty,
-      };
+        status: typeof status === 'string' ? status : undefined,
+        domain: typeof domain === 'string' ? domain : undefined,
+        difficulty: typeof difficulty === 'string' ? difficulty : undefined,
+      } as any;
 
       const result = await hackathonService.getHackathons(
         filters,
-        parseInt(page as string),
-        parseInt(limit as string),
+        parseInt(String(page)),
+        parseInt(String(limit)),
         userId
       );
 
@@ -109,7 +109,7 @@ export class HackathonController {
       const { id } = req.params;
       const userId = req.user?.id;
 
-      const hackathon = await hackathonService.getHackathonById(parseInt(id), userId);
+      const hackathon = await hackathonService.getHackathonById(parseInt(String(id)), userId);
 
       res.json({
         success: true,
@@ -134,7 +134,7 @@ export class HackathonController {
           paymentStatus: hackathonRegistrations.paymentStatus,
         })
         .from(hackathonRegistrations)
-        .where(eq(hackathonRegistrations.hackathonId, parseInt(id)));
+        .where(eq(hackathonRegistrations.hackathonId, parseInt(String(id))));
 
       res.json({
         success: true,
@@ -170,7 +170,7 @@ export class HackathonController {
       const { teamId } = req.body;
 
       const result = await hackathonService.registerForHackathon(
-        parseInt(id),
+        parseInt(String(id)),
         userId,
         teamId
       );
@@ -189,7 +189,7 @@ export class HackathonController {
     try {
       const { id } = req.params;
       const userId = req.user!.id;
-      const hackathonId = parseInt(id);
+      const hackathonId = parseInt(String(id));
 
       const result = await hackathonService.registerForHackathon(hackathonId, userId);
       
@@ -218,7 +218,7 @@ export class HackathonController {
       const userId = req.user!.id;
       const { teamName } = req.body;
 
-      const team = await hackathonService.createTeam(parseInt(id), userId, teamName);
+      const team = await hackathonService.createTeam(parseInt(String(id)), userId, teamName);
 
       res.json({
         success: true,
@@ -236,7 +236,7 @@ export class HackathonController {
       const userId = req.user!.id;
       const { teamCode } = req.body;
 
-      const result = await hackathonService.joinTeam(parseInt(id), userId, teamCode);
+      const result = await hackathonService.joinTeam(parseInt(String(id)), userId, teamCode);
 
       res.json({
         success: true,
@@ -254,7 +254,7 @@ export class HackathonController {
       const { language, sourceCode, ...additionalFiles } = req.body;
 
       const submission = await hackathonService.submitCode(
-        parseInt(id),
+        parseInt(String(id)),
         userId,
         language,
         sourceCode,
@@ -276,7 +276,7 @@ export class HackathonController {
       const { id } = req.params;
       const { code, language, input } = req.body;
 
-      const result = await hackathonService.runCode(parseInt(id), code, language, input);
+      const result = await hackathonService.runCode(parseInt(String(id)), code, language, input);
 
       res.json({
         success: true,
@@ -291,7 +291,7 @@ export class HackathonController {
     try {
       const { id } = req.params;
 
-      const leaderboard = await hackathonService.getLeaderboard(parseInt(id));
+      const leaderboard = await hackathonService.getLeaderboard(parseInt(String(id)));
 
       res.json({
         success: true,
@@ -307,7 +307,7 @@ export class HackathonController {
       const { id } = req.params;
       const userId = req.user!.id;
 
-      const submissions = await hackathonService.getUserSubmissions(parseInt(id), userId);
+      const submissions = await hackathonService.getUserSubmissions(parseInt(String(id)), userId);
 
       res.json({
         success: true,
@@ -323,7 +323,7 @@ export class HackathonController {
       const { id } = req.params;
       const userId = req.user!.id;
 
-      const matches = await hackathonService.getPotentialMatches(parseInt(id), userId);
+      const matches = await hackathonService.getPotentialMatches(parseInt(String(id)), userId);
 
       res.json({
         success: true,
@@ -345,7 +345,7 @@ export class HackathonController {
       }
 
       const result = await hackathonService.transferTeamLeadership(
-        parseInt(id),
+        parseInt(String(id)),
         currentLeaderId,
         newLeaderId
       );
@@ -361,7 +361,7 @@ export class HackathonController {
 
   async createBehaviorEvent(req: Request, res: Response, next: NextFunction) {
     try {
-      const hackathonId = parseInt(req.params.id, 10);
+      const hackathonId = parseInt(String(req.params.id), 10);
       const userId = req.user!.id;
       const { eventType, eventPayload } = req.body || {};
 
@@ -388,7 +388,7 @@ export class HackathonController {
 
   async getAdaptiveGuidance(req: Request, res: Response, next: NextFunction) {
     try {
-      const hackathonId = parseInt(req.params.id, 10);
+      const hackathonId = parseInt(String(req.params.id), 10);
       const userId = req.user!.id;
       if (!Number.isInteger(hackathonId) || hackathonId <= 0) {
         return res.status(400).json({ success: false, message: 'Invalid hackathon id' });
@@ -461,3 +461,8 @@ export class HackathonController {
     }
   }
 }
+
+
+
+
+

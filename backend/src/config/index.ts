@@ -288,4 +288,7 @@ export const config = {
   logging: {
     level: process.env.LOG_LEVEL || 'info',
   },
+
+  // ── Internal API (Backend-to-Backend) ──────────────────────────────────────
+  internalApiKey: process.env.INTERNAL_API_KEY,
 };

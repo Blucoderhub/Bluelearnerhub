@@ -38,7 +38,7 @@ export const certTypeEnum    = pgEnum('cert_type',        ['course', 'track', 'h
 // ────────────────────────────────────────────────────────────────────────────
 
 /**
- * tutorials — top-level tutorial documents (W3Schools-style)
+ * tutorials — top-level tutorial documents (Guided Learning Engine)
  *
  * A tutorial contains multiple ordered sections; each section can have an
  * embedded code playground and/or a practice exercise.

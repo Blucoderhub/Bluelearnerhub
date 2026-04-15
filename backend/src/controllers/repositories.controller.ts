@@ -39,7 +39,7 @@ import logger from '../utils/logger';
 
 export const getUserRepositories = async (req: Request, res: Response) => {
   try {
-    const { username } = req.params;
+    const username = String(req.params.username);
     const requesterId  = req.user?.id;
 
     const [owner] = await db
@@ -75,7 +75,8 @@ export const getUserRepositories = async (req: Request, res: Response) => {
 
 export const getRepository = async (req: Request, res: Response) => {
   try {
-    const { username, slug } = req.params;
+    const username = String(req.params.username);
+    const slug = String(req.params.slug);
     const requesterId = req.user?.id;
 
     const [owner] = await db
@@ -162,7 +163,7 @@ function buildTree(files: { id: number; path: string; language: string | null; s
 
 export const getFileContent = async (req: Request, res: Response) => {
   try {
-    const repoId     = parseInt(req.params.id);
+    const repoId     = parseInt(String(req.params.id));
     const { path }   = req.query as { path: string };
     const requesterId = req.user?.id;
 
@@ -240,7 +241,7 @@ export const createRepository = async (req: Request, res: Response) => {
 
 export const createCommit = async (req: Request, res: Response) => {
   try {
-    const repoId   = parseInt(req.params.id);
+    const repoId   = parseInt(String(req.params.id));
     const authorId = req.user!.id;
     const { message: rawMessage, files, branch = 'main' } = req.body;
     // files: [{ path, content, language }]
@@ -307,7 +308,7 @@ export const createCommit = async (req: Request, res: Response) => {
 
 export const listIssues = async (req: Request, res: Response) => {
   try {
-    const repoId      = parseInt(req.params.id);
+    const repoId      = parseInt(String(req.params.id));
     const requesterId = req.user?.id;
     const { status = 'open', page = 1, limit = 30 } = req.query as { status?: string; page?: string; limit?: string };
 
@@ -315,8 +316,8 @@ export const listIssues = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Invalid repository id' });
     }
 
-    const pageNum = Math.max(1, parseInt(page) || 1);
-    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 30));
+    const pageNum = Math.max(1, parseInt(String(page)) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(String(limit)) || 30));
     const offset = (pageNum - 1) * limitNum;
 
     const [repo] = await db
@@ -363,7 +364,7 @@ export const listIssues = async (req: Request, res: Response) => {
 
 export const createIssue = async (req: Request, res: Response) => {
   try {
-    const repoId   = parseInt(req.params.id);
+    const repoId   = parseInt(String(req.params.id));
     const authorId = req.user!.id;
     const { title: rawTitle, body: rawBody, labels } = req.body;
 
@@ -414,7 +415,7 @@ export const createIssue = async (req: Request, res: Response) => {
 
 export const listPullRequests = async (req: Request, res: Response) => {
   try {
-    const repoId      = parseInt(req.params.id);
+    const repoId      = parseInt(String(req.params.id));
     const requesterId = req.user?.id;
     const { page = 1, limit = 30 } = req.query as { page?: string; limit?: string };
 
@@ -422,8 +423,8 @@ export const listPullRequests = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Invalid repository id' });
     }
 
-    const pageNum = Math.max(1, parseInt(page) || 1);
-    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 30));
+    const pageNum = Math.max(1, parseInt(String(page)) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(String(limit)) || 30));
     const offset = (pageNum - 1) * limitNum;
 
     const [repo] = await db
@@ -470,7 +471,7 @@ export const listPullRequests = async (req: Request, res: Response) => {
 
 export const createPullRequest = async (req: Request, res: Response) => {
   try {
-    const repoId   = parseInt(req.params.id);
+    const repoId   = parseInt(String(req.params.id));
     const authorId = req.user!.id;
     const { title: rawTitle, description: rawDesc, sourceBranch, targetBranch = 'main', diffContent } = req.body;
 
@@ -530,7 +531,7 @@ export const requestAIReview = async (req: Request, res: Response) => {
     const [pr] = await db
       .select()
       .from(pullRequests)
-      .where(eq(pullRequests.id, parseInt(prId)));
+      .where(eq(pullRequests.id, parseInt(String(prId))));
 
     if (!pr) return res.status(404).json({ success: false, message: 'PR not found' });
 
@@ -566,7 +567,7 @@ async function triggerAICodeReview(prId: number, diffContent: string): Promise<s
 export const toggleStar = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const repoId = parseInt(req.params.id);
+    const repoId = parseInt(String(req.params.id));
 
     const [existing] = await db
       .select()
@@ -600,3 +601,6 @@ export const toggleStar = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Failed to star repository' });
   }
 };
+
+
+

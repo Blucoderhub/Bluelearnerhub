@@ -31,6 +31,10 @@ const CSRF_HEADER = 'x-csrf-token';
 const EXEMPT_PATHS = new Set([
   '/api/auth/login',
   '/api/auth/register',
+  '/api/auth/corporate/login',
+  '/api/auth/corporate/register',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
   '/api/payments/webhook',
   '/health',
 ]);

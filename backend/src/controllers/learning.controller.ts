@@ -14,7 +14,7 @@ export const getAllDomains = async (req: Request, res: Response) => {
 
 export const getDomainById = async (req: Request, res: Response) => {
     try {
-        const domain = await db.select().from(domains).where(eq(domains.id, parseInt(req.params.id)));
+        const domain = await db.select().from(domains).where(eq(domains.id, parseInt(String(req.params.id))));
         if (!domain.length) return res.status(404).json({ success: false, message: 'Domain not found', error: 'NOT_FOUND' });
         res.json({ success: true, data: domain[0] });
     } catch (error) {
@@ -33,7 +33,7 @@ export const getAllSpecializations = async (req: Request, res: Response) => {
 
 export const getSpecializationsByDomain = async (req: Request, res: Response) => {
     try {
-        const specs = await db.select().from(specializations).where(eq(specializations.domainId, parseInt(req.params.domainId)));
+        const specs = await db.select().from(specializations).where(eq(specializations.domainId, parseInt(String(req.params.domainId))));
         res.json({ success: true, data: specs });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch specializations', error: 'FETCH_SPECS_ERROR' });
@@ -71,7 +71,7 @@ export const getAllCourses = async (req: Request, res: Response) => {
 
 export const getCoursesBySpecialization = async (req: Request, res: Response) => {
     try {
-        const specializationCourses = await db.select().from(courses).where(eq(courses.specializationId, parseInt(req.params.specId)));
+        const specializationCourses = await db.select().from(courses).where(eq(courses.specializationId, parseInt(String(req.params.specId))));
         res.json({ success: true, data: specializationCourses });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch courses', error: 'FETCH_COURSES_ERROR' });
@@ -80,7 +80,7 @@ export const getCoursesBySpecialization = async (req: Request, res: Response) =>
 
 export const getCourseById = async (req: Request, res: Response) => {
     try {
-        const course = await db.select().from(courses).where(eq(courses.id, parseInt(req.params.id)));
+        const course = await db.select().from(courses).where(eq(courses.id, parseInt(String(req.params.id))));
         if (!course.length) return res.status(404).json({ success: false, message: 'Course not found', error: 'NOT_FOUND' });
         res.json({ success: true, data: course[0] });
     } catch (error) {
@@ -90,7 +90,7 @@ export const getCourseById = async (req: Request, res: Response) => {
 
 export const getModulesByCourse = async (req: Request, res: Response) => {
     try {
-        const courseModules = await db.select().from(modules).where(eq(modules.courseId, parseInt(req.params.courseId)));
+        const courseModules = await db.select().from(modules).where(eq(modules.courseId, parseInt(String(req.params.courseId))));
         res.json({ success: true, data: courseModules });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch modules', error: 'FETCH_MODULES_ERROR' });
@@ -99,9 +99,10 @@ export const getModulesByCourse = async (req: Request, res: Response) => {
 
 export const getProjectsByModule = async (req: Request, res: Response) => {
     try {
-        const moduleLabs = await db.select().from(labs).where(eq(labs.moduleId, parseInt(req.params.moduleId)));
+        const moduleLabs = await db.select().from(labs).where(eq(labs.moduleId, parseInt(String(req.params.moduleId))));
         res.json({ success: true, data: moduleLabs });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch projects', error: 'FETCH_PROJECTS_ERROR' });
     }
 };
+

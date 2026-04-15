@@ -48,7 +48,7 @@ export const listOrganizations = async (req: Request, res: Response) => {
 
 export const getOrganization = async (req: Request, res: Response) => {
   try {
-    const { slug } = req.params;
+    const slug = String(req.params.slug);
 
     const [org] = await db
       .select()
@@ -125,7 +125,7 @@ export const createOrganization = async (req: Request, res: Response) => {
 export const inviteMember = async (req: Request, res: Response) => {
   try {
     const adminId = req.user!.id;
-    const orgId   = parseInt(req.params.id);
+    const orgId   = parseInt(String(req.params.id));
     const { userId, role: rawRole = 'MEMBER' } = req.body;
     const VALID_MEMBER_ROLES = ['MEMBER', 'ADMIN', 'VIEWER'] as const;
     const role = VALID_MEMBER_ROLES.includes(rawRole) ? rawRole : 'MEMBER';
@@ -165,7 +165,7 @@ export const inviteMember = async (req: Request, res: Response) => {
 
 export const listTalentPool = async (req: Request, res: Response) => {
   try {
-    const orgId = parseInt(req.params.id);
+    const orgId = parseInt(String(req.params.id));
     const adminId = req.user!.id;
 
     // Verify requester has org access
@@ -194,7 +194,7 @@ export const listTalentPool = async (req: Request, res: Response) => {
 
 export const addToTalentPool = async (req: Request, res: Response) => {
   try {
-    const orgId  = parseInt(req.params.id);
+    const orgId  = parseInt(String(req.params.id));
     const userId = req.user!.id;
     // Stage and notes are org-admin fields — never accept from the applicant
     const stage = 'prospects';
@@ -243,7 +243,7 @@ export const listChallenges = async (req: Request, res: Response) => {
 
 export const createChallenge = async (req: Request, res: Response) => {
   try {
-    const orgId     = parseInt(req.params.id);
+    const orgId     = parseInt(String(req.params.id));
     const creatorId = req.user!.id;
     const { title: rawTitle, description: rawDesc, deadline, prizeDescription: rawPrize, evaluationCriteria: rawCriteria } = req.body;
 
@@ -284,3 +284,5 @@ export const createChallenge = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Failed to create challenge' });
   }
 };
+
+

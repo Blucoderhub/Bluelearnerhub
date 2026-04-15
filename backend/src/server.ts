@@ -1,5 +1,4 @@
 console.log('>>> SERVER.TS STARTING <<<');
-import './types/express'; // Import type augmentations first
 import http from 'http';
 import * as Sentry from '@sentry/node';
 import { execFile } from 'child_process';

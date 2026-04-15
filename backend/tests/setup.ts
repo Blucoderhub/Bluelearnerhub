@@ -108,3 +108,19 @@ global.testUtils = {
     fullName: 'Admin User',
   },
 };
+// Mock Drizzle ORM db (used by gamification controller/service)
+jest.mock('../src/db', () => ({
+  db: {
+    select: jest.fn().mockReturnThis(),
+    from: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    innerJoin: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockReturnThis(),
+    update: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    set: jest.fn().mockReturnThis(),
+    values: jest.fn().mockResolvedValue([]),
+    returning: jest.fn().mockResolvedValue([]),
+  },
+}));

@@ -6,7 +6,7 @@ export interface User {
   email: string;
   password_hash: string;
   full_name: string;
-  role: 'ADMIN' | 'CORPORATE' | 'HR' | 'STUDENT' | 'CANDIDATE' | 'FACULTY' | 'INSTITUTION';
+  role?: 'STUDENT' | 'CORPORATE' | 'MENTOR' | 'ADMIN';
   profile_picture?: string;
   bio?: string;
   location?: string;
@@ -41,10 +41,10 @@ export interface CreateUserDTO {
   email: string;
   password: string;
   fullName: string;
-  role: 'ADMIN' | 'CORPORATE' | 'HR' | 'STUDENT' | 'CANDIDATE' | 'FACULTY' | 'INSTITUTION';
   collegeName?: string;
   company?: string;
   avatarConfig?: any;
+  role?: 'STUDENT' | 'CORPORATE' | 'MENTOR' | 'ADMIN';
 }
 
 export interface UpdateUserDTO {
@@ -70,8 +70,8 @@ export class UserModel {
 
     const query = `
       INSERT INTO users (
-        email, password_hash, full_name, role, 
-        college_name, company, avatar_config
+        email, password_hash, full_name, 
+        college_name, company, avatar_config, role
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
     `;
@@ -80,10 +80,10 @@ export class UserModel {
       data.email,
       hashedPassword,
       data.fullName,
-      data.role,
       data.collegeName || null,
       data.company || null,
       JSON.stringify(data.avatarConfig || {}),
+      data.role || 'STUDENT',
     ];
 
     const result = await pool.query(query, values);

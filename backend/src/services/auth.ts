@@ -14,26 +14,27 @@ export class AuthService {
       throw new AppError('Email already registered', 400);
     }
 
-    // Create user with default avatar config
+    // Create user with default avatar config and specified role
     const user = await UserModel.create({
       ...data,
       avatarConfig: {
         seed: data.email.split('@')[0],
         style: 'adventurer',
-      }
+      },
+      role: data.role || 'STUDENT',
     });
 
-    // Generate tokens
+    // Generate tokens with role
     const accessToken = signAccessToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     const refreshToken = signRefreshToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     // Store refresh token
@@ -51,7 +52,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         fullName: user.full_name,
-        role: user.role,
+        role: user.role || 'STUDENT',
       },
       accessToken,
       refreshToken,
@@ -127,17 +128,17 @@ export class AuthService {
       logger.warn('[auth] Could not reset login attempts — run DB migrations:', (err as Error).message);
     }
 
-    // Generate tokens
+    // Generate tokens with role
     const accessToken = signAccessToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     const refreshToken = signRefreshToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     // Store refresh token — upsert to avoid duplicate token collisions
@@ -158,7 +159,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         fullName: user.full_name,
-        role: user.role,
+        role: user.role || 'STUDENT',
         profilePicture: user.profile_picture,
         totalPoints: user.total_points,
         level: user.level,
@@ -171,7 +172,7 @@ export class AuthService {
   async logout(userId: number, _refreshToken?: string) {
     // Revoke ALL refresh tokens for this user.
     // We cannot rely on matching a specific token because the refreshToken cookie
-    // is scoped to path '/api/auth/refresh' and the browser won't send it to
+    // is scoped to path '/api/auth/refresh-token' and the browser won't send it to
     // '/api/auth/logout'. Revoking by user_id is also more secure (ends all sessions).
     await pool.query(
       'UPDATE refresh_tokens SET revoked = true WHERE user_id = $1',
@@ -204,13 +205,13 @@ export class AuthService {
     const newAccessToken = signAccessToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     const newRefreshToken = signRefreshToken({
       userId: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'STUDENT',
     });
 
     // Invalidate old refresh token
@@ -247,7 +248,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       fullName: user.full_name,
-      role: user.role,
+      role: user.role || 'STUDENT',
       profilePicture: user.profile_picture,
       bio: user.bio,
       location: user.location,

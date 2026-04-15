@@ -15,6 +15,10 @@ router.post('/refresh-token', authLimiter, controller.refreshToken.bind(controll
 router.post('/forgot-password', passwordResetLimiter, controller.forgotPassword.bind(controller));
 router.post('/reset-password',  passwordResetLimiter, controller.resetPassword.bind(controller));
 
+// Corporate endpoints (organization email required)
+router.post('/corporate/login', authLimiter, authValidators.login, validate, controller.corporateLogin.bind(controller));
+router.post('/corporate/register', authLimiter, authValidators.register, validate, controller.corporateRegister.bind(controller));
+
 // endpoints requiring auth
 router.post('/logout', authenticate, controller.logout.bind(controller));
 router.get('/me', authenticate, controller.getCurrentUser.bind(controller));

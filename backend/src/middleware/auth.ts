@@ -1,8 +1,22 @@
 import type { Request, Response, NextFunction } from 'express';
 import { eq } from 'drizzle-orm';
-import { verifyAccessToken, TokenPayload } from '../utils/jwt';
+import { verifyAccessToken, TokenPayload, UserRole } from '../utils/jwt';
 import { db, users } from '../db';
 import logger from '../utils/logger';
+
+// Extend Express Request type to include user with role
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: number;
+        email: string;
+        fullName: string;
+        role: UserRole;
+      };
+    }
+  }
+}
 
 export const authenticate = async (
   req: Request,
@@ -39,8 +53,8 @@ export const authenticate = async (
       columns: {
         id: true,
         email: true,
-        role: true,
         fullName: true,
+        role: true,
         isActive: true,
       },
     });
@@ -62,12 +76,12 @@ export const authenticate = async (
       return;
     }
 
-    // Attach user to request
+    // Attach user to request with role
     req.user = {
       id: result.id,
       email: result.email,
-      role: result.role,
       fullName: result.fullName,
+      role: result.role,
     };
 
     // Update last active (fire-and-forget — never block auth on this)
@@ -86,7 +100,8 @@ export const authenticate = async (
   }
 };
 
-export const authorize = (...roles: string[]) => {
+// Role-based authorization middleware
+export const authorize = (...allowedRoles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({
@@ -96,10 +111,10 @@ export const authorize = (...roles: string[]) => {
       return;
     }
 
-    if (!roles.includes(req.user.role)) {
+    if (!allowedRoles.includes(req.user.role)) {
       res.status(403).json({
         success: false,
-        message: 'Insufficient permissions',
+        message: 'Access denied. Insufficient permissions.',
       });
       return;
     }
@@ -134,8 +149,8 @@ export const optionalAuth = async (
       columns: {
         id: true,
         email: true,
-        role: true,
         fullName: true,
+        role: true,
         isActive: true,
       },
     });
@@ -144,8 +159,8 @@ export const optionalAuth = async (
       req.user = {
         id: result.id,
         email: result.email,
-        role: result.role,
         fullName: result.fullName,
+        role: result.role,
       };
     }
 

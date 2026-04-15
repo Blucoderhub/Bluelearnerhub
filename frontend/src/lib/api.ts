@@ -69,7 +69,7 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Don't retry the refresh endpoint itself — avoids infinite loops
-      if (originalRequest.url?.includes('/auth/refresh')) {
+      if (originalRequest.url?.includes('/auth/refresh-token')) {
         redirectToLogin()
         return Promise.reject(error)
       }
@@ -89,7 +89,7 @@ api.interceptors.response.use(
 
       try {
         // Attempt a silent token refresh using the HttpOnly refreshToken cookie
-        await api.post('/auth/refresh')
+        await api.post('/auth/refresh-token')
         isRefreshing = false
         drainRefreshQueue(true)
         return api(originalRequest)

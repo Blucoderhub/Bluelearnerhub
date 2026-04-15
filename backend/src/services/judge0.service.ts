@@ -133,4 +133,60 @@ export async function executeCode(
   }
 }
 
-export const judge0Service = { executeCode, LANGUAGE_IDS };
+export const judge0Service = { executeCode, executeMultiple, LANGUAGE_IDS };
+
+// ─── Execute against multiple test cases ─────────────────────────────────────
+
+export interface TestCase {
+  input: string;
+  expected: string;
+}
+
+export interface TestCaseResult {
+  passed: boolean;
+  input: string;
+  expected: string;
+  actual: string | null;
+  stderr: string | null;
+  status: string;
+  time?: string;
+}
+
+export async function executeMultiple(
+  code: string,
+  language: string,
+  testCases: TestCase[]
+): Promise<TestCaseResult[]> {
+  const results: TestCaseResult[] = [];
+
+  for (const testCase of testCases) {
+    const result = await executeCode(code, language, testCase.input);
+    const actual = result.stdout?.trim() || '';
+    const expected = testCase.expected.trim();
+    const passed = actual === expected;
+
+    results.push({
+      passed,
+      input: testCase.input,
+      expected: testCase.expected,
+      actual,
+      stderr: result.stderr,
+      status: result.status.description,
+      time: result.time || undefined,
+    });
+  }
+
+  return results;
+}
+
+// ─── Class wrapper (for legacy import compatibility) ───────────────────────────
+
+export class Judge0Service {
+  async execute(code: string, language: string, stdin?: string) {
+    return executeCode(code, language, stdin);
+  }
+
+  async executeMultiple(code: string, language: string, testCases: TestCase[]) {
+    return executeMultiple(code, language, testCases);
+  }
+}

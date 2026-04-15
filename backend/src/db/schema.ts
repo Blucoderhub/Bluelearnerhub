@@ -2,14 +2,42 @@ import { pgTable, serial, text, varchar, timestamp, integer, boolean, pgEnum, js
 import { relations } from 'drizzle-orm';
 
 // Enums
-export const roleEnum = pgEnum('role', [
-    'ADMIN',
-    'CORPORATE',
-    'HR',
+export const userRoleEnum = pgEnum('user_role', [
     'STUDENT',
-    'CANDIDATE',
-    'FACULTY',
-    'INSTITUTION'
+    'CORPORATE',
+    'MENTOR',
+    'ADMIN'
+]);
+
+export const challengeTypeEnum = pgEnum('challenge_type', [
+    'QUIZ',
+    'CODING'
+]);
+
+export const challengeDifficultyEnum = pgEnum('challenge_difficulty', [
+    'EASY',
+    'MEDIUM',
+    'HARD'
+]);
+
+export const submissionStatusEnum = pgEnum('submission_status', [
+    'PENDING',
+    'RUNNING',
+    'PASSED',
+    'FAILED',
+    'ERROR'
+]);
+
+export const sessionStatusEnum = pgEnum('session_status', [
+    'SCHEDULED',
+    'IN_PROGRESS',
+    'COMPLETED',
+    'CANCELLED'
+]);
+
+export const submissionReviewStatusEnum = pgEnum('submission_review_status', [
+    'PENDING',
+    'GRADED'
 ]);
 
 export const domainEnum = pgEnum('domain', [
@@ -37,8 +65,8 @@ export const users = pgTable('users', {
     id: serial('id').primaryKey(),
     email: varchar('email', { length: 255 }).unique().notNull(),
     password_hash: text('password_hash'),
-    full_name: varchar('full_name', { length: 255 }).notNull(),
-    role: roleEnum('role').default('STUDENT').notNull(),
+    fullName: varchar('full_name', { length: 255 }).notNull(),
+    role: userRoleEnum('role').default('STUDENT').notNull(),
     xp: integer('xp').default(0).notNull(),
     level: integer('level').default(1).notNull(),
     current_streak: integer('current_streak').default(0).notNull(),
@@ -325,3 +353,201 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
         references: [users.id],
     }),
 }));
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SPACES - Coding Challenges & Quizzes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const spaces = pgTable('spaces', {
+    id: serial('id').primaryKey(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description'),
+    category: varchar('category', { length: 100 }).notNull(), // python, javascript, dsa, etc.
+    difficulty: challengeDifficultyEnum('difficulty').default('MEDIUM').notNull(),
+    xpReward: integer('xp_reward').default(50).notNull(),
+    timeLimit: integer('time_limit'), // minutes, null = no limit
+    isActive: boolean('is_active').default(true).notNull(),
+    createdBy: integer('created_by').references(() => users.id),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => ({
+    categoryIdx: index('idx_spaces_category').on(t.category),
+    difficultyIdx: index('idx_spaces_difficulty').on(t.difficulty),
+}));
+
+export const challenges = pgTable('challenges', {
+    id: serial('id').primaryKey(),
+    spaceId: integer('space_id').references(() => spaces.id).notNull(),
+    type: challengeTypeEnum('type').default('CODING').notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+    starterCode: jsonb('starter_code').default('{}').notNull(), // {python: "...", javascript: "..."}
+    testCases: jsonb('test_cases').default('[]').notNull(), // [{input, expected}]
+    hints: jsonb('hints').default('[]').notNull(),
+    constraints: jsonb('constraints').default('[]').notNull(),
+    examples: jsonb('examples').default('[]').notNull(),
+    solution: text('solution'),
+    difficulty: challengeDifficultyEnum('difficulty').default('MEDIUM').notNull(),
+    xpReward: integer('xp_reward').default(50).notNull(),
+    acceptanceRate: integer('acceptance_rate').default(0), // percentage
+    totalSolves: integer('total_solves').default(0),
+    tags: jsonb('tags').default('[]').notNull(),
+    isPublished: boolean('is_published').default(false).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => ({
+    spaceIdx: index('idx_challenges_space').on(t.spaceId),
+    difficultyIdx: index('idx_challenges_difficulty').on(t.difficulty),
+}));
+
+export const challengeSubmissions = pgTable('challenge_submissions', {
+    id: serial('id').primaryKey(),
+    challengeId: integer('challenge_id').references(() => challenges.id).notNull(),
+    userId: integer('user_id').references(() => users.id).notNull(),
+    language: varchar('language', { length: 50 }).notNull(),
+    sourceCode: text('source_code').notNull(),
+    status: submissionStatusEnum('status').default('PENDING').notNull(),
+    passedTests: integer('passed_tests').default(0),
+    totalTests: integer('total_tests').default(0),
+    executionTime: integer('execution_time'), // ms
+    errorMessage: text('error_message'),
+    output: text('output'),
+    xpEarned: integer('xp_earned').default(0),
+    submittedAt: timestamp('submitted_at').defaultNow().notNull(),
+}, (t) => ({
+    challengeIdx: index('idx_submissions_challenge').on(t.challengeId),
+    userIdx: index('idx_submissions_user').on(t.userId),
+}));
+
+export const dailyChallenges = pgTable('daily_challenges', {
+    id: serial('id').primaryKey(),
+    challengeId: integer('challenge_id').references(() => challenges.id).notNull(),
+    date: varchar('date', { length: 10 }).notNull(), // YYYY-MM-DD
+    domain: varchar('domain', { length: 100 }).notNull(),
+    isCompleted: boolean('is_completed').default(false).notNull(),
+    completedByUserId: integer('completed_by_user_id').references(() => users.id),
+    completedAt: timestamp('completed_at'),
+}, (t) => ({
+    dateIdx: index('idx_daily_date').on(t.date),
+    uniqueDate: index('idx_daily_unique').on(t.date, t.domain),
+}));
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MENTOR - Batch Tracking & Sessions
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const mentorProfiles = pgTable('mentor_profiles', {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id').references(() => users.id).notNull().unique(),
+    specialization: varchar('specialization', { length: 255 }),
+    bio: text('bio'),
+    rating: integer('rating').default(0), // 0-5 scale
+    totalSessions: integer('total_sessions').default(0),
+    totalStudents: integer('total_students').default(0),
+    availability: jsonb('availability').default('[]').notNull(), // [{day, startTime, endTime}]
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const mentorBatches = pgTable('mentor_batches', {
+    id: serial('id').primaryKey(),
+    mentorId: integer('mentor_id').references(() => mentorProfiles.id).notNull(),
+    name: varchar('name', { length: 255 }).notNull(),
+    description: text('description'),
+    domain: varchar('domain', { length: 100 }).notNull(),
+    maxStudents: integer('max_students').default(50),
+    startDate: timestamp('start_date'),
+    endDate: timestamp('end_date'),
+    isActive: boolean('is_active').default(true).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => ({
+    mentorIdx: index('idx_batches_mentor').on(t.mentorId),
+}));
+
+export const batchEnrollments = pgTable('batch_enrollments', {
+    id: serial('id').primaryKey(),
+    batchId: integer('batch_id').references(() => mentorBatches.id).notNull(),
+    studentId: integer('student_id').references(() => users.id).notNull(),
+    progress: integer('progress').default(0), // 0-100
+    status: varchar('status', { length: 50 }).default('active').notNull(), // active, completed, dropped
+    enrolledAt: timestamp('enrolled_at').defaultNow().notNull(),
+}, (t) => ({
+    uniqueEnrollment: index('idx_enrollment_unique').on(t.batchId, t.studentId),
+}));
+
+export const mentorSessions = pgTable('mentor_sessions', {
+    id: serial('id').primaryKey(),
+    batchId: integer('batch_id').references(() => mentorBatches.id).notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description'),
+    scheduledAt: timestamp('scheduled_at').notNull(),
+    duration: integer('duration').default(60), // minutes
+    status: sessionStatusEnum('status').default('SCHEDULED').notNull(),
+    meetingLink: text('meeting_link'),
+    recordingUrl: text('recording_url'),
+    materials: jsonb('materials').default('[]').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => ({
+    batchIdx: index('idx_sessions_batch').on(t.batchId),
+    scheduledIdx: index('idx_sessions_scheduled').on(t.scheduledAt),
+}));
+
+export const sessionAttendance = pgTable('session_attendance', {
+    id: serial('id').primaryKey(),
+    sessionId: integer('session_id').references(() => mentorSessions.id).notNull(),
+    studentId: integer('student_id').references(() => users.id).notNull(),
+    attended: boolean('attended').default(false).notNull(),
+    joinedAt: timestamp('joined_at'),
+    leftAt: timestamp('left_at'),
+}, (t) => ({
+    uniqueAttendance: index('idx_attendance_unique').on(t.sessionId, t.studentId),
+}));
+
+export const studentSubmissions = pgTable('student_submissions', {
+    id: serial('id').primaryKey(),
+    studentId: integer('student_id').references(() => users.id).notNull(),
+    batchId: integer('batch_id').references(() => mentorBatches.id),
+    taskTitle: varchar('task_title', { length: 255 }).notNull(),
+    taskType: varchar('task_type', { length: 100 }).notNull(), // quiz, exercise, assignment
+    submissionUrl: text('submission_url'),
+    submissionText: text('submission_text'),
+    score: integer('score'),
+    maxScore: integer('max_score').default(100),
+    status: submissionReviewStatusEnum('status').default('PENDING').notNull(),
+    feedback: text('feedback'),
+    gradedBy: integer('graded_by').references(() => users.id),
+    submittedAt: timestamp('submitted_at').defaultNow().notNull(),
+    gradedAt: timestamp('graded_at'),
+}, (t) => ({
+    studentIdx: index('idx_student_submissions_student').on(t.studentId),
+    batchIdx: index('idx_student_submissions_batch').on(t.batchId),
+}));
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIBRARY - User Collections
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const userLibraries = pgTable('user_libraries', {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id').references(() => users.id).notNull(),
+    name: varchar('name', { length: 255 }).notNull(),
+    description: text('description'),
+    isPublic: boolean('is_public').default(false).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (t) => ({
+    userIdx: index('idx_libraries_user').on(t.userId),
+}));
+
+export const libraryItems = pgTable('library_items', {
+    id: serial('id').primaryKey(),
+    libraryId: integer('library_id').references(() => userLibraries.id).notNull(),
+    itemType: varchar('item_type', { length: 50 }).notNull(), // tutorial, course, notebook, certificate
+    itemId: integer('item_id').notNull(), // references to actual content
+    addedAt: timestamp('added_at').defaultNow().notNull(),
+}, (t) => ({
+    libraryIdx: index('idx_library_items_library').on(t.libraryId),
+}));
+

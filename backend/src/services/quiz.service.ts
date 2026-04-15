@@ -9,9 +9,9 @@ export class QuizService {
         const user = await db.select().from(users).where(eq(users.id, userId));
         if (!user.length) return null;
 
-        // Generate quiz using AI
+        // Generate quiz using AI (always Engineering domain for students)
         const quizData = await aiService.generateQuiz(
-            user[0].role === 'STUDENT' ? 'Engineering' : 'Management',
+            'Engineering',
             user[0].level,
             `XP: ${user[0].xp}, Streak: ${user[0].current_streak}`
         );

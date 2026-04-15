@@ -16,8 +16,8 @@ export class JobController {
 
       const result = await jobService.getJobs(
         filters,
-        parseInt(page as string),
-        parseInt(limit as string)
+        parseInt(String(page)),
+        parseInt(String(limit))
       );
 
       res.json({
@@ -34,7 +34,7 @@ export class JobController {
       const { id } = req.params;
       const userId = req.user?.id;
 
-      const job = await jobService.getJobById(parseInt(id), userId);
+      const job = await jobService.getJobById(parseInt(String(id)), userId);
 
       res.json({
         success: true,
@@ -69,7 +69,7 @@ export class JobController {
       const { resumeUrl, coverLetter } = req.body;
 
       const application = await jobService.applyForJob(
-        parseInt(id),
+        parseInt(String(id)),
         userId,
         resumeUrl,
         coverLetter
@@ -92,8 +92,8 @@ export class JobController {
 
       const result = await jobService.getUserApplications(
         userId,
-        parseInt(page as string),
-        parseInt(limit as string)
+        parseInt(String(page)),
+        parseInt(String(limit))
       );
 
       res.json({
@@ -117,7 +117,7 @@ export class JobController {
       };
 
       const candidates = await jobService.getCandidates(
-        parseInt(id),
+        parseInt(String(id)),
         companyId,
         filters
       );
@@ -136,7 +136,7 @@ export class JobController {
       const { id } = req.params;
       const companyId = req.user!.id;
 
-      const rankings = await jobService.rankCandidates(parseInt(id), companyId);
+      const rankings = await jobService.rankCandidates(parseInt(String(id)), companyId);
 
       res.json({
         success: true,
@@ -148,3 +148,5 @@ export class JobController {
     }
   }
 }
+
+

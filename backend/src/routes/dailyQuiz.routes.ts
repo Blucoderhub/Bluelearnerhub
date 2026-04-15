@@ -21,6 +21,7 @@ import { apiLimiter, strictLimiter } from '../middleware/rateLimiter';
 import { GamificationService } from '../services/gamification.service';
 import { pool } from '../utils/database';
 import logger from '../utils/logger';
+import { asString } from '../utils/request';
 
 const router = Router();
 
@@ -57,7 +58,7 @@ router.get('/domains', apiLimiter, (_req, res) => {
 
 router.get('/:domain', apiLimiter, authenticate, async (req, res) => {
   try {
-    const domain = decodeURIComponent(req.params.domain as string);
+    const domain = decodeURIComponent(asString(req.params.domain));
     const allowedDomains = getAvailableDomains();
 
     if (!allowedDomains.includes(domain)) {
@@ -199,3 +200,5 @@ router.post('/submit', strictLimiter, authenticate, async (req, res) => {
 });
 
 export default router;
+
+

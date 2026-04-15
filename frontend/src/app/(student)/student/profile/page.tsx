@@ -351,7 +351,7 @@ export default function ProfilePage() {
                       </div>
                     ))
                   ) : (
-                    {[userLbEntry].map((_, i) => (
+                    [userLbEntry].map((_, i) => (
                       <div key={i} className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/10 p-3">
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted text-xs font-black text-muted-foreground">?</div>
                         <div className="min-w-0 flex-1">

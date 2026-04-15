@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 import * as ctrl from '../controllers/organizations.controller';
 
 const router = Router();
@@ -21,3 +21,4 @@ router.get('/challenges',    ctrl.listChallenges);
 router.post('/:id/challenges', authenticate, ctrl.createChallenge);
 
 export default router;
+

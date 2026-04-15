@@ -137,8 +137,8 @@ export async function findOrCreateOAuthUser(profile: OAuthProfile) {
 }
 
 export async function issueTokensForUser(user: any) {
-  const accessToken = signAccessToken({ userId: user.id, email: user.email, role: user.role });
-  const refreshToken = signRefreshToken({ userId: user.id, email: user.email, role: user.role });
+  const accessToken = signAccessToken({ userId: user.id, email: user.email, role: user.role || 'STUDENT' });
+  const refreshToken = signRefreshToken({ userId: user.id, email: user.email, role: user.role || 'STUDENT' });
 
   await pool.query(
     `INSERT INTO refresh_tokens (user_id, token, expires_at)

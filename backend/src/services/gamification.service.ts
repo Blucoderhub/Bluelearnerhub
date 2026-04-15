@@ -181,10 +181,9 @@ export class GamificationService {
         
         const rows = await db.select({
             id: users.id,
-            name: users.full_name,
+            name: users.fullName,
             xp: users.xp,
             level: users.level,
-            role: users.role,
             streak: users.current_streak,
             longestStreak: users.longest_streak,
             lastActive: users.last_active,
@@ -214,3 +213,4 @@ export class GamificationService {
         await redisHelpers.clearPattern('leaderboard:*');
     }
 }
+

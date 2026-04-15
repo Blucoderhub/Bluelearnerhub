@@ -10,6 +10,33 @@ import { setCsrfCookie, clearCsrfCookie } from '../middleware/csrf';
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
+// Blocked email domains for organization registration
+const BLOCKED_EMAIL_DOMAINS = [
+  'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'live.com',
+  'msn.com', 'aol.com', 'icloud.com', 'me.com', 'mac.com',
+  'zoho.com', 'protonmail.com', 'mail.com', 'ymail.com',
+  'yandex.com', 'gmx.com', 'inbox.com', 'fastmail.com',
+  'qq.com', '163.com', '126.com', 'rediffmail.com',
+  'indiatimes.com', 'sify.com', 'hotmail.co.uk', 'hotmail.fr',
+];
+
+export const isOrganizationEmail = (email: string): { valid: boolean; reason?: string } => {
+  const domain = email.split('@')[1]?.toLowerCase();
+  if (!domain) {
+    return { valid: false, reason: 'Please enter a valid email address' };
+  }
+  if (BLOCKED_EMAIL_DOMAINS.includes(domain)) {
+    return { 
+      valid: false, 
+      reason: `Personal email addresses are not allowed for organization registration. Please use your organization email (e.g., name@company.com)` 
+    };
+  }
+  if (!domain.includes('.')) {
+    return { valid: false, reason: 'Please enter a valid organization email' };
+  }
+  return { valid: true };
+};
+
 async function ensureResetTable() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS password_reset_tokens (
@@ -28,6 +55,7 @@ const authService = new AuthService();
 // Helper function to set secure HttpOnly cookies
 const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
   const isProduction = config.nodeEnv === 'production';
+  const refreshPath = '/api/auth/refresh-token';
   
   // Access Token Cookie
   res.cookie('accessToken', accessToken, {
@@ -46,7 +74,7 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    path: '/api/auth/refresh',
+    path: refreshPath,
     signed: true,
   });
 };
@@ -56,6 +84,7 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
 // browsers (especially Chrome with SameSite=None) will ignore the clear.
 const clearAuthCookies = (res: Response) => {
   const isProduction = config.nodeEnv === 'production';
+  const refreshPath = '/api/auth/refresh-token';
   const baseOpts = {
     httpOnly: true,
     secure: isProduction,
@@ -63,19 +92,18 @@ const clearAuthCookies = (res: Response) => {
     signed: true,
   };
   res.clearCookie('accessToken', { ...baseOpts, path: '/' });
-  res.clearCookie('refreshToken', { ...baseOpts, path: '/api/auth/refresh' });
+  res.clearCookie('refreshToken', { ...baseOpts, path: refreshPath });
 };
 
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password, fullName, role, collegeName, company } = req.body;
+      const { email, password, fullName, collegeName, company } = req.body;
 
       const result = await authService.register({
         email,
         password,
         fullName,
-        role,
         collegeName,
         company,
       });
@@ -120,6 +148,76 @@ export class AuthController {
     }
   }
 
+  async corporateLogin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+
+      // Validate organization email
+      const emailValidation = isOrganizationEmail(email);
+      if (!emailValidation.valid) {
+        res.status(400).json({
+          success: false,
+          message: emailValidation.reason,
+        });
+        return;
+      }
+
+      const result = await authService.login(email, password);
+
+      // Set HttpOnly cookies instead of returning tokens in body
+      setAuthCookies(res, result.accessToken, result.refreshToken);
+      setCsrfCookie(res);
+
+      res.json({
+        success: true,
+        message: 'Login successful',
+        data: {
+          user: result.user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async corporateRegister(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password, fullName, company } = req.body;
+
+      // Validate organization email
+      const emailValidation = isOrganizationEmail(email);
+      if (!emailValidation.valid) {
+        res.status(400).json({
+          success: false,
+          message: emailValidation.reason,
+        });
+        return;
+      }
+
+      const result = await authService.register({
+        email,
+        password,
+        fullName,
+        company,
+        role: 'CORPORATE',
+      });
+
+      // Set HttpOnly cookies instead of returning tokens in body
+      setAuthCookies(res, result.accessToken, result.refreshToken);
+      setCsrfCookie(res);
+
+      res.status(201).json({
+        success: true,
+        message: 'Registration successful',
+        data: {
+          user: result.user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
       const refreshToken = req.signedCookies?.refreshToken;
@@ -156,6 +254,7 @@ export class AuthController {
 
       // Set new cookies with rotated tokens
       setAuthCookies(res, result.accessToken, result.refreshToken);
+      setCsrfCookie(res);
 
       res.json({
         success: true,

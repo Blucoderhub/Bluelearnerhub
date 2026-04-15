@@ -14,7 +14,8 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../db';
 import { eq } from 'drizzle-orm';
-import { certificates, certificateTemplates } from '../db/schema-v2';
+import { certificates } from '../db/schema-v2';
+import { asString } from '../utils/request';
 import { users } from '../db/schema';
 import logger from '../utils/logger';
 
@@ -45,7 +46,7 @@ export const getMyCertificates = async (req: Request, res: Response) => {
 
 export const verifyCertificate = async (req: Request, res: Response) => {
   try {
-    const { credentialId } = req.params;
+    const credentialId = asString(req.params.credentialId);
 
     const [cert] = await db
       .select({
@@ -152,3 +153,5 @@ async function schedulePDFGeneration(certId: number): Promise<void> {
   // TODO: push to BullMQ 'certificate-pdf' queue
   // await pdfQueue.add('generate', { certId });
 }
+
+
