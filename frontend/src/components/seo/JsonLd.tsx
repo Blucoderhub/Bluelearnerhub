@@ -17,7 +17,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'support@bluelearnerhub.com',
+    email: 'connect@bluecoderhub.com',
     availableLanguage: 'English',
   },
   offers: {

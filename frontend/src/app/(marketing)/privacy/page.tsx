@@ -58,8 +58,8 @@ export default function PrivacyPage() {
           <p className="leading-relaxed text-muted-foreground">
             We retain your account data for as long as your account is active. You may request
             deletion of your account and associated data at any time by emailing{' '}
-            <a href="mailto:privacy@bluelearnerhub.com" className="text-primary underline">
-              privacy@bluelearnerhub.com
+            <a href="mailto:connect@bluecoderhub.com" className="text-primary underline">
+              connect@bluecoderhub.com
             </a>
             .
           </p>
@@ -70,8 +70,8 @@ export default function PrivacyPage() {
           <p className="leading-relaxed text-muted-foreground">
             Depending on your jurisdiction you have the right to access, correct, delete, and port
             your data. Contact us at{' '}
-            <a href="mailto:privacy@bluelearnerhub.com" className="text-primary underline">
-              privacy@bluelearnerhub.com
+            <a href="mailto:connect@bluecoderhub.com" className="text-primary underline">
+              connect@bluecoderhub.com
             </a>{' '}
             to exercise these rights.
           </p>
@@ -90,8 +90,8 @@ export default function PrivacyPage() {
           <h2 className="mb-3 text-xl font-bold text-white">8. Contact</h2>
           <p className="leading-relaxed text-muted-foreground">
             Questions? Email{' '}
-            <a href="mailto:privacy@bluelearnerhub.com" className="text-primary underline">
-              privacy@bluelearnerhub.com
+            <a href="mailto:connect@bluecoderhub.com" className="text-primary underline">
+              connect@bluecoderhub.com
             </a>{' '}
             or visit our{' '}
             <Link href="/contact" className="text-primary underline">

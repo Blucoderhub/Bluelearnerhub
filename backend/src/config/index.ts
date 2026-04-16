@@ -230,7 +230,7 @@ export const config = {
 
   // Email (SendGrid preferred, Resend fallback)
   email: {
-    from:           process.env.EMAIL_FROM      || 'noreply@bluelearnerhub.com',
+    from:           process.env.EMAIL_FROM      || 'connect@bluecoderhub.com',
     sendgridApiKey: process.env.SENDGRID_API_KEY,
     resendApiKey:   process.env.RESEND_API_KEY,
   },

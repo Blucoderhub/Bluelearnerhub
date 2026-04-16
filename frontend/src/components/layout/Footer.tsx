@@ -25,9 +25,7 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { name: 'YouTube', icon: Youtube, href: 'https://youtube.com' },
   { name: 'Twitter', icon: Twitter, href: 'https://twitter.com' },
-  { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com' },
   { name: 'GitHub', icon: Github, href: 'https://github.com' },
 ]
 

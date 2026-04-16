@@ -339,7 +339,6 @@ export default function SpacesPage() {
             <div className="flex items-center gap-2 border-b border-border/40 bg-muted/60 px-5 py-3">
               <div className="h-3 w-3 rounded-full bg-border" />
               <div className="h-3 w-3 rounded-full bg-border" />
-              <div className="h-3 w-3 rounded-full bg-border" />
               <div className="mx-4 flex-1 rounded-md border border-border/50 bg-background px-3 py-1 font-mono text-[11px] tracking-tight text-muted-foreground">
                 spaces.bluelearnerhub.com/preview/my-portfolio
               </div>
@@ -490,7 +489,7 @@ export default function SpacesPage() {
               Everything You Need
             </p>
             <h2 className="text-3xl font-black tracking-tighter sm:text-4xl">
-              Built for learners & builders
+              Build by engineers for world
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -575,7 +574,6 @@ export default function SpacesPage() {
                     <div className="mb-3 flex gap-1.5">
                       <div className="h-2.5 w-2.5 rounded-full bg-border" />
                       <div className="h-2.5 w-2.5 rounded-full bg-border" />
-                      <div className="h-2.5 w-2.5 rounded-full bg-border" />
                     </div>
                     <pre className="whitespace-pre-wrap text-muted-foreground">{t.preview}</pre>
                     {/* Overlay on hover */}
@@ -644,7 +642,7 @@ export default function SpacesPage() {
                 Community Gallery
               </p>
               <h2 className="text-3xl font-black tracking-tighter sm:text-4xl">
-                Built by learners. For learners.
+                Build by engineers for world
               </h2>
             </div>
             <Link

@@ -12,8 +12,8 @@ const CONTACT_CHANNELS = [
   {
     icon: Mail,
     label: 'Support Email',
-    value: 'support@bluelearnerhub.com',
-    href: 'mailto:support@bluelearnerhub.com',
+    value: 'connect@bluecoderhub.com',
+    href: 'mailto:connect@bluecoderhub.com',
   },
   { icon: MessageSquare, label: 'Community Q&A', value: 'Ask in our public forum', href: '/qna' },
   { icon: MapPin, label: 'Headquarters', value: 'India (Remote-first global team)', href: null },
@@ -94,8 +94,8 @@ export default function ContactPage() {
             <h3 className="mb-2 font-bold text-white">For Organizations</h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Looking to hire from our talent pool or run a private hackathon for your company?{' '}
-              <a href="mailto:partnerships@bluelearnerhub.com" className="text-primary underline">
-                partnerships@bluelearnerhub.com
+              <a href="mailto:connect@bluecoderhub.com" className="text-primary underline">
+                connect@bluecoderhub.com
               </a>
             </p>
           </div>
