@@ -285,4 +285,4 @@ npm start
 
 ## 📄 License
 
-Proprietary - © 2026 BluelearnerHub (Powered by Bluecoderhub)
+Proprietary - © 2026 BluelearnerHub (Powered by Bluelearnerhub)

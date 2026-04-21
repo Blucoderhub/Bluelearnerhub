@@ -100,8 +100,8 @@ export default function TermsPage() {
               contact page
             </Link>{' '}
             or email{' '}
-            <a href="mailto:connect@bluecoderhub.com" className="text-primary underline">
-              connect@bluecoderhub.com
+            <a href="mailto:connect@bluelearnerhub.com" className="text-primary underline">
+              connect@bluelearnerhub.com
             </a>
             .
           </p>

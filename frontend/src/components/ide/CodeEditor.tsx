@@ -169,7 +169,7 @@ export default function CodeEditor() {
           </div>
         </div>
         <span className="text-[10px] font-medium text-white/10">
-          Built by Bluecoderhub for Elite Engineers
+          Built by Bluelearnerhub for Elite Engineers
         </span>
       </div>
     </div>

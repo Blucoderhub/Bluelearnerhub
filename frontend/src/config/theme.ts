@@ -35,11 +35,11 @@ export const brandConfig = {
   name: 'Bluelearnerhub',
   tagline: 'Learn. Code. Excel. Master Skills.',
   poweredBy: 'Bluelearnerhub',
-  domain: 'bluecoderhub.com',
+  domain: 'bluelearnerhub.com',
   social: {
-    twitter: '@bluecoderhub',
-    linkedin: 'bluecoderhub',
-    github: 'bluecoderhub',
+    twitter: '@bluelearnerhub',
+    linkedin: 'bluelearnerhub',
+    github: 'bluelearnerhub',
   },
 }
 

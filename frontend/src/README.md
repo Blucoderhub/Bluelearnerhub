@@ -85,7 +85,7 @@ src/
 
 **Brand Name**: Bluelearnerhub  
 **Tagline**: Learn. Code. Excel. Get Hired.  
-**Powered by**: Bluecoderhub
+**Powered by**: Bluelearnerhub
 
 **Primary Colors**:
 
@@ -202,4 +202,4 @@ Build optimized for:
 
 ## 📄 License
 
-Proprietary - © 2026 Bluelearnerhub (Powered by Bluecoderhub)
+Proprietary - © 2026 Bluelearnerhub (Powered by Bluelearnerhub)

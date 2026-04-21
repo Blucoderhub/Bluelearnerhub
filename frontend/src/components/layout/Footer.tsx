@@ -110,7 +110,7 @@ export default function Footer() {
           {/* ── Bottom bar ── */}
           <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: '#57606a' }}>
-              © {new Date().getFullYear()} Bluelearnerhub. Built with ♥ in India.
+              © {new Date().getFullYear()} Bluelearnerhub. A Product of Bluecoderhub.
             </p>
             <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: '#57606a' }}>
               Need help?{' '}

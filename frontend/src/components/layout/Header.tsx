@@ -71,7 +71,7 @@ export default function Header() {
                 <path d="M9 12l2 2 4-4" />
               </svg>
               <span className="text-base font-bold tracking-tight text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
-                <span className="text-primary">Blue</span>CoderHub
+                <span className="text-primary">Blue</span>learnerhub
               </span>
             </Link>
 
@@ -158,7 +158,7 @@ export default function Header() {
                   <path d="M9 12l2 2 4-4" />
                 </svg>
                 <span className="text-base font-bold" style={{ fontFamily: 'var(--font-heading)' }}>
-                  <span className="text-primary">Blue</span>CoderHub
+                  <span className="text-primary">Blue</span>learnerhub
                 </span>
               </Link>
               <button

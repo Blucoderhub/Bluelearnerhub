@@ -57,7 +57,7 @@ Python prioritizes readability and simplicity, making it the ideal first languag
       code: `print("Hello, World!")
 
 # This is a comment
-name = "BlueCoderHub"
+name = "BlueLearnerHub"
 version = 2.0
 
 print(f"Welcome to {name} v{version}")
@@ -110,7 +110,7 @@ print(text.upper())           # UPPERCASE
 print(text.replace("Python", "World"))
 
 # String slicing
-msg = "BlueCoderHub"
+msg = "BlueLearnerHub"
 print(msg[0:4])   # Blue
 print(msg[-3:])   # Hub
 print(msg[::-1])  # buHredoCeulB
@@ -160,7 +160,7 @@ def greet(name):
     return f"Hello, {name}!"
 
 # Call function
-message = greet("BlueCoderHub")
+message = greet("BlueLearnerHub")
 print(message)
 
 # Default parameter
@@ -189,7 +189,7 @@ It runs in browsers, on servers (Node.js), and in mobile apps. JavaScript makes 
 console.log("Hello, World!");
 
 // Variables
-let name = "BlueCoderHub";
+let name = "BlueLearnerHub";
 const PI = 3.14159;
 var legacy = "old style";
 
@@ -519,7 +519,7 @@ hanoi(3, 'A', 'C', 'B')`,
 </head>
 <body>
     <header>
-        <h1>Welcome to BlueCoderHub</h1>
+        <h1>Welcome to BlueLearnerHub</h1>
         <nav>
             <a href="#about">About</a>
             <a href="#learn">Learn</a>
@@ -540,7 +540,7 @@ hanoi(3, 'A', 'C', 'B')`,
     </main>
     
     <footer>
-        <p>&copy; 2026 BlueCoderHub</p>
+        <p>&copy; 2026 BlueLearnerHub</p>
     </footer>
 </body>
 </html>`,

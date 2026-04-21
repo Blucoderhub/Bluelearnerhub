@@ -94,14 +94,13 @@ export default function Testimonials() {
             Success Stories
           </span>
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
-            Loved by{' '}
+            Join Our{' '}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              50,000+
-            </span>{' '}
-            Learners
+              Founding Cohort
+            </span>
           </h2>
           <p className="mx-auto max-w-xl text-base text-muted-foreground md:text-lg">
-            Join thousands of students who have transformed their careers
+            Be among the first to experience Bluelearnerhub — and help shape the future of engineering education
           </p>
         </motion.div>
 

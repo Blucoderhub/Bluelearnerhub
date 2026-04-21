@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
+    default: 'Bluelearnerhub — Engineering Learning Platform',
     template: '%s | Bluelearnerhub',
   },
   description:
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: BASE_URL,
     siteName: 'Bluelearnerhub',
-    title: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
+    title: 'Bluelearnerhub — Engineering Learning Platform',
     description:
       'India\'s premier EdTech platform. AI-powered learning, coding challenges, hackathons, and mentorship for engineering students.',
     images: [
@@ -63,15 +63,15 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'BlueLearnerHub — Your Path to Tech Excellence',
+        alt: 'Bluelearnerhub — Engineering Learning Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@bluecoderhub',
-    creator: '@bluecoderhub',
-    title: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
+    site: '@bluelearnerhub',
+    creator: '@bluelearnerhub',
+    title: 'Bluelearnerhub — Engineering Learning Platform',
     description:
       'India\'s premier EdTech platform for engineering students. AI-powered learning, coding challenges, and hackathons.',
     images: ['/og-image.png'],

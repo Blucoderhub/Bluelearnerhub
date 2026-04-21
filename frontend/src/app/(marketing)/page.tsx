@@ -85,7 +85,7 @@ const whyItems = [
   {
     num: '01',
     headline: 'Free learning that actually works.',
-    body: 'Structured tracks for CS, Mechanical, Electrical, Civil and Management — written by engineers, not content mills. No paywalls. No fluff.',
+    body: 'Curated by Bluecoderhub Engineers for all core branches — CS, Mechanical, Electrical, Civil, and Management. No paywalls. No fluff.',
   },
   {
     num: '02',
@@ -101,7 +101,7 @@ const whyItems = [
 
 // ─── Terminal lines ─────────────────────────────────────────────────────────────
 const terminalLines = [
-  { text: '$ bluecoderhub start --track ai-python', color: '#e6edf3' },
+  { text: '$ bluelearnerhub start --track ai-python', color: '#e6edf3' },
   { text: '✓ Loading Python environment...', color: '#3fb950' },
   { text: '✓ AI Quiz Engine ready', color: '#3fb950' },
   { text: '✓ 2,450 XP loaded for user @rajan', color: '#3fb950' },
@@ -120,10 +120,10 @@ const terminalLines = [
 
 // ─── Stats ─────────────────────────────────────────────────────────────────────
 const stats = [
-  { label: 'Active Learners', value: '50,000+' },
-  { label: 'Lessons Available', value: '200+' },
+  { label: 'Status', value: 'Beta Launch' },
+  { label: 'Lessons Available', value: '50+' },
   { label: 'Languages Supported', value: '15+' },
-  { label: 'Avg. XP / Week', value: '1,200' },
+  { label: 'Per Session', value: 'Earn XP & Level Up' },
 ]
 
 // ─── Fade-up variant ───────────────────────────────────────────────────────────
@@ -156,9 +156,9 @@ export default function LandingPage() {
                 transition={{ duration: 0.4 }}
                 className="mb-5 flex items-center gap-2"
               >
-                <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-sm font-mono font-medium text-primary tracking-wide">
-                  Free for personal use
+                  Limited Beta Access · Join our Founding Cohort
                 </span>
               </motion.div>
 
@@ -240,7 +240,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative mx-auto w-full max-w-xl lg:max-w-none"
             >
               {/* Glow behind terminal */}
               <div
@@ -377,9 +377,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════
-          WHY BLUECODERHUB — numbered like Hacksplaining
-      ════════════════════════════════════════════════ */}
+    
       <section id="why" className="section">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
@@ -637,9 +635,10 @@ export default function LandingPage() {
                 className="mx-auto mb-8 max-w-lg text-white/80 leading-relaxed"
                 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}
               >
-                Join 50,000+ learners mastering engineering skills and landing dream jobs.
+                Be part of our Founding Cohort — master engineering skills across CS, Mechanical,
+                Electrical, Civil and more. AI-powered, free, no credit card needed.
                 <br />
-                Free — no credit card needed.
+                Limited Beta Access — join now and shape the platform.
               </p>
               <Link
                 href="/get-started"

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://bluecoderhub.com'
+const BASE_URL = 'https://bluelearnerhub.com'
 
 // Organization schema — tells Google this is a real education company
 const organizationSchema = {
@@ -17,7 +17,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'connect@bluecoderhub.com',
+    email: 'connect@bluelearnerhub.com',
     availableLanguage: 'English',
   },
   offers: {

@@ -340,7 +340,7 @@ export default function SpacesPage() {
               <div className="h-3 w-3 rounded-full bg-border" />
               <div className="h-3 w-3 rounded-full bg-border" />
               <div className="mx-4 flex-1 rounded-md border border-border/50 bg-background px-3 py-1 font-mono text-[11px] tracking-tight text-muted-foreground">
-                spaces.bluecoderhub.com/preview/my-portfolio
+                spaces.bluelearnerhub.com/preview/my-portfolio
               </div>
               <div className="flex items-center gap-1 text-[11px] font-bold text-primary">
                 <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />

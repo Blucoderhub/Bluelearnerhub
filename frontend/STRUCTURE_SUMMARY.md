@@ -302,7 +302,7 @@ frontend/
 
 **Name**: BluelearnerHub  
 **Tagline**: Learn. Code. Excel. Get Hired.  
-**Powered By**: Bluecoderhub  
+**Powered By**: Bluelearnerhub  
 **Domain**: bluelearnerhub.com  
 **Primary Color**: Blue (#3b82f6)  
 **Fonts**: Inter + JetBrains Mono
