@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2, Zap, Rocket, ChevronRight } from 'lucide-react'
+import { CheckCircle2, Rocket } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 

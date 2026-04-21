@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Users,
   Plus,
   UserPlus,
   Sparkles,

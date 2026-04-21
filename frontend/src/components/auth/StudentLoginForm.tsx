@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
-import { Github, Mail, KeyRound, User } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { KeyRound, User } from 'lucide-react'
+import { Github } from '@/components/ui/BrandIcons'
 
 interface StudentLoginFormProps {
   onSubmit: (credentials: { email: string; password: string }) => Promise<void>

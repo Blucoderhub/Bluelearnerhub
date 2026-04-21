@@ -6,8 +6,9 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <>
       <Header />
-      <main className="min-h-screen">{children}</main>
+      <div className="min-h-screen">{children}</div>
       <Footer />
     </>
   )
 }
+

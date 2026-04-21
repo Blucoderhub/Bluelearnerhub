@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
@@ -10,7 +10,6 @@ import {
   Play,
   CheckCircle,
   XCircle,
-  Clock,
   Zap,
   Users,
   Target,
@@ -19,7 +18,6 @@ import {
   Lightbulb,
   BookOpen,
   Code2,
-  Brain,
   Copy,
   Check,
   RotateCcw,
@@ -195,7 +193,6 @@ function CodeEditorSkeleton() {
 
 export default function ChallengeDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const challengeId = params.id as string
   const challenge = challenges[challengeId]
 
@@ -203,7 +200,7 @@ export default function ChallengeDetailPage() {
   const [language, setLanguage] = useState('python')
   const [output, setOutput] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null)
   const [running, setRunning] = useState(false)
-  const [passedTests, setPassedTests] = useState(0)
+  const [_passedTests, setPassedTests] = useState(0)
   const [showHint, setShowHint] = useState(false)
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('description')
@@ -461,7 +458,7 @@ export default function ChallengeDetailPage() {
                 height="100%"
                 language={language}
                 value={code}
-                onChange={(value) => setCode(value || '')}
+                onChange={(value: string | undefined) => setCode(value || '')}
                 theme="vs-dark"
                 options={{
                   minimap: { enabled: false },

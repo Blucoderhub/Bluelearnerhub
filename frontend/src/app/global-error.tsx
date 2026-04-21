@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { AlertTriangle } from 'lucide-react'
 
 // global-error.tsx replaces the root layout on fatal crashes.
 // It must include its own <html>/<body> tags.

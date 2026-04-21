@@ -9,7 +9,6 @@ import React from 'react'
 import Link from 'next/link'
 import { Star, GitFork, Lock, Globe, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
-import { cn } from '@/lib/utils'
 
 const LANG_COLORS: Record<string, string> = {
   python: '#3572A5',
@@ -39,7 +38,7 @@ interface RepoCardProps {
 }
 
 export default function RepoCard({
-  id,
+  id: _id,
   ownerSlug,
   slug,
   name,

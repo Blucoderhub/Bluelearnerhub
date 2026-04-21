@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Users, BookOpen, Trophy, Award, Code2, Brain, Zap } from 'lucide-react'
 
 const CODE_LINES = [
@@ -22,14 +22,14 @@ const CODE_LINES = [
   { text: '// 🚀  Career unlocked.', dim: true },
 ]
 
-const STATS = [
+const _STATS = [
   { icon: Users, value: '12,000+', label: 'Active Learners', delay: 0.4 },
   { icon: BookOpen, value: '1,400+', label: 'Lessons', delay: 0.55 },
   { icon: Trophy, value: '50+', label: 'Hackathons', delay: 0.7 },
   { icon: Award, value: '200+', label: 'Certificates', delay: 0.85 },
 ]
 
-const BADGES = [
+const _BADGES = [
   { icon: Zap, text: '+500 XP Earned', delay: 2.0 },
   { icon: Brain, text: 'AI Mentor Active', delay: 2.8 },
   { icon: Code2, text: 'Challenge Complete', delay: 3.6 },

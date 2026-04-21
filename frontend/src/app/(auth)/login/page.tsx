@@ -7,7 +7,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Github, Mail, Lock, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Mail, Lock, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Github } from '@/components/ui/BrandIcons'
 
 function LoginContent() {
   const { login, user, isAuthenticated } = useAuth()

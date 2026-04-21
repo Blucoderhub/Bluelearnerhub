@@ -6,7 +6,6 @@ import CodePlayground from '@/components/tutorials/CodePlayground'
 import { tutorialsAPI } from '@/lib/api-civilization'
 import {
   CheckCircle2,
-  Circle,
   ChevronLeft,
   ChevronRight,
   BookOpen,
@@ -16,13 +15,11 @@ import {
   Menu,
   X,
   Play,
-  Clock,
   BarChart3,
   Bookmark,
   Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'

@@ -258,7 +258,7 @@ router.get('/reports/:type', async (req, res) => {
 // ─── Bulk User Operations ─────────────────────────────────────────────────────
 router.post('/users/bulk', async (req, res) => {
   try {
-    const { action, userIds, data } = req.body;
+    const { action, userIds } = req.body;
 
     if (!action || !userIds || !Array.isArray(userIds)) {
       return res.status(400).json({

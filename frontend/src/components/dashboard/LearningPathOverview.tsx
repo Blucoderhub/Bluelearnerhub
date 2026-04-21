@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, Play, CheckCircle2, Lock } from 'lucide-react'
+import { BookOpen, Play } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 

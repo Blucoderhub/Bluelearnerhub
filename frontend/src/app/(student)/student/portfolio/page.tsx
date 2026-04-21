@@ -7,14 +7,13 @@ import Link from 'next/link'
 import {
   Trophy,
   Award,
-  Github,
-  Linkedin,
   Globe,
   Loader2,
   TrendingUp,
   Flame,
   Star,
 } from 'lucide-react'
+import { Github, Linkedin } from '@/components/ui/BrandIcons'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

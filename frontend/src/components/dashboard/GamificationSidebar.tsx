@@ -1,7 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Trophy, Zap, Target, Award, ChevronRight, Star, Users } from 'lucide-react'
+import { Trophy, Zap, Target, Award, ChevronRight, Star } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'

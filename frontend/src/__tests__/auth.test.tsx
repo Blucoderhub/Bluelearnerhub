@@ -4,7 +4,6 @@
  */
 import React from 'react'
 import { render, screen, act, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 
 // ─── Mock api module ──────────────────────────────────────────────────────────
@@ -150,15 +149,13 @@ describe('AuthContext — login', () => {
 
     await waitFor(() => expect(screen.getByTestId('loading').textContent).toBe('ready'))
 
-    let thrownError: Error | null = null
     try {
       await act(async () => {
-        const { login } = (screen.getByTestId('login-btn') as any)
         // Trigger login and catch error
         await renderAuth().unmount()
       })
-    } catch (e: any) {
-      thrownError = e
+    } catch {
+      // Expected to throw
     }
 
     // Should remain unauthenticated

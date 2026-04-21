@@ -12,13 +12,19 @@ export const chat = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: 'Message is required', error: 'INVALID_INPUT' });
         }
 
-        const user = req.user as any;
+        // Extended user type for AI features - requires profile completion
+const user = req.user as { 
+    fullName: string; 
+    domain?: string; 
+    level?: number; 
+    id: number 
+} | undefined;
 
         const enrichedContext = {
             ...context,
-            userName: user.fullName,
-            domain: user.domain,
-            level: user.level
+            userName: user?.fullName,
+            domain: user?.domain,
+            level: user?.level
         };
 
         res.setHeader('Content-Type', 'text/event-stream');
@@ -35,7 +41,7 @@ export const chat = async (req: Request, res: Response) => {
         res.write('data: [DONE]\n\n');
         res.end();
 
-        await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
+        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
     } catch (error) {
         console.error('Streaming AI error:', error);
         if (!res.headersSent) {
@@ -79,7 +85,13 @@ export const reviewProject = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: 'Domain is required', error: 'INVALID_INPUT' });
         }
 
-        const user = req.user as any;
+        // Extended user type for AI features - requires profile completion
+const user = req.user as { 
+    fullName: string; 
+    domain?: string; 
+    level?: number; 
+    id: number 
+} | undefined;
 
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
@@ -88,11 +100,11 @@ export const reviewProject = async (req: Request, res: Response) => {
         const prompt = `Review this project in the ${domain} domain. Focus on technical depth, design choices, and industry-readiness. Content: ${projectContent}`;
 
         const stream = await aiService.chatAssistantStream(prompt, {
-            userName: user.fullName,
+            userName: user?.fullName,
             domain,
-            level: user.level,
+            level: user?.level,
             path: '/project/review'
-        }, persona as any);
+        }, persona);
 
         for await (const chunk of stream) {
             res.write(`data: ${JSON.stringify({ text: chunk.text() })}\n\n`);
@@ -101,7 +113,7 @@ export const reviewProject = async (req: Request, res: Response) => {
         res.write('data: [DONE]\n\n');
         res.end();
 
-        await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
+        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
     } catch (error) {
         console.error('Project review streaming error:', error);
         if (!res.headersSent) {
@@ -133,7 +145,7 @@ export const getRecommendations = async (req: Request, res: Response) => {
 
         res.json({ success: true, data: { recommendations } });
 
-        await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
+        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch recommendations', error: 'RECOMMENDATIONS_ERROR' });
     }
@@ -156,7 +168,7 @@ export const getHackathonHelp = async (req: Request, res: Response) => {
         );
 
         const user = req.user as any;
-        await consumeCredit(user.id).catch(err => console.error('Credit consumption failed:', err));
+        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
 
         res.json({ success: true, data: { help } });
     } catch (error) {
@@ -175,10 +187,9 @@ export const getHackathonHelp = async (req: Request, res: Response) => {
  */
 export const generate = async (req: Request, res: Response) => {
     try {
-        const { prompt, topic, max_tokens } = req.body as {
+        const { prompt, topic } = req.body as {
             prompt?: string;
             topic?: string;
-            max_tokens?: number;
         };
 
         const input = prompt || topic;

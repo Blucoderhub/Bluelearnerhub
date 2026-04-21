@@ -22,7 +22,7 @@ export default function Compiler({
   const [code, setCode] = useState(initialCode || getDefaultCode(initialLanguage))
   const [output, setOutput] = useState<string[]>([])
   const [testResults, setTestResults] = useState<any[]>([])
-  const [isRunning, setIsRunning] = useState(false)
+  const [_isRunning, setIsRunning] = useState(false)
   const [executionTime, setExecutionTime] = useState<number | null>(null)
   const [memoryUsed, setMemoryUsed] = useState<number | null>(null)
 
@@ -57,7 +57,7 @@ export default function Compiler({
     }
   }
 
-  const handleSubmit = async () => {
+  const _handleSubmit = async () => {
     if (!problemId) return
 
     setIsRunning(true)

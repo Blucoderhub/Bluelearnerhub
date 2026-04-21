@@ -7,8 +7,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://bluelearnerhub.com
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0f' },
+    { media: '(prefers-color-scheme: light)', color: '#eef2fb' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d1117' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -17,8 +17,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
-    template: '%s | BlueLearnerHub',
+    default: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
+    template: '%s | Bluelearnerhub',
   },
   description:
     'India\'s premier EdTech platform for engineering students. Master programming with AI-powered quizzes, coding challenges, hackathons, and expert mentorship. Start your tech career today.',
@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     'hackathon platform India',
     'coding interview prep',
     'verified certificates',
-    'BlueLearnerHub',
+    'Bluelearnerhub',
     'edtech India',
     'software engineering',
     'AI learning platform',
   ],
-  authors: [{ name: 'BlueLearnerHub', url: BASE_URL }],
-  creator: 'BlueLearnerHub',
-  publisher: 'BlueLearnerHub',
+  authors: [{ name: 'Bluelearnerhub', url: BASE_URL }],
+  creator: 'Bluelearnerhub',
+  publisher: 'Bluelearnerhub',
   category: 'education',
   robots: {
     index: true,
@@ -54,8 +54,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: BASE_URL,
-    siteName: 'BlueLearnerHub',
-    title: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
+    siteName: 'Bluelearnerhub',
+    title: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
     description:
       'India\'s premier EdTech platform. AI-powered learning, coding challenges, hackathons, and mentorship for engineering students.',
     images: [
@@ -69,9 +69,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@bluelearnerhub',
-    creator: '@bluelearnerhub',
-    title: 'BlueLearnerHub — Learn. Code. Compete. Succeed.',
+    site: '@bluecoderhub',
+    creator: '@bluecoderhub',
+    title: 'Bluelearnerhub — Learn. Code. Compete. Succeed.',
     description:
       'India\'s premier EdTech platform for engineering students. AI-powered learning, coding challenges, and hackathons.',
     images: ['/og-image.png'],
@@ -100,14 +100,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Providers>
           <CustomCursor />
-          <div className="spilled-paint-bg">
-            <div className="blob blob-1" />
-            <div className="blob blob-2" />
-            <div className="blob blob-3" />
-          </div>
-          <main id="main-content">
+          <div id="main-content">
             {children}
-          </main>
+          </div>
         </Providers>
       </body>
     </html>

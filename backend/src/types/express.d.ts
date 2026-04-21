@@ -1,10 +1,11 @@
+/// <reference types="express" />
+
 /**
  * Extends Express's Request interface globally so req.user and req.requestId
  * are fully typed across all controllers and middleware without (req as any) casts.
  *
  * Compatible with Express v5 + @types/express v5
  */
-
 declare global {
   namespace Express {
     interface Request {
@@ -16,13 +17,17 @@ declare global {
         id: number;
         email: string;
         fullName: string;
+        role?: 'STUDENT' | 'CORPORATE' | 'MENTOR' | 'ADMIN';
+        domain?: string;
+        level?: number;
+        isActive?: boolean;
       };
 
       /**
        * Set by requestContext middleware — unique ID for log correlation.
        * Always present after requestContext middleware runs.
        */
-      requestId: string;
+      requestId?: string;
 
       /**
        * Alias for requestId — legacy name.

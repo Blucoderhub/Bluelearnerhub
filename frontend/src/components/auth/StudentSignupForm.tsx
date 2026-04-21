@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { motion } from 'framer-motion'
-import { Github, Mail, User, ShieldCheck, KeyRound, MailIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { User, KeyRound, MailIcon } from 'lucide-react'
+import { Github } from '@/components/ui/BrandIcons'
 
 interface StudentSignupFormProps {
   onSubmit: (userData: any) => Promise<void>

@@ -1,4 +1,5 @@
 // src/components/ui/tabs.tsx
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 'use client'
 

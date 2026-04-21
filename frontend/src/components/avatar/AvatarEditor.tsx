@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { AvatarPreview } from './AvatarPreview'
 import { AvatarConfig, DEFAULT_AVATAR_CONFIG } from '@/utils/generateAvatar'
 import { Button } from '@/components/ui/button'
@@ -21,9 +21,9 @@ interface AvatarEditorProps {
 }
 
 const STYLES = ['adventurer', 'avataaars', 'bottts', 'pixel-art', 'big-smile', 'croodles']
-const HAIR_TYPES = ['long', 'short', 'bob', 'curly', 'buzz', 'none']
-const EYE_TYPES = ['default', 'happy', 'wink', 'surprised', 'closed']
-const MOUTH_TYPES = ['default', 'smile', 'tongue', 'sad', 'open']
+const _HAIR_TYPES = ['long', 'short', 'bob', 'curly', 'buzz', 'none']
+const _EYE_TYPES = ['default', 'happy', 'wink', 'surprised', 'closed']
+const _MOUTH_TYPES = ['default', 'smile', 'tongue', 'sad', 'open']
 
 export const AvatarEditor: React.FC<AvatarEditorProps> = ({ initialConfig, onSave, username }) => {
   const [config, setConfig] = useState<AvatarConfig>(

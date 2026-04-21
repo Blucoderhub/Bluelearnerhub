@@ -2,15 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, Search, ChevronRight, ArrowLeft, Loader2, Play, Star, Zap } from 'lucide-react'
+import { BookOpen, Search, ArrowLeft, Play, Star, Zap } from 'lucide-react'
 import { LucideIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { tutorialsAPI } from '@/lib/api-civilization'
-import TutorialTrackSkeleton from '@/components/skeletons/TutorialTrackSkeleton'
 
 interface TutorialItem {
   id: string

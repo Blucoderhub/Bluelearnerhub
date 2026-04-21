@@ -48,7 +48,10 @@ export default function ChatPanel({
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const bottom = bottomRef.current
+    if (bottom) {
+      bottom.scrollIntoView({ behavior: 'smooth' })
+    }
   }, [messages])
 
   const readySources = sources.filter((s) => s.status === 'ready')
@@ -87,7 +90,7 @@ export default function ChatPanel({
         })
         .catch(() => {})
       onMessagesChange((prev) => [...prev, assistantMessage])
-    } catch (err) {
+    } catch {
       api
         .post(`/notebooks/${notebookId}/behavior-events`, {
           eventType: 'chat_error',
@@ -109,8 +112,8 @@ export default function ChatPanel({
     try {
       await api.delete(`/notebooks/${notebookId}/chat`)
       onMessagesChange([])
-    } catch (err) {
-      console.error('Failed to clear chat', err)
+    } catch {
+      console.error('Failed to clear chat')
     } finally {
       setClearing(false)
     }

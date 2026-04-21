@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Layers, 
+import {
+  Layers,
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
@@ -13,16 +13,15 @@ import {
   Check,
   BookOpen,
   Sparkles,
+  ChevronRight,
   Thermometer,
   Droplets,
   Cog,
   Wrench,
-  Car
+  Car,
 } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import Footer from '@/components/layout/Footer'
 
 const topics = [
   { id: 'thermodynamics', name: 'Thermodynamics', lessons: ['Introduction', 'Laws of Thermodynamics', 'Heat Transfer', 'Entropy', 'Thermodynamic Processes'] },
@@ -789,7 +788,7 @@ const sidebarTopics = [
   { id: 'fluid-mechanics', name: 'Fluid Mechanics', icon: Droplets },
   { id: 'cad-cam', name: 'CAD/CAM', icon: Cog },
   { id: 'manufacturing', name: 'Manufacturing', icon: Wrench },
-  { id: 'automobile', name: 'Automobile', icon: Car }
+  { id: 'automobile', name: 'Automobile', icon: Car },
 ]
 
 export default function MechanicalPage() {
@@ -808,55 +807,70 @@ export default function MechanicalPage() {
     }
   }
 
+  const currentLessons = topics.find(t => t.id === selectedTopic)?.lessons ?? []
+  const currentIndex   = currentLessons.indexOf(selectedLesson)
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      <div className="flex pt-16">
-        {/* Sidebar */}
-        <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-border bg-background overflow-y-auto">
+
+      <div className="flex pt-14">
+        {/* ── Sidebar ── */}
+        <aside className="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 border-r border-border bg-card overflow-y-auto scrollbar-thin z-20">
           <div className="p-4">
-            <Link href="/library" className="mb-4 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/library" className="mb-5 flex items-center gap-2 text-sm font-mono font-medium text-muted-foreground hover:text-primary transition-colors">
               <ArrowLeft className="h-4 w-4" />
               Back to Library
             </Link>
-            
-            <h2 className="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Topics</h2>
-            
-            <nav className="space-y-1">
-              {sidebarTopics.map((topic) => (
-                <button
-                  key={topic.id}
-                  onClick={() => {
-                    setSelectedTopic(topic.id)
-                    const firstLesson = topics.find(t => t.id === topic.id)?.lessons[0]
-                    if (firstLesson) setSelectedLesson(firstLesson)
-                  }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors text-left ${
-                    selectedTopic === topic.id
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <topic.icon className="h-4 w-4" />
-                  {topic.name}
-                </button>
-              ))}
+
+            <div className="mb-4 flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'hsl(30 100% 50% / 0.10)' }}>
+                <Layers className="h-4 w-4" style={{ color: 'hsl(30 100% 50%)' }} />
+              </div>
+              <div>
+                <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Domain</p>
+                <p className="text-sm font-bold text-foreground">Mechanical</p>
+              </div>
+            </div>
+
+            <div className="mb-4 border-t border-border" />
+
+            <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">Topics</p>
+            <nav className="space-y-0.5">
+              {sidebarTopics.map((topic) => {
+                const Icon = topic.icon
+                const isActive = selectedTopic === topic.id
+                return (
+                  <button
+                    key={topic.id}
+                    onClick={() => {
+                      setSelectedTopic(topic.id)
+                      const firstLesson = topics.find(t => t.id === topic.id)?.lessons[0]
+                      if (firstLesson) setSelectedLesson(firstLesson)
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg transition-all text-left ${
+                      isActive ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{topic.name}</span>
+                    {isActive && <ChevronRight className="h-3.5 w-3.5 ml-auto text-primary" />}
+                  </button>
+                )
+              })}
             </nav>
 
-            <div className="mt-6">
-              <h3 className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className="mt-5">
+              <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">
                 {sidebarTopics.find(t => t.id === selectedTopic)?.name} Lessons
-              </h3>
+              </p>
               <div className="space-y-0.5">
                 {topics.find(t => t.id === selectedTopic)?.lessons.map((lesson) => (
                   <button
                     key={lesson}
                     onClick={() => setSelectedLesson(lesson)}
-                    className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
-                      selectedLesson === lesson
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                    className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-mono ${
+                      selectedLesson === lesson ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
                     }`}
                   >
                     {lesson}
@@ -867,28 +881,28 @@ export default function MechanicalPage() {
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="ml-64 min-h-[calc(100vh-4rem)] flex-1 p-8">
-          <div className="mx-auto max-w-4xl">
-            <div className="mb-8 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-red-500 text-white">
-                  <Layers className="h-6 w-6" />
+        {/* ── Main Content ── */}
+        <main className="ml-64 flex-1 min-h-[calc(100vh-3.5rem)]">
+          <div className="mx-auto max-w-4xl px-6 py-8">
+
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground mb-1">
+                  <Link href="/library" className="hover:text-primary transition-colors">Library</Link>
+                  <span>/</span>
+                  <span>Mechanical</span>
+                  <span>/</span>
+                  <span className="text-foreground">{sidebarTopics.find(t => t.id === selectedTopic)?.name}</span>
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold">Mechanical Engineering</h1>
-                  <p className="text-sm text-muted-foreground">{tutorialContent[selectedTopic as keyof typeof tutorialContent] ? Object.keys(tutorialContent[selectedTopic as keyof typeof tutorialContent]).length : 0} tutorials in {selectedTopic}</p>
-                </div>
+                <h1 className="text-2xl font-bold">{lessonData?.title ?? selectedLesson}</h1>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="success" className="gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  Free
-                </Badge>
-                <Badge variant="outline">
-                  <BookOpen className="h-3 w-3 mr-1" />
-                  No Login
-                </Badge>
+                <span className="badge badge-primary flex items-center gap-1">
+                  <Sparkles className="h-3 w-3" /> Free
+                </span>
+                <span className="badge border border-border text-muted-foreground font-mono">
+                  <BookOpen className="h-3 w-3 mr-1" /> No Login
+                </span>
               </div>
             </div>
 
@@ -898,92 +912,71 @@ export default function MechanicalPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
+                className="space-y-6"
               >
-                <Card className="border-border/50">
-                  <CardContent className="p-8">
-                    <h2 className="mb-4 text-2xl font-bold">{lessonData.title}</h2>
-                    
-                    <div className="prose prose-neutral dark:prose-invert max-w-none mb-8">
-                      <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
-                        {lessonData.content}
-                      </div>
+                <div className="card p-7">
+                  <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line" style={{ fontFamily: 'var(--font-mono)' }}>
+                    {lessonData.content}
+                  </div>
+                </div>
+
+                <div className="rounded-xl overflow-hidden border border-border" style={{ background: 'hsl(222 47% 9%)' }}>
+                  <div className="flex items-center justify-between px-4 py-3 border-b" style={{ background: 'hsl(222 47% 12%)', borderColor: 'hsl(222 47% 20%)' }}>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#ff5f57]" />
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#ffbd2e]" />
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#28c840]" />
+                      <span className="ml-2 text-xs font-mono text-gray-400">Example</span>
                     </div>
+                    <button onClick={copyCode} className="flex items-center gap-1.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">
+                      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <pre className="p-5 overflow-x-auto text-sm scrollbar-thin" style={{ color: '#e6edf3', fontFamily: 'var(--font-mono)', lineHeight: 1.75 }}>
+                    <code>{lessonData.code}</code>
+                  </pre>
+                </div>
 
-                    <div className="relative rounded-xl bg-[#1e1e1e] overflow-hidden">
-                      <div className="flex items-center justify-between px-4 py-3 bg-[#2d2d2d] border-b border-[#3d3d3d]">
-                        <span className="text-sm font-medium text-muted-foreground">Example</span>
-                        <button
-                          onClick={copyCode}
-                          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                          {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                      </div>
-                      <pre className="p-4 overflow-x-auto">
-                        <code className="text-sm font-mono text-foreground">
-                          {lessonData.code}
-                        </code>
-                      </pre>
+                {lessonData.tryIt && (
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <Link href="/ide" className="btn btn-primary flex items-center gap-2">
+                      <Play className="h-4 w-4" /> Try it Yourself
+                    </Link>
+                    <div className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      Free to use — no login required
                     </div>
+                  </div>
+                )}
 
-                    {lessonData.tryIt && (
-                      <div className="mt-6 flex items-center justify-between">
-                        <Button className="gap-2">
-                          <Play className="h-4 w-4" />
-                          Try it Yourself
-                        </Button>
-                        
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            Free to use
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <Button 
-                    variant="outline" 
-                    className="gap-2"
-                    onClick={() => {
-                      const currentLessons = topics.find(t => t.id === selectedTopic)?.lessons || []
-                      const currentIndex = currentLessons.indexOf(selectedLesson)
-                      if (currentIndex > 0) {
-                        setSelectedLesson(currentLessons[currentIndex - 1])
-                      }
-                    }}
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <button
+                    onClick={() => { if (currentIndex > 0) setSelectedLesson(currentLessons[currentIndex - 1]) }}
+                    disabled={currentIndex === 0}
+                    className="btn btn-outline flex items-center gap-2 disabled:opacity-40"
                   >
-                    <ArrowLeft className="h-4 w-4" />
-                    Previous
-                  </Button>
-                  
-                  <Button 
-                    className="gap-2"
-                    onClick={() => {
-                      const currentLessons = topics.find(t => t.id === selectedTopic)?.lessons || []
-                      const currentIndex = currentLessons.indexOf(selectedLesson)
-                      if (currentIndex < currentLessons.length - 1) {
-                        setSelectedLesson(currentLessons[currentIndex + 1])
-                      }
-                    }}
+                    <ArrowLeft className="h-4 w-4" /> Previous
+                  </button>
+                  <span className="text-xs font-mono text-muted-foreground">{currentIndex + 1} / {currentLessons.length}</span>
+                  <button
+                    onClick={() => { if (currentIndex < currentLessons.length - 1) setSelectedLesson(currentLessons[currentIndex + 1]) }}
+                    disabled={currentIndex === currentLessons.length - 1}
+                    className="btn btn-primary flex items-center gap-2 disabled:opacity-40"
                   >
-                    Next
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
+                    Next <ArrowRight className="h-4 w-4" />
+                  </button>
                 </div>
               </motion.div>
             ) : (
-              <Card className="border-border/50">
-                <CardContent className="p-8 text-center">
-                  <p className="text-muted-foreground">Select a topic to start learning</p>
-                </CardContent>
-              </Card>
+              <div className="card p-10 text-center">
+                <BookOpen className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+                <p className="font-mono text-muted-foreground">Select a topic and lesson from the sidebar to start learning.</p>
+              </div>
             )}
           </div>
+
+          <div className="px-6 pb-8"><Footer /></div>
         </main>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, GraduationCap, ChevronDown } from 'lucide-react'
+
 import IsometricScene from './IsometricScene'
 
 export default function IsometricHero() {

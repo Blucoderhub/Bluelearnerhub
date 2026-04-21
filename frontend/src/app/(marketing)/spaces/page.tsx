@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -340,7 +340,7 @@ export default function SpacesPage() {
               <div className="h-3 w-3 rounded-full bg-border" />
               <div className="h-3 w-3 rounded-full bg-border" />
               <div className="mx-4 flex-1 rounded-md border border-border/50 bg-background px-3 py-1 font-mono text-[11px] tracking-tight text-muted-foreground">
-                spaces.bluelearnerhub.com/preview/my-portfolio
+                spaces.bluecoderhub.com/preview/my-portfolio
               </div>
               <div className="flex items-center gap-1 text-[11px] font-bold text-primary">
                 <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
@@ -675,7 +675,10 @@ export default function SpacesPage() {
                   <MonitorPlay className="h-10 w-10 text-foreground/20" />
                   {/* Hover overlay */}
                   <div className="absolute inset-0 flex items-center justify-center gap-2 bg-background/80 opacity-0 transition-opacity group-hover:opacity-100">
-                    <Link href={`/spaces/explore/${i + 1}`} onClick={(e) => e.stopPropagation()}>
+                    <Link
+                      href={`/spaces/explore/${i + 1}`}
+                      onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
+                    >
                       <Button size="sm" className="h-8 gap-1.5 rounded-lg text-[11px] font-black">
                         <ExternalLink className="h-3 w-3" /> Open
                       </Button>

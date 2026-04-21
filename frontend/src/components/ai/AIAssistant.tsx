@@ -89,13 +89,13 @@ export function AIAssistant() {
                   return newMessages
                 })
               }
-            } catch (e) {
+            } catch {
               // Bit of a hack for partial JSON, but works for most stream chunks
             }
           }
         }
       }
-    } catch (error) {
+    } catch {
       setMessages((prev) => {
         const newMessages = [...prev]
         newMessages[newMessages.length - 1].content =

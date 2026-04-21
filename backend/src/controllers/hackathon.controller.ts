@@ -4,7 +4,7 @@ import { MockPaymentService } from '../services/mockPayment';
 import { db } from '../db';
 import { hackathons, hackathonRegistrations } from '../db/schema';
 import { learningBehaviorEvents } from '../db/schema-v2';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import logger from '../utils/logger';
 import { fetchAdaptiveGuidanceFromAI, fallbackHackathonGuidance } from '../services/adaptiveGuidance';
 

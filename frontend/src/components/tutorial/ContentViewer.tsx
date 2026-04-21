@@ -42,7 +42,7 @@ export default function ContentViewer({ section, onComplete }: ContentViewerProp
       <div className="prose prose-gray dark:prose-invert prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-sm dark:prose-code:bg-gray-800 max-w-none">
         <ReactMarkdown
           components={{
-            code({ node, inline, className, children, ...props }: any) {
+            code({ node: _node, inline, className, children, ...props }: any) {
               const match = /language-(\w+)/.exec(className || '')
               const lang = match ? match[1] : ''
 

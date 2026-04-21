@@ -20,18 +20,16 @@ import {
   Zap,
   Target,
   TrendingUp,
-  CheckCircle2,
   Clock,
   GitBranch,
   ArrowUp,
   ArrowDown,
   Minus,
   ExternalLink,
-  Github,
-  Linkedin,
   Globe,
   Loader2,
 } from 'lucide-react'
+import { Github, Linkedin } from '@/components/ui/BrandIcons'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
@@ -121,7 +119,6 @@ export default function ProfilePage() {
   const enrolledPaths = user.stats?.enrolled_paths ?? 0
 
   const currentLevelXP = totalXP % 1000
-  const nextLevelXP = (level + 1) * 1000
   const xpPercent = Math.min((currentLevelXP / (level * 1000)) * 100, 100)
 
   const joinedDate = user.createdAt

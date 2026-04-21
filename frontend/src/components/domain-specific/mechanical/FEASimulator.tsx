@@ -51,7 +51,8 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
   }
 
   useEffect(() => {
-    if (!containerRef.current) return
+    const container = containerRef.current
+    if (!container) return
 
     // Scene setup
     const scene = new THREE.Scene()
@@ -61,7 +62,7 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
     // Camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      containerRef.current.clientWidth / containerRef.current.clientHeight,
+      container.clientWidth / container.clientHeight,
       0.1,
       1000
     )
@@ -69,8 +70,8 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
-    containerRef.current.appendChild(renderer.domElement)
+    renderer.setSize(container.clientWidth, container.clientHeight)
+    container.appendChild(renderer.domElement)
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement)
@@ -112,7 +113,11 @@ export default function FEASimulator({ height = '600px' }: FEASimulatorProps) {
 
     return () => {
       renderer.dispose()
-      containerRef.current?.removeChild(renderer.domElement)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      const container = containerRef.current
+      if (container && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement)
+      }
     }
   }, [])
 

@@ -35,27 +35,31 @@ export default function Oscilloscope() {
     period: 0,
   })
 
-  const animate = () => {
-    drawWaveform()
-    setPhase((prev) => (prev + frequency[0] * 0.05) % (2 * Math.PI))
-    animationRef.current = requestAnimationFrame(animate)
-  }
-
   useEffect(() => {
-    if (isRunning) {
-      animate()
-    } else {
+    if (!isRunning) {
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
       }
+      return
     }
+
+    const animate = () => {
+      drawWaveform()
+      setPhase((prev) => (prev + frequency[0] * 0.05) % (2 * Math.PI))
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    animate()
 
     return () => {
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
       }
     }
-  }, [isRunning, waveform, frequency, amplitude, timeScale, voltageScale, offset])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning])
 
   const drawWaveform = () => {
     const canvas = canvasRef.current

@@ -56,7 +56,7 @@ export default function CodeEditor() {
       } else {
         setOutput(result.output || 'Program executed successfully with no output.')
       }
-    } catch (err) {
+    } catch {
       setOutput('Failed to execute code. Please check your internet connection and try again.')
     } finally {
       setIsRunning(false)

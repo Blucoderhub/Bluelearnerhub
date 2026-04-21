@@ -1,13 +1,17 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from 'next-themes'
 import { Toaster } from 'sonner'
-import { useState } from 'react'
+import { useState, type ComponentType, type ReactNode } from 'react'
 import ErrorBoundary from '@/components/ui/ErrorBoundary'
 import { AuthProvider } from '@/context/AuthContext'
 
-export function Providers({ children }: { children: React.ReactNode }) {
+const ThemeProvider = NextThemesProvider as ComponentType<
+  ThemeProviderProps & { children: ReactNode }
+>
+
+export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({

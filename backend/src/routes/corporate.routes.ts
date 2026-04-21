@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authenticate, authorize } from '../middleware/auth';
 import { apiLimiter } from '../middleware/rateLimiter';
-import { validate } from '../middleware/validate';
 import { pool } from '../utils/database';
 import logger from '../utils/logger';
 
@@ -267,7 +266,7 @@ router.post('/hackathons', apiLimiter, async (req, res, next) => {
 });
 
 // ─── ATS Resume Screening ───────────────────────────────────────────────────────
-router.post('/ats/screen', apiLimiter, async (req, res, next) => {
+router.post('/ats/screen', apiLimiter, async (req, res, _next) => {
   try {
     const { resumeText, jobDescription } = req.body;
 
@@ -380,7 +379,7 @@ router.get('/interviews/:id/questions', async (req, res, next) => {
   }
 });
 
-router.post('/interviews/:id/submit-answer', apiLimiter, async (req, res, next) => {
+router.post('/interviews/:id/submit-answer', apiLimiter, async (req, res, _next) => {
   try {
     const { id } = req.params;
     const { questionId, answer } = req.body;

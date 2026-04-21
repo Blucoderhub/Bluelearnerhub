@@ -34,11 +34,12 @@ export const brandColors = {
 export const brandConfig = {
   name: 'Bluelearnerhub',
   tagline: 'Learn. Code. Excel. Master Skills.',
-  poweredBy: 'Bluecoderhub',
-  domain: 'Bluelearnerhub.com',
+  poweredBy: 'Bluelearnerhub',
+  domain: 'bluecoderhub.com',
   social: {
-    twitter: '@Bluelearnerhub',
-    linkedin: 'Bluelearnerhub',
+    twitter: '@bluecoderhub',
+    linkedin: 'bluecoderhub',
     github: 'bluecoderhub',
   },
 }
+

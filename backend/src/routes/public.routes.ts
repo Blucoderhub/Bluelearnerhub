@@ -182,10 +182,8 @@ router.get('/candidates', authenticate, async (req, res) => {
   try {
     const { 
       search, 
-      skills, 
       minXp, 
       maxXp,
-      domain,
       sortBy = 'total_points',
       sortOrder = 'desc',
       page = '1',
@@ -257,7 +255,7 @@ router.get('/candidates', authenticate, async (req, res) => {
       );
 
       const skillsMap: Record<number, any[]> = {};
-      for (const skill of skillsResult.rows) {
+      for (const skill of skillsResult.rows as Array<{user_id: number}>) {
         if (!skillsMap[skill.user_id]) {
           skillsMap[skill.user_id] = [];
         }
@@ -296,7 +294,6 @@ router.get('/jobs/search', optionalAuth, async (req, res) => {
       location, 
       jobType, 
       domain,
-      minSalary,
       remote,
       sortBy = 'created_at',
       sortOrder = 'desc',

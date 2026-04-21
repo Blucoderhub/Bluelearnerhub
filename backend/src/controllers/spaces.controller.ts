@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
 import { db } from '../db';
-import { challenges, challengeSubmissions, spaces, dailyChallenges, users } from '../db/schema';
-import { eq, desc, and, sql, inArray } from 'drizzle-orm';
+import { challenges, challengeSubmissions, spaces, dailyChallenges } from '../db/schema';
+import { eq, desc, and, sql } from 'drizzle-orm';
 import { authenticate } from '../middleware/auth';
 import { GamificationService } from '../services/gamification.service';
 import { judge0Service } from '../services/judge0.service';
@@ -24,7 +24,6 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/spaces', async (req: Request, res: Response) => {
   try {
-    const { category, difficulty, type } = req.query;
 
     const query = db.select().from(spaces).where(eq(spaces.isActive, true));
 
@@ -140,7 +139,7 @@ router.get(
       }
 
       // Don't send solution to client
-      const { solution, ...safeChallenge } = challenge[0];
+      const { solution: _solution, ...safeChallenge } = challenge[0];
 
       // Increment view count or solve count
       await db
@@ -245,7 +244,7 @@ router.get('/submissions', authenticate, async (req: Request, res: Response) => 
       conditions.push(eq(challengeSubmissions.challengeId, parseInt(challengeId as string)));
     }
 
-    const [submissions, countResult] = await Promise.all([
+    const [submissions, _countResult] = await Promise.all([
       db
         .select({
           id: challengeSubmissions.id,
@@ -275,7 +274,7 @@ router.get('/submissions', authenticate, async (req: Request, res: Response) => 
       pagination: {
         page: parseInt(page as string),
         limit: parseInt(limit as string),
-        total: countResult[0]?.count || 0,
+        total: _countResult[0]?.count || 0,
       },
     });
   } catch (error) {
@@ -358,7 +357,7 @@ router.get('/daily', authenticate, async (req: Request, res: Response) => {
     }
 
     // Don't send solution
-    const { solution, ...safeChallenge } = daily[0].challenges;
+    const { solution: _solution, ...safeChallenge } = daily[0].challenges;
 
     res.json({
       challenge: safeChallenge,

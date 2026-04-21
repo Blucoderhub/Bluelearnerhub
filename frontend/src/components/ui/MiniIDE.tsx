@@ -6,7 +6,7 @@ import { Play, RotateCcw, CheckCircle2, Terminal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const DEFAULT_CODE = `# Welcome to BlueLearnerHub!
+const DEFAULT_CODE = `# Welcome to Bluelearnerhub!
 # This is a mini-demonstration of our IDE.
 
 def greet(name):

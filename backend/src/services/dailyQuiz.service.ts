@@ -8,7 +8,6 @@
  */
 
 import axios from 'axios';
-import { db } from '../db';
 import logger from '../utils/logger';
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL ?? 'http://localhost:8001';
@@ -145,7 +144,8 @@ function cleanupCache(): void {
 }
 
 // Start automatic cleanup every hour
-setInterval(cleanupCache, 60 * 60 * 1000);
+const cacheCleanupInterval = setInterval(cleanupCache, 60 * 60 * 1000);
+cacheCleanupInterval.unref?.();
 
 // ─── Generator ────────────────────────────────────────────────────────────────
 

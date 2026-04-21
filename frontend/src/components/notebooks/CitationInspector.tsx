@@ -90,6 +90,7 @@ export default function CitationInspector({
     setSelectedQuote(focusSnippet || '')
     setSelectedChunkIndex(focusChunkIndex ?? null)
     setNoteDraft('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source?.id, open, focusSnippet, focusChunkIndex])
 
   useEffect(() => {
@@ -98,8 +99,9 @@ export default function CitationInspector({
     api
       .get(`/notebooks/${notebookId}/sources/${source.id}/annotations`)
       .then(({ data }) => setAnnotations(data.annotations || []))
-      .catch((err) => console.error('Failed to load annotations', err))
+      .catch(() => console.error('Failed to load annotations'))
       .finally(() => setAnnotationLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, source?.id, notebookId])
 
   const saveAnnotation = async () => {
@@ -114,8 +116,8 @@ export default function CitationInspector({
       setAnnotations((prev) => [data.annotation, ...prev])
       setNoteDraft('')
       onAnnotationsChanged?.()
-    } catch (err) {
-      console.error('Failed to save annotation', err)
+    } catch {
+      console.error('Failed to save annotation')
     } finally {
       setSaving(false)
     }
@@ -127,8 +129,8 @@ export default function CitationInspector({
       await api.delete(`/notebooks/${notebookId}/sources/${source.id}/annotations/${annotationId}`)
       setAnnotations((prev) => prev.filter((item) => item.id !== annotationId))
       onAnnotationsChanged?.()
-    } catch (err) {
-      console.error('Failed to delete annotation', err)
+    } catch {
+      console.error('Failed to delete annotation')
     }
   }
 

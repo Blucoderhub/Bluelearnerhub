@@ -169,7 +169,7 @@ describe('ErrorBoundary', () => {
       let shouldThrow = true
       const TestComponent = () => <ThrowError shouldThrow={shouldThrow} />
 
-      const { rerender } = render(
+      render(
         <TestWrapper>
           <ErrorBoundary>
             <TestComponent />

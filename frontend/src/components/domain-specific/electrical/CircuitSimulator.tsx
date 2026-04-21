@@ -1,18 +1,11 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Play, Pause, Trash2, Download, Upload, Zap, Plus, Minus } from 'lucide-react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Play, Trash2, Download } from 'lucide-react'
 
 interface Component {
   id: string
@@ -44,9 +37,9 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
   const [simulationResults, setSimulationResults] = useState<any>(null)
   const [componentValue, setComponentValue] = useState('1000')
   const [gridSize] = useState(20)
-  const [showGrid, setShowGrid] = useState(true)
+  const [showGrid, _setShowGrid] = useState(true)
 
-  const drawCircuit = () => {
+  const _drawCircuit = () => {
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -517,7 +510,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
 }
 
 function ComponentButton({
-  type,
+  type: _type,
   icon,
   label,
   selected,

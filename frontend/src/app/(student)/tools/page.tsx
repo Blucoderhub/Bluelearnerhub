@@ -2,7 +2,7 @@
 
 import React from 'react'
 import DomainTools from '@/components/tools/DomainTools'
-import { Puzzle, Settings2, Sparkles } from 'lucide-react'
+import { Settings2, Sparkles } from 'lucide-react'
 
 export default function ToolsPage() {
   return (

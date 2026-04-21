@@ -7,7 +7,7 @@
 import { Request, Response } from 'express';
 import { db } from '../db';
 import { sanitizeText, sanitizeRichText } from '../utils/sanitize';
-import { eq, and, desc, ilike, SQL } from 'drizzle-orm';
+import { eq, and, desc, SQL } from 'drizzle-orm';
 import {
   organizations, orgMembers, talentPool, innovationChallenges,
 } from '../db/schema-v2';
@@ -67,6 +67,7 @@ export const getOrganization = async (req: Request, res: Response) => {
       .limit(10);
 
     // Load active challenges
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const challenges = await db
       .select()
       .from(innovationChallenges)

@@ -30,7 +30,7 @@ export default function CADViewer({
   height = '600px',
   showControls = true,
   backgroundColor = '#1a1a1a',
-  onMeasure,
+  onMeasure: _onMeasure,
 }: CADViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -42,7 +42,7 @@ export default function CADViewer({
   const [showGrid, setShowGrid] = useState(true)
   const [showAxes] = useState(true)
   const [wireframe, setWireframe] = useState(false)
-  const [modelInfo, setModelInfo] = useState<{
+  const [modelInfo, _setModelInfo] = useState<{
     vertices: number
     faces: number
     dimensions: { x: number; y: number; z: number }
@@ -93,10 +93,11 @@ export default function CADViewer({
     modelRef.current = cube
   }
 
-  useEffect(() => {
-    if (!containerRef.current) return
+useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
 
-    // Initialize Scene
+    // Scene setup
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(backgroundColor)
     sceneRef.current = scene
@@ -104,7 +105,7 @@ export default function CADViewer({
     // Initialize Camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      containerRef.current.clientWidth / containerRef.current.clientHeight,
+      container.clientWidth / container.clientHeight,
       0.1,
       1000
     )
@@ -113,10 +114,10 @@ export default function CADViewer({
 
     // Initialize Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+    renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
-    containerRef.current.appendChild(renderer.domElement)
+    container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
     // Initialize Controls
@@ -173,11 +174,11 @@ export default function CADViewer({
 
     // Handle Window Resize
     const handleResize = () => {
-      if (!containerRef.current) return
+      if (!container) return
 
-      camera.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight
+      camera.aspect = container.clientWidth / container.clientHeight
       camera.updateProjectionMatrix()
-      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+      renderer.setSize(container.clientWidth, container.clientHeight)
     }
     window.addEventListener('resize', handleResize)
 
@@ -185,7 +186,9 @@ export default function CADViewer({
     return () => {
       window.removeEventListener('resize', handleResize)
       renderer.dispose()
-      containerRef.current?.removeChild(renderer.domElement)
+      if (container && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement)
+      }
     }
   }, [modelUrl, backgroundColor])
 

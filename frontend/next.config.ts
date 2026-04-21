@@ -25,10 +25,6 @@ const nextConfig = {
     ],
   },
 
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
   webpack: (config: any, { isServer }: { isServer: boolean }) => {
     // Handle monaco-editor
     config.module.rules.push({

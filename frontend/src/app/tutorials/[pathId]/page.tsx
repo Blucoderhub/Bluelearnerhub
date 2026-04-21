@@ -5,20 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Cpu,
   Settings,
-  Zap,
-  Building2,
   Briefcase,
   BookOpen,
   Search,
-  ChevronRight,
-  Star,
   ArrowLeft,
   Play,
 } from 'lucide-react'
 import { LucideIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { tutorialsAPI } from '@/lib/api-civilization'

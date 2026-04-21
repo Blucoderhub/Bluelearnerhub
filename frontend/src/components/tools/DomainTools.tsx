@@ -52,7 +52,7 @@ export default function DomainTools() {
     try {
       const parsed = JSON.parse(input)
       setOutput(JSON.stringify(parsed, null, 2))
-    } catch (err) {
+    } catch {
       setOutput('Invalid JSON Input')
     }
   }
@@ -61,7 +61,7 @@ export default function DomainTools() {
     try {
       if (mode === 'encode') setOutput(btoa(input))
       else setOutput(atob(input))
-    } catch (err) {
+    } catch {
       setOutput('Base64 Conversion Error')
     }
   }

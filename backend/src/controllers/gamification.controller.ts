@@ -10,11 +10,10 @@
 
 import { Request, Response } from 'express';
 import { db } from '../db';
-import { eq, sql, desc } from 'drizzle-orm';
-import { users, achievements, userAchievements } from '../db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { achievements, userAchievements } from '../db/schema';
 import logger from '../utils/logger';
 import { GamificationService, LeaderboardPeriod } from '../services/gamification.service';
-import { toUTCISOString } from '../utils/timezone';
 
 // ─── All defined achievements catalogue (shown with lock/unlock state) ──────
 
@@ -55,11 +54,11 @@ export const getMyAchievements = async (req: Request, res: Response) => {
       .orderBy(desc(userAchievements.earnedAt));
 
     // Build set of earned titles for quick lookup
-    const earnedTitles = new Set(earned.map((e: any) => e.title));
+    const _earnedTitles = new Set(earned.map((e) => (e as { title: string }).title));
 
     // Merge catalogue with earned state
     const enriched = ALL_ACHIEVEMENTS.map((a) => {
-      const match = earned.find((e: any) => e.title === a.title);
+      const match = earned.find((e) => (e as { title: string }).title === a.title);
       return {
         id:          a.code,
         title:       a.title,

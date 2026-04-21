@@ -11,7 +11,7 @@
 
 import { Request, Response } from 'express';
 import { db } from '../db';
-import { eq, ilike, or, sql, desc, asc } from 'drizzle-orm';
+import { eq, ilike, desc } from 'drizzle-orm';
 import { quizzes, questions, modules, courses, specializations, domains } from '../db/schema';
 import logger from '../utils/logger';
 
@@ -114,8 +114,9 @@ export const getExercise = async (req: Request, res: Response) => {
       .from(questions)
       .where(eq(questions.quizId, id));
 
-    const questionsWithoutAnswers = qs.map((q: any) => {
-      const { correctAnswer, ...rest } = q;
+    const questionsWithoutAnswers = qs.map((q) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { correctAnswer: _correctAnswer, ...rest } = q;
       return rest;
     });
 

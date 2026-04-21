@@ -16,10 +16,9 @@
 
 import { Request, Response } from 'express';
 import axios from 'axios';
-import crypto from 'crypto';
 import { db } from '../db';
 import { sanitizeText, sanitizeRichText } from '../utils/sanitize';
-import { eq, desc, and, sql } from 'drizzle-orm';
+import { eq, desc, sql } from 'drizzle-orm';
 import {
   qnaQuestions, qnaAnswers, qnaVotes, tags,
   qnaQuestionTags, userReputation,
@@ -50,7 +49,7 @@ async function adjustReputation(userId: number, delta: number) {
     });
 }
 
-function computeRank(points: number): string {
+function _computeRank(points: number): string {
   if (points >= 5000) return 'Platform Authority';
   if (points >= 1000) return 'Domain Expert';
   if (points >= 500)  return 'Domain Helper';
@@ -64,7 +63,7 @@ function computeRank(points: number): string {
 
 export const listQuestions = async (req: Request, res: Response) => {
   try {
-    const { domain, tag, page = '1', limit = '20' } = req.query as Record<string, string>;
+    const { page = '1', limit = '20' } = req.query as Record<string, string>;
     const rawSort = String(req.query.sort ?? 'recent');
     const sort = ['recent', 'votes'].includes(rawSort) ? rawSort : 'recent';
     const safeLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);

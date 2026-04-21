@@ -7,10 +7,9 @@
 import { Request, Response } from 'express';
 import { db } from '../db';
 import { eq, and, desc, sql } from 'drizzle-orm';
-import { learningTracks, trackCourses, trackEnrollments, certificates, certificateTemplates } from '../db/schema-v2';
+import { learningTracks, trackCourses, trackEnrollments } from '../db/schema-v2';
 import { courses } from '../db/schema';
 import { GamificationService } from '../services/gamification.service';
-import { v4 as uuidv4 } from 'uuid';
 import logger from '../utils/logger';
 
 export const listTracks = async (req: Request, res: Response) => {

@@ -54,6 +54,7 @@ export function AIBubblePreview() {
     if (isOpen && messages.length === 0) {
       playNext()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   return (
