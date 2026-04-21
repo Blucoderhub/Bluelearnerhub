@@ -654,6 +654,19 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ════════════════════════════════════════════════
+          FOOTER — Powered by Bluecoderhub
+      ════════════════════════════════════════════════ */}
+      <footer className="border-t border-border/40 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground font-mono">
+              <span className="font-bold text-foreground">Bluelearnerhub</span> powered by <span className="font-bold text-foreground">Bluecoderhub</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+
     </main>
   )
 }
