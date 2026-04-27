@@ -1,15 +1,56 @@
 import Stripe from 'stripe';
 import { db } from '../db';
-import { users, userSubscriptions } from '../db/schema';
-import { eq } from 'drizzle-orm';
-import dotenv from 'dotenv';
 
-dotenv.config();
+// Initialize lazily to avoid circular dependency
+let stripeInstance: Stripe | null = null;
+let stripeKey: string | undefined;
 
-const stripeKey = process.env.STRIPE_SECRET_KEY || '';
-export const stripe = stripeKey
-  ? new Stripe(stripeKey, { apiVersion: '2023-10-16' as any })
-  : null as unknown as Stripe;
+function getStripe() {
+  if (!stripeInstance && !stripeKey) {
+    stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (stripeKey) {
+      stripeInstance = new Stripe(stripeKey, { apiVersion: '2023-10-16' as any });
+    }
+  }
+  return stripeInstance;
+}
+
+export const stripe = {
+  get isConfigured() { return !!stripeKey; },
+  // Forward to the actual Stripe instance lazily
+  checkout: {
+    sessions: {
+      create: async (...args: any[]) => {
+        const s = getStripe();
+        if (!s) throw new Error('Stripe not configured');
+        return (s.checkout.sessions.create as any)(...args);
+      }
+    }
+  },
+  subscriptions: {
+    create: async (...args: any[]) => {
+      const s = getStripe();
+      if (!s) throw new Error('Stripe not configured');
+      return (s.subscriptions.create as any)(...args);
+    }
+  },
+  billingPortal: {
+    sessions: {
+      create: async (...args: any[]) => {
+        const s = getStripe();
+        if (!s) throw new Error('Stripe not configured');
+        return (s.billingPortal.sessions.create as any)(...args);
+      }
+    }
+  },
+  webhooks: {
+    constructEvent: (...args: any[]) => {
+      const s = getStripe();
+      if (!s) throw new Error('Stripe not configured');
+      return (s.webhooks.constructEvent as any)(...args);
+    }
+  }
+};
 
 const PRICE_IDS = {
     EXPLORER: process.env.STRIPE_PRICE_EXPLORER!,
@@ -18,9 +59,9 @@ const PRICE_IDS = {
 };
 
 export class StripeService {
-    static async createCheckoutSession(userId: number, tier: 'EXPLORER' | 'INNOVATOR' | 'ENTERPRISE') {
+    static async createCheckoutSession(userId: string, tier: 'EXPLORER' | 'INNOVATOR' | 'ENTERPRISE') {
         const user = await db.query.users.findFirst({
-            where: eq(users.id, userId),
+            _id: userId,
         });
 
         if (!user) throw new Error('User not found');
@@ -46,9 +87,9 @@ export class StripeService {
         return session;
     }
 
-    static async createPortalSession(userId: number) {
+    static async createPortalSession(userId: string) {
         const subscription = await db.query.userSubscriptions.findFirst({
-            where: eq(userSubscriptions.userId, userId),
+            userId,
         });
 
         if (!subscription || !subscription.stripeCustomerId) {
@@ -66,26 +107,26 @@ export class StripeService {
     static async handleWebhook(event: Stripe.Event) {
         switch (event.type) {
             case 'checkout.session.completed': {
-                const session = event.data.object as any; // Cast to any to access metadata safely
-                const userId = parseInt(session.metadata!.userId);
+                const session = event.data.object as any;
+                const userId = session.metadata!.userId;
                 const tier = session.metadata!.tier as any;
 
-                await db.insert(userSubscriptions).values({
-                    userId,
-                    stripeCustomerId: session.customer as string,
-                    stripeSubscriptionId: session.subscription as string,
-                    tier,
-                    status: 'active',
-                    currentPeriodEnd: new Date(), // Will be updated by invoice.paid or subscription.updated
-                }).onConflictDoUpdate({
-                    target: userSubscriptions.userId,
-                    set: {
+                // Upsert subscription
+                const existing = await db.query.userSubscriptions.findFirst({ userId });
+                if (existing) {
+                    await db.query.userSubscriptions.update(
+                        { userId },
+                        { stripeCustomerId: session.customer as string, stripeSubscriptionId: session.subscription as string, tier }
+                    );
+                } else {
+                    await db.query.userSubscriptions.create({
+                        userId,
+                        stripeCustomerId: session.customer as string,
                         stripeSubscriptionId: session.subscription as string,
                         tier,
-                        status: 'active',
-                        updatedAt: new Date(),
-                    }
-                });
+                        createdAt: new Date(),
+                    });
+                }
                 break;
             }
 
@@ -93,17 +134,14 @@ export class StripeService {
             case 'customer.subscription.deleted': {
                 const subscription = event.data.object as any;
                 const dbSub = await db.query.userSubscriptions.findFirst({
-                    where: eq(userSubscriptions.stripeSubscriptionId, subscription.id),
+                    stripeSubscriptionId: subscription.id,
                 });
 
                 if (dbSub) {
-                    await db.update(userSubscriptions)
-                        .set({
-                            status: subscription.status as string,
-                            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-                            updatedAt: new Date(),
-                        })
-                        .where(eq(userSubscriptions.id, dbSub.id));
+                    await db.query.userSubscriptions.update(
+                        { _id: dbSub._id },
+                        { status: subscription.status as string, expiresAt: new Date(subscription.current_period_end * 1000) }
+                    );
                 }
                 break;
             }

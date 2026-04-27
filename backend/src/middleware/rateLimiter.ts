@@ -86,3 +86,30 @@ export const webhookLimiter = rateLimit({
     return !!req.headers['stripe-signature']
   },
 });
+
+// Hackathon-specific rate limits for 600+ user events
+export const hackathonLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // 100 requests per minute per IP during hackathon
+  message: { success: false, message: 'Hackathon rate limit exceeded. Please slow down.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Quiz/Arena rate limits — multiple users submitting at once
+export const quizLimiter = rateLimit({
+  windowMs: 30 * 1000, // 30 seconds
+  max: 20, // 20 quiz submissions per 30s
+  message: { success: false, message: 'Quiz rate limit exceeded' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Code execution — expensive operation
+export const codeExecutionLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // 10 code runs per minute per user
+  message: { success: false, message: 'Code execution limit exceeded. Wait before running again.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

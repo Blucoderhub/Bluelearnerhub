@@ -11,6 +11,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+EXPOSED_GEMINI_KEY_PATTERN="YOUR_EXPOSED_GEMINI_KEY_HERE"
 
 echo -e "${BLUE}╔════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║  EdTech Platform Security Remediation      ║${NC}"
@@ -48,8 +49,8 @@ for file in "${PYTHON_FILES[@]}"; do
     if [ -f "$file" ]; then
         echo "  Processing: $file"
         # Replace hardcoded API key with environment variable reference
-        sed -i 's/AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM/YOUR_GEMINI_API_KEY/g' "$file"
-        sed -i 's/"AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM"/""/g' "$file"
+        sed -i "s/${EXPOSED_GEMINI_KEY_PATTERN}/YOUR_GEMINI_API_KEY/g" "$file"
+        sed -i "s/\"${EXPOSED_GEMINI_KEY_PATTERN}\"/\"\"/g" "$file"
     fi
 done
 
@@ -109,7 +110,7 @@ if [ -d ".git" ]; then
     
     # Scan history for patterns
     echo "Scanning Git history for patterns..."
-    if grep -r "AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM" .git/objects 2>/dev/null | grep -q .; then
+    if grep -r "$EXPOSED_GEMINI_KEY_PATTERN" .git/objects 2>/dev/null | grep -q .; then
         echo -e "${RED}⚠️  Exposed API key found in Git history!${NC}"
         echo "Run history cleanup commands above"
     else
@@ -284,7 +285,7 @@ echo ""
 ISSUES=0
 
 # Check for remaining exposed keys
-if grep -r "AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM" --include="*.ts" --include="*.js" --include="*.py" . 2>/dev/null | grep -v node_modules | grep -v ".git"; then
+if grep -r "$EXPOSED_GEMINI_KEY_PATTERN" --include="*.ts" --include="*.js" --include="*.py" . 2>/dev/null | grep -v node_modules | grep -v ".git"; then
     echo -e "${RED}❌ Exposed API keys still found in source code${NC}"
     ISSUES=$((ISSUES + 1))
 else

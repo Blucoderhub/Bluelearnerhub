@@ -14,6 +14,11 @@ export class SocketService {
         origin: config.corsOrigins,
         credentials: true,
       },
+      // Handle 600+ concurrent connections
+      pingTimeout: 60000,      // 60s ping timeout
+      pingInterval: 25000,    // 25s ping interval
+      transports: ['websocket', 'polling'], // Prefer websocket
+      maxHttpBufferSize: 1e8, // 100MB for code submissions
     });
 
     this.setupMiddleware();

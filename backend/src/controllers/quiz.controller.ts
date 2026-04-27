@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { QuizService } from '../services/quiz';
 import { db } from '../db';
-import { learningBehaviorEvents } from '../db/schema-v2';
 import { and, desc, eq } from 'drizzle-orm';
+import { learningBehaviorEvents } from '../db/schema-v2';
 import logger from '../utils/logger';
 import { fetchAdaptiveGuidanceFromAI, fallbackQuizGuidance } from '../services/adaptiveGuidance';
 

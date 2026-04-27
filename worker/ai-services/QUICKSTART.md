@@ -89,7 +89,7 @@ docker build -t edtech-ai:latest .
 
 # Run container
 docker run -p 8000:8000 \
-  -e GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM \
+  -e GEMINI_API_KEY=YOUR_GEMINI_API_KEY \
   -e DATABASE_URL=postgresql://... \
   edtech-ai:latest
 
@@ -116,7 +116,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/edtech_db
 REDIS_URL=redis://localhost:6379
 
 # AI APIs
-GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 
 # JWT
 JWT_SECRET=your-secret-key

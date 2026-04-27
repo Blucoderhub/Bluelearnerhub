@@ -10,6 +10,8 @@ import { errorHandler, notFound } from './middleware/error.middleware';
 import { generalLimiter } from './middleware/rateLimiter';
 import { requestContext } from './middleware/requestContext';
 import { csrfProtection } from './middleware/csrf';
+import { getDBStatus } from './db/mongodb';
+import { redisClient } from './utils/database';
 import logger from './utils/logger';
 
 export function createApp(): Application {
@@ -75,10 +77,7 @@ export function createApp(): Application {
     })
   );
 
-  // CORS
-  // Build the allowed-origins set once: CORS_ORIGINS env var + FRONTEND_URL env var.
-  // In production we also accept any *.vercel.app preview URL for this project so that
-  // preview deploys work without having to update CORS_ORIGINS on every PR.
+  // CORS - Build the allowed-origins set from config
   const allowedOrigins = new Set<string>(config.corsOrigins);
   if (config.frontendUrl) allowedOrigins.add(config.frontendUrl);
 
@@ -87,13 +86,16 @@ export function createApp(): Application {
       // Allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
 
-      const isAllowed =
-        allowedOrigins.has(origin) ||
-        config.nodeEnv === 'development' ||
-        /^https:\/\/[a-z0-9-]+-bluelearnerhub\.vercel\.app$/.test(origin) ||
-        origin === 'https://bluelearnerhub.vercel.app';
+      // Only allow specific origins - no wildcard patterns
+      const productionOrigins = [
+        'https://bluelearnerhub.com',
+        'https://www.bluelearnerhub.com',
+      ];
+      const isProductionAllowed = productionOrigins.includes(origin);
+      const isDevAllowed = config.nodeEnv === 'development';
+      const isConfigAllowed = allowedOrigins.has(origin);
 
-      if (isAllowed) {
+      if (isProductionAllowed || isDevAllowed || isConfigAllowed) {
         callback(null, true);
       } else {
         logger.warn(`CORS blocked origin: ${origin}`);
@@ -115,11 +117,15 @@ export function createApp(): Application {
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
   // Cookie parser with session secret
-  if (!config.sessionSecret) {
-    logger.warn('⚠️  SESSION_SECRET not set — using insecure fallback. Set SESSION_SECRET in your environment.');
+  const sessionSecret = config.sessionSecret;
+  if (!sessionSecret) {
+    if (config.nodeEnv === 'production') {
+      logger.error('FATAL: SESSION_SECRET is required in production. Set SESSION_SECRET in your environment.');
+      process.exit(1);
+    }
+    logger.warn('⚠️  SESSION_SECRET not set — using insecure fallback in development only.');
   }
-  const sessionSecret = config.sessionSecret || 'dev-secret-change-me-not-for-production';
-  app.use(cookieParser(sessionSecret));
+  app.use(cookieParser(sessionSecret || 'dev-secret-change-me-in-dev'));
 
   // Compression
   app.use(compression());
@@ -149,10 +155,26 @@ export function createApp(): Application {
 
   // Health check
   app.get('/health', (_req, res) => {
-    res.json({
-      status: 'OK',
+    const mongo = getDBStatus();
+    const redisStatus = redisClient ? redisClient.status : 'disabled';
+    const isHealthy = mongo.isConnected;
+
+    res.status(isHealthy ? 200 : 503).json({
+      status: isHealthy ? 'OK' : 'DEGRADED',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
+      services: {
+        mongodb: {
+          connected: mongo.isConnected,
+          readyState: mongo.readyState,
+          host: mongo.host || null,
+          name: mongo.name || null,
+        },
+        redis: {
+          enabled: Boolean(redisClient),
+          status: redisStatus,
+        },
+      },
     });
   });
 

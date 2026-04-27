@@ -10,6 +10,35 @@ const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd  = nodeEnv === 'production';
 const isTest  = nodeEnv === 'test';
 
+function buildMongoUrl(): string {
+  const explicitMongoUrl = process.env.MONGODB_URL?.trim();
+  if (explicitMongoUrl) {
+    return explicitMongoUrl;
+  }
+
+  const host = process.env.DB_HOST?.trim();
+  if (!host) {
+    return 'mongodb://localhost:27017/bluelearnerhub';
+  }
+
+  const port = process.env.DB_PORT || '27017';
+  const name = process.env.DB_NAME || 'bluelearnerhub';
+  const user = process.env.DB_USER?.trim();
+  const password = process.env.DB_PASSWORD?.trim();
+
+  const credentials = user
+    ? `${encodeURIComponent(user)}:${encodeURIComponent(password || '')}@`
+    : '';
+
+  return `mongodb://${credentials}${host}:${port}/${name}`;
+}
+
+const mongoUrl = buildMongoUrl();
+const legacySqlUrl = process.env.DATABASE_URL?.trim() || '';
+const runSqlMigrations =
+  process.env.RUN_SQL_MIGRATIONS === 'true' ||
+  (process.env.RUN_SQL_MIGRATIONS !== 'false' && legacySqlUrl.length > 0);
+
 /**
  * Returns true when a secret value looks like a placeholder that was never
  * replaced.  These patterns are intentionally distinct from real secrets so
@@ -68,9 +97,19 @@ if (!isTest) {
   // ── Production-only requirements ────────────────────────────────────────────
 
   if (isProd) {
-    // Database
-    if (!process.env.DATABASE_URL && !process.env.DB_HOST) {
-      errors.push('DATABASE_URL is required in production (set to your Neon/Render PostgreSQL URL)');
+    // Primary database
+    if (!process.env.MONGODB_URL && !process.env.DB_HOST) {
+      errors.push('MONGODB_URL is required in production (or provide DB_HOST/DB_PORT/DB_NAME for MongoDB)');
+    }
+
+    // Legacy SQL migrations are optional, but if explicitly enabled they must be configured
+    if (process.env.RUN_SQL_MIGRATIONS === 'true' && !legacySqlUrl) {
+      errors.push('RUN_SQL_MIGRATIONS=true but DATABASE_URL is not set for legacy SQL migrations');
+    }
+
+    // Redis - required for production (caching, sessions, rate limiting)
+    if (!process.env.REDIS_URL && !process.env.REDIS_HOST) {
+      errors.push('REDIS_URL is required in production — set to your Redis URL (e.g. from Upstash, Redis Cloud)');
     }
 
     // CORS / cookie domain
@@ -157,26 +196,32 @@ export const config = {
   // CORS
   corsOrigins: (process.env.CORS_ORIGINS || 'http://localhost:3000,http://localhost:5000').split(',').map((o) => o.trim()),
 
-  // Database
+  // Database (MongoDB)
   database: {
-    url:                    process.env.DATABASE_URL,
-    host:                   process.env.DB_HOST       || process.env.POSTGRES_HOST || 'localhost',
-    port:                   parseInt(process.env.DB_PORT || process.env.POSTGRES_PORT || '5432'),
-    name:                   process.env.DB_NAME       || process.env.POSTGRES_DB   || 'bluelearnerhub',
-    user:                   process.env.DB_USER       || process.env.POSTGRES_USER || 'postgres',
-    password:               process.env.DB_PASSWORD   || process.env.POSTGRES_PASSWORD || '',
-    maxConnections:         parseInt(process.env.DB_MAX_CONNECTIONS  || '20'),
-    idleTimeoutMillis:      parseInt(process.env.DB_IDLE_TIMEOUT     || '30000'),
-    connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT || '2000'),
+    provider: 'mongodb',
+    url: mongoUrl,
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '27017'),
+    name: process.env.DB_NAME || 'bluelearnerhub',
+    user: process.env.DB_USER || '',
+    password: process.env.DB_PASSWORD || '',
   },
 
-  // Redis
+  legacySql: {
+    url: legacySqlUrl,
+    migrationsEnabled: runSqlMigrations,
+  },
+
+  // Redis - scaled for 600+ concurrent users
   redis: {
     url:      process.env.REDIS_URL,
     host:     process.env.REDIS_HOST     || 'localhost',
     port:     parseInt(process.env.REDIS_PORT || '6379'),
     password: process.env.REDIS_PASSWORD || '',
     db:       parseInt(process.env.REDIS_DB   || '0'),
+    maxRetriesPerRequest: 3,
+    enableReadyCheck: true,
+    enableOfflineQueue: false, // Fail fast for 600+ users
   },
 
   // JWT
@@ -196,10 +241,10 @@ export const config = {
   // Shorthand for middleware that only needs the cookie secret
   sessionSecret: process.env.SESSION_SECRET || process.env.COOKIE_SECRET || '',
 
-  // Rate Limiting
+  // Rate Limiting - increased for hackathons with 600+ users
   rateLimit: {
-    windowMs:    parseInt(process.env.RATE_LIMIT_WINDOW_MS    || '900000'), // 15 min
-    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
+    windowMs:    parseInt(process.env.RATE_LIMIT_WINDOW_MS    || '60000'), // 1 minute (finer granularity)
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '200'), // Increased from 100
   },
 
   // File Upload

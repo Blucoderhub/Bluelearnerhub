@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { aiService } from '../services/ai.service';
-import { QuizService } from '../services/quiz.service';
+import { QuizService } from '../services/quiz';
 import { consumeCredit } from '../middleware/credits';
 import { runAgentCommand, generateQuizQuestions, isInProcess } from '../services/aiCoreBridge.service';
+import logger from '../utils/logger';
 
 export const chat = async (req: Request, res: Response) => {
     try {
@@ -41,9 +42,12 @@ const user = req.user as {
         res.write('data: [DONE]\n\n');
         res.end();
 
-        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
+        const userId = user?.id;
+        if (userId) {
+            await consumeCredit(String(userId)).catch(err => logger.error('Credit consumption failed:', err));
+        }
     } catch (error) {
-        console.error('Streaming AI error:', error);
+        logger.error('Streaming AI error:', error);
         if (!res.headersSent) {
             res.status(500).json({ success: false, message: 'AI Chat failed', error: 'AI_CHAT_ERROR' });
         } else {
@@ -56,7 +60,7 @@ const user = req.user as {
 export const getDailyQuiz = async (req: Request, res: Response) => {
     try {
         const userId = req.user!.id;
-        const quiz = await QuizService.getDailyQuiz(userId);
+        const quiz = await QuizService.getDailyQuiz(String(userId));
         res.json(quiz);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to generate quiz', error: 'QUIZ_ERROR' });
@@ -67,7 +71,7 @@ export const submitQuiz = async (req: Request, res: Response) => {
     try {
         const userId = req.user!.id;
         const { quizId, answers } = req.body;
-        const result = await QuizService.submitQuiz(userId, quizId, answers);
+        const result = await QuizService.submitQuiz(String(userId), String(quizId), answers);
         res.json(result);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Quiz submission failed', error: 'QUIZ_SUBMISSION_ERROR' });
@@ -113,9 +117,12 @@ const user = req.user as {
         res.write('data: [DONE]\n\n');
         res.end();
 
-        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
+        const reviewUserId = user?.id;
+        if (reviewUserId) {
+            await consumeCredit(String(reviewUserId)).catch(err => logger.error('Credit consumption failed:', err));
+        }
     } catch (error) {
-        console.error('Project review streaming error:', error);
+        logger.error('Project review streaming error:', error);
         if (!res.headersSent) {
             res.status(500).json({ success: false, message: 'Project review failed', error: 'PROJECT_REVIEW_ERROR' });
         } else {
@@ -145,7 +152,10 @@ export const getRecommendations = async (req: Request, res: Response) => {
 
         res.json({ success: true, data: { recommendations } });
 
-        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
+        const creditUserId2 = user?.id;
+        if (creditUserId2) {
+            await consumeCredit(creditUserId2).catch(err => logger.error('Credit consumption failed:', err));
+        }
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch recommendations', error: 'RECOMMENDATIONS_ERROR' });
     }
@@ -167,8 +177,11 @@ export const getHackathonHelp = async (req: Request, res: Response) => {
             { hackathonTheme }
         );
 
-        const user = req.user as any;
-        await consumeCredit(user?.id).catch(err => console.error('Credit consumption failed:', err));
+        const helpUser = req.user as any;
+        const helpUserId = helpUser?.id;
+        if (helpUserId) {
+            await consumeCredit(helpUserId).catch(err => logger.error('Credit consumption failed:', err));
+        }
 
         res.json({ success: true, data: { help } });
     } catch (error) {
@@ -206,7 +219,7 @@ export const generate = async (req: Request, res: Response) => {
             inProcess: isInProcess,
         });
     } catch (error) {
-        console.error('[ai.controller] generate error:', error);
+        logger.error('[ai.controller] generate error:', error);
         return res.status(500).json({ success: false, error: 'AI generation failed' });
     }
 };
@@ -228,7 +241,7 @@ export const agentRun = async (req: Request, res: Response) => {
         const result = await runAgentCommand(command.trim(), agent_type);
         return res.json({ success: true, ...result });
     } catch (error) {
-        console.error('[ai.controller] agentRun error:', error);
+        logger.error('[ai.controller] agentRun error:', error);
         return res.status(500).json({ success: false, error: 'Agent command failed' });
     }
 };
@@ -264,7 +277,7 @@ export const generateQuiz = async (req: Request, res: Response) => {
 
         return res.json({ success: true, ...result });
     } catch (error) {
-        console.error('[ai.controller] generateQuiz error:', error);
+        logger.error('[ai.controller] generateQuiz error:', error);
         return res.status(500).json({ success: false, error: 'Quiz generation failed' });
     }
 };

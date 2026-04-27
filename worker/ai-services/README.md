@@ -177,7 +177,7 @@ MONGODB_URI=mongodb://localhost:27017/edtech_logs
 REDIS_URL=redis://localhost:6379
 
 # AI APIs
-GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 
 # JWT
 JWT_SECRET=your-secret-key

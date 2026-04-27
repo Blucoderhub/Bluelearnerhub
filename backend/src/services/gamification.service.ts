@@ -155,7 +155,7 @@ export class GamificationService {
             return cached;
         }
 
-        let dateFilter = undefined;
+        let dateFilter: any = undefined;
         const now = new Date();
         const nowUtc = new Date(Date.UTC(
             now.getUTCFullYear(),

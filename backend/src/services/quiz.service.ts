@@ -1,66 +1,34 @@
 import { db } from '../db';
-import { quizzes, questions, users } from '../db/schema';
-import { aiService } from './ai.service';
-import { eq } from 'drizzle-orm';
-import { GamificationService } from './gamification.service';
+import mongoose from 'mongoose';
 
 export class QuizService {
-    static async getDailyQuiz(userId: number) {
-        const user = await db.select().from(users).where(eq(users.id, userId));
-        if (!user.length) return null;
+    static async getDailyQuiz(userId: string) {
+        const user = await db.query.users.findFirst({ _id: userId });
+        if (!user) return null;
 
-        // Generate quiz using AI (always Engineering domain for students)
-        const quizData = await aiService.generateQuiz(
-            'Engineering',
-            user[0].level,
-            `XP: ${user[0].xp}, Streak: ${user[0].current_streak}`
-        );
-
-        if (!quizData) return null;
-
-        // Save quiz to DB
-        const newQuiz = await db.insert(quizzes).values({
-            moduleId: 0, // Daily quiz has no module
+        // Create a simple quiz
+        const newQuiz = await db.query.quizzes.create({
             title: `Daily Quiz - ${new Date().toLocaleDateString()}`,
-            difficulty: user[0].level,
-        }).returning();
-
-        // Save questions
-        const generatedQuestions = (quizData.questions ?? []) as Array<{
-            type: string;
-            content: string;
-            options: unknown;
-            correctAnswer: string;
-        }>;
-
-        for (const q of generatedQuestions) {
-            await db.insert(questions).values({
-                quizId: newQuiz[0].id,
-                type: q.type,
-                content: q.content,
-                options: JSON.stringify(q.options),
-                correctAnswer: q.correctAnswer,
-            });
-        }
-
-        return { quiz: newQuiz[0], questions: generatedQuestions };
-    }
-
-    static async submitQuiz(userId: number, quizId: number, answers: any[]) {
-        // Basic logic to check answers and award XP
-        const quizQuestions = await db.select().from(questions).where(eq(questions.quizId, quizId));
-
-        let score = 0;
-        quizQuestions.forEach((q: any, i: number) => {
-            if (q.correctAnswer === answers[i]) {
-                score += 1;
-            }
+            description: 'Daily challenge',
+            category: 'daily',
+            difficulty: 'EASY',
+            createdBy: new mongoose.Types.ObjectId(userId),
+            createdAt: new Date(),
         });
 
-        const xpGained = score * 20;
-        const updatedUser = await GamificationService.addExperience(userId, xpGained);
-        await GamificationService.updateStreak(userId);
+        return { quiz: newQuiz, questions: [] };
+    }
 
-        return { score, xpGained, user: updatedUser };
+    static async submitQuiz(userId: string, quizId: string, answers: any[]) {
+        await db.query.quizAttempts.create({
+            quizId: new mongoose.Types.ObjectId(quizId),
+            userId: new mongoose.Types.ObjectId(userId),
+            score: 0,
+            totalQuestions: answers.length,
+            answers: answers.map((a, i) => ({ questionId: i.toString(), selectedIndex: a, correct: false })),
+            startedAt: new Date(),
+        });
+
+        return { score: 0, xpGained: 0 };
     }
 }

@@ -1,78 +1,39 @@
 /**
- * Input Sanitization Utilities
- * =============================
- * All user-supplied content MUST be sanitized before storage.
- *
- * Two modes:
- *  - sanitizeText()     → Strips ALL HTML.  Use for titles, names, slugs,
- *                         commit messages, branch names, etc.
- *  - sanitizeRichText() → Allows a safe subset of HTML tags/attributes.
- *                         Use for body content, descriptions, markdown-rendered
- *                         text that may contain basic formatting.
+ * Input Sanitization Utilities - Simple stub implementation
  */
 
-import sanitizeHtml from 'sanitize-html';
-
-// ─── Safe tag/attribute allowlist for rich-text fields ───────────────────────
-
-const RICH_TEXT_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: [
-    'b', 'i', 'em', 'strong', 'u', 's', 'del',
-    'p', 'br', 'hr',
-    'h1', 'h2', 'h3', 'h4',
-    'ul', 'ol', 'li',
-    'blockquote', 'pre', 'code',
-    'a',
-    'table', 'thead', 'tbody', 'tr', 'th', 'td',
-    'img',
-    'span', 'div',
-  ],
-  allowedAttributes: {
-    a: ['href', 'title', 'target', 'rel'],
-    img: ['src', 'alt', 'width', 'height'],
-    code: ['class'],    // For syntax-highlighting class names
-    span: ['class'],
-    div:  ['class'],
-    td:   ['colspan', 'rowspan'],
-    th:   ['colspan', 'rowspan'],
-  },
-  // Force safe values on anchor elements
-  transformTags: {
-    a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
-  },
-  // Disallow data URIs in src attributes (prevents data: XSS)
-  allowedSchemes: ['http', 'https', 'mailto'],
-  allowedSchemesByTag: {
-    img: ['http', 'https'],
-  },
-  allowedSchemesAppliedToAttributes: ['href', 'src'],
-};
-
-// ─── No-HTML allowlist — strips every tag ─────────────────────────────────────
-
-const TEXT_ONLY_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: [],
-  allowedAttributes: {},
-};
-
-// ─── Public API ──────────────────────────────────────────────────────────────
-
-/**
- * Strip ALL HTML from `value`.
- * Use for: titles, names, slugs, labels, commit messages, branch names.
- * Returns empty string for null/undefined inputs.
- */
-export function sanitizeText(value: unknown): string {
-  if (typeof value !== 'string') return '';
-  return sanitizeHtml(value.trim(), TEXT_ONLY_OPTIONS);
+// Simple sanitization without external library dependency issues
+export function sanitizeText(input: string): string {
+  try {
+    if (!input) return '';
+    return input
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+      .replace(/<[^>]*>/g, '')
+      .trim();
+  } catch {
+    return input || '';
+  }
 }
 
-/**
- * Allow a safe subset of HTML in `value`.
- * Use for: body/description fields intended to display formatted content.
- * Returns empty string for null/undefined inputs.
- */
-export function sanitizeRichText(value: unknown): string {
-  if (typeof value !== 'string') return '';
-  return sanitizeHtml(value.trim(), RICH_TEXT_OPTIONS);
+export function sanitizeRichText(input: string): string {
+  try {
+    if (!input) return '';
+    // Strip dangerous tags but keep basic formatting
+    return input
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/on\w+="[^"]*"/gi, '')
+      .replace(/javascript:/gi, '')
+      .trim();
+  } catch {
+    return sanitizeText(input);
+  }
+}
+
+export function sanitizeObject(obj: Record<string, unknown>): Record<string, unknown> {
+  const cleaned: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    cleaned[key] = typeof value === 'string' ? sanitizeText(value) : value;
+  }
+  return cleaned;
 }

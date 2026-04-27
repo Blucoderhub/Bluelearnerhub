@@ -120,11 +120,11 @@ services:
       dockerfile: Dockerfile
     container_name: edtech_ai_services
     environment:
-      # Database Configuration
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-blh_pg_xK9mP2vL8qR4nW6yZ3aB7cD}@postgres:5432/edtech_platform
+      # Database Configuration - CHANGE THESE IN PRODUCTION
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-CHANGE_ME_IN_PRODUCTION}@postgres:5432/edtech_platform
       
-      # Redis Configuration  
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-blh_redis_aB3cD5eF7gH9jK1l}@redis:6379/1
+      # Redis Configuration - CHANGE THESE IN PRODUCTION  
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-CHANGE_ME_IN_PRODUCTION}@redis:6379/1
       
       # AI API Keys
       - GEMINI_API_KEY=${GEMINI_API_KEY}

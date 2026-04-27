@@ -1,39 +1,43 @@
 import { Request, Response } from 'express';
-import { pool } from '../utils/database';
+import { db } from '../db';
+import logger from '../utils/logger';
 
-// Ensure leads table exists (runs once; harmless if already created)
-const ensureTable = pool.query(`
-  CREATE TABLE IF NOT EXISTS leads (
-    id          SERIAL PRIMARY KEY,
-    email       TEXT NOT NULL,
-    source      TEXT NOT NULL DEFAULT 'homepage_newsletter',
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    UNIQUE (email, source)
-  )
-`).catch(() => {/* ignore — table may already exist */});
-
-export async function captureLeadEmail(req: Request, res: Response) {
-  const { email, source = 'homepage_newsletter' } = req.body as { email?: string; source?: string };
-
-  if (!email || typeof email !== 'string' || !email.includes('@')) {
-    return res.status(400).json({ success: false, message: 'A valid email is required.' });
-  }
-
-  const sanitizedEmail = email.trim().toLowerCase().slice(0, 254);
-  const sanitizedSource = String(source).slice(0, 64);
-
+// Leads controller using MongoDB
+export const captureLeadEmail = async (req: Request, res: Response) => {
   try {
-    await ensureTable; // wait for table creation if it's still pending
-    await pool.query(
-      `INSERT INTO leads (email, source)
-       VALUES ($1, $2)
-       ON CONFLICT (email, source) DO NOTHING`,
-      [sanitizedEmail, sanitizedSource],
-    );
-    return res.json({ success: true, message: 'Lead captured.' });
+    const { email, source = 'homepage_newsletter' } = req.body;
+
+    if (!email || typeof email !== 'string') {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    // Use MongoDB - create if not exists
+    const existing = await db.query.leads.findFirst({ email: email.toLowerCase() });
+    
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'Email already registered' });
+    }
+
+    await db.query.leads.create({
+      email: email.toLowerCase(),
+      source,
+      createdAt: new Date(),
+    });
+
+    logger.info(`[leads] New lead: ${email} from ${source}`);
+    res.json({ success: true, message: 'Email captured successfully' });
   } catch (err) {
-    // Never expose DB errors to the client
-    console.error('[leads] captureLeadEmail error:', err);
-    return res.json({ success: true, message: 'Lead captured.' }); // silent fail — UX must not break
+    logger.error('[leads] captureLeadEmail error:', err);
+    res.status(500).json({ success: false, message: 'Failed to capture email' });
   }
-}
+};
+
+export const getLeads = async (_req: Request, res: Response) => {
+  try {
+    const leads = await db.query.leads.findMany({});
+    res.json({ success: true, data: leads });
+  } catch (err) {
+    logger.error('[leads] getLeads error:', err);
+    res.status(500).json({ success: false, message: 'Failed to fetch leads' });
+  }
+};

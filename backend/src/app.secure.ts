@@ -257,7 +257,7 @@ export function validateSecurityConfig() {
     'JWT_SECRET',
     'JWT_REFRESH_SECRET',
     'SESSION_SECRET',
-    'DATABASE_URL',
+    'MONGODB_URL',
     'REDIS_URL',
     'FRONTEND_URL',
     'NODE_ENV',

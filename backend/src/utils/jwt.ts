@@ -4,7 +4,7 @@ import { config } from '../config';
 export type UserRole = 'STUDENT' | 'CORPORATE' | 'MENTOR' | 'ADMIN';
 
 export interface TokenPayload {
-  userId: number;
+  userId: string;
   email?: string;
   role: UserRole;
 }

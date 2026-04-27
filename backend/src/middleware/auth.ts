@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { eq } from 'drizzle-orm';
 import { verifyAccessToken, TokenPayload, UserRole } from '../utils/jwt';
-import { db, users } from '../db';
+import { db } from '../db';
 import logger from '../utils/logger';
 
 // Extend Express Request type to include user with role
@@ -9,7 +8,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: {
-        id: number;
+        id: any;
         email: string;
         fullName: string;
         role: UserRole;
@@ -47,16 +46,9 @@ export const authenticate = async (
     // Verify token
     const decoded: TokenPayload = verifyAccessToken(token);
 
-    // Get user from database using Drizzle ORM
+    // Get user from database using MongoDB query
     const result = await db.query.users.findFirst({
-      where: eq(users.id, decoded.userId),
-      columns: {
-        id: true,
-        email: true,
-        fullName: true,
-        role: true,
-        isActive: true,
-      },
+      _id: decoded.userId,
     });
 
     if (!result) {
@@ -85,10 +77,9 @@ export const authenticate = async (
     };
 
     // Update last active (fire-and-forget — never block auth on this)
-    db.update(users)
-      .set({ lastActive: new Date() })
-      .where(eq(users.id, result.id))
-      .catch(() => { /* non-fatal */ });
+    try {
+      await db.query.users.updateById(result._id, { lastActiveAt: new Date() });
+    } catch { /* non-fatal */ }
 
     next();
   } catch (error) {
@@ -145,14 +136,7 @@ export const optionalAuth = async (
     const decoded: TokenPayload = verifyAccessToken(token);
 
     const result = await db.query.users.findFirst({
-      where: eq(users.id, decoded.userId),
-      columns: {
-        id: true,
-        email: true,
-        fullName: true,
-        role: true,
-        isActive: true,
-      },
+      _id: decoded.userId,
     });
 
     if (result && result.isActive) {

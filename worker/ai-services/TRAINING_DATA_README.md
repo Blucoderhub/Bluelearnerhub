@@ -41,7 +41,7 @@ This system generates 10,000+ high-quality quiz and hackathon questions for trai
 psql -d $DATABASE_URL -f database/migrations/003_training_data_schema.sql
 
 # Environment variables
-export GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM
+export GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 export DB_HOST=localhost
 export DB_NAME=edtech_platform
 export DB_USER=postgres
@@ -295,7 +295,7 @@ dataset = load_dataset('json', data_files='data/processed_training_data/*.jsonl'
 
 ```bash
 # Required
-GEMINI_API_KEY=AIzaSyCXaJvkoc7J4RxGMfLPd_clxFNEinDuqUM  # Google Gemini API key
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY  # Google Gemini API key
 DB_HOST=localhost                                      # Database host
 DB_NAME=edtech_platform                               # Database name  
 DB_USER=postgres                                      # Database user

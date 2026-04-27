@@ -29,7 +29,7 @@
       "@/config/*": ["./src/config/*"],
       "@/store/*": ["./src/store/*"]
     },
-    "forceConsistentCasingInFileNames": true,
+"forceConsistentCasingInFileNames": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
