@@ -26,6 +26,7 @@ import oauthRoutes        from './oauth';
 import spacesRoutes       from './spaces.routes';
 import mentorRoutes       from './mentor.routes';
 import corporateRoutes    from './corporate.routes';
+import productRoutes    from './products.routes';
 // ── API LAYERS ─────────────────────────────────────────────────────────────
 import internalRoutes     from './internal.routes';
 import serviceRoutes      from './service.routes';
@@ -91,6 +92,7 @@ router.use('/leads',         leadsRoutes);        // Newsletter / Lead Capture
 router.use('/spaces',        spacesRoutes);        // Coding Challenges / Quiz Arena
 router.use('/mentor',        mentorRoutes);        // Mentor Dashboard
 router.use('/corporate',     corporateRoutes);    // Corporate Hiring Dashboard
+router.use('/products',      productRoutes);      // Product Catalog
 
 // ── PUBLIC API (Search & Profile) ────────────────────────────────────────────
 router.use('/public', publicRoutes);               // Live search, profile, candidate search

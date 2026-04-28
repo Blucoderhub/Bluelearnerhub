@@ -651,3 +651,44 @@ const LeadSchema = new Schema<ILead>({
 LeadSchema.index({ email: 1 }, { unique: true });
 
 export const Lead = mongoose.model<ILead>('Lead', LeadSchema);
+
+// Products (e-commerce/catalog)
+export interface IProduct extends Document {
+  name: string;
+  description?: string;
+  price: number;
+  compareAtPrice?: number;
+  category: string;
+  images: string[];
+  features: string[];
+  isActive: boolean;
+  isFeatured: boolean;
+  stock?: number;
+  sku?: string;
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ProductSchema = new Schema<IProduct>({
+  name: { type: String, required: true },
+  description: { type: String },
+  price: { type: Number, required: true, min: 0 },
+  compareAtPrice: { type: Number },
+  category: { type: String, required: true },
+  images: [{ type: String }],
+  features: [{ type: String }],
+  isActive: { type: Boolean, default: true },
+  isFeatured: { type: Boolean, default: false },
+  stock: { type: Number, default: 0 },
+  sku: { type: String },
+  tags: [{ type: String }],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
+
+ProductSchema.index({ name: 1, category: 1 });
+ProductSchema.index({ isActive: 1, isFeatured: 1 });
+ProductSchema.index({ tags: 1 });
+
+export const Product = mongoose.model<IProduct>('Product', ProductSchema);
