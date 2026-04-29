@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, X, Loader2 } from 'lucide-react'
+import { Search, X, Loader2, BookOpen, Code, Trophy, Briefcase, GraduationCap, Clock, TrendingUp } from 'lucide-react'
 import { cn, getStorageItem, setStorageItem, removeStorageItem } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Input } from './input'
+import { Badge } from './badge'
 
 interface SearchResult {
   id: string
@@ -164,7 +166,7 @@ export default function UniversalSearch() {
           type="search"
           placeholder="Search tutorials, courses, problems, hackathons..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
           className={cn(
             'w-full border-gray-700 bg-gray-800 pl-10 pr-10 text-white placeholder:text-gray-500',
