@@ -101,7 +101,10 @@ const TEMPLATES = [
     color: 'bg-yellow-500/10 text-yellow-600',
     stars: 5610,
     forks: 2100,
-    preview: `function calculate(a, op, b) {\n  return eval(\`\${a}\${op}\${b}\`);\n}`,
+    preview: `function calculate(a, op, b) {
+  const ops = { '+': (a,b) => a+b, '-': (a,b) => a-b, '*': (a,b) => a*b, '/': (a,b) => b !== 0 ? a/b : null };
+  return ops[op]?.(Number(a), Number(b)) ?? null;
+}`,
   },
   {
     id: 'react-todo',

@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
+import crypto from 'crypto';
 import { config } from './config';
 import routes from './routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
@@ -117,15 +118,16 @@ export function createApp(): Application {
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
   // Cookie parser with session secret
-  const sessionSecret = config.sessionSecret;
+  let sessionSecret = config.sessionSecret;
   if (!sessionSecret) {
     if (config.nodeEnv === 'production') {
       logger.error('FATAL: SESSION_SECRET is required in production. Set SESSION_SECRET in your environment.');
       process.exit(1);
     }
-    logger.warn('⚠️  SESSION_SECRET not set — using insecure fallback in development only.');
+    logger.warn('⚠️  SESSION_SECRET not set — generating temporary secret for development.');
+    sessionSecret = `dev-${crypto.randomBytes(32).toString('hex')}`;
   }
-  app.use(cookieParser(sessionSecret || 'dev-secret-change-me-in-dev'));
+  app.use(cookieParser(sessionSecret));
 
   // Compression
   app.use(compression());

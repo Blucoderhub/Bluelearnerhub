@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronRight, ChevronLeft, CheckCircle2, Play, BookOpen, Target, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import { cn, setStorageItem, removeStorageItem, getStorageItem as getStored } from '@/lib/utils'
 
 interface OnboardingTourProps {
   onComplete: () => void
@@ -59,7 +59,7 @@ export function OnboardingTour({ onComplete, isFirstTime: _isFirstTime }: Onboar
 
   const handleComplete = useCallback(() => {
     setIsVisible(false)
-    localStorage.setItem('onboarding_completed', 'true')
+    setStorageItem('onboarding_completed', 'true')
     setTimeout(onComplete, 300)
   }, [onComplete])
 

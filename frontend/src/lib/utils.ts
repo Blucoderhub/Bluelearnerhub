@@ -30,3 +30,28 @@ export function slugify(text: string): string {
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')
 }
+
+export function getStorageItem<T>(key: string, fallback: T): T {
+  try {
+    const item = localStorage.getItem(key)
+    return item ? JSON.parse(item) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+export function setStorageItem<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch {
+    // Storage full or disabled
+  }
+}
+
+export function removeStorageItem(key: string): void {
+  try {
+    localStorage.removeItem(key)
+  } catch {
+    // Ignore errors
+  }
+}

@@ -5,7 +5,7 @@ import { useState, lazy, Suspense, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn, getStorageItem, setStorageItem } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
 import { generateAvatarURL } from '@/utils/generateAvatar'
 import {
@@ -70,10 +70,11 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const { user, logout } = useAuth()
 
   useEffect(() => {
-    const isDark = localStorage.getItem('theme') === 'dark' || 
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    setDarkMode(isDark)
-    if (isDark) {
+    const savedTheme = getStorageItem<string>('theme', '')
+    const prefersDark = savedTheme === 'dark' || 
+      (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    setDarkMode(prefersDark)
+    if (prefersDark) {
       document.documentElement.classList.add('dark')
     }
   }, [])
@@ -81,7 +82,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const toggleDarkMode = () => {
     const newMode = !darkMode
     setDarkMode(newMode)
-    localStorage.setItem('theme', newMode ? 'dark' : 'light')
+    setStorageItem('theme', newMode ? 'dark' : 'light')
     if (newMode) {
       document.documentElement.classList.add('dark')
     } else {

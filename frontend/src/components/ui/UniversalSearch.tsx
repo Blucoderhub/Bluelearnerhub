@@ -2,20 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Search,
-  X,
-  TrendingUp,
-  Clock,
-  BookOpen,
-  Code,
-  Trophy,
-  Briefcase,
-  GraduationCap,
-} from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { Search, X, Loader2 } from 'lucide-react'
+import { cn, getStorageItem, setStorageItem, removeStorageItem } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SearchResult {
@@ -39,20 +27,7 @@ export default function UniversalSearch() {
 
   useEffect(() => {
     // Load recent searches from localStorage
-    const saved = localStorage.getItem('recentSearches')
-    if (saved) {
-      setRecentSearches(JSON.parse(saved))
-    }
-
-    // Close on click outside
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    setRecentSearches(getStorageItem<string[]>('recentSearches', []))
   }, [])
 
   useEffect(() => {
@@ -140,7 +115,7 @@ export default function UniversalSearch() {
     // Add to recent searches
     const updated = [result.title, ...recentSearches.filter((s) => s !== result.title)].slice(0, 5)
     setRecentSearches(updated)
-    localStorage.setItem('recentSearches', JSON.stringify(updated))
+    setStorageItem('recentSearches', updated)
 
     // Navigate
     router.push(result.url)
@@ -150,7 +125,7 @@ export default function UniversalSearch() {
 
   const clearRecentSearches = () => {
     setRecentSearches([])
-    localStorage.removeItem('recentSearches')
+    removeStorageItem('recentSearches')
   }
 
   const getTypeIcon = (type: SearchResult['type']) => {
