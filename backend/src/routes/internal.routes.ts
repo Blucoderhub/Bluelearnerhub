@@ -144,10 +144,21 @@ router.get('/verify-token', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { fields = '*' } = req.query;
+    // Whitelist allowed fields to prevent SQL injection
+    const allowedFields = ['id', 'email', 'full_name', 'role', 'is_active', 'created_at', 'last_active_at'];
+    const requestedFields = (req.query.fields as string || '*').split(',')
+      .map(f => f.trim())
+      .filter(f => allowedFields.includes(f) || f === '*');
+    
+    if (requestedFields.length === 0 || requestedFields.includes('*')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid fields requested',
+      });
+    }
 
     const result = await pool.query(
-      `SELECT ${fields} FROM users WHERE id = $1`,
+      `SELECT ${requestedFields.join(', ')} FROM users WHERE id = $1`,
       [id]
     );
 
