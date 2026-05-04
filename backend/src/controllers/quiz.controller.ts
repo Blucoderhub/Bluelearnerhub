@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { QuizService } from '../services/quiz';
+import { quizService } from '../services/quiz';
 import { db } from '../db';
 import { and, desc, eq } from 'drizzle-orm';
 import { learningBehaviorEvents } from '../db/schema-v2';
 import logger from '../utils/logger';
 import { fetchAdaptiveGuidanceFromAI, fallbackQuizGuidance } from '../services/adaptiveGuidance';
-
-const quizService = new QuizService();
 
 export class QuizController {
   async getQuizzes(req: Request, res: Response, next: NextFunction) {

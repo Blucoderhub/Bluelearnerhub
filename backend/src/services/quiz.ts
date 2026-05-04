@@ -22,8 +22,8 @@ export class QuizService {
     return quiz;
   }
 
-  async getDailyQuiz(domain?: string) {
-    return await QuizModel.getDailyQuiz(domain);
+  async getDailyQuiz(domainOrUserId?: string) {
+    return await QuizModel.getDailyQuiz(domainOrUserId);
   }
 
   async submitQuizAttempt(userId: number, quizId: number, answers: any) {
@@ -87,3 +87,5 @@ export class QuizService {
     }
   }
 }
+
+export const quizService = new QuizService();

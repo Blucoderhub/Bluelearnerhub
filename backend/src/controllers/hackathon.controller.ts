@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose, { Types } from 'mongoose';
 import { db } from '../db';
+import { HackathonService, hackathonService } from '../services/hackathon';
 import logger from '../utils/logger';
 
 export class HackathonController {
@@ -204,7 +205,7 @@ export class HackathonController {
         });
       }
 
-      const result = await HackathonService.runCode(parseInt(id), code, language, input);
+      const result = await hackathonService.runCode(parseInt(id), code, language, input);
       
       res.json({
         success: true,

@@ -426,3 +426,5 @@ export class HackathonService {
     return { message: 'Team leadership transferred successfully' };
   }
 }
+
+export const hackathonService = new HackathonService();

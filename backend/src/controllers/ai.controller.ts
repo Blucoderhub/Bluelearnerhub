@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { aiService } from '../services/ai.service';
-import { QuizService } from '../services/quiz';
+import { quizService } from '../services/quiz';
 import { consumeCredit } from '../middleware/credits';
 import { runAgentCommand, generateQuizQuestions, isInProcess } from '../services/aiCoreBridge.service';
 import logger from '../utils/logger';
@@ -60,7 +60,7 @@ const user = req.user as {
 export const getDailyQuiz = async (req: Request, res: Response) => {
     try {
         const userId = req.user!.id;
-        const quiz = await QuizService.getDailyQuiz(String(userId));
+        const quiz = await quizService.getDailyQuiz(String(userId));
         res.json(quiz);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to generate quiz', error: 'QUIZ_ERROR' });
@@ -71,7 +71,7 @@ export const submitQuiz = async (req: Request, res: Response) => {
     try {
         const userId = req.user!.id;
         const { quizId, answers } = req.body;
-        const result = await QuizService.submitQuiz(String(userId), String(quizId), answers);
+        const result = await quizService.submitQuizAttempt(Number(userId), Number(quizId), answers);
         res.json(result);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Quiz submission failed', error: 'QUIZ_SUBMISSION_ERROR' });
