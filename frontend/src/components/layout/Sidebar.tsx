@@ -23,7 +23,6 @@ import {
   Star,
 } from 'lucide-react'
 import { useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 
 type SidebarSubItem = {
   name: string
@@ -46,7 +45,6 @@ type SidebarItem =
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
   const [expandedSections, setExpandedSections] = useState<string[]>(['learn'])
 
   const toggleSection = (section: string) => {
@@ -55,7 +53,7 @@ export default function Sidebar() {
     )
   }
 
-  const studentNavigation: SidebarItem[] = [
+  const navigation: SidebarItem[] = [
     {
       name: 'Dashboard',
       href: '/student/dashboard',
@@ -122,40 +120,6 @@ export default function Sidebar() {
     },
   ]
 
-  const corporateNavigation: SidebarItem[] = [
-    {
-      name: 'Dashboard',
-      href: '/corporate/dashboard',
-      icon: LayoutDashboard,
-    },
-    {
-      name: 'Post Job',
-      href: '/corporate/post-job',
-      icon: Briefcase,
-    },
-    {
-      name: 'Host Hackathon',
-      href: '/corporate/host-hackathon',
-      icon: Trophy,
-    },
-    {
-      name: 'Candidates',
-      href: '/corporate/candidates',
-      icon: Users,
-    },
-    {
-      name: 'Analytics',
-      href: '/corporate/dashboard',
-      icon: TrendingUp,
-    },
-  ]
-
-  const userRole = user?.role || 'STUDENT'
-  const navigation = userRole === 'CORPORATE' ? corporateNavigation : studentNavigation
-  const userTotalPoints = user?.totalPoints ?? 0
-  const userLevel = user?.level ?? 0
-  const userStreak = user?.currentStreak ?? 0
-
   return (
     <aside className="hidden shadow-card lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-border lg:bg-background lg:pt-16">
       <div className="flex flex-1 flex-col overflow-y-auto">
@@ -221,33 +185,6 @@ export default function Sidebar() {
             </div>
           ))}
         </nav>
-
-        {/* User Stats in Sidebar */}
-        {user && (
-          <div className="border-t border-border p-4">
-            <div className="space-y-3 rounded-xl bg-muted/50 p-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-medium text-muted-foreground">Streak</span>
-                <span className="flex items-center gap-1 font-bold text-foreground">
-                  🔥 {userStreak} days
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-medium text-muted-foreground">Total XP</span>
-                <span className="font-bold text-primary">{userTotalPoints.toLocaleString()}</span>
-              </div>
-              <div className="h-1.5 w-full rounded-full bg-border">
-                <div
-                  className="from-brand to-brand-light h-1.5 rounded-full bg-gradient-to-r transition-all duration-700"
-                  style={{ width: `${Math.min((userTotalPoints % 1000) / 10, 100)}%` }}
-                />
-              </div>
-              <div className="text-center text-xs text-muted-foreground">
-                {1000 - (userTotalPoints % 1000)} XP to Level {userLevel + 1}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </aside>
   )

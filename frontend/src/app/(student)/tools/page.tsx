@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import DomainTools from '@/components/tools/DomainTools'
 import { Settings2, Sparkles } from 'lucide-react'
 

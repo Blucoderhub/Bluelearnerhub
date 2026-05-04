@@ -29,13 +29,11 @@ function GetStartedContent() {
       const from = searchParams.get('from')
       if (from && from.startsWith('/')) {
         router.replace(from)
-      } else if (user?.role === 'CORPORATE' || user?.role === 'ADMIN') {
-        router.replace('/corporate/dashboard')
       } else {
-        router.replace('/student/dashboard')
+        router.replace('/dashboard')
       }
     }
-  }, [isAuthenticated, router, searchParams, user?.role])
+  }, [isAuthenticated, router, searchParams])
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,12 +54,8 @@ function GetStartedContent() {
     setError(null)
     setLoading(true)
     try {
-      const loggedInUser = await login(email, password)
-      if (loggedInUser?.role === 'CORPORATE' || loggedInUser?.role === 'ADMIN') {
-        router.replace('/corporate/dashboard')
-      } else {
-        router.replace('/student/dashboard')
-      }
+      await login(email, password)
+      router.replace('/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Invalid email or password')
     } finally {

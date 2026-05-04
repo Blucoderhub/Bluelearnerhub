@@ -1,4 +1,3 @@
-import React from 'react'
 import { brandConfig } from '@/config/theme'
 
 interface LogoProps {

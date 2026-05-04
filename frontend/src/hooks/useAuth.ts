@@ -3,9 +3,9 @@
 import { User } from '@/types'
 
 interface UseAuthResult {
-  user: null
-  loading: false
-  isAuthenticated: false
+  user: User | null
+  loading: boolean
+  isAuthenticated: boolean
   login: (email: string, password: string) => Promise<User>
   logout: () => void
   register: (data: { email: string; password: string; name: string }) => Promise<User>

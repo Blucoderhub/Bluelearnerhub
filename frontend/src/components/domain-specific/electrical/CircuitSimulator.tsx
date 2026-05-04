@@ -37,7 +37,7 @@ export default function CircuitSimulator({ height = '600px' }: CircuitSimulatorP
   const [simulationResults, setSimulationResults] = useState<any>(null)
   const [componentValue, setComponentValue] = useState('1000')
   const [gridSize] = useState(20)
-  const [showGrid, _setShowGrid] = useState(true)
+  const [showGrid] = useState(true)
 
   const _drawCircuit = () => {
     const canvas = canvasRef.current

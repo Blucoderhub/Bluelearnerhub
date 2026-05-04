@@ -36,7 +36,6 @@ export interface User {
   githubUrl?: string
   linkedinUrl?: string
   portfolioUrl?: string
-  role?: 'STUDENT' | 'CORPORATE' | 'ADMIN'
   createdAt: Date
 }
 

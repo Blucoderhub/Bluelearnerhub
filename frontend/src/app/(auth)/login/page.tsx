@@ -24,26 +24,19 @@ function LoginContent() {
       const from = searchParams.get('from')
       if (from && from.startsWith('/')) {
         router.replace(from)
-      } else if (user?.role === 'CORPORATE' || user?.role === 'ADMIN') {
-        router.replace('/corporate/dashboard')
       } else {
-        router.replace('/student/dashboard')
+        router.replace('/dashboard')
       }
     }
-  }, [isAuthenticated, router, searchParams, user?.role])
+  }, [isAuthenticated, router, searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
     try {
-      const loggedInUser = await login(email, password)
-      // Redirect based on role after login
-      if (loggedInUser?.role === 'CORPORATE' || loggedInUser?.role === 'ADMIN') {
-        router.replace('/corporate/dashboard')
-      } else {
-        router.replace('/student/dashboard')
-      }
+      await login(email, password)
+      router.replace('/dashboard')
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Invalid email or password')
     } finally {
