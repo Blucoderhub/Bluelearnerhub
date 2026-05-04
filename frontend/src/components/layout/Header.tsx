@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Menu, X, ArrowRight, Search } from 'lucide-react'
+import { Menu, X, Search } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { CommandPalette } from '@/components/layout/CommandPalette'
 
@@ -110,24 +110,6 @@ export default function Header() {
 
               <ThemeToggle />
 
-              <Link
-                href="/login"
-                id="header-login-btn"
-                className="hidden text-sm font-medium text-muted-foreground hover:text-foreground transition-colors sm:block"
-              >
-                Log in
-              </Link>
-
-              <Link
-                href="/get-started"
-                id="header-cta-btn"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
-                style={{ fontFamily: 'var(--font-heading)' }}
-              >
-                Start Learning
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
               {/* Mobile hamburger */}
               <button
                 id="header-mobile-menu-btn"
@@ -188,24 +170,6 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-
-            {/* Mobile auth buttons */}
-            <div className="p-5 border-t border-border space-y-3">
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block w-full rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium hover:bg-secondary transition-colors"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/get-started"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-bold text-white hover:bg-primary/90 transition-colors"
-              >
-                Start Learning Free →
-              </Link>
-            </div>
           </div>
         </div>
       )}

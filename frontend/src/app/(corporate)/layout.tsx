@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth } from '@/hooks/useAuth'
 import { cn, getStorageItem, setStorageItem } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -12,10 +11,8 @@ import {
   Trophy,
   Briefcase,
   Bot,
-  LogOut,
   Menu,
   X,
-  ChevronDown,
   TrendingUp,
   Search,
   Sun,
@@ -43,9 +40,7 @@ const mobileTabItems = [
 
 export default function CorporateLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const { user, logout } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
@@ -68,14 +63,6 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
       document.documentElement.classList.remove('dark')
     }
   }
-
-  const handleLogout = () => {
-    logout()
-    window.location.href = '/login'
-  }
-
-  const displayName = user?.fullName ?? user?.name ?? 'Corporate'
-  const initials = displayName.charAt(0).toUpperCase()
 
   return (
     <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
@@ -184,51 +171,20 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
           })}
         </div>
 
-        {/* ─── Profile Section ─────────────────────────────────────────── */}
+        {/* ─── Profile Section (static, no auth) ─────────────────────────────────────────── */}
         <div className="border-t border-border/50 p-4">
-          <div className="relative">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3 transition-all hover:bg-secondary/50"
-            >
-              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-border/40 bg-gradient-to-br from-violet-600 to-primary font-bold text-white shadow-inner">
-                {initials}
-              </div>
-              <div className="min-w-0 flex-1 text-left">
-                <p className="truncate text-sm font-semibold text-foreground">{displayName}</p>
-                <p className="text-xs text-violet-400">Corporate</p>
-              </div>
-              <ChevronDown className={cn('h-4 w-4 text-muted-foreground transition-transform', profileOpen && 'rotate-180')} />
-            </button>
-
-            <AnimatePresence>
-              {profileOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute bottom-full left-0 right-0 mb-2 overflow-hidden rounded-xl border border-border bg-card shadow-xl"
-                >
-                  <Link
-                    href="/corporate/dashboard"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-secondary/50"
-                  >
-                    <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
-                    <span>Dashboard</span>
-                  </Link>
-                  <div className="border-t border-border/50" />
-                  <button
-                    onClick={handleLogout}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-500 transition-colors hover:bg-red-500/10"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out</span>
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <Link
+            href="/corporate/dashboard"
+            className="flex w-full items-center gap-3 rounded-xl border border-border/50 bg-secondary/30 p-3 transition-all hover:bg-secondary/50"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/40 bg-gradient-to-br from-violet-600 to-primary font-bold text-white shadow-inner">
+              G
+            </div>
+            <div className="min-w-0 flex-1 text-left">
+              <p className="truncate text-sm font-semibold text-foreground">Guest User</p>
+              <p className="text-xs text-violet-400">Corporate</p>
+            </div>
+          </Link>
         </div>
       </aside>
 
@@ -296,15 +252,6 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
                   )
                 })}
               </nav>
-              <div className="mt-6 border-t border-border/50 pt-6">
-                <button
-                  onClick={handleLogout}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10"
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Sign Out</span>
-                </button>
-              </div>
             </motion.div>
           </>
         )}

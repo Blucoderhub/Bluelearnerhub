@@ -5,7 +5,6 @@ import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from 'ne
 import { Toaster } from 'sonner'
 import { useState, type ComponentType, type ReactNode } from 'react'
 import ErrorBoundary from '@/components/ui/ErrorBoundary'
-import { AuthProvider } from '@/context/AuthContext'
 
 const ThemeProvider = NextThemesProvider as ComponentType<
   ThemeProviderProps & { children: ReactNode }
@@ -25,39 +24,37 @@ export function Providers({ children }: { children: ReactNode }) {
   )
 
   return (
-    <AuthProvider>
-      <ErrorBoundary
-        name="App Root"
-        level="page"
-        onError={(error, errorInfo) => {
-          // Log critical application errors
-          console.error('[Critical App Error]', { error, errorInfo })
+    <ErrorBoundary
+      name="App Root"
+      level="page"
+      onError={(error, errorInfo) => {
+        // Log critical application errors
+        console.error('[Critical App Error]', { error, errorInfo })
 
-          // Report to analytics/monitoring service
-          if (typeof window !== 'undefined' && (window as any).gtag) {
-            ;(window as any).gtag('event', 'exception', {
-              description: error.toString(),
-              fatal: true,
-            })
-          }
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <ErrorBoundary name="Query Client Provider" level="section">
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem={false}
-              disableTransitionOnChange
-            >
-              <ErrorBoundary name="Theme Provider" level="section">
-                {children}
-                <Toaster position="top-right" theme="light" richColors />
-              </ErrorBoundary>
-            </ThemeProvider>
-          </ErrorBoundary>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </AuthProvider>
+        // Report to analytics/monitoring service
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          ;(window as any).gtag('event', 'exception', {
+            description: error.toString(),
+            fatal: true,
+          })
+        }
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <ErrorBoundary name="Query Client Provider" level="section">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <ErrorBoundary name="Theme Provider" level="section">
+              {children}
+              <Toaster position="top-right" theme="light" richColors />
+            </ErrorBoundary>
+          </ThemeProvider>
+        </ErrorBoundary>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
